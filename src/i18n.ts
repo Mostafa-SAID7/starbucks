@@ -1,21 +1,16 @@
 import i18n from 'i18next'
 import { initReactI18next } from 'react-i18next'
 
+import en from './locales/en.json'
+import ar from './locales/ar.json'
+
 // We will add translations here as we develop features
 const resources = {
   ar: {
-    translation: {
-      "Welcome": "مرحباً",
-      "Language": "English",
-      "Menu": "القائمة"
-    }
+    translation: ar
   },
   en: {
-    translation: {
-      "Welcome": "Welcome",
-      "Language": "العربية",
-      "Menu": "Menu"
-    }
+    translation: en
   }
 }
 

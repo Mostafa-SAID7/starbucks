@@ -2,54 +2,22 @@
   "cards": [
     {
       "id": 1,
-      "title": "عصر جديد. نفس النجوم.",
-      "description": "اكتشف 3 طلبات أيقونية مستوحاة من فيلم The Devil Wears Prada: قهوة ميرندا، كابتشينو آندي بحليب الشوفان، اسبرسو نايجل بالكريمة المخفوقة. متوفر في الفروع لفترة محدودة.",
-      "image": "https://www.starbucks.eg/sites/starbucks-eg-pwa/files/styles/c22_featured_card_531x273/public/2026-05/UAE_1.jpg.webp",
-      "imageAlt": "New Era Campaign",
-      "cta": "اكتشف المزيد",
-      "ctaLink": "/new-era-same-icons",
-      "theme": "Gray"
+      "title": "cards.new_menu.title",
+      "description": "cards.new_menu.description",
+      "image": "https://www.starbucks.eg/sites/starbucks-eg-pwa/files/styles/c01_square_800x800/public/2024-03/Sbx_1.jpg.webp",
+      "imageAlt": "New Season",
+      "cta": "cards.new_menu.cta",
+      "ctaLink": "/menu",
+      "theme": "Green"
     },
     {
       "id": 2,
-      "title": "Starbucks®",
-      "description": "",
-      "image": "https://www.starbucks.eg/sites/starbucks-eg-pwa/files/styles/c22_featured_card_531x273/public/2023-11/Generic-VB.jpg.webp",
-      "imageAlt": "Starbucks Delivery",
-      "cta": "اطلب الآن",
-      "ctaLink": "/delivery",
-      "secondaryCta": "اكتشف مواقع مقاهينا",
-      "secondaryCtaLink": "/about-us",
-      "theme": "Green"
-    },
-    {
-      "id": 3,
-      "title": "بيان ستاربكس الرسمي",
-      "description": "بيان ستاربكس الرسمي الحقيقة مُهمة. رداً على المعلومات الخاطئة، فإننا نشارككم اليوم الحقائق حول ما تُؤمن به ستاربكس وتُدافع عنه.",
-      "image": "https://www.starbucks.eg/sites/starbucks-eg-pwa/files/styles/c22_featured_card_531x273/public/2024-05/Starbucks%20for%20the%20Record.png.webp",
-      "imageAlt": "Official Statement",
-      "cta": "اعرف المزيد",
-      "ctaLink": "/starbucks-for-the-record",
-      "theme": "Gray"
-    },
-    {
-      "id": 4,
-      "title": "متعة قهوة ستاربكس",
-      "description": "اكتشف نكهات جديدة مع درجات تحميص القهوة من ستاربكس",
-      "image": "https://www.starbucks.eg/sites/starbucks-eg-pwa/files/styles/c22_featured_card_531x273/public/2022-05/Summer-Website-Banners--Mycoffee-TC-2.png.webp",
-      "imageAlt": "Coffee Experience",
-      "cta": "اكتشف المزيد",
-      "ctaLink": "/our-coffees",
-      "theme": "Green"
-    },
-    {
-      "id": 5,
-      "title": "خدمة توصيل ستاربكس",
-      "description": "احصل على النكهة المفضلة لديك مباشرة عند باب منزلك",
-      "image": "https://www.starbucks.eg/sites/starbucks-eg-pwa/files/styles/c22_featured_card_531x273/public/2022-05/Summer-Website-Banners--Delivery-TC-2.png.webp",
-      "imageAlt": "Delivery Service",
-      "cta": "اطلب الآن",
-      "ctaLink": "/delivery",
+      "title": "cards.locations.title",
+      "description": "cards.locations.description",
+      "image": "https://www.starbucks.eg/sites/starbucks-eg-pwa/files/styles/c01_square_800x800/public/2023-10/Sbx-Banner-2.jpg.webp",
+      "imageAlt": "Locations",
+      "cta": "cards.locations.cta",
+      "ctaLink": "/locations",
       "theme": "Gray"
     }
   ]

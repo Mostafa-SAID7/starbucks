@@ -15,28 +15,40 @@
     @apply transition-colors duration-300;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
+
+  /* Global Premium Scrollbar */
+  html {
+    scrollbar-width: thin;
+    scrollbar-color: #006241 transparent;
+  }
+
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #006241;
+    border-radius: 20px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #004d33;
+    border: 1px solid transparent;
+    background-clip: content-box;
+  }
+
+  /* Support for Dark Mode Scrollbar */
+  .dark ::-webkit-scrollbar-thumb {
+    background: #00754a;
+    background-clip: content-box;
+  }
 }
 
-@layer utilities {
-  .scrollbar-custom {
-    scrollbar-width: thin;
-    scrollbar-color: #006241 #f1f1f1;
-  }
-  
-  .scrollbar-custom::-webkit-scrollbar {
-    @apply w-2;
-  }
-  
-  .scrollbar-custom::-webkit-scrollbar-track {
-    @apply bg-gray-100 dark:bg-gray-800;
-  }
-  
-  .scrollbar-custom::-webkit-scrollbar-thumb {
-    @apply bg-starbucks-green rounded;
-  }
-  
-  .scrollbar-custom::-webkit-scrollbar-thumb:hover {
-    @apply bg-starbucks-dark;
-  }
-}
 

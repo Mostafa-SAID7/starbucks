@@ -1,150 +1,116 @@
-import { useState } from 'react'
+import React from 'react'
 import { Link } from 'react-router-dom'
-import { ChevronDown, Globe } from 'lucide-react'
-import { motion, AnimatePresence } from 'framer-motion'
-import footerData from '@/data/footer.json'
-import type { FooterData } from '@/types'
+import { useTranslation } from 'react-i18next'
+import { Globe } from 'lucide-react'
+import data from '../data/footer.json'
 
-const data: FooterData = footerData
+export default function Footer() {
+  const { t } = useTranslation()
 
-const Footer = () => {
-  const [openSection, setOpenSection] = useState<string | null>(null)
-  const [showCountries, setShowCountries] = useState(false)
-
-  const toggleSection = (section: string) => {
-    setOpenSection(openSection === section ? null : section)
+  const socialIcons: Record<string, React.ReactNode> = {
+    facebook: (
+      <svg viewBox="0 0 24 24" fill="currentColor" className="h-6 w-6">
+        <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+      </svg>
+    ),
+    instagram: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6">
+        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+      </svg>
+    )
   }
 
   return (
-    <footer className="bg-starbucks-dark text-white transition-colors">
-      <div className="container mx-auto max-w-7xl px-4 py-12">
-        {/* Desktop Footer */}
-        <div className="hidden grid-cols-4 gap-8 md:grid">
-          {/* Logo */}
-          <div>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 64 64"
-              className="h-16 w-16"
-            >
-              <circle cx="32" cy="32" r="31" fill="#fff" />
-              <path
-                fill="#006241"
-                d="M32 14c1.5 0 2.8.2 3.1.3.2 0 .2-.1.1-.2l-3.2-2.4-3.2 2.4c-.1.1-.1.2.1.2h.1c.4-.1 1.6-.3 3-.3m-2.4 15.8c0-.2.2-.2.2-.2s.8.2 2.2.2c1.4 0 2.2-.2 2.2-.2s.2.1.2.2c-.2.1-.3.3-.5.5-.4.5-1 1.1-1.9 1.1-1 0-1.5-.6-1.9-1.1-.2-.2-.4-.4-.5-.5"
-              />
-            </svg>
-          </div>
-
-          {/* Links Columns */}
-          {Object.entries(data.sections).map(([key, section]) => (
-            <div key={key}>
-              <h3 className="mb-4 text-lg font-semibold">{section.title}</h3>
-              <ul className="space-y-2">
+    <footer className="bg-white pt-16 pb-32 dark:bg-black border-t dark:border-gray-800 transition-colors">
+      <div className="container mx-auto max-w-7xl px-4">
+        <div className="grid grid-cols-1 gap-12 border-b pb-12 lg:grid-cols-4 dark:border-gray-800 transition-colors">
+          {data.sections.map((section) => (
+            <div key={section.title}>
+              <h3 className="mb-6 text-lg font-bold text-starbucks-dark dark:text-foreground-dark uppercase tracking-wider">
+                {t(section.title)}
+              </h3>
+              <ul className="space-y-4">
                 {section.links.map((link) => (
                   <li key={link.label}>
                     <Link
                       to={link.href}
-                      className="text-sm text-gray-300 transition-colors hover:text-white"
+                      className="text-base text-gray-500 hover:text-starbucks-dark dark:hover:text-foreground-dark transition-colors"
                     >
-                      {link.label}
+                      {t(link.label)}
                     </Link>
                   </li>
                 ))}
               </ul>
             </div>
           ))}
-        </div>
 
-        {/* Mobile Footer - Accordion */}
-        <div className="space-y-4 md:hidden">
-          {Object.entries(data.sections).map(([key, section]) => (
-            <div key={key} className="border-b border-gray-600 pb-4">
-              <button
-                onClick={() => toggleSection(key)}
-                className="flex w-full items-center justify-between text-right"
-              >
-                <ChevronDown
-                  className={`h-5 w-5 transition-transform ${
-                    openSection === key ? 'rotate-180' : ''
-                  }`}
-                />
-                <h3 className="text-lg font-semibold">{section.title}</h3>
+          {/* Location Selector (Desktop/Mobile) */}
+          <div>
+            <h3 className="mb-6 text-lg font-bold text-starbucks-dark dark:text-foreground-dark uppercase tracking-wider">
+              {t('footer.location_selector')}
+            </h3>
+            <div className="group relative">
+              <button className="flex items-center gap-3 text-base text-gray-500 hover:text-starbucks-dark dark:hover:text-foreground-dark transition-colors">
+                <Globe className="h-5 w-5" />
+                <span>{t('footer.location_selector')}</span>
               </button>
-              <AnimatePresence>
-                {openSection === key && (
-                  <motion.ul
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: 'auto', opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.3 }}
-                    className="mt-3 space-y-2 overflow-hidden"
-                  >
-                    {section.links.map((link) => (
-                      <li key={link.label}>
-                        <Link
-                          to={link.href}
-                          className="block text-right text-sm text-gray-300"
-                        >
-                          {link.label}
-                        </Link>
-                      </li>
-                    ))}
-                  </motion.ul>
-                )}
-              </AnimatePresence>
+              
+              <div className="invisible absolute bottom-full left-0 z-50 mb-4 h-64 w-64 overflow-y-auto rounded-xl border bg-white p-4 shadow-2xl group-hover:visible dark:bg-black dark:border-gray-800">
+                <ul className="space-y-3">
+                  {data.countries.map((country) => (
+                    <li key={country.name}>
+                      <a
+                        href={country.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="block text-sm text-gray-500 hover:text-starbucks-green dark:hover:text-starbucks-green transition-colors"
+                      >
+                        {country.name}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
-          ))}
-        </div>
-
-        {/* Country Selector */}
-        <div className="mt-12 border-t border-gray-600 pt-8">
-          <div className="relative">
-            <button
-              onClick={() => setShowCountries(!showCountries)}
-              className="flex items-center gap-2 text-sm font-semibold transition-colors hover:text-gray-300"
-            >
-              <ChevronDown
-                className={`h-4 w-4 transition-transform ${
-                  showCountries ? 'rotate-180' : ''
-                }`}
-              />
-              <span>{data.locationSelector}</span>
-              <Globe className="h-5 w-5" />
-            </button>
-
-            <AnimatePresence>
-              {showCountries && (
-                <motion.div
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  className="absolute bottom-full left-0 mb-2 w-64 rounded-lg bg-white dark:bg-gray-800 p-4 shadow-xl"
-                >
-                  <ul className="space-y-2">
-                    {data.countries.map((country) => (
-                      <li key={country}>
-                        <a
-                          href="#"
-                          className="block rounded px-3 py-2 text-right text-sm text-gray-800 dark:text-gray-200 transition-colors hover:bg-gray-100 dark:hover:bg-gray-700"
-                        >
-                          {country}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </motion.div>
-              )}
-            </AnimatePresence>
           </div>
         </div>
 
-        {/* Copyright */}
-        <div className="mt-8 border-t border-gray-600 pt-6 text-center text-xs text-gray-400">
-          <p>{data.copyright}</p>
+        <div className="flex flex-col items-center justify-between gap-8 py-12 lg:flex-row">
+          {/* Social Links */}
+          <div className="flex items-center gap-6">
+            {data.socials.map((social) => (
+              <a
+                key={social.name}
+                href={social.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex h-10 w-10 items-center justify-center rounded-full bg-starbucks-dark text-white hover:bg-gray-800 transition-colors"
+              >
+                {socialIcons[social.name]}
+              </a>
+            ))}
+          </div>
+
+          {/* Legal Links */}
+          <div className="flex flex-wrap items-center justify-center gap-6 lg:justify-end">
+            {data.legal.map((link) => (
+              <Link
+                key={link.label}
+                to={link.href}
+                className="text-sm font-bold text-starbucks-dark hover:text-starbucks-green dark:text-foreground-dark transition-colors"
+              >
+                {t(link.label)}
+              </Link>
+            ))}
+          </div>
         </div>
+
+        <p className="text-center text-sm text-gray-400 lg:text-left">
+          {t('footer.copyright')}
+        </p>
       </div>
     </footer>
   )
 }
-
-export default Footer

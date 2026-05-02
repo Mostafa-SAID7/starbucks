@@ -1,42 +1,86 @@
 {
-  "title": "قائمة الطعام",
-  "description": "ستاربكس يقدم لكم مشروبات لذيذة محضرة يدوياً ومأكولات خفيفة رائعة المذاق من مكونات عالية الجودة. فن تحضير القهوة هو شغفنا الأول، وكذلك كل ما نقوم به لتستمتع بتجربة تذوق ممتعة لدى ستاربكس أينما كنت. \n\nسواء كنت ترغب بمشروب قهوة مميز أو الاستمتاع بوجبة خفيفة، ستاربكس هو وجهتك المفضلة لتبدأ نهارك بطريقة مثالية كل يوم.",
-  "categories": [
-    {
-      "id": "drinks",
-      "title": "اكتشف المشروبات",
-      "description": "استمتع بعالم رائع من مشروبات ستاربكس المميزة، مشروبات ساخنة أو باردة منعشة بنكهة غنية.",
-      "image": "https://www.starbucks.eg/sites/starbucks-eg-pwa/files/styles/c06_cards_grid_314x176/public/2021-01/ProductShot_5.jpg.webp?h=34e43602&itok=OqHJvNZs",
-      "href": "/menu/drinks"
-    },
-    {
-      "id": "food",
-      "title": "اكتشف المأكولات",
-      "description": "ستاربكس يقدم لك تشكيلة واسعة من السندويشات، السلطات أو الحلويات التي تناسب كافة الأذواق.",
-      "image": "https://www.starbucks.eg/sites/starbucks-eg-pwa/files/styles/c06_cards_grid_314x176/public/2021-01/Image-104_0.jpg.webp?h=04d92ac6&itok=JbtQOzRa",
-      "href": "/menu/food"
-    }
-  ],
-  "allergyInfo": {
-    "title": "مسببات الحساسية",
-    "description": "يرجى العلم بأننا لا نستطيع التأكيد بأن المأكولات أو المشروبات لدينا هي خالية تماماً من المكونات المسببة للحساسية نتيجة التعامل مع أدوات ومعدات مشتركة لدى مقاهينا.",
-    "link": "https://www.alshaya.com/campaigns/Starbucks/uae/index.html",
-    "linkLabel": "المزيد من المعلومات عن مسببات الحساسية"
-  },
-  "sidebar": {
-    "title": "القائمة",
-    "image": "https://www.starbucks.eg/sites/starbucks-eg-pwa/files/styles/c01_vertical_card_1287x1792/public/2021-01/MenuImg2.jpg.webp?h=8a7fc05e&itok=R8sPwZHl",
-    "actions": [
+  "ar": {
+    "title": "قائمة الطعام",
+    "description": "ستاربكس يقدم لكم مشروبات لذيذة محضرة يدوياً ومأكولات خفيفة رائعة المذاق من مكونات عالية الجودة. فن تحضير القهوة هو شغفنا الأول، وكذلك كل ما نقوم به لتستمتع بتجربة تذوق ممتعة لدى ستاربكس أينما كنت. \n\nسواء كنت ترغب بمشروب قهوة مميز أو الاستمتاع بوجبة خفيفة، ستاربكس هو وجهتك المفضلة لتبدأ نهارك بطريقة مثالية كل يوم.",
+    "categories": [
       {
-        "label": "اطلب الآن",
-        "href": "https://www.talabat.com/ar/egypt/restaurant/516787/starbucks-city-scape-6th-of-october?aid=7935",
-        "primary": true
+        "id": "drinks",
+        "title": "اكتشف المشروبات",
+        "description": "استمتع بعالم رائع من مشروبات ستاربكس المميزة، مشروبات ساخنة أو باردة منعشة بنكهة غنية.",
+        "image": "https://www.starbucks.eg/sites/starbucks-eg-pwa/files/styles/c06_cards_grid_314x176/public/2021-01/ProductShot_5.jpg.webp?h=34e43602&itok=OqHJvNZs",
+        "href": "/menu/drinks"
       },
       {
-        "label": "اكتشف مواقع محلاتنا",
-        "href": "https://locations.starbucks.eg/ar/directory",
-        "primary": false
+        "id": "food",
+        "title": "اكتشف المأكولات",
+        "description": "ستاربكس يقدم لك تشكيلة واسعة من السندويشات، السلطات أو الحلويات التي تناسب كافة الأذواق.",
+        "image": "https://www.starbucks.eg/sites/starbucks-eg-pwa/files/styles/c06_cards_grid_314x176/public/2021-01/Image-104_0.jpg.webp?h=04d92ac6&itok=JbtQOzRa",
+        "href": "/menu/food"
       }
-    ]
+    ],
+    "allergyInfo": {
+      "title": "مسببات الحساسية",
+      "description": "يرجى العلم بأننا لا نستطيع التأكيد بأن المأكولات أو المشروبات لدينا هي خالية تماماً من المكونات المسببة للحساسية نتيجة التعامل مع أدوات ومعدات مشتركة لدى مقاهينا.",
+      "link": "https://www.alshaya.com/campaigns/Starbucks/uae/index.html",
+      "linkLabel": "المزيد من المعلومات عن مسببات الحساسية"
+    },
+    "sidebar": {
+      "title": "القائمة",
+      "image": "https://www.starbucks.eg/sites/starbucks-eg-pwa/files/styles/c01_vertical_card_1287x1792/public/2021-01/MenuImg2.jpg.webp?h=8a7fc05e&itok=R8sPwZHl",
+      "actions": [
+        {
+          "label": "اطلب الآن",
+          "href": "https://www.talabat.com/ar/egypt/restaurant/516787/starbucks-city-scape-6th-of-october?aid=7935",
+          "primary": true
+        },
+        {
+          "label": "اكتشف مواقع محلاتنا",
+          "href": "https://locations.starbucks.eg/ar/directory",
+          "primary": false
+        }
+      ]
+    }
+  },
+  "en": {
+    "title": "Menu",
+    "description": "Starbucks offers you delicious handcrafted beverages and great tasting snacks made from high quality ingredients. The art of making coffee is our first passion, as is everything we do to ensure you enjoy a pleasant tasting experience at Starbucks wherever you are. \n\nWhether you want a signature coffee drink or to enjoy a snack, Starbucks is your favorite destination to start your day perfectly every day.",
+    "categories": [
+      {
+        "id": "drinks",
+        "title": "Explore Beverages",
+        "description": "Enjoy the wonderful world of signature Starbucks drinks, refreshing hot or cold beverages with a rich flavor.",
+        "image": "https://www.starbucks.eg/sites/starbucks-eg-pwa/files/styles/c06_cards_grid_314x176/public/2021-01/ProductShot_5.jpg.webp?h=34e43602&itok=OqHJvNZs",
+        "href": "/menu/drinks"
+      },
+      {
+        "id": "food",
+        "title": "Explore Food",
+        "description": "Starbucks offers you a wide selection of sandwiches, salads or desserts to suit all tastes.",
+        "image": "https://www.starbucks.eg/sites/starbucks-eg-pwa/files/styles/c06_cards_grid_314x176/public/2021-01/Image-104_0.jpg.webp?h=04d92ac6&itok=JbtQOzRa",
+        "href": "/menu/food"
+      }
+    ],
+    "allergyInfo": {
+      "title": "Allergens",
+      "description": "Please be advised that we cannot confirm that our food or drinks are completely free of allergenic ingredients as a result of handling shared tools and equipment at our coffee houses.",
+      "link": "https://www.alshaya.com/campaigns/Starbucks/uae/index.html",
+      "linkLabel": "More information on allergens"
+    },
+    "sidebar": {
+      "title": "Menu",
+      "image": "https://www.starbucks.eg/sites/starbucks-eg-pwa/files/styles/c01_vertical_card_1287x1792/public/2021-01/MenuImg2.jpg.webp?h=8a7fc05e&itok=R8sPwZHl",
+      "actions": [
+        {
+          "label": "Order Now",
+          "href": "https://www.talabat.com/en/egypt/restaurant/516787/starbucks-city-scape-6th-of-october?aid=7935",
+          "primary": true
+        },
+        {
+          "label": "Find our Stores",
+          "href": "https://locations.starbucks.eg/en/directory",
+          "primary": false
+        }
+      ]
+    }
   }
 }

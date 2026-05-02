@@ -1,50 +1,112 @@
 {
   "about-us": {
-    "title": "نبذة عنا",
-    "content": "<p>منذ بداية تأسيس شركتنا في العام 1971، كنا نؤمن دوماً بإمكانياتنا على القيام بكل ما هو أفضل وبطريقة فريدة.</p><p>نحن نعتقد أنه ينبغي على الشركات أن تقوم بعمل الخير دائماً؛ لذلك نسعى لتحفيز كل من حولنا على تحمل مسؤوليتهم الاجتماعية للمساهمة في تطور المجتمع والبيئة المحيطة.</p>"
+    "ar": {
+      "title": "نبذة عنا",
+      "content": "<h3>قصتنا</h3><p>منذ بداية تأسيس شركتنا في العام 1971، كنا نؤمن دوماً بإمكانياتنا على القيام بكل ما هو أفضل وبطريقة فريدة. نحن لا نبيع القهوة فحسب، بل نسعى لتعزيز الروابط الإنسانية في كل كوب.</p><p>نحن نعتقد أنه ينبغي على الشركات أن تقوم بعمل الخير دائماً؛ لذلك نسعى لتحفيز كل من حولنا على تحمل مسؤوليتهم الاجتماعية للمساهمة في تطور المجتمع والبيئة المحيطة بنا في مصر وحول العالم.</p>"
+    },
+    "en": {
+      "title": "About Us",
+      "content": "<h3>Our Story</h3><p>Since our founding in 1971, we have always believed in our potential to do better and in a unique way. We don't just sell coffee; we strive to enhance human connections in every cup.</p><p>We believe that companies should always do good; therefore, we seek to inspire everyone around us to take their social responsibility to contribute to the development of society and the surrounding environment in Egypt and globally.</p>"
+    }
   },
   "delivery": {
-    "title": "التوصيل",
-    "content": "<p>احصل على النكهة المفضلة لديك مباشرة عند باب منزلك من خلال شركائنا في طلبات وغيرها من منصات التوصيل.</p>"
+    "ar": {
+      "title": "قائمة التوصيل",
+      "content": "<h3>استمتع بستاربكس في أي مكان</h3><p>احصل على منتجات ستاربكس المفضلة لديك مباشرة إلى باب منزلك. لقد دخلنا في شراكة مع <strong>طلبات</strong> لنقدم لك قهوتنا المميزة وأطعمتنا الطازجة مباشرة.</p><p>ما عليك سوى فتح تطبيق طلبات، واختيار أقرب فرع ستاربكس إليك، والاختيار من قائمة التوصيل المحسنة لدينا والمصممة للحفاظ على أعلى مستويات الجودة والنضارة.</p>"
+    },
+    "en": {
+      "title": "Delivery Menu",
+      "content": "<h3>Enjoy Starbucks Anywhere</h3><p>Get your Starbucks favorites delivered to your doorstep. We've partnered with <strong>Talabat</strong> to bring our premium coffee and fresh food directly to you.</p><p>Simply open the Talabat app, select your nearest Starbucks, and choose from our specially optimized delivery menu designed to maintain the highest quality and freshness.</p>"
+    }
   },
   "privacy-statement": {
-    "title": "سياسة الخصوصية",
-    "content": "<p>نحن في ستاربكس نقدر خصوصيتك. توضح هذه السياسة كيف نجمع ونستخدم ونحمي بياناتك الشخصية.</p>"
+    "ar": {
+      "title": "بيان الخصوصية",
+      "content": "<h3>حماية خصوصيتك</h3><p>تلتزم ستاربكس مصر، التي تديرها مجموعة الشايع، بحماية معلوماتك الشخصية. يوضح بيان الخصوصية هذا كيف نجمع معلوماتك ونستخدمها ونشاركها عند استخدامك لموقعنا الإلكتروني أو تطبيق الهاتف المحمول.</p><p>نحن نطبق تدابير أمنية قياسية في الصناعة لحماية معلوماتك وضمان الامتثال لقوانين حماية البيانات المحلية والدولية.</p>"
+    },
+    "en": {
+      "title": "Privacy Policy",
+      "content": "<h3>Protecting Your Privacy</h3><p>Starbucks Egypt, operated by Alshaya Group, is committed to protecting your personal information. This Privacy Statement explains how we collect, use, and share your data when you use our website or mobile application.</p><p>We implement industry-standard security measures to safeguard your information and ensure compliance with local and international data protection laws.</p>"
+    }
   },
   "terms-of-use": {
-    "title": "الشروط والأحكام",
-    "content": "<p>يرجى قراءة شروط الاستخدام بعناية قبل استخدام موقع وتطبيق ستاربكس. استمرارك في استخدام الموقع يعني موافقتك على هذه الشروط.</p>"
+    "ar": {
+      "title": "شروط الاستخدام",
+      "content": "<h3>الاتفاقية القانونية</h3><p>من خلال الوصول إلى موقع ستاربكس مصر أو استخدامه، فإنك توافق على الالتزام بشروط الاستخدام هذه. تحكم هذه الشروط استخدامك لخدماتنا الرقمية، بما في ذلك إدارة الحساب والطلب عبر الإنترنت والمشاركة في برنامج الولاء.</p><p>نحن نحتفظ بالحق في تحديث هذه الشروط في أي وقت لتعكس التغييرات في خدماتنا أو المتطلبات القانونية.</p>"
+    },
+    "en": {
+      "title": "Terms of Use",
+      "content": "<h3>Legal Agreement</h3><p>By accessing or using the Starbucks Egypt website, you agree to comply with these Terms of Use. These terms govern your use of our digital services, including account management, online ordering, and loyalty program participation.</p><p>We reserve the right to update these terms at any time to reflect changes in our services or legal requirements.</p>"
+    }
   },
   "our-coffees": {
-    "title": "قهوتنا",
-    "content": "<p>نحن ملتزمون بتقديم أجود أنواع القهوة في العالم، والمحمصة بخبرة وعناية فائقة. اكتشف درجات التحميص المختلفة من ستاربكس.</p>"
+    "ar": {
+      "title": "قهوتنا",
+      "content": "<h3>ما وراء حبة البن</h3><p>في ستاربكس، نذهب إلى ما هو أبعد من مجرد حبة البن. نحن نسافر حول العالم للعثور على أجود أنواع حبوب بن أرابيكا، ونحمصها بدقة متناهية لإبراز نكهاتها الفريدة.</p><p>سواء كنت تفضل النكهات الزاهية لـ \"بلوند روست\"، أو النكهة المتوازنة لـ \"ميديوم روست\"، أو العمق القوي لـ \"دارك روست\"، فقد تم إعداد قهوتنا لتلهمك مع كل رشفة.</p>"
+    },
+    "en": {
+      "title": "Our Coffees",
+      "content": "<h3>Beyond the Bean</h3><p>At Starbucks, we go beyond the bean. We travel the world to find the finest Arabica coffee beans, roasting them with expert precision to bring out their unique flavors.</p><p>Whether you prefer the bright notes of a Blonde Roast, the balanced flavor of a Medium Roast, or the bold depth of a Dark Roast, our coffee is crafted to inspire every sip.</p>"
+    }
   },
   "contact-us": {
-    "title": "اتصل بنا",
-    "content": "<p>نحن هنا للمساعدة. يمكنك التواصل معنا عبر البريد الإلكتروني أو الهاتف، أو زيارة أحد فروعنا.</p>"
+    "ar": {
+      "title": "اتصل بنا",
+      "content": "<h3>نحن هنا للاستماع إليكم</h3><p>ملاحظاتكم تهمنا. سواء كان لديك سؤال حول قائمتنا، أو كنت بحاجة إلى مساعدة بشأن تجربتك في المتجر، أو تريد فقط مشاركة أفكارك، فإن فريق خدمة العملاء لدينا هنا للمساعدة.</p><p>يمكنك الاتصال بنا عبر خطنا الساخن على <strong>19991</strong>، أو مراسلتنا عبر البريد الإلكتروني على <strong>customer.care@alshaya.com</strong>. نحن ملتزمون بضمان أن تكون تجربة ستاربكس الخاصة بك استثنائية.</p>"
+    },
+    "en": {
+      "title": "Contact Us",
+      "content": "<h3>We're Here to Listen</h3><p>Your feedback matters to us. Whether you have a question about our menu, need assistance with a store experience, or just want to share your thoughts, our customer care team is here to help.</p><p>You can reach us via our hotline at <strong>19991</strong>, or email us at <strong>customer.care@alshaya.com</strong>. We are dedicated to ensuring your Starbucks experience is exceptional.</p>"
+    }
   },
   "cookie-notice": {
-    "title": "سياسة ملفات تعريف الارتباط",
-    "content": "<p>نحن نستخدم ملفات تعريف الارتباط لتحسين تجربتك على موقعنا. من خلال الاستمرار في التصفح، فإنك توافق على استخدامنا لملفات تعريف الارتباط.</p>"
+    "ar": {
+      "title": "سياسة ملفات تعريف الارتباط",
+      "content": "<p>نحن نستخدم ملفات تعريف الارتباط لتحسين تجربتك على موقعنا. من خلال الاستمرار في التصفح، فإنك توافق على استخدامنا لملفات تعريف الارتباط.</p>"
+    },
+    "en": {
+      "title": "Cookie Policy",
+      "content": "<p>We use cookies to improve your experience on our site. By continuing to browse, you agree to our use of cookies.</p>"
+    }
   },
   "social-impact-sustainability": {
-    "title": "الاستدامة",
-    "content": "<p>في ستاربكس، نؤمن بأن الشركات يجب أن تترك أثراً إيجابياً في العالم. نحن ملتزمون بتقليل بصمتنا البيئية ودعم المجتمعات التي نعمل فيها.</p>"
+    "ar": {
+      "title": "الاستدامة",
+      "content": "<h3>الالتزام نحو الكوكب والمجتمع</h3><p>في ستاربكس، نحن ملتزمون بأن نكون مؤسسة ذات أثر إيجابي على الموارد - نعيد للكوكب أكثر مما نأخذ منه. بحلول عام 2030، نهدف إلى تقليل بصمتنا الكربونية والمائية والنفايات بنسبة 50%.</p><p>في مصر وعبر المنطقة، قدمنا أغطية بدون شفاطات للتخلص التدريجي من الشفاطات البلاستيكية، ونشجع على استخدام الأكواب القابلة لإعادة الاستخدام، ونقدم تفل القهوة للحدائق. نحن نحصل على قهوتنا بشكل أخلاقي من خلال ممارسات C.A.F.E.، لدعم المزارعين والبيئة.</p>"
+    },
+    "en": {
+      "title": "Sustainability",
+      "content": "<h3>Commitment to People & Planet</h3><p>At Starbucks, we are committed to being resource-positive—giving back more than we take from the planet. By 2030, we aim to reduce our carbon, water, and waste footprints by 50%.</p><p>In Egypt and across the region, we've introduced strawless lids to phase out plastic straws, promote the use of reusable cups, and offer coffee grounds for gardens. We source our coffee ethically through C.A.F.E. Practices, supporting farmers and the environment.</p>"
+    }
   },
   "starbucks-middle-east": {
-    "title": "ستاربكس الشرق الأوسط",
-    "content": "<p>تعمل ستاربكس في الشرق الأوسط منذ عام 1999 وذلك من خلال اتفاقية امتياز حصرية مع شريكها التجاري، مجموعة الشايع، وهي شركة عائلية كويتية خاصة.</p>"
+    "ar": {
+      "title": "ستاربكس الشرق الأوسط",
+      "content": "<h3>تاريخ من التميز في المنطقة</h3><p>منذ عام 1999، كانت ستاربكس جزءاً من مجتمع الشرق الأوسط من خلال اتفاقية امتياز حصرية مع <strong>مجموعة الشايع</strong>، وهي شركة عائلية كويتية خاصة.</p><p>اليوم، تدير الشايع ما يقرب من 2000 متجر في 11 سوقاً في المنطقة، وتوظف الآلاف من الشركاء المحليين الملتزمين بارتداء \"المريلة الخضراء\". نحن مؤسسة غير سياسية ونظل مكرسين لخدمة عملائنا ومجتمعاتنا بأعلى معايير التميز في القهوة والمسؤولية الاجتماعية.</p>"
+    },
+    "en": {
+      "title": "Starbucks Middle East",
+      "content": "<h3>A History of Excellence in the Region</h3><p>Since 1999, Starbucks has been a part of the Middle East community through an exclusive franchise agreement with <strong>Alshaya Group</strong>, a private Kuwaiti family-owned company.</p><p>Today, Alshaya operates nearly 2,000 stores across 11 markets in the region, employing thousands of local partners dedicated to wearing the \"Green Apron\". We are a non-political organization and remain dedicated to serving our customers and communities with the highest standards of coffee excellence and social responsibility.</p>"
+    }
   },
   "starbucks-for-the-record": {
-    "title": "بيان ستاربكس الرسمي",
-    "content": "<h3>الحقيقة مُهمة</h3><p>رداً على المعلومات الخاطئة، فإننا نشارككم اليوم الحقائق حول ما تُؤمن به ستاربكس وتُدافع عنه.</p><p>ستاربكس هي مؤسسة غير سياسية. نحن لا ندعم أي أطراف سياسية أو حكومات في أي مكان في العالم.</p>"
+    "ar": {
+      "title": "بيان ستاربكس الرسمي",
+      "content": "<h3>الحقيقة مُهمة</h3><p>رداً على المعلومات الخاطئة، فإننا نشارككم اليوم الحقائق حول ما تُؤمن به ستاربكس وتُدافع عنه.</p><p>ستاربكس هي مؤسسة غير سياسية. نحن لا ندعم أي أطراف سياسية أو حكومات في أي مكان في العالم.</p>"
+    },
+    "en": {
+      "title": "Starbucks Official Statement",
+      "content": "<h3>Truth Matters</h3><p>In response to misinformation, we are sharing with you today the facts about what Starbucks believes in and stands for.</p><p>Starbucks is a non-political organization. We do not support any political parties or governments anywhere in the world.</p>"
+    }
   },
   "community-impact-starbucks": {
-    "title": "التأثير المجتمعي",
-    "content": "<h3>دعم غزة</h3><p>مؤسسة ستاربكس والشايع تتبرعان لدعم المساعدات الإنسانية في غزة. نحن ملتزمون بدعم المجتمعات التي نخدمها.</p>"
-  },
-  "new-era-same-icons": {
-    "title": "عصر جديد. نفس النجوم.",
-    "content": "<h3>طلبك الأيقوني</h3><p>اكتشف 3 طلبات أيقونية مستوحاة من فيلم The Devil Wears Prada. متوفر لفترة محدودة.</p>"
+    "ar": {
+      "title": "التأثير المجتمعي",
+      "content": "<h3>دعم غزة</h3><p>مؤسسة ستاربكس والشايع تتبرعان لدعم المساعدات الإنسانية في غزة. نحن ملتزمون بدعم المجتمعات التي نخدمها.</p>"
+    },
+    "en": {
+      "title": "Community Impact",
+      "content": "<h3>Support for Gaza</h3><p>The Starbucks Foundation and Alshaya are donating to support humanitarian aid in Gaza. We are committed to supporting the communities we serve.</p>"
+    }
   }
 }

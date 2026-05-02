@@ -1,55 +1,53 @@
-import { useState } from 'react'
+import React from 'react'
 import { Link } from 'react-router-dom'
-import { Menu, MapPin, ShoppingCart, User, Moon, Sun, Globe } from 'lucide-react'
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from './ui/sheet'
-import { Button } from './ui/button'
-import { useTheme } from '@/contexts/ThemeContext'
 import { useTranslation } from 'react-i18next'
+import { useTheme } from '../contexts/ThemeContext'
+import { Button } from './ui/button'
+import { 
+  MapPin, 
+  Menu, 
+  Globe, 
+  Moon, 
+  Sun 
+} from 'lucide-react'
 import { toast } from 'sonner'
-import navbarData from '@/data/navbar.json'
-import type { NavbarData } from '@/types'
 
-const data: NavbarData = navbarData
-
-const Navbar = () => {
-  const [isOpen, setIsOpen] = useState(false)
-  const { theme, toggleTheme } = useTheme()
+export default function Navbar() {
   const { t, i18n } = useTranslation()
+  const { theme, toggleTheme } = useTheme()
 
   const toggleLanguage = () => {
     const newLang = i18n.language === 'ar' ? 'en' : 'ar'
     i18n.changeLanguage(newLang)
-    toast.success(newLang === 'ar' ? 'تم تغيير اللغة إلى العربية' : 'Language changed to English')
-    document.documentElement.dir = newLang === 'ar' ? 'rtl' : 'ltr'
-    document.documentElement.lang = newLang
+    toast.success(t('common.language_changed'))
   }
 
+  const navItems = [
+    { label: t('navbar.menu'), href: '/menu' },
+    { label: t('navbar.delivery'), href: '/delivery' },
+    { label: t('navbar.sustainability'), href: '/social-impact-sustainability' },
+    { label: t('navbar.middle_east'), href: '/starbucks-middle-east' },
+  ]
+
   return (
-    <header className="sticky top-0 z-50 w-full bg-card-light dark:bg-card-dark shadow-sm border-b border-border-light dark:border-border-dark transition-colors">
-      <nav className="container mx-auto flex h-20 items-center justify-between px-4">
-        {/* Logo */}
+    <nav className="sticky top-0 z-50 w-full border-b bg-white/80 backdrop-blur-md dark:bg-black/80 transition-colors">
+      <div className="container mx-auto flex h-20 max-w-7xl items-center justify-between px-4">
+        {/* Logo and Nav Items */}
         <div className="flex items-center gap-8">
           <Link to="/" className="flex-shrink-0">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 64 64"
-              className="h-12 w-12"
-            >
-              <circle cx="32" cy="32" r="31" fill="#006241" />
-              <path
-                fill="#fff"
-                d="M32 14c1.5 0 2.8.2 3.1.3.2 0 .2-.1.1-.2l-3.2-2.4-3.2 2.4c-.1.1-.1.2.1.2h.1c.4-.1 1.6-.3 3-.3m-2.4 15.8c0-.2.2-.2.2-.2s.8.2 2.2.2c1.4 0 2.2-.2 2.2-.2s.2.1.2.2c-.2.1-.3.3-.5.5-.4.5-1 1.1-1.9 1.1-1 0-1.5-.6-1.9-1.1-.2-.2-.4-.4-.5-.5m2-2.2c.1 0 .2.1.4.1s.3 0 .4-.1c.1 0 .2 0 .3-.1.2 0 .7.2.8.4 0 .1 0 .2-.1.2-.2 0-.4.1-.6.2-.2.1-.5.2-.8.2s-.6-.1-.8-.2c-.2-.1-.4-.1-.6-.2 0-.1 0-.2-.1-.2.1-.2.6-.4.8-.4.1 0 .2 0 .3.1"
-              />
-            </svg>
+            <img 
+              src="https://www.starbucks.eg/assets/app/icons/icon-192x192.png" 
+              alt="Starbucks" 
+              className="h-12 w-12 hover:scale-105 transition-transform"
+            />
           </Link>
-
-          {/* Desktop Menu */}
-          <div className="hidden items-center gap-6 md:flex">
-            {data.menuItems.map((item) => (
+          
+          <div className="hidden items-center gap-6 lg:flex">
+            {navItems.map((item) => (
               <Link
-                key={item.label}
+                key={item.href}
                 to={item.href}
-                className="text-base font-semibold text-foreground-light dark:text-foreground-dark transition-colors hover:text-starbucks-green"
+                className="text-sm font-bold uppercase tracking-widest text-starbucks-dark hover:text-starbucks-green dark:text-foreground-dark transition-colors"
               >
                 {item.label}
               </Link>
@@ -57,121 +55,55 @@ const Navbar = () => {
           </div>
         </div>
 
-        {/* Right Side Actions */}
+        {/* Action Items */}
         <div className="flex items-center gap-4">
-          {/* Desktop Actions */}
-          <div className="hidden items-center gap-3 md:flex">
-            <Button
-              variant="ghost"
-              size="icon"
-              className="rounded-full hover:bg-gray-100 dark:hover:bg-gray-800"
-              aria-label={data.actions.location}
+          <div className="hidden items-center gap-6 lg:flex">
+            <Link 
+              to="/locations" 
+              className="flex items-center gap-2 text-sm font-bold text-starbucks-dark hover:text-starbucks-green dark:text-foreground-dark transition-colors"
             >
               <MapPin className="h-5 w-5" />
-            </Button>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="rounded-full hover:bg-gray-100 dark:hover:bg-gray-800"
-              aria-label={data.actions.cart}
-            >
-              <ShoppingCart className="h-5 w-5" />
-            </Button>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={toggleTheme}
-              className="rounded-full hover:bg-gray-100 dark:hover:bg-gray-800"
-              aria-label="Toggle theme"
-            >
-              {theme === 'light' ? (
-                <Moon className="h-5 w-5" />
-              ) : (
-                <Sun className="h-5 w-5" />
-              )}
-            </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={toggleLanguage}
-              className="gap-2 hover:bg-gray-100 dark:hover:bg-gray-800"
-            >
-              <Globe className="h-4 w-4" />
-              {t('Language')}
-            </Button>
-            <Button variant="outline" size="sm" className="gap-2">
-              <User className="h-4 w-4" />
-              {data.actions.login}
-            </Button>
+              {t('common.locations')}
+            </Link>
+            
+            <div className="flex items-center gap-3 border-r dark:border-gray-800 pr-6 mr-2 transition-colors">
+              <Link to="/signin">
+                <Button variant="outline" size="sm" className="font-bold border-2 rounded-full px-6 hover:bg-starbucks-green hover:border-starbucks-green hover:text-white transition-all">
+                  {t('common.sign_in')}
+                </Button>
+              </Link>
+              <Link to="/signup">
+                <Button size="sm" className="font-bold bg-black text-white rounded-full px-6 hover:bg-gray-800 transition-all">
+                  {t('common.join_now')}
+                </Button>
+              </Link>
+            </div>
           </div>
 
-          {/* Mobile Menu */}
-          <Sheet open={isOpen} onOpenChange={setIsOpen}>
-            <SheetTrigger className="md:hidden">
-              <Button variant="ghost" size="icon">
-                <Menu className="h-6 w-6" />
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="left" className="bg-card-light dark:bg-card-dark">
-              <SheetHeader>
-                <SheetTitle className="text-right text-2xl font-bold text-foreground-light dark:text-foreground-dark">
-                  القائمة
-                </SheetTitle>
-              </SheetHeader>
-              <div className="mt-8 flex flex-col gap-4">
-                {data.menuItems.map((item) => (
-                  <Link
-                    key={item.label}
-                    to={item.href}
-                    className="text-right text-lg font-semibold text-foreground-light dark:text-foreground-dark transition-colors hover:text-starbucks-green"
-                    onClick={() => setIsOpen(false)}
-                  >
-                    {item.label}
-                  </Link>
-                ))}
-                <hr className="my-4 border-border-light dark:border-border-dark" />
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={toggleTheme}
-                  className="w-full justify-start gap-2"
-                >
-                  {theme === 'light' ? (
-                    <>
-                      <Moon className="h-4 w-4" />
-                      الوضع الداكن
-                    </>
-                  ) : (
-                    <>
-                      <Sun className="h-4 w-4" />
-                      الوضع الفاتح
-                    </>
-                  )}
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={toggleLanguage}
-                  className="w-full justify-start gap-2"
-                >
-                  <Globe className="h-4 w-4" />
-                  {t('Language')}
-                </Button>
-                <Button variant="default" className="w-full">
-                  <User className="h-4 w-4" />
-                  {data.actions.login}
-                </Button>
-                <Button variant="outline" className="w-full">
-                  <MapPin className="h-4 w-4" />
-                  {data.actions.findStore}
-                </Button>
-              </div>
-            </SheetContent>
-          </Sheet>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={toggleLanguage}
+            className="flex items-center gap-2 font-bold text-starbucks-dark dark:text-foreground-dark hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full"
+          >
+            <Globe className="h-5 w-5" />
+            <span className="min-w-[40px]">{t('common.language')}</span>
+          </Button>
+
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={toggleTheme}
+            className="text-starbucks-dark dark:text-foreground-dark hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full"
+          >
+            {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+          </Button>
+
+          <Button variant="ghost" size="icon" className="lg:hidden">
+            <Menu className="h-6 w-6" />
+          </Button>
         </div>
-      </nav>
-    </header>
+      </div>
+    </nav>
   )
 }
-
-export default Navbar

@@ -1,0 +1,59 @@
+{
+  "common": {
+    "welcome": "Welcome to Starbucks",
+    "language": "العربية",
+    "menu": "Menu",
+    "locations": "Locations",
+    "rewards": "Rewards",
+    "account": "Account",
+    "sign_in": "Sign In",
+    "join_now": "Join Now",
+    "sign_out": "Sign Out",
+    "back": "Back",
+    "home": "Home",
+    "close": "Close",
+    "search": "Search",
+    "loading": "Loading...",
+    "language_changed": "Language changed to English"
+  },
+  "navbar": {
+    "menu": "Menu",
+    "delivery": "Delivery Menu",
+    "sustainability": "Sustainability",
+    "middle_east": "Starbucks Middle East"
+  },
+  "footer": {
+    "about_us": "About Us",
+    "our_coffees": "Our Coffees",
+    "contact_us": "Contact Us",
+    "social_impact": "Social Impact",
+    "sustainability": "Sustainability",
+    "privacy_policy": "Privacy Policy",
+    "terms_conditions": "Terms & Conditions",
+    "cookie_policy": "Cookie Policy",
+    "location_selector": "Select Your Location",
+    "copyright": "© 2024 Starbucks Coffee Company. All rights reserved."
+  },
+  "hero": {
+    "title": "A New Era. Same Icons.",
+    "subtitle": "Discover our latest collections and timeless classics.",
+    "cta": "Learn More"
+  },
+  "not_found": {
+    "title": "404 - Page Not Found",
+    "message": "Sorry, the page you are looking for does not exist.",
+    "button": "Return to Homepage"
+  },
+  "cards": {
+    "new_menu": {
+      "title": "New Season, New Flavors",
+      "description": "Discover our latest seasonal drinks and treats.",
+      "cta": "See the Menu"
+    },
+    "locations": {
+      "title": "Find Us Nearby",
+      "description": "Locate your nearest Starbucks and order ahead.",
+      "cta": "Find a Store"
+    }
+  }
+}

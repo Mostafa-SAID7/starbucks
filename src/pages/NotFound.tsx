@@ -1,12 +1,15 @@
 import { Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { Button } from '../components/ui/button'
 import { Home } from 'lucide-react'
 import SEO from '../components/SEO'
 
 export default function NotFound() {
+  const { t } = useTranslation()
+
   return (
     <div className="flex min-h-[70vh] flex-col items-center justify-center px-4 text-center">
-      <SEO title="404 - الصفحة غير موجودة" />
+      <SEO title={t('not_found.title')} />
       <div className="mb-8 rounded-full bg-starbucks-green/10 p-6 text-starbucks-green dark:bg-starbucks-green/20 dark:text-starbucks-light">
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -20,15 +23,15 @@ export default function NotFound() {
       </div>
       <h1 className="mb-4 text-6xl font-bold text-starbucks-green dark:text-starbucks-light">404</h1>
       <h2 className="mb-6 text-2xl font-bold text-foreground-light dark:text-foreground-dark">
-        عذراً، الصفحة التي تبحث عنها غير موجودة
+        {t('not_found.title')}
       </h2>
       <p className="mb-8 max-w-md text-gray-600 dark:text-gray-400">
-        ربما تم نقل الصفحة أو حذفها، أو ربما كتبت العنوان بشكل غير صحيح.
+        {t('not_found.message')}
       </p>
       <Link to="/">
         <Button className="gap-2">
           <Home className="h-4 w-4" />
-          العودة للصفحة الرئيسية
+          {t('not_found.button')}
         </Button>
       </Link>
     </div>
