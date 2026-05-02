@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  starbucks-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: starbucks-eg-react
+    ports:
+      - "3000:80"
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+    networks:
+      - starbucks-network
+    labels:
+      - "com.starbucks.description=Starbucks Egypt React Application"
+      - "com.starbucks.version=1.0.0"
+
+networks:
+  starbucks-network:
+    driver: bridge

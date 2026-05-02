@@ -1,0 +1,22 @@
+{
+  "menuItems": [
+    {
+      "label": "القائمة",
+      "href": "#menu"
+    },
+    {
+      "label": "المكافآت",
+      "href": "#rewards"
+    },
+    {
+      "label": "بطاقات الهدايا",
+      "href": "#gift-cards"
+    }
+  ],
+  "actions": {
+    "location": "العثور على متجر",
+    "cart": "السلة",
+    "login": "تسجيل الدخول",
+    "findStore": "العثور على متجر"
+  }
+}
