@@ -2,15 +2,19 @@
   "menuItems": [
     {
       "label": "القائمة",
-      "href": "#menu"
+      "href": "/menu"
     },
     {
-      "label": "المكافآت",
-      "href": "#rewards"
+      "label": "قائمة التوصيل",
+      "href": "/delivery"
     },
     {
-      "label": "بطاقات الهدايا",
-      "href": "#gift-cards"
+      "label": "الاستدامة",
+      "href": "/social-impact-sustainability"
+    },
+    {
+      "label": "ستاربكس الشرق الأوسط",
+      "href": "/starbucks-middle-east"
     }
   ],
   "actions": {

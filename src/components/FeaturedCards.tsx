@@ -5,7 +5,7 @@ import { ArrowLeft } from 'lucide-react'
 import featuredCardsData from '@/data/featured-cards.json'
 import type { FeaturedCardsData } from '@/types'
 
-const data: FeaturedCardsData = featuredCardsData
+const data = featuredCardsData as FeaturedCardsData
 
 const FeaturedCards = () => {
   return (
@@ -20,7 +20,15 @@ const FeaturedCards = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
             >
-              <Card className="group overflow-hidden border-0 shadow-lg transition-all hover:shadow-2xl bg-card-light dark:bg-card-dark">
+              <Card 
+                className={`group overflow-hidden border-0 shadow-lg transition-all hover:shadow-2xl ${
+                  card.theme === 'Green' 
+                    ? 'bg-starbucks-green text-white' 
+                    : card.theme === 'Gray' 
+                    ? 'bg-gray-100 dark:bg-gray-800' 
+                    : 'bg-card-light dark:bg-card-dark'
+                }`}
+              >
                 <div className="relative aspect-video overflow-hidden">
                   <img
                     src={card.image}
@@ -29,18 +37,24 @@ const FeaturedCards = () => {
                   />
                 </div>
                 <CardContent className="p-6">
-                  <h3 className="mb-3 text-right text-2xl font-bold text-starbucks-dark dark:text-foreground-dark transition-colors">
+                  <h3 className={`mb-3 text-right text-2xl font-bold transition-colors ${
+                    card.theme === 'Green' ? 'text-white' : 'text-starbucks-dark dark:text-foreground-dark'
+                  }`}>
                     {card.title}
                   </h3>
                   {card.description && (
-                    <p className="mb-4 text-right text-sm leading-relaxed text-gray-600 dark:text-gray-400 transition-colors">
+                    <p className={`mb-4 text-right text-sm leading-relaxed transition-colors ${
+                      card.theme === 'Green' ? 'text-green-50' : 'text-gray-600 dark:text-gray-400'
+                    }`}>
                       {card.description}
                     </p>
                   )}
                   <div className="flex flex-col gap-3">
                     <Button
-                      variant="default"
-                      className="w-full justify-between"
+                      variant={card.theme === 'Green' ? 'outline' : 'default'}
+                      className={`w-full justify-between ${
+                        card.theme === 'Green' ? 'border-white text-white hover:bg-white hover:text-starbucks-green' : ''
+                      }`}
                       asChild
                     >
                       <a href={card.ctaLink}>
@@ -51,7 +65,9 @@ const FeaturedCards = () => {
                     {card.secondaryCta && (
                       <Button
                         variant="outline"
-                        className="w-full justify-between"
+                        className={`w-full justify-between ${
+                          card.theme === 'Green' ? 'border-white text-white hover:bg-white hover:text-starbucks-green' : ''
+                        }`}
                         asChild
                       >
                         <a href={card.secondaryCtaLink}>

@@ -7,7 +7,8 @@
       "image": "https://www.starbucks.eg/sites/starbucks-eg-pwa/files/styles/c22_featured_card_531x273/public/2026-05/UAE_1.jpg.webp",
       "imageAlt": "New Era Campaign",
       "cta": "اكتشف المزيد",
-      "ctaLink": "#"
+      "ctaLink": "/new-era-same-icons",
+      "theme": "Gray"
     },
     {
       "id": 2,
@@ -16,9 +17,10 @@
       "image": "https://www.starbucks.eg/sites/starbucks-eg-pwa/files/styles/c22_featured_card_531x273/public/2023-11/Generic-VB.jpg.webp",
       "imageAlt": "Starbucks Delivery",
       "cta": "اطلب الآن",
-      "ctaLink": "#",
+      "ctaLink": "/delivery",
       "secondaryCta": "اكتشف مواقع مقاهينا",
-      "secondaryCtaLink": "#"
+      "secondaryCtaLink": "/about-us",
+      "theme": "Green"
     },
     {
       "id": 3,
@@ -27,7 +29,8 @@
       "image": "https://www.starbucks.eg/sites/starbucks-eg-pwa/files/styles/c22_featured_card_531x273/public/2024-05/Starbucks%20for%20the%20Record.png.webp",
       "imageAlt": "Official Statement",
       "cta": "اعرف المزيد",
-      "ctaLink": "#"
+      "ctaLink": "/starbucks-for-the-record",
+      "theme": "Gray"
     },
     {
       "id": 4,
@@ -36,7 +39,8 @@
       "image": "https://www.starbucks.eg/sites/starbucks-eg-pwa/files/styles/c22_featured_card_531x273/public/2022-05/Summer-Website-Banners--Mycoffee-TC-2.png.webp",
       "imageAlt": "Coffee Experience",
       "cta": "اكتشف المزيد",
-      "ctaLink": "#"
+      "ctaLink": "/our-coffees",
+      "theme": "Green"
     },
     {
       "id": 5,
@@ -45,7 +49,8 @@
       "image": "https://www.starbucks.eg/sites/starbucks-eg-pwa/files/styles/c22_featured_card_531x273/public/2022-05/Summer-Website-Banners--Delivery-TC-2.png.webp",
       "imageAlt": "Delivery Service",
       "cta": "اطلب الآن",
-      "ctaLink": "#"
+      "ctaLink": "/delivery",
+      "theme": "Gray"
     }
   ]
 }

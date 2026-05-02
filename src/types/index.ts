@@ -44,6 +44,7 @@ export interface FeaturedCard {
   ctaLink: string
   secondaryCta?: string
   secondaryCtaLink?: string
+  theme?: 'Green' | 'Gray' | null
 }
 
 export interface FeaturedCardsData {

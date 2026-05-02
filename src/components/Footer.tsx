@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { ChevronDown, Globe } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import footerData from '@/data/footer.json'
@@ -41,12 +42,12 @@ const Footer = () => {
               <ul className="space-y-2">
                 {section.links.map((link) => (
                   <li key={link.label}>
-                    <a
-                      href={link.href}
+                    <Link
+                      to={link.href}
                       className="text-sm text-gray-300 transition-colors hover:text-white"
                     >
                       {link.label}
-                    </a>
+                    </Link>
                   </li>
                 ))}
               </ul>
@@ -80,12 +81,12 @@ const Footer = () => {
                   >
                     {section.links.map((link) => (
                       <li key={link.label}>
-                        <a
-                          href={link.href}
+                        <Link
+                          to={link.href}
                           className="block text-right text-sm text-gray-300"
                         >
                           {link.label}
-                        </a>
+                        </Link>
                       </li>
                     ))}
                   </motion.ul>
