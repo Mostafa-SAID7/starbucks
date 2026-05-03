@@ -19,7 +19,7 @@ import AuthModal from './AuthModal'
 import { navbar } from '../data'
 
 export default function Navbar() {
-  const { t, i18n } = useTranslation()
+  const { i18n } = useTranslation()
   const { theme, toggleTheme } = useTheme()
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [isSearchOpen, setIsSearchOpen] = useState(false)
@@ -28,11 +28,13 @@ export default function Navbar() {
   
   const lang = (i18n.language === 'ar' ? 'ar' : 'en') as 'ar' | 'en'
   const isRTL = lang === 'ar'
-  const navData = (navbar as any)[lang]
+  const navData = (navbar as Record<string, any>)[lang]
 
   // Close mobile menu on route change
   useEffect(() => {
-    setIsMobileMenuOpen(false)
+    if (isMobileMenuOpen) {
+      setIsMobileMenuOpen(false)
+    }
   }, [location.pathname])
 
   const toggleLanguage = () => {

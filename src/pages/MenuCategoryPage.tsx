@@ -10,11 +10,48 @@ import MenuPromoVideo from '../components/MenuPromoVideo'
 import menuData from '../data/menu.json'
 import NotFound from './NotFound'
 
+interface Subcategory {
+  id: string
+  title: string
+  image: string
+  href: string
+}
+
+interface Category {
+  id: string
+  title: string
+  description?: string
+  sidebarTitle?: string
+  image?: string
+  subcategories?: Subcategory[]
+}
+
+interface MenuData {
+  title: string
+  description: string
+  categories: Category[]
+  allergyInfo: {
+    title: string
+    description: string
+    link: string
+    linkLabel: string
+  }
+  sidebar: {
+    title: string
+    image: string
+    actions: {
+      label: string
+      href: string
+      primary: boolean
+    }[]
+  }
+}
+
 export default function MenuCategoryPage() {
   const { categoryId } = useParams<{ categoryId: string }>()
   const { i18n } = useTranslation()
   const currentLang = (i18n.language === 'ar' ? 'ar' : 'en') as 'ar' | 'en'
-  const data = menuData[currentLang]
+  const data = (menuData as unknown as Record<string, MenuData>)[currentLang]
 
   const category = data.categories.find((c) => c.id === categoryId)
 
@@ -50,7 +87,7 @@ export default function MenuCategoryPage() {
           </div>
 
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {category.subcategories?.map((sub: any, index: number) => (
+            {category.subcategories?.map((sub, index: number) => (
               <motion.div
                 key={sub.id}
                 initial={{ opacity: 0, y: 20 }}

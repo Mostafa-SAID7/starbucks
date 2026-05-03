@@ -4,7 +4,12 @@ import { motion } from 'framer-motion'
 import { SEO, Header, Accordion } from '../components'
 import { middleEast as data } from '../data'
 
-const MiddleEastPage: React.FC = () => {
+interface FAQ {
+  q: { ar: string; en: string }
+  a: { ar: string; en: string }
+}
+
+export default function MiddleEastPage() {
   const { i18n } = useTranslation()
   const lang = (i18n.language === 'ar' ? 'ar' : 'en') as 'ar' | 'en'
 
@@ -25,7 +30,7 @@ const MiddleEastPage: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           className="space-y-6 text-start leading-relaxed text-gray-700 dark:text-gray-300 text-base lg:text-lg border-b border-gray-100 dark:border-zinc-800 pb-12 mb-12"
         >
-          {data.paragraphs[lang].map((p, i) => (
+          {data.paragraphs[lang].map((p: string, i: number) => (
             <p key={i}>{p}</p>
           ))}
         </motion.div>
@@ -37,7 +42,7 @@ const MiddleEastPage: React.FC = () => {
           </h2>
           <div className="mt-8">
             <Accordion 
-              items={data.faqs.map((faq: any) => ({
+              items={data.faqs.map((faq: FAQ) => ({
                 title: faq.q[lang],
                 content: faq.a[lang]
               }))} 
@@ -55,5 +60,3 @@ const MiddleEastPage: React.FC = () => {
     </div>
   )
 }
-
-export default MiddleEastPage

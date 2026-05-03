@@ -5,9 +5,19 @@ import { useTranslation } from 'react-i18next'
 import { Button } from './button'
 import { hero as data } from '../../data'
 
+interface HeroData {
+  title: string
+  description: string
+  imageUrl: string
+  imageAlt: string
+  ctaText: string
+  ctaLink: string
+}
+
 export const Banner: React.FC = () => {
   const { i18n } = useTranslation()
-  const localizedData = (data as any)[i18n.language] || data.en
+  const lang = i18n.language as keyof typeof data
+  const localizedData = (data[lang] || data.en) as HeroData
 
   return (
     <section className="relative h-[400px] md:h-[500px] lg:h-[600px] w-full overflow-hidden">

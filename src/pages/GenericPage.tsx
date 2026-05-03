@@ -5,6 +5,13 @@ import { motion } from 'framer-motion'
 import { SEO, Button, Header, Accordion } from '../components'
 import pagesData from '../data/pages.json'
 
+interface SectionItem {
+  name?: string
+  logo?: string
+  question?: string
+  answer?: string
+}
+
 interface Section {
   type: 'hero' | 'partners' | 'card' | 'faq' | 'content'
   title?: string
@@ -14,7 +21,7 @@ interface Section {
   imageAlt?: string
   cta?: string
   ctaLink?: string
-  items?: any[]
+  items?: SectionItem[]
   content?: string
   reverse?: boolean
   bgColor?: string
@@ -39,7 +46,7 @@ export default function GenericPage() {
   
   const slug = paramSlug || location.pathname.split('/').pop() || ''
   
-  const { i18n, t } = useTranslation()
+  const { i18n } = useTranslation()
   const currentLang = (i18n.language === 'ar' ? 'ar' : 'en') as keyof PageData
 
   if (!slug || !typedPagesData[slug]) {
@@ -77,8 +84,6 @@ export default function GenericPage() {
 }
 
 function PageSection({ section }: { section: Section }) {
-  const { t } = useTranslation()
-
   switch (section.type) {
     case 'hero':
       return (
@@ -87,17 +92,17 @@ function PageSection({ section }: { section: Section }) {
             <div className="flex flex-col-reverse items-center gap-12 lg:flex-row">
               <div className="flex-1 text-center md:text-start">
                 <motion.h1 
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="mb-6 text-4xl font-extrabold text-starbucks-dark dark:text-white lg:text-6xl leading-tight"
+                   initial={{ opacity: 0, y: 20 }}
+                   animate={{ opacity: 1, y: 0 }}
+                   className="mb-6 text-4xl font-extrabold text-starbucks-dark dark:text-white lg:text-6xl leading-tight"
                 >
                   {section.title}
                 </motion.h1>
                 <motion.p 
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.1 }}
-                  className="mb-8 text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto md:mx-0"
+                   initial={{ opacity: 0, y: 20 }}
+                   animate={{ opacity: 1, y: 0 }}
+                   transition={{ delay: 0.1 }}
+                   className="mb-8 text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto md:mx-0"
                 >
                   {section.description}
                 </motion.p>
@@ -177,9 +182,9 @@ function PageSection({ section }: { section: Section }) {
             </h2>
             <div className="mt-8">
               <Accordion 
-                items={section.items?.map((item: any) => ({
-                  title: item.question,
-                  content: item.answer
+                items={section.items?.map((item) => ({
+                  title: item.question || '',
+                  content: item.answer || ''
                 })) || []} 
               />
             </div>

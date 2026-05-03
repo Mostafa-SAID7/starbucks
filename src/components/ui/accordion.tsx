@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronDown } from 'lucide-react'
-import { useTranslation } from 'react-i18next'
 
 interface AccordionItemProps {
   title: string
@@ -11,9 +10,6 @@ interface AccordionItemProps {
 }
 
 const AccordionItem: React.FC<AccordionItemProps> = ({ title, content, isOpen, onClick }) => {
-  const { i18n } = useTranslation()
-  const isRTL = i18n.language === 'ar'
-
   return (
     <div className={`mb-4 overflow-hidden rounded-2xl border transition-all duration-300 ${
       isOpen 

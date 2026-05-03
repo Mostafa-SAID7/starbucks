@@ -10,14 +10,60 @@ import menuData from '../data/menu.json'
 import NotFound from './NotFound'
 import { Button } from '../components/ui/button'
 
+interface MenuItem {
+  id: string
+  title: string
+  description: string
+  image: string
+  href: string
+}
+
+interface Subcategory {
+  id: string
+  title: string
+  image?: string
+  href: string
+  items?: MenuItem[]
+}
+
+interface Category {
+  id: string
+  title: string
+  description?: string
+  sidebarTitle?: string
+  image?: string
+  subcategories?: Subcategory[]
+}
+
+interface MenuData {
+  title: string
+  description: string
+  categories: Category[]
+  allergyInfo: {
+    title: string
+    description: string
+    link: string
+    linkLabel: string
+  }
+  sidebar: {
+    title: string
+    image: string
+    actions: {
+      label: string
+      href: string
+      primary: boolean
+    }[]
+  }
+}
+
 export default function MenuItemPage() {
   const { categoryId, itemId: subcategoryId } = useParams<{ categoryId: string; itemId: string }>()
   const { i18n } = useTranslation()
   const currentLang = (i18n.language === 'ar' ? 'ar' : 'en') as 'ar' | 'en'
-  const data = menuData[currentLang]
+  const data = (menuData as unknown as Record<string, MenuData>)[currentLang]
 
   const category = data.categories.find((c) => c.id === categoryId)
-  const subcategory = category?.subcategories?.find((s: any) => s.id === subcategoryId)
+  const subcategory = category?.subcategories?.find((s) => s.id === subcategoryId)
 
   if (!category || !subcategory) {
     return <NotFound />
@@ -48,7 +94,7 @@ export default function MenuItemPage() {
           </div>
 
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-2">
-            {subcategory.items?.map((item: any, index: number) => (
+            {subcategory.items?.map((item, index: number) => (
               <motion.div
                 key={item.id}
                 initial={{ opacity: 0, y: 20 }}
@@ -74,7 +120,7 @@ export default function MenuItemPage() {
                     asChild
                     className="rounded-2xl bg-starbucks-green px-6 font-bold text-white shadow-sm hover:bg-starbucks-dark dark:bg-starbucks-light dark:text-black dark:hover:bg-white"
                   >
-                    <a href="https://www.talabat.com/ar/egypt/restaurant/516787/starbucks-city-scape-6th-of-october?aid=7935" target="_blank" rel="noreferrer">
+                    <a href={item.href} target="_blank" rel="noreferrer">
                       {currentLang === 'ar' ? 'اطلبه للتوصيل' : 'Order for delivery'}
                     </a>
                   </Button>

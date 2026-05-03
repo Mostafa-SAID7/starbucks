@@ -1,13 +1,31 @@
 import React from 'react'
-import { useTranslation } from 'react-i18next'
 import { motion } from 'framer-motion'
-import { SEO, Header, Logo, Accordion } from '../components'
+import { useTranslation } from 'react-i18next'
+import { SEO, Header, Accordion } from '../components'
 import { privacyStatement as data } from '../data'
+
+interface Section {
+  id: string
+  title: { ar: string; en: string }
+  paragraphs?: { ar: string; en: string }[]
+  list?: { ar: string; en: string }[]
+  types?: {
+    id: string
+    label: { ar: string; en: string }
+    text: { ar: string; en: string }
+  }[]
+  contactNote?: { ar: string; en: string }
+  contactInfo?: {
+    email: string
+    phone: string
+    phoneTel: string
+    address: { ar: string; en: string }
+  }
+}
 
 const PrivacyStatementPage: React.FC = () => {
   const { i18n } = useTranslation()
   const lang = (i18n.language === 'ar' ? 'ar' : 'en') as 'ar' | 'en'
-  const isRTL = i18n.language === 'ar'
 
   return (
     <div className="min-h-screen bg-white dark:bg-black">
@@ -15,112 +33,109 @@ const PrivacyStatementPage: React.FC = () => {
 
       <Header
         title={data.header[lang]}
+        subtitle={data.lastUpdated[lang]}
         variant="light"
       />
 
-      <div className="container mx-auto max-w-6xl px-6 py-16 md:py-24 lg:px-10">
-        <div className="flex flex-col lg:flex-row gap-10">
+      <div className="container mx-auto max-w-5xl px-6 py-16 lg:py-24">
+        <div className="space-y-12">
+          {data.sections.map((section: Section) => (
+            <motion.div
+              key={section.id}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="space-y-6"
+            >
+              <h2 className="text-2xl font-extrabold text-starbucks-dark dark:text-white border-s-4 border-starbucks-green ps-4">
+                {section.title[lang]}
+              </h2>
 
-          {/* ─── Sidebar ─── */}
-          <aside className="lg:w-64 flex-shrink-0">
-            <div className="sticky top-24 rounded-2xl border border-gray-100 dark:border-zinc-800 overflow-hidden shadow-sm">
-              <div className="bg-starbucks-green p-4 text-center">
-                <Logo className="mx-auto h-16 w-16 object-contain mb-2" />
+              <div className="space-y-4 text-lg text-gray-600 dark:text-gray-400 leading-relaxed">
+                {section.paragraphs?.map((p, idx) => (
+                  <p key={idx}>{p[lang]}</p>
+                ))}
               </div>
-              <div className="bg-gray-50 dark:bg-zinc-900 p-4 space-y-3">
-                <a
-                  href={data.sidebar.links.menu}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="block w-full rounded-full bg-starbucks-green py-3 text-center text-sm font-extrabold text-white hover:bg-starbucks-dark transition-all"
-                >
-                  {data.sidebar.menu[lang]}
-                </a>
-                <a
-                  href={data.sidebar.links.about}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="block w-full rounded-full border-2 border-starbucks-dark py-3 text-center text-sm font-extrabold text-starbucks-dark dark:border-white dark:text-white hover:bg-starbucks-dark hover:text-white transition-all"
-                >
-                  {data.sidebar.about[lang]}
-                </a>
-              </div>
-            </div>
-          </aside>
 
-          {/* ─── Main Content ─── */}
-          <motion.article
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-          className="flex-1 text-start"
-          >
-            <div className="space-y-4 mb-8">
-              <h1 className="text-3xl font-black text-starbucks-dark dark:text-white">{data.header[lang]}</h1>
-              <p className="text-sm text-gray-400">{data.lastUpdated[lang]}</p>
-            </div>
+              {section.list && (
+                <ul className="space-y-3 ps-6">
+                  {section.list.map((item, idx) => (
+                    <li key={idx} className="flex items-start gap-3">
+                      <span className="mt-2.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-starbucks-green" />
+                      <span>{item[lang]}</span>
+                    </li>
+                  ))}
+                </ul>
+              )}
 
-            <Accordion 
-              items={data.sections.map((section) => ({
-                title: section.title[lang],
-                content: (
-                  <div className="space-y-4">
-                    {section.paragraphs?.map((p: any, idx: number) => (
-                      <p key={idx}>{p[lang]}</p>
-                    ))}
-                    
-                    {section.list && (
-                      <ul className="space-y-2 ps-4">
-                        {section.list.map((item: any, i: number) => (
-                          <li key={i} className="flex items-start gap-3 flex-row text-start">
-                            <span className="mt-2 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-starbucks-green" />
-                            <span>{item[lang]}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    )}
+              {section.types && (
+                <div className="grid gap-4 mt-8">
+                  {section.types.map((type) => (
+                    <div key={type.id} className="p-6 bg-[#f7f7f7] dark:bg-zinc-950 rounded-2xl border border-gray-100 dark:border-zinc-900">
+                      <p className="font-bold text-starbucks-dark dark:text-white mb-2">
+                        {type.label[lang]}
+                      </p>
+                      <p>{type.text[lang]}</p>
+                    </div>
+                  ))}
+                </div>
+              )}
 
-                    {section.types && (
-                      <div className="space-y-3">
-                        {section.types.map((type: any) => (
-                          <p key={type.id}>
-                            <strong className="font-extrabold text-starbucks-dark dark:text-white">
-                              {type.label[lang]}
-                            </strong> {type.text[lang]}
-                          </p>
-                        ))}
-                      </div>
-                    )}
+              {section.contactNote && (
+                <div className="mt-8 p-6 bg-starbucks-green/5 border border-starbucks-green/20 rounded-2xl">
+                  <p className="font-bold text-starbucks-green">
+                    {section.contactNote[lang]}
+                  </p>
+                </div>
+              )}
 
-                    {section.contactNote && (
-                      <p>{section.contactNote[lang]}</p>
-                    )}
-
-                    {section.contactInfo && (
-                      <div className="pt-2 space-y-1 text-starbucks-green font-bold text-start">
-                        <p dir="ltr">
-                          <a href={`mailto:${section.contactInfo.email}`} className="hover:underline">{section.contactInfo.email}</a>
-                        </p>
-                        <p dir="ltr">
-                          <a href={`tel:${section.contactInfo.phoneTel}`} className="hover:underline">{section.contactInfo.phone}</a>
-                        </p>
-                        {section.contactInfo.address && (
-                          <p className="mt-4 text-sm text-gray-400 font-normal">
-                            {section.contactInfo.address[lang]}
-                          </p>
-                        )}
-                      </div>
-                    )}
+              {section.contactInfo && (
+                <div className="mt-8 space-y-4 p-8 bg-starbucks-dark text-white rounded-[2rem] shadow-xl">
+                  <div className="grid gap-6 md:grid-cols-2">
+                    <div className="space-y-2">
+                      <p className="text-gray-400 text-sm">{lang === 'ar' ? 'البريد الإلكتروني' : 'Email'}</p>
+                      <a href={`mailto:${section.contactInfo.email}`} className="text-xl font-bold hover:text-starbucks-green transition-colors">
+                        {section.contactInfo.email}
+                      </a>
+                    </div>
+                    <div className="space-y-2">
+                      <p className="text-gray-400 text-sm">{lang === 'ar' ? 'الهاتف' : 'Phone'}</p>
+                      <a href={`tel:${section.contactInfo.phoneTel}`} className="text-xl font-bold hover:text-starbucks-green transition-colors">
+                        {section.contactInfo.phone}
+                      </a>
+                    </div>
+                    <div className="space-y-2 md:col-span-2">
+                      <p className="text-gray-400 text-sm">{lang === 'ar' ? 'العنوان' : 'Address'}</p>
+                      <p className="text-xl font-bold">
+                        {section.contactInfo.address[lang]}
+                      </p>
+                    </div>
                   </div>
-                )
-              }))}
-            />
-          </motion.article>
+                </div>
+              )}
+            </motion.div>
+          ))}
+        </div>
 
+        {/* FAQ Style Accordion for main sections if needed */}
+        <div className="mt-24 space-y-12">
+          <div className="text-center space-y-4">
+            <h2 className="text-3xl font-extrabold text-starbucks-dark dark:text-white italic">
+              {lang === 'ar' ? 'مزيد من المعلومات' : 'More Information'}
+            </h2>
+          </div>
+          <div className="bg-white dark:bg-zinc-900/50 rounded-[2rem] p-4 md:p-8 shadow-sm border border-gray-100 dark:border-zinc-800">
+            <Accordion 
+              items={data.sections.slice(1, 5).map((section: Section) => ({
+                title: section.title[lang],
+                content: section.paragraphs?.[0]?.[lang] || ''
+              }))} 
+            />
+          </div>
         </div>
       </div>
     </div>
   )
 }
-
 
 export default PrivacyStatementPage

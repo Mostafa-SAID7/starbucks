@@ -1,5 +1,5 @@
 import { Outlet } from 'react-router-dom'
-import { Navbar, Footer, MobileTabBar, CookieConsent, Toaster } from '../components'
+import { Navbar, Footer, MobileTabBar, CookieConsent, Toaster, ChatWidget, ScrollToTop } from '../components'
 
 export default function MainLayout() {
   return (
@@ -12,6 +12,8 @@ export default function MainLayout() {
       <MobileTabBar />
       <CookieConsent />
       <Toaster />
+      <ChatWidget />
+      <ScrollToTop />
     </div>
   )
 }

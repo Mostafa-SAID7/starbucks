@@ -17,6 +17,11 @@ export { default as AllergyInfo } from './AllergyInfo'
 
 // Modals
 export { default as SearchModal } from './SearchModal'
+export { default as AuthModal } from './AuthModal'
+
+// Shared Widgets
+export * from './ChatWidget'
+export * from './ScrollToTop'
 
 // UI Components
 export * from './ui'

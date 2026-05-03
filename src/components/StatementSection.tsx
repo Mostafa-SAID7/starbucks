@@ -4,9 +4,18 @@ import { Button } from './ui'
 import { Link } from 'react-router-dom'
 import { statement as data } from '../data'
 
+interface StatementData {
+  title: string
+  subtitle: string
+  paragraphs: string[]
+  ctaText: string
+  ctaLink: string
+}
+
 const StatementSection = () => {
   const { i18n } = useTranslation()
-  const localizedData = (data as any)[i18n.language] || data.en
+  const lang = i18n.language as keyof typeof data
+  const localizedData = (data[lang] || data.en) as StatementData
 
   return (
     <section className="bg-background-light dark:bg-background-dark py-16 transition-colors">

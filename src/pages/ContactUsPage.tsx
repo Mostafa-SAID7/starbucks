@@ -7,6 +7,12 @@ import SEO from '../components/SEO'
 import { Button, Input, Select, Textarea } from '../components/ui'
 import { contactUs as data } from '../data'
 
+interface SubjectOption {
+  id: string
+  ar: string
+  en: string
+}
+
 const ContactUsPage: React.FC = () => {
   const { i18n } = useTranslation()
   const lang = (i18n.language === 'ar' ? 'ar' : 'en') as 'ar' | 'en'
@@ -84,7 +90,7 @@ const ContactUsPage: React.FC = () => {
             alt={data.hero.imageAlt[lang]}
             className="absolute inset-0 h-full w-full object-cover transition-transform duration-1000 hover:scale-105"
             onError={(e) => {
-              if (data.hero.fallbackImage) e.currentTarget.src = data.hero.fallbackImage
+              if (data.hero.fallbackImage) (e.target as HTMLImageElement).src = data.hero.fallbackImage
             }}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-starbucks-dark/80 via-transparent to-transparent" />
@@ -185,7 +191,7 @@ const ContactUsPage: React.FC = () => {
                   </label>
                   <Select
                     isRTL={isRTL}
-                    options={data.form.subjects.map(s => ({ id: s.id, label: s[lang] }))}
+                    options={(data.form.subjects as SubjectOption[]).map(s => ({ id: s.id, label: s[lang] }))}
                     value={form.subject}
                     onChange={(val) => setForm(prev => ({ ...prev, subject: val }))}
                     placeholder={data.form.fields.subject.placeholder[lang]}
@@ -212,8 +218,8 @@ const ContactUsPage: React.FC = () => {
                   type="submit"
                   loading={loading}
                   className="h-16 px-16 text-lg rounded-full shadow-2xl hover:shadow-starbucks-green/40 transform hover:-translate-y-1 transition-all"
+                  leftIcon={!loading ? <Send className="h-6 w-6 rtl:-rotate-180" /> : undefined}
                 >
-                  {!loading && <Send className="h-6 w-6 me-3 rtl:-rotate-180" />}
                   {data.form.fields.submit[lang]}
                 </Button>
               </div>

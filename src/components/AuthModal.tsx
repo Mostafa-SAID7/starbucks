@@ -1,9 +1,32 @@
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { motion, AnimatePresence } from 'framer-motion'
-import { User, Mail, Lock, Eye, EyeOff, ArrowRight, ArrowLeft } from 'lucide-react'
 import { Modal, Button, Input } from './ui'
 import { navbar } from '../data'
+
+interface AuthData {
+  login: {
+    title: string
+    email: string
+    password: string
+    submit: string
+    forgot: string
+    remember: string
+    no_account: string
+    register: string
+  }
+  register: {
+    title: string
+    first_name: string
+    last_name: string
+    email: string
+    password: string
+    submit: string
+    have_account: string
+    login: string
+    terms: string
+  }
+}
 
 interface AuthModalProps {
   isOpen: boolean
@@ -14,10 +37,11 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
   const { i18n } = useTranslation()
   const lang = (i18n.language === 'ar' ? 'ar' : 'en') as 'ar' | 'en'
   const isRTL = lang === 'ar'
-  const authData = (navbar as any)[lang].auth
+  
+  // Safe type access for navbar auth data
+  const authData = ((navbar as any)[lang].auth) as AuthData
 
   const [mode, setMode] = useState<'login' | 'register'>('login')
-  const [showPassword, setShowPassword] = useState(false)
 
   const toggleMode = () => setMode(prev => prev === 'login' ? 'register' : 'login')
 
@@ -70,26 +94,18 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
             >
               <div className="space-y-4">
                 <div className="relative">
-                  <Mail className={`absolute top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5 ${isRTL ? 'right-4' : 'left-4'}`} />
                   <Input 
                     type="email" 
                     placeholder={authData.login.email}
-                    className={`${isRTL ? 'pr-12' : 'pl-12'} h-14 rounded-2xl border-gray-100 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-950 focus:bg-white transition-all`}
+                    className="h-14 rounded-2xl border-gray-100 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-950 focus:bg-white transition-all px-6"
                   />
                 </div>
                 <div className="relative">
-                  <Lock className={`absolute top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5 ${isRTL ? 'right-4' : 'left-4'}`} />
                   <Input 
-                    type={showPassword ? 'text' : 'password'} 
+                    type="password" 
                     placeholder={authData.login.password}
-                    className={`${isRTL ? 'pr-12' : 'pl-12'} h-14 rounded-2xl border-gray-100 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-950 focus:bg-white transition-all`}
+                    className="h-14 rounded-2xl border-gray-100 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-950 focus:bg-white transition-all px-6"
                   />
-                  <button 
-                    onClick={() => setShowPassword(!showPassword)}
-                    className={`absolute top-1/2 -translate-y-1/2 text-gray-400 hover:text-starbucks-green transition-colors ${isRTL ? 'left-4' : 'right-4'}`}
-                  >
-                    {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
-                  </button>
                 </div>
               </div>
 
@@ -136,34 +152,26 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
               <div className="grid grid-cols-2 gap-4">
                 <Input 
                   placeholder={authData.register.first_name}
-                  className="h-14 rounded-2xl border-gray-100 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-950 focus:bg-white transition-all"
+                  className="h-14 rounded-2xl border-gray-100 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-950 focus:bg-white transition-all px-6"
                 />
                 <Input 
                   placeholder={authData.register.last_name}
-                  className="h-14 rounded-2xl border-gray-100 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-950 focus:bg-white transition-all"
+                  className="h-14 rounded-2xl border-gray-100 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-950 focus:bg-white transition-all px-6"
                 />
               </div>
               <div className="relative">
-                <Mail className={`absolute top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5 ${isRTL ? 'right-4' : 'left-4'}`} />
                 <Input 
                   type="email" 
                   placeholder={authData.register.email}
-                  className={`${isRTL ? 'pr-12' : 'pl-12'} h-14 rounded-2xl border-gray-100 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-950 focus:bg-white transition-all`}
+                  className="h-14 rounded-2xl border-gray-100 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-950 focus:bg-white transition-all px-6"
                 />
               </div>
               <div className="relative">
-                <Lock className={`absolute top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5 ${isRTL ? 'right-4' : 'left-4'}`} />
                 <Input 
-                  type={showPassword ? 'text' : 'password'} 
+                  type="password" 
                   placeholder={authData.register.password}
-                  className={`${isRTL ? 'pr-12' : 'pl-12'} h-14 rounded-2xl border-gray-100 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-950 focus:bg-white transition-all`}
+                  className="h-14 rounded-2xl border-gray-100 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-950 focus:bg-white transition-all px-6"
                 />
-                <button 
-                  onClick={() => setShowPassword(!showPassword)}
-                  className={`absolute top-1/2 -translate-y-1/2 text-gray-400 hover:text-starbucks-green transition-colors ${isRTL ? 'left-4' : 'right-4'}`}
-                >
-                  {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
-                </button>
               </div>
 
               <div className="px-2">
