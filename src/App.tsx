@@ -5,8 +5,13 @@ import { motion, AnimatePresence } from 'framer-motion'
 
 // Layout & Components
 import { MainLayout } from '@/components'
-import { Skeleton } from '@/components/ui'
 import { ANIMATIONS } from '@/constants'
+import { 
+  HomeSkeleton, 
+  MenuSkeleton, 
+  StaticPageSkeleton, 
+  ContactSkeleton 
+} from '@/components/skeletons'
 
 // Lazy loaded Pages for performance
 const HomePage = lazy(() => import('@/pages/HomePage'))
@@ -22,48 +27,17 @@ const ContactUsPage = lazy(() => import('@/pages/ContactUsPage'))
 const CookieNoticePage = lazy(() => import('@/pages/CookieNoticePage'))
 const NotFound = lazy(() => import('@/pages/NotFound'))
 
-// Premium Skeleton loading fallback
-const PageLoader = () => (
-  <div className="min-h-screen bg-white dark:bg-black">
-    {/* Hero Skeleton */}
-    <div className="h-[350px] lg:h-[450px] w-full bg-gray-50 dark:bg-zinc-950 flex flex-col lg:flex-row border-b border-gray-100 dark:border-zinc-800">
-      <div className="flex-1 p-10 lg:p-20 flex flex-col justify-center space-y-8">
-        <Skeleton className="h-14 w-3/4 rounded-xl" />
-        <div className="space-y-4">
-          <Skeleton className="h-6 w-full rounded-lg" />
-          <Skeleton className="h-6 w-5/6 rounded-lg" />
-          <Skeleton className="h-6 w-2/3 rounded-lg" />
-        </div>
-        <Skeleton className="h-12 w-48 rounded-full" />
-      </div>
-      <div className="hidden lg:block flex-1 bg-gray-100 dark:bg-zinc-900 animate-pulse" />
-    </div>
-
-    {/* Content Area Skeleton */}
-    <div className="container mx-auto max-w-4xl px-6 py-20 space-y-12">
-      <div className="space-y-4">
-        <Skeleton className="h-10 w-64 rounded-xl" />
-        <Skeleton className="h-4 w-full rounded-md" />
-      </div>
-      
-      <div className="grid grid-cols-1 gap-6">
-        <Skeleton className="h-24 w-full rounded-3xl" />
-        <Skeleton className="h-24 w-full rounded-3xl" />
-        <Skeleton className="h-24 w-full rounded-3xl" />
-      </div>
-    </div>
-  </div>
-)
-
-// Page Wrapper for transitions using centralized constants
-const PageWrapper = ({ children }: { children: React.ReactNode }) => (
+// Page Wrapper for transitions using centralized constants and specific skeletons
+const PageWrapper = ({ children, skeleton }: { children: React.ReactNode, skeleton?: React.ReactNode }) => (
   <motion.div
     initial={ANIMATIONS.fadeInUp.initial}
     animate={ANIMATIONS.fadeInUp.animate}
     exit={{ opacity: 0, y: -10 }}
     transition={ANIMATIONS.fadeInUp.transition}
   >
-    {children}
+    <Suspense fallback={skeleton || <div className="min-h-screen bg-white dark:bg-black" />}>
+      {children}
+    </Suspense>
   </motion.div>
 )
 
@@ -87,10 +61,10 @@ const AnimatedRoutes = () => {
     <AnimatePresence mode="wait">
       <Routes location={location} key={location.pathname}>
         <Route path="/" element={<MainLayout />}>
-          <Route index element={<PageWrapper><HomePage /></PageWrapper>} />
-          <Route path="menu/:categoryId" element={<PageWrapper><MenuCategoryPage /></PageWrapper>} />
-          <Route path="menu/:categoryId/:itemId" element={<PageWrapper><MenuItemPage /></PageWrapper>} />
-          <Route path="locations" element={<PageWrapper><LocationsPage /></PageWrapper>} />
+          <Route index element={<PageWrapper skeleton={<HomeSkeleton />}><HomePage /></PageWrapper>} />
+          <Route path="menu/:categoryId" element={<PageWrapper skeleton={<MenuSkeleton />}><MenuCategoryPage /></PageWrapper>} />
+          <Route path="menu/:categoryId/:itemId" element={<PageWrapper skeleton={<MenuSkeleton />}><MenuItemPage /></PageWrapper>} />
+          <Route path="locations" element={<PageWrapper skeleton={<StaticPageSkeleton />}><LocationsPage /></PageWrapper>} />
           
           {/* Redirects to prevent 404s on generic sections */}
           <Route path="menu" element={<Navigate to="/menu/drinks" replace />} />
@@ -99,13 +73,13 @@ const AnimatedRoutes = () => {
           <Route path="account" element={<Navigate to="/" replace />} />
           
           {/* Informational Pages */}
-          <Route path="delivery" element={<PageWrapper><DeliveryPage /></PageWrapper>} />
-          <Route path="about-us" element={<PageWrapper><AboutUsPage /></PageWrapper>} />
-          <Route path="social-impact-sustainability" element={<PageWrapper><SustainabilityPage /></PageWrapper>} />
-          <Route path="privacy-statement" element={<PageWrapper><PrivacyStatementPage /></PageWrapper>} />
-          <Route path="terms-of-use" element={<PageWrapper><TermsOfUsePage /></PageWrapper>} />
-          <Route path="contact-us" element={<PageWrapper><ContactUsPage /></PageWrapper>} />
-          <Route path="cookie-notice" element={<PageWrapper><CookieNoticePage /></PageWrapper>} />
+          <Route path="delivery" element={<PageWrapper skeleton={<StaticPageSkeleton />}><DeliveryPage /></PageWrapper>} />
+          <Route path="about-us" element={<PageWrapper skeleton={<StaticPageSkeleton />}><AboutUsPage /></PageWrapper>} />
+          <Route path="social-impact-sustainability" element={<PageWrapper skeleton={<StaticPageSkeleton />}><SustainabilityPage /></PageWrapper>} />
+          <Route path="privacy-statement" element={<PageWrapper skeleton={<StaticPageSkeleton />}><PrivacyStatementPage /></PageWrapper>} />
+          <Route path="terms-of-use" element={<PageWrapper skeleton={<StaticPageSkeleton />}><TermsOfUsePage /></PageWrapper>} />
+          <Route path="contact-us" element={<PageWrapper skeleton={<ContactSkeleton />}><ContactUsPage /></PageWrapper>} />
+          <Route path="cookie-notice" element={<PageWrapper skeleton={<StaticPageSkeleton />}><CookieNoticePage /></PageWrapper>} />
           
           <Route path="*" element={<PageWrapper><NotFound /></PageWrapper>} />
         </Route>
@@ -118,9 +92,7 @@ function App() {
   return (
     <Router>
       <LanguageDirectionHandler />
-      <Suspense fallback={<PageLoader />}>
-        <AnimatedRoutes />
-      </Suspense>
+      <AnimatedRoutes />
     </Router>
   )
 }

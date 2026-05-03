@@ -1,0 +1,4 @@
+export * from './HomeSkeleton'
+export * from './MenuSkeleton'
+export * from './StaticPageSkeleton'
+export * from './ContactSkeleton'

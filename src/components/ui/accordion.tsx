@@ -64,9 +64,10 @@ const AccordionItem: React.FC<AccordionItemProps> = ({ title, content, isOpen, o
 interface AccordionProps {
   items: { title: string; content: string | React.ReactNode }[]
   allowMultiple?: boolean
+  className?: string
 }
 
-export const Accordion: React.FC<AccordionProps> = ({ items, allowMultiple = false }) => {
+export const Accordion: React.FC<AccordionProps> = ({ items, allowMultiple = false, className = '' }) => {
   const [openIndexes, setOpenIndexes] = useState<number[]>([])
 
   const handleItemClick = (index: number) => {
@@ -80,7 +81,7 @@ export const Accordion: React.FC<AccordionProps> = ({ items, allowMultiple = fal
   }
 
   return (
-    <div className="w-full">
+    <div className={`w-full ${className}`}>
       {items.map((item, index) => (
         <AccordionItem
           key={index}
