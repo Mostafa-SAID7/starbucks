@@ -1,7 +1,4 @@
-import HeroBanner from '../components/HeroBanner'
-import StatementSection from '../components/StatementSection'
-import FeaturedCards from '../components/FeaturedCards'
-import SEO from '../components/SEO'
+import { HeroBanner, StatementSection, FeaturedCards, SEO } from '../components'
 
 export default function HomePage() {
   return (

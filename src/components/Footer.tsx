@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { Globe } from 'lucide-react'
-import data from '../data/footer.json'
+import { footer as data } from '../data'
 
 export default function Footer() {
   const { t } = useTranslation()

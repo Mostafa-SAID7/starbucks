@@ -1,10 +1,22 @@
 {
-  "title": "بيان من شركة ستاربكس",
-  "subtitle": "حقائق حول ستاربكس في الشرق الأوسط",
-  "paragraphs": [
-    "تعمل ستاربكس في الشرق الأوسط منذ عام 1999 وذلك من خلال شراكة مع مجموعة الشايع. نحن فخورون بخدمة مجتمعاتنا وتقديم تجربة ستاربكس الفريدة لعملائنا في المنطقة.",
-    "تعرّف على المزيد عن ستاربكس الشرق الأوسط عبر الرابط أدناه."
-  ],
-  "ctaText": "اعرف المزيد",
-  "ctaLink": "#"
+  "ar": {
+    "title": "بيان من شركة ستاربكس",
+    "subtitle": "حقائق حول ستاربكس في الشرق الأوسط",
+    "paragraphs": [
+      "تعمل ستاربكس في الشرق الأوسط منذ عام 1999 وذلك من خلال شراكة مع مجموعة الشايع. نحن فخورون بخدمة مجتمعاتنا وتقديم تجربة ستاربكس الفريدة لعملائنا في المنطقة.",
+      "تعرّف على المزيد عن ستاربكس الشرق الأوسط عبر الرابط أدناه."
+    ],
+    "ctaText": "اعرف المزيد",
+    "ctaLink": "/middle-east"
+  },
+  "en": {
+    "title": "A Statement from Starbucks",
+    "subtitle": "Facts About Starbucks in the Middle East",
+    "paragraphs": [
+      "Starbucks has been operating in the Middle East since 1999 through a partnership with Alshaya Group. We are proud to serve our communities and provide the unique Starbucks experience to our customers in the region.",
+      "Learn more about Starbucks Middle East via the link below."
+    ],
+    "ctaText": "Learn More",
+    "ctaLink": "/middle-east"
+  }
 }

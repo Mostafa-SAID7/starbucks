@@ -222,5 +222,15 @@
       "title": "Community Impact",
       "content": "<h3>Support for Gaza</h3><p>The Starbucks Foundation and Alshaya are donating to support humanitarian aid in Gaza. We are committed to supporting the communities we serve.</p>"
     }
+  },
+  "new-era-same-icons": {
+    "ar": {
+      "title": "عصر جديد، نفس الأيقونات",
+      "content": "<h3>نفس الطعم الذي تحبه</h3><p>نحن فخورون بتقديم أفضل تجربة قهوة في مصر. عصر جديد يبدأ، ولكن شغفنا بالجودة والتميز يظل ثابتاً.</p>"
+    },
+    "en": {
+      "title": "New Era, Same Icons",
+      "content": "<h3>The Same Taste You Love</h3><p>We are proud to provide the best coffee experience in Egypt. A new era begins, but our passion for quality and excellence remains constant.</p>"
+    }
   }
 }

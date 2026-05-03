@@ -1,44 +1,90 @@
 {
-  "cards": [
-    {
-      "id": "new-era",
-      "title": "عصر جديد. نفس النجوم.",
-      "description": "اكتشف 3 طلبات أيقونية مستوحاة من فيلم The Devil Wears Prada: قهوة ميرندا، كابتشينو آندي بحليب الشوفان، اسبرسو نايجل بالكريمة المخفوقة.",
-      "cta": "اكتشف المزيد",
-      "ctaLink": "/new-era-same-icons",
-      "image": "https://www.starbucks.eg/sites/starbucks-eg-pwa/files/styles/c22_featured_card_531x273/public/2026-05/UAE_1.jpg.webp?h=c7029006&itok=RMrK1Ggt",
-      "imageAlt": "عصر جديد",
-      "theme": "White"
-    },
-    {
-      "id": "official-statement",
-      "title": "بيان ستاربكس الرسمي",
-      "description": "الحقيقة مُهمة. رداً على المعلومات الخاطئة، فإننا نشارككم اليوم الحقائق حول ما تُؤمن به ستاربكس وتُدافع عنه.",
-      "cta": "اعرف المزيد",
-      "ctaLink": "/starbucks-for-the-record",
-      "image": "https://www.starbucks.eg/sites/starbucks-eg-pwa/files/styles/c22_featured_card_531x273/public/2024-05/Starbucks%20for%20the%20Record.png.webp?h=7025b037&itok=XLxmlz9E",
-      "imageAlt": "بيان ستاربكس",
-      "theme": "Green"
-    },
-    {
-      "id": "delivery-promo",
-      "title": "خدمة توصيل ستاربكس",
-      "description": "احصل على النكهة المفضلة لديك مباشرة عند باب منزلك عبر طلبات.",
-      "cta": "اطلب الآن",
-      "ctaLink": "https://www.talabat.com/ar/egypt/restaurant/516787/starbucks-city-scape-6th-of-october?aid=7935",
-      "image": "https://www.starbucks.eg/sites/starbucks-eg-pwa/files/styles/c22_featured_card_531x273/public/2022-05/Summer-Website-Banners--Delivery-TC-2.png.webp?h=0d43458e&itok=KilEmmyt",
-      "imageAlt": "توصيل ستاربكس",
-      "theme": "White"
-    },
-    {
-      "id": "rewards-promo",
-      "title": "استمتع بمكافآت ستاربكس",
-      "description": "اجمع النجوم واحصل على مشروبات مجانية والعديد من المزايا الحصرية.",
-      "cta": "انضم الآن",
-      "ctaLink": "https://www.starbucks.eg/ar/account/register",
-      "image": "https://www.starbucks.eg/sites/starbucks-eg-pwa/files/styles/c22_featured_card_531x273/public/2023-11/Generic-VB.jpg.webp?h=31892f93&itok=GiFtFBDi",
-      "imageAlt": "مكافآت ستاربكس",
-      "theme": "Green"
-    }
-  ]
+  "ar": {
+    "cards": [
+      {
+        "id": "new-era",
+        "title": "عصر جديد. نفس النجوم.",
+        "description": "اكتشف 3 طلبات أيقونية مستوحاة من فيلم The Devil Wears Prada: قهوة ميرندا، كابتشينو آندي بحليب الشوفان، اسبرسو نايجل بالكريمة المخفوقة.",
+        "cta": "اكتشف المزيد",
+        "ctaLink": "/new-era-same-icons",
+        "image": "https://www.starbucks.eg/sites/starbucks-eg-pwa/files/styles/c22_featured_card_531x273/public/2026-05/UAE_1.jpg.webp?h=c7029006&itok=RMrK1Ggt",
+        "imageAlt": "عصر جديد",
+        "theme": "White"
+      },
+      {
+        "id": "official-statement",
+        "title": "بيان ستاربكس الرسمي",
+        "description": "الحقيقة مُهمة. رداً على المعلومات الخاطئة، فإننا نشارككم اليوم الحقائق حول ما تُؤمن به ستاربكس وتُدافع عنه.",
+        "cta": "اعرف المزيد",
+        "ctaLink": "/starbucks-for-the-record",
+        "image": "https://www.starbucks.eg/sites/starbucks-eg-pwa/files/styles/c22_featured_card_531x273/public/2024-05/Starbucks%20for%20the%20Record.png.webp?h=7025b037&itok=XLxmlz9E",
+        "imageAlt": "بيان ستاربكس",
+        "theme": "Green"
+      },
+      {
+        "id": "delivery-promo",
+        "title": "خدمة توصيل ستاربكس",
+        "description": "احصل على النكهة المفضلة لديك مباشرة عند باب منزلك عبر طلبات.",
+        "cta": "اطلب الآن",
+        "ctaLink": "https://www.talabat.com/ar/egypt/restaurant/516787/starbucks-city-scape-6th-of-october?aid=7935",
+        "image": "https://www.starbucks.eg/sites/starbucks-eg-pwa/files/styles/c22_featured_card_531x273/public/2022-05/Summer-Website-Banners--Delivery-TC-2.png.webp?h=0d43458e&itok=KilEmmyt",
+        "imageAlt": "توصيل ستاربكس",
+        "theme": "White"
+      },
+      {
+        "id": "rewards-promo",
+        "title": "استمتع بمكافآت ستاربكس",
+        "description": "اجمع النجوم واحصل على مشروبات مجانية والعديد من المزايا الحصرية.",
+        "cta": "انضم الآن",
+        "ctaLink": "https://www.starbucks.eg/ar/account/register",
+        "image": "https://www.starbucks.eg/sites/starbucks-eg-pwa/files/styles/c22_featured_card_531x273/public/2023-11/Generic-VB.jpg.webp?h=31892f93&itok=GiFtFBDi",
+        "imageAlt": "مكافآت ستاربكس",
+        "theme": "Green"
+      }
+    ]
+  },
+  "en": {
+    "cards": [
+      {
+        "id": "new-era",
+        "title": "New Era. Same Icons.",
+        "description": "Discover 3 iconic orders inspired by The Devil Wears Prada: Miranda's Coffee, Andy's Oatmilk Cappuccino, and Nigel's Espresso with Whipped Cream.",
+        "cta": "Discover More",
+        "ctaLink": "/new-era-same-icons",
+        "image": "https://www.starbucks.eg/sites/starbucks-eg-pwa/files/styles/c22_featured_card_531x273/public/2026-05/UAE_1.jpg.webp?h=c7029006&itok=RMrK1Ggt",
+        "imageAlt": "New Era",
+        "theme": "White"
+      },
+      {
+        "id": "official-statement",
+        "title": "Official Starbucks Statement",
+        "description": "Truth matters. In response to misinformation, we're sharing the facts about what Starbucks believes and stands for.",
+        "cta": "Learn More",
+        "ctaLink": "/starbucks-for-the-record",
+        "image": "https://www.starbucks.eg/sites/starbucks-eg-pwa/files/styles/c22_featured_card_531x273/public/2024-05/Starbucks%20for%20the%20Record.png.webp?h=7025b037&itok=XLxmlz9E",
+        "imageAlt": "Starbucks Statement",
+        "theme": "Green"
+      },
+      {
+        "id": "delivery-promo",
+        "title": "Starbucks Delivery",
+        "description": "Get your favorite flavor delivered straight to your door via Talabat.",
+        "cta": "Order Now",
+        "ctaLink": "https://www.talabat.com/en/egypt/restaurant/516787/starbucks-city-scape-6th-of-october?aid=7935",
+        "image": "https://www.starbucks.eg/sites/starbucks-eg-pwa/files/styles/c22_featured_card_531x273/public/2022-05/Summer-Website-Banners--Delivery-TC-2.png.webp?h=0d43458e&itok=KilEmmyt",
+        "imageAlt": "Starbucks Delivery",
+        "theme": "White"
+      },
+      {
+        "id": "rewards-promo",
+        "title": "Enjoy Starbucks Rewards",
+        "description": "Collect Stars and get free drinks and many exclusive benefits.",
+        "cta": "Join Now",
+        "ctaLink": "https://www.starbucks.eg/en/account/register",
+        "image": "https://www.starbucks.eg/sites/starbucks-eg-pwa/files/styles/c22_featured_card_531x273/public/2023-11/Generic-VB.jpg.webp?h=31892f93&itok=GiFtFBDi",
+        "imageAlt": "Starbucks Rewards",
+        "theme": "Green"
+      }
+    ]
+  }
 }

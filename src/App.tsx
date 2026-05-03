@@ -5,21 +5,23 @@ import { motion, AnimatePresence } from 'framer-motion'
 import MainLayout from './layouts/MainLayout'
 
 // Lazy load pages for performance optimization
-const HomePage = lazy(() => import('./pages/HomePage'))
-const MenuPage = lazy(() => import('./pages/MenuPage'))
-const MenuCategoryPage = lazy(() => import('./pages/MenuCategoryPage'))
-const MenuItemPage = lazy(() => import('./pages/MenuItemPage'))
-const DeliveryPage = lazy(() => import('./pages/DeliveryPage'))
-const AboutUsPage = lazy(() => import('./pages/AboutUsPage'))
-const SustainabilityPage = lazy(() => import('./pages/SustainabilityPage'))
-const MiddleEastPage = lazy(() => import('./pages/MiddleEastPage'))
-const LocationsPage = lazy(() => import('./pages/LocationsPage'))
-const TermsOfUsePage = lazy(() => import('./pages/TermsOfUsePage'))
-const PrivacyStatementPage = lazy(() => import('./pages/PrivacyStatementPage'))
-const ContactUsPage = lazy(() => import('./pages/ContactUsPage'))
-const CookieNoticePage = lazy(() => import('./pages/CookieNoticePage'))
-const GenericPage = lazy(() => import('./pages/GenericPage'))
-const NotFound = lazy(() => import('./pages/NotFound'))
+import { 
+  HomePage, 
+  MenuPage, 
+  MenuCategoryPage, 
+  MenuItemPage, 
+  DeliveryPage, 
+  AboutUsPage, 
+  SustainabilityPage, 
+  MiddleEastPage, 
+  LocationsPage, 
+  TermsOfUsePage, 
+  PrivacyStatementPage, 
+  ContactUsPage, 
+  CookieNoticePage, 
+  GenericPage, 
+  NotFound 
+} from './pages'
 
 // Simple loading fallback
 const PageLoader = () => (

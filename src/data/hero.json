@@ -1,8 +1,18 @@
 {
-  "title": "مؤسسة ستاربكس والشايع تتبرعان لدعم المساعدات الإنسانية في غزة",
-  "description": "نحن ملتزمون بدعم المجتمعات التي نخدمها",
-  "ctaText": "اعرف المزيد",
-  "ctaLink": "/community-impact-starbucks",
-  "imageUrl": "https://www.starbucks.eg/sites/starbucks-eg-pwa/files/styles/c20_hero_1084x400/public/2023-10/Sbx-Banner-2.jpg.webp",
-  "imageAlt": "Starbucks Banner"
+  "ar": {
+    "title": "مؤسسة ستاربكس والشايع تتبرعان لدعم المساعدات الإنسانية في غزة",
+    "description": "نحن ملتزمون بدعم المجتمعات التي نخدمها",
+    "ctaText": "اعرف المزيد",
+    "ctaLink": "/community-impact-starbucks",
+    "imageUrl": "https://www.starbucks.eg/sites/starbucks-eg-pwa/files/styles/c20_hero_1084x400/public/2023-10/Sbx-Banner-2.jpg.webp",
+    "imageAlt": "Starbucks Banner"
+  },
+  "en": {
+    "title": "The Starbucks Foundation and Alshaya are donating to support humanitarian aid in Gaza",
+    "description": "We are committed to supporting the communities we serve",
+    "ctaText": "Learn More",
+    "ctaLink": "/community-impact-starbucks",
+    "imageUrl": "https://www.starbucks.eg/sites/starbucks-eg-pwa/files/styles/c20_hero_1084x400/public/2023-10/Sbx-Banner-2.jpg.webp",
+    "imageAlt": "Starbucks Banner"
+  }
 }

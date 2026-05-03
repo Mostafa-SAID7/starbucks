@@ -6,61 +6,31 @@ import SEO from '../components/SEO'
 import { Button } from '../components/ui/button'
 import MenuPromoVideo from '../components/MenuPromoVideo'
 import Logo from '../components/Logo'
+import { delivery as data } from '../data'
 
 import talabatLogo from '../assets/talabat.png'
 
-const TALABAT_URL = 'https://www.talabat.com/ar/egypt/restaurant/516787/starbucks-city-scape-6th-of-october?aid=7935'
-
-const faqs = [
-  {
-    q: 'كيف أحصل على خدمة التوصيل من ستاربكس؟',
-    a: (
-      <>
-        اطلب بسهولة عبر تطبيق{' '}
-        <a href={TALABAT_URL} target="_blank" rel="noopener noreferrer" className="font-bold text-[#ff6600] underline underline-offset-2">
-          Talabat
-        </a>
-        .
-      </>
-    ),
-  },
-  {
-    q: 'هل يمكن طلب كافة المأكولات والمشروبات المتوفرة ضمن قائمة ستاربكس مع خدمة التوصيل؟',
-    a: 'حفاظاً على معايير الجودة العالية ومستويات الخدمة التي نقدمها لزبائننا، يرجى العلم بأنه يتوفر لدينا قائمة خاصة للتوصيل، وبالتالي فإن بعض المأكولات والمشروبات المختارة غير متوفرة حالياً مع خدمة التوصيل.',
-  },
-  {
-    q: 'هل يمكنني الدفع باستخدام بطاقة ستاربكس أو تطبيق ستاربكس مع خدمة التوصيل؟',
-    a: 'يرجى العلم بأن خدمة الدفع باستخدام بطاقة ستاربكس أو عبر التطبيق غير متوفرة حالياً مع خدمة التوصيل. الرجاء الدفع عن طريق تطبيق Talabat عند الطلب مع خدمة التوصيل.',
-  },
-  {
-    q: 'هل خدمة توصيل ستاربكس متوفرة في منطقتي؟',
-    a: 'يرجى تحديد موقعك على الخريطة (اللوكيشن) عبر تطبيق Talabat لمعرفة ما إذا كانت خدمة توصيل ستاربكس متوفرة في منطقتك.',
-  },
-  {
-    q: 'ماذا يمكنني أن أفعل إذا حدث خطأ في طلبي مع خدمة التوصيل؟',
-    a: 'يرجى التواصل مع خدمة زبائن Talabat في حال حدوث أي خطأ في طلبك مع خدمة التوصيل.',
-  },
-]
-
 const DeliveryPage: React.FC = () => {
-  const { t } = useTranslation()
+  const { i18n } = useTranslation()
+  const lang = (i18n.language === 'ar' ? 'ar' : 'en') as 'ar' | 'en'
+  const isRTL = i18n.language === 'ar'
 
   return (
     <div className="min-h-screen bg-white dark:bg-black">
-      <SEO title="قائمة التوصيل | ستاربكس" />
+      <SEO title={data.title[lang]} />
 
       {/* ─── Hero Section ─── */}
       <section className="bg-[#f7f7f7] dark:bg-zinc-950 py-12 lg:py-20">
         <div className="container mx-auto max-w-6xl px-6 lg:px-12">
-          <div className="flex flex-col-reverse items-center gap-10 lg:flex-row">
-            {/* Left text */}
-            <div className="flex-1 text-right space-y-5">
+          <div className={`flex flex-col-reverse items-center gap-10 ${isRTL ? 'lg:flex-row' : 'lg:flex-row-reverse'}`}>
+            {/* Main Text */}
+            <div className={`flex-1 ${isRTL ? 'text-right' : 'text-left'} space-y-5`}>
               <motion.h1
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 className="text-4xl font-extrabold text-starbucks-dark dark:text-white lg:text-5xl leading-tight"
               >
-                الآن أصبح الاستمتاع بتجربة ستاربكس أسهل
+                {data.hero.title[lang]}
               </motion.h1>
               <motion.p
                 initial={{ opacity: 0, y: 20 }}
@@ -68,13 +38,13 @@ const DeliveryPage: React.FC = () => {
                 transition={{ delay: 0.1 }}
                 className="text-lg text-gray-600 dark:text-gray-400 leading-relaxed"
               >
-                اكتشف إذا كانت خدمة التوصيل متوفرة في منطقتك. اطلب الآن من ستاربكس واستمتع بمشروباتك ومأكولاتك المفضلة مع خدمة التوصيل عبر Talabat.
+                {data.hero.description[lang]}
               </motion.p>
 
               {/* Partners Card */}
               <div className="mt-6 rounded-2xl border border-gray-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-6 shadow-sm">
                 <p className="mb-4 text-base font-extrabold text-starbucks-dark dark:text-white text-center">
-                  شركاؤنا في خدمة التوصيل
+                  {data.partners.title[lang]}
                 </p>
                 <div className="flex items-center justify-center gap-3 mb-6">
                   {/* Starbucks logo */}
@@ -93,20 +63,20 @@ const DeliveryPage: React.FC = () => {
                   </div>
                 </div>
                 <p className="text-center text-sm font-bold text-starbucks-dark dark:text-white mb-1">
-                  خدمة التوصيل من ستاربكس متوفرة عبر Talabat
+                  {data.partners.status[lang]}
                 </p>
                 <p className="text-center text-sm text-gray-500 dark:text-gray-400 mb-5">
-                  استمتع بمشروبك المفضل من ستاربكس مع خدمة التوصيل عبر Talabat
+                  {data.partners.subStatus[lang]}
                 </p>
-                <a href={TALABAT_URL} target="_blank" rel="noopener noreferrer">
+                <a href={data.urls.talabat} target="_blank" rel="noopener noreferrer">
                   <Button className="w-full rounded-full bg-starbucks-green py-6 font-extrabold text-white hover:bg-starbucks-dark transition-all">
-                    اطلب الآن
+                    {data.hero.cta[lang]}
                   </Button>
                 </a>
               </div>
             </div>
 
-            {/* Left Section (Video + Action) */}
+            {/* Video Section */}
             <div className="flex-1 w-full max-w-xl">
               <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
@@ -118,11 +88,11 @@ const DeliveryPage: React.FC = () => {
                 
                 <div className="space-y-4">
                   <h3 className="text-xl font-extrabold text-starbucks-dark dark:text-white">
-                    خدمة التوصيل لدى ستاربكس
+                    {data.videoSection.title[lang]}
                   </h3>
-                  <a href={TALABAT_URL} target="_blank" rel="noopener noreferrer" className="block">
+                  <a href={data.urls.talabat} target="_blank" rel="noopener noreferrer" className="block">
                     <Button className="rounded-2xl bg-starbucks-green px-12 py-7 text-lg font-extrabold text-white shadow-xl hover:bg-starbucks-dark transition-all transform hover:scale-105 active:scale-95">
-                      اطلب الآن
+                      {data.hero.cta[lang]}
                     </Button>
                   </a>
                 </div>
@@ -135,33 +105,33 @@ const DeliveryPage: React.FC = () => {
       {/* ─── Enjoy at Home Section ─── */}
       <section className="py-16 lg:py-24 border-b border-gray-100 dark:border-zinc-800">
         <div className="container mx-auto max-w-6xl px-6 lg:px-12">
-          <div className="flex flex-col items-center gap-10 lg:flex-row-reverse">
+          <div className={`flex flex-col items-center gap-10 ${isRTL ? 'lg:flex-row-reverse' : 'lg:flex-row'}`}>
             <div className="flex-1">
               <motion.img
-                initial={{ opacity: 0, x: 20 }}
+                initial={{ opacity: 0, x: isRTL ? 20 : -20 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
-                src="https://www.starbucks.eg/assets/image-cache/delivery-home-ar.jpg"
-                alt="استمتع بتجربة ستاربكس في المنزل"
+                src={data.homeSection.image}
+                alt={data.homeSection.title[lang]}
                 className="w-full rounded-3xl shadow-2xl"
                 onError={(e) => {
-                  e.currentTarget.src = 'https://www.starbucks.eg/assets/image-cache/home-delivery.jpg'
+                  e.currentTarget.src = data.homeSection.fallbackImage
                 }}
               />
             </div>
-            <div className="flex-1 text-right space-y-6">
+            <div className={`flex-1 ${isRTL ? 'text-right' : 'text-left'} space-y-6`}>
               <h2 className="text-3xl font-extrabold text-starbucks-dark dark:text-white lg:text-4xl leading-snug">
-                استمتع بتجربة ستاربكس في المنزل
+                {data.homeSection.title[lang]}
               </h2>
               <p className="text-lg text-gray-600 dark:text-gray-400 leading-relaxed">
-                الآن يمكنك الاستمتاع بمشروبات ومأكولات ستاربكس المفضلة لديك وأنت في منزلك مع خدمة التوصيل!
+                {data.homeSection.description[lang]}
               </p>
               <Link to="/our-coffees">
                 <Button
                   variant="outline"
                   className="rounded-full border-2 border-starbucks-dark px-10 py-6 font-extrabold text-starbucks-dark hover:bg-starbucks-dark hover:text-white dark:border-white dark:text-white dark:hover:bg-white dark:hover:text-black transition-all"
                 >
-                  تعرّف على المزيد
+                  {data.homeSection.cta[lang]}
                 </Button>
               </Link>
             </div>
@@ -172,23 +142,25 @@ const DeliveryPage: React.FC = () => {
       {/* ─── FAQ Section ─── */}
       <section className="py-16 lg:py-24 bg-[#f9f9f9] dark:bg-zinc-950">
         <div className="container mx-auto max-w-4xl px-6">
-          <h2 className="mb-12 text-right text-3xl font-extrabold text-starbucks-dark dark:text-white">
-            أسئلة شائعة
+          <h2 className={`mb-12 ${isRTL ? 'text-right' : 'text-left'} text-3xl font-extrabold text-starbucks-dark dark:text-white`}>
+            {data.faqs.title[lang]}
           </h2>
           <div className="space-y-8">
-            {faqs.map((faq, i) => (
+            {data.faqs.items.map((faq: any, i: number) => (
               <motion.div
                 key={i}
                 initial={{ opacity: 0, y: 12 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.05 }}
-                className="text-right"
+                className={isRTL ? 'text-right' : 'text-left'}
               >
                 <h3 className="mb-2 text-base font-extrabold text-starbucks-dark dark:text-white lg:text-lg">
-                  {faq.q}
+                  {faq.q[lang]}
                 </h3>
-                <p className="text-gray-600 dark:text-gray-400 leading-relaxed">{faq.a}</p>
+                <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+                  {faq.a[lang]}
+                </p>
               </motion.div>
             ))}
           </div>

@@ -1,0 +1,85 @@
+{
+  "title": { "ar": "الاستدامة والتأثير الاجتماعي", "en": "Sustainability & Social Impact" },
+  "sections": [
+    {
+      "id": "hero",
+      "title": { "ar": "نعمل معاً لإعادة ابتكار المستقبل لأجل أمورٍ، كثيرة", "en": "Working together to reinvent the future for many things" },
+      "subtitle": { "ar": "نعمل معاً لإعادة ابتكار المستقبل لأجل أمورٍ، كثيرة", "en": "Working together to reinvent the future for many things" },
+      "image": "https://www.starbucks.eg/assets/image-cache/sustainability-hero-ar.jpg",
+      "fallbackImage": "https://www.starbucks.eg/assets/image-cache/social-impact.jpg",
+      "content": [
+        {
+          "ar": "نحب شغفكم للقهوة سواء كنتم في الطريق الى العمل أو لمقابلة الأصدقاء أو الذهاب إلى النادي الرياضي، فنحن معكم في كل مكان وجزء من روتينكم اليومي مثلما أنكم أيضاً جزء من رحلتنا لنكون شركة إيجابية الموارد.",
+          "en": "We love your passion for coffee whether you are on your way to work, meeting friends, or going to the gym. We are with you everywhere and part of your daily routine just as you are part of our journey to be a resource-positive company."
+        },
+        {
+          "ar": "تتمثل أهمية البيئة بالنسبة لنا كأهمية صناعة القهوة ولهذا السبب قمنا بزيادة خيارات قائمة الطعام النباتي والصديق للبيئة، كما قمنا بالتخلص من المواد ذات الاستخدام الواحد واستبدالها بمواد قابلة لإعادة الاستخدام، وقمنا بالاستثمار في ممارسات مبتكرة وجديدة لتطوير مقاهي صديقة للبيئة ومستدامة. فبإمكان شركائنا وزبائننا المساهمة في صنع التغير #اصنعوا_الفرق ومساعدتنا في رحلتنا للاستدامة البيئية من خلال مقاهينا ال 900 الموجودة في منطقة الشرق الأوسط وشمال إفريقيا.",
+          "en": "The environment is as important to us as coffee making. That's why we've increased plant-based and eco-friendly menu options, eliminated single-use materials in favor of reusables, and invested in innovative practices to develop sustainable cafes. Our partners and customers can contribute to change #MakeADifference and help our sustainability journey across 900 cafes in the MENA region."
+        }
+      ],
+      "subHeading": { "ar": "نحقق أهدافنا بالعمل الجماعي", "en": "Achieving our goals through collective action" },
+      "subContent": {
+        "ar": "إبدأ بخطوات بسيطة فمثلاً في كل مرة تخرج فيها احمل معك كوب قابل لإعادة الاستخدام و#اصنعوا_الفرق بطريقة سهلة وفعالة لتكونوا جزءاً من نجاحنا في الحفاظ على البيئة حيث نقدم أكثر مما نستهلك. لذا ندعوكم لجعل المواد القابلة لإعادة الاستخدام جزء من روتينكم اليومي فمن خلال خطوات صغيرة نستطيع أن نحدث فرقاً كبيراً.",
+        "en": "Start with simple steps. For example, carry a reusable cup every time you go out and #MakeADifference in an easy and effective way to be part of our success in preserving the environment where we give back more than we consume. We invite you to make reusables part of your daily routine; small steps can make a big difference."
+      },
+      "cta": { "ar": "قم بإجراء التغيير", "en": "Make the Change" },
+      "ctaLink": "https://www.youtube.com/watch?v=ybWV-w6M_0U"
+    },
+    {
+      "id": "reusable",
+      "title": { "ar": "طريقة استعمال الأكواب القابلة لإعادة الاستخدام", "en": "How to use reusable cups" },
+      "image": "https://www.starbucks.eg/assets/image-cache/reusable-cup.jpg",
+      "fallbackImage": "https://www.starbucks.eg/assets/image-cache/sustainability-cup.jpg",
+      "content": {
+        "ar": "تعد آمنة وبدون تلامس! ما عليك سوى أن تحضر كوبك النظيف القابل لإعادة الاستخدام للاستمتاع بمشروبك المفضل من ستاربكس و#اصنعوا_الفرق",
+        "en": "Safe and contactless! Simply bring your clean reusable cup to enjoy your favorite Starbucks drink and #MakeADifference."
+      },
+      "cta": { "ar": "شاهد كيف", "en": "Watch How" },
+      "ctaLink": "https://www.youtube.com/watch?v=qY160wQXkfM"
+    },
+    {
+      "id": "grounds",
+      "title": { "ar": "الزهور تحب القهوة أيضاً!", "en": "Flowers love coffee too!" },
+      "image": "https://www.starbucks.eg/assets/image-cache/flowers-sustainability.jpg",
+      "fallbackImage": "https://www.starbucks.eg/assets/image-cache/coffee-grounds.jpg",
+      "content": [
+        {
+          "ar": "هل تساءلت يومًا إلى أي مدى يمكن أن تذهب حبة البن؟ بالإضافة إلى فنجان القهوة الساخن الذي تستمتع به يوميًا، لقد وجدنا طريقة لاستخدام القهوة المطحونة في تغذية البيئة.",
+          "en": "Have you ever wondered how far a coffee bean can go? Beyond your daily hot cup, we've found a way to use coffee grounds to nourish the environment."
+        },
+        {
+          "ar": "القهوة مصدر كبير للعناصر الغذائية لزهورك ونباتاتك. مستوحاة من هذا، بدأت ستاربكس برنامج Grounds for Your Garden في عام 1995. هذا هو المكان الذي يتم فيه تعبئة بقايا القهوة المستهلكة بعناية في أكياس، لتأخذها إلى المنزل وتستخدمها في حديقتك.",
+          "en": "Coffee is a great source of nutrients for your flowers and plants. Inspired by this, Starbucks started the 'Grounds for Your Garden' program in 1995, where used grounds are packaged for you to take home for your garden."
+        }
+      ],
+      "tipsTitle": { "ar": "تُعد تفل القهوة المستخدمة سماداً ممتازاً، خاصةً للنباتات التي تزدهر في التربة الحمضية. فيما يلي ثلاث طرق لاستخدام قهوتنا:", "en": "Used coffee grounds make excellent fertilizer, especially for acid-loving plants. Here are three ways to use our grounds:" },
+      "tips": [
+        { "ar": "مختلطة مباشرة في التربة حول النباتات، مثل الهذر، رودودندرون، الأزاليات، المغنوليا، الكوبية والكاميليا.", "en": "Mixed directly into the soil around plants like heather, rhododendrons, azaleas, magnolias, hydrangeas, and camellias." },
+        { "ar": "يضاف إلى السماد للمساعدة في تسريع عملية التسميد.", "en": "Added to compost to help speed up the composting process." },
+        { "ar": "يتم تطبيقه كضمادة علوية للخضروات سريعة النمو، والعزق في التربة لتجنب تلوث أوراق الشجر.", "en": "Applied as a top dressing for fast-growing vegetables, hoed into the soil to avoid foliage contamination." }
+      ],
+      "note": {
+        "ar": "للحصول على أفضل النتائج، يجب ألا تزيد نسبة القهوة المطحونة عن 25٪ من إجمالي محتوى كومة السماد. يجب استخدام القهوة المطحونة في غضون 2-3 أسابيع من التخمير للحصول على أكبر قيمة غذائية.",
+        "en": "For best results, grounds should not exceed 25% of the total compost content. Use within 2-3 weeks of brewing for maximum nutritional value."
+      }
+    },
+    {
+      "id": "strawless",
+      "title": { "ar": "أغطية بدون أعواد الشرب في الشرق الأوسط", "en": "Strawless Lids in the Middle East" },
+      "image": "https://www.starbucks.eg/assets/image-cache/cold-cup-ar.jpg",
+      "fallbackImage": "https://www.starbucks.eg/assets/image-cache/strawless-lid.jpg",
+      "link": "https://www.alshaya.com/campaigns/Starbucks/Strawless_Lid_Launch/ar/strawless.html",
+      "subHeading": { "ar": "تقليل النفايات + تمكين الابتكار", "en": "Reducing Waste + Enabling Innovation" },
+      "content": [
+        {
+          "ar": "يمكن للأمور الصغيرة التي نفعلها أن تحقق أثراً كبيراً على العالم. يعد اتخاذ قرار البدء في التوقف عن استخدام أعواد الشرب البلاستيكية من قبل مقاهي ستاربكس خطوةً صغيرةً لكنها مهمة في رحلتنا لتعزيز وعينا تجاه البيئة وتقليل تأثيرنا على العالم من خلال الحد من النفايات التي ننتجها والوصول إلى هدفنا المتمثل في أن نكون شركة إيجابية الموارد هنا في منطقة الشرق الأوسط وشمال أفريقيا.",
+          "en": "Small things we do can make a big impact. Phasing out plastic straws is a small but important step in our journey to reduce waste and reach our goal of being a resource-positive company in the MENA region."
+        },
+        {
+          "ar": "ومن خلال مزيج من التصميم الرائع والتفكير المبتكر والتركيز على إيجاد حلول أفضل للحفاظ على البيئة، قدمنا أغطية الأكواب الخالية من اعواد الشرب والقابلة لإعادة التدوير بالكامل. ويمثل وصول أغطية الأكواب الخالية من الأعواد إلى منطقة الشرق الأوسط وشمال أفريقيا، قفزةً إلى الأمام في ما يتعلق بالتفكير الصديق للبيئة وحل المشكلات، كما أنه يعد دليلاً على أن التغييرات الصغيرة يمكنها أن تحقق أثراً كبيراً.",
+          "en": "Through great design and innovative thinking, we've introduced fully recyclable strawless lids. Their arrival in the MENA region is a leap forward in eco-friendly problem-solving, proving that small changes can make a big impact."
+        }
+      ]
+    }
+  ]
+}

@@ -1,11 +1,13 @@
+import { useTranslation } from 'react-i18next'
 import { motion } from 'framer-motion'
-import { Button } from './ui/button'
-import statementData from '@/data/statement.json'
-import type { StatementData } from '@/types'
-
-const data: StatementData = statementData
+import { Button } from './ui'
+import { Link } from 'react-router-dom'
+import { statement as data } from '../data'
 
 const StatementSection = () => {
+  const { i18n } = useTranslation()
+  const localizedData = (data as any)[i18n.language] || data.en
+
   return (
     <section className="bg-background-light dark:bg-background-dark py-16 transition-colors">
       <div className="container mx-auto max-w-4xl px-4">
@@ -17,21 +19,23 @@ const StatementSection = () => {
           className="text-center"
         >
           <h2 className="mb-6 text-3xl font-bold text-starbucks-dark dark:text-foreground-dark md:text-4xl transition-colors">
-            {data.title}
+            {localizedData.title}
           </h2>
           <div className="mb-8 space-y-4 text-center">
             <h4 className="text-xl font-semibold text-starbucks-green">
-              {data.subtitle}
+              {localizedData.subtitle}
             </h4>
-            {data.paragraphs.map((paragraph, index) => (
+            {localizedData.paragraphs.map((paragraph: string, index: number) => (
               <p key={index} className="leading-relaxed text-gray-700 dark:text-gray-300 transition-colors">
                 {paragraph}
               </p>
             ))}
           </div>
-          <Button variant="outline" size="lg">
-            {data.ctaText}
-          </Button>
+          <Link to={localizedData.ctaLink}>
+            <Button variant="outline" size="lg">
+              {localizedData.ctaText}
+            </Button>
+          </Link>
         </motion.div>
       </div>
     </section>

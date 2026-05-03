@@ -4,9 +4,12 @@ import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { Mail, Phone, Send, CheckCircle } from 'lucide-react'
 import SEO from '../components/SEO'
+import { Button } from '../components/ui'
+import { contactUs as data } from '../data'
 
 const ContactUsPage: React.FC = () => {
   const { i18n } = useTranslation()
+  const lang = (i18n.language === 'ar' ? 'ar' : 'en') as 'ar' | 'en'
   const isRTL = i18n.language === 'ar'
 
   const [form, setForm] = useState({ name: '', email: '', phone: '', subject: '', message: '' })
@@ -28,7 +31,7 @@ const ContactUsPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-white dark:bg-black">
-      <SEO title={isRTL ? 'اتصل بنا | ستاربكس' : 'Contact Us | Starbucks'} />
+      <SEO title={data.hero.title[lang]} />
 
       {/* ─── Hero Split Section ─── */}
       <section className="flex flex-col lg:flex-row min-h-[420px] border-b border-gray-100 dark:border-zinc-800">
@@ -39,43 +42,39 @@ const ContactUsPage: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             className="mb-6 text-3xl font-black text-starbucks-dark dark:text-white lg:text-4xl"
           >
-            {isRTL ? 'هل ترغبون بمعرفة كيفية التواصل معنا؟' : 'Would you like to know how to contact us?'}
+            {data.hero.title[lang]}
           </motion.h1>
 
           <div className="space-y-5 text-gray-600 dark:text-gray-400">
             <p className="font-bold text-starbucks-dark dark:text-white">
-              {isRTL ? 'هل لديكم أي استفسار؟' : 'Do you have any inquiry?'}
+              {data.info.inquiry[lang]}
             </p>
             <p>
-              {isRTL
-                ? 'يمكنكم التواصل مع فريق خدمة الزبائن عبر البريد الإلكتروني:'
-                : 'You can contact our customer service team by email:'}
+              {data.info.emailLabel[lang]}
             </p>
 
             <a
-              href="mailto:starbucks.mena@alshaya.com"
+              href={`mailto:${data.info.email}`}
               className="flex items-center justify-end gap-3 text-starbucks-green font-bold hover:underline underline-offset-4"
             >
-              starbucks.mena@alshaya.com
+              {data.info.email}
               <Mail className="h-5 w-5" />
             </a>
 
             <p>
-              {isRTL
-                ? 'أو عبر صفحاتنا على فيسبوك وانستغرام.'
-                : 'Or through our Facebook and Instagram pages.'}
+              {data.info.socialLabel[lang]}
             </p>
 
             <div className="pt-2">
               <p className="font-bold text-starbucks-dark dark:text-white mb-2">
-                {isRTL ? 'اتصلوا بنا على الرقم:' : 'Call us at:'}
+                {data.info.phoneLabel[lang]}
               </p>
               <a
-                href="tel:0224803822"
+                href={`tel:${data.info.phoneTel}`}
                 className="flex items-center justify-end gap-3 text-starbucks-green font-bold text-xl hover:underline underline-offset-4"
                 dir="ltr"
               >
-                02-24803822
+                {data.info.phone}
                 <Phone className="h-5 w-5" />
               </a>
             </div>
@@ -85,17 +84,17 @@ const ContactUsPage: React.FC = () => {
         {/* Right — Image */}
         <div className="relative flex-1 min-h-[300px] overflow-hidden lg:max-w-[45%]">
           <img
-            src="https://www.starbucks.eg/assets/image-cache/contact-us-hero.jpg"
-            alt={isRTL ? 'للتواصل مع فريق ستاربكس' : 'Contact Starbucks Team'}
+            src={data.hero.image}
+            alt={data.hero.imageAlt[lang]}
             className="absolute inset-0 h-full w-full object-cover"
             onError={(e) => {
-              e.currentTarget.src = 'https://images.unsplash.com/photo-1561494673-f9e9e9f7a1c3?w=800&q=80'
+              if (data.hero.fallbackImage) e.currentTarget.src = data.hero.fallbackImage
             }}
           />
           <div className="absolute inset-0 bg-starbucks-dark/40" />
           <div className="absolute bottom-8 right-8 left-8 text-right">
             <p className="mb-3 text-2xl font-black text-white drop-shadow-lg">
-              {isRTL ? 'للتواصل مع فريق ستاربكس' : 'Connect with the Starbucks Team'}
+              {data.hero.imageAlt[lang]}
             </p>
             <Link
               to="/about-us"
@@ -112,12 +111,10 @@ const ContactUsPage: React.FC = () => {
         <div className="container mx-auto max-w-3xl px-6">
           <div className="text-right mb-10">
             <h2 className="text-3xl font-extrabold text-starbucks-dark dark:text-white mb-3">
-              {isRTL ? 'أرسل لنا رسالة' : 'Send Us a Message'}
+              {data.form.title[lang]}
             </h2>
             <p className="text-gray-500 dark:text-gray-400">
-              {isRTL
-                ? 'سيقوم فريقنا بالرد على استفساركم في أقرب وقت ممكن.'
-                : 'Our team will respond to your inquiry as soon as possible.'}
+              {data.form.subtitle[lang]}
             </p>
           </div>
 
@@ -129,12 +126,10 @@ const ContactUsPage: React.FC = () => {
             >
               <CheckCircle className="mx-auto mb-4 h-14 w-14 text-starbucks-green" />
               <h3 className="text-xl font-extrabold text-starbucks-dark dark:text-white mb-2">
-                {isRTL ? 'شكراً لتواصلكم معنا!' : 'Thank you for contacting us!'}
+                {data.form.success.title[lang]}
               </h3>
               <p className="text-gray-500 dark:text-gray-400">
-                {isRTL
-                  ? 'تم استلام رسالتكم بنجاح. سنرد عليكم في أقرب وقت ممكن.'
-                  : 'Your message has been received. We will get back to you shortly.'}
+                {data.form.success.message[lang]}
               </p>
             </motion.div>
           ) : (
@@ -148,20 +143,20 @@ const ContactUsPage: React.FC = () => {
               <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
                 <div>
                   <label className="mb-2 block text-sm font-bold text-starbucks-dark dark:text-white">
-                    {isRTL ? 'الاسم الكامل *' : 'Full Name *'}
+                    {data.form.fields.name.label[lang]}
                   </label>
                   <input
                     required
                     name="name"
                     value={form.name}
                     onChange={handleChange}
-                    placeholder={isRTL ? 'أدخل اسمك الكامل' : 'Enter your full name'}
+                    placeholder={data.form.fields.name.placeholder[lang]}
                     className="w-full rounded-xl border border-gray-200 dark:border-zinc-700 bg-gray-50 dark:bg-zinc-900 px-4 py-3.5 text-gray-800 dark:text-white placeholder-gray-400 outline-none focus:border-starbucks-green focus:ring-2 focus:ring-starbucks-green/20 transition-all"
                   />
                 </div>
                 <div>
                   <label className="mb-2 block text-sm font-bold text-starbucks-dark dark:text-white">
-                    {isRTL ? 'البريد الإلكتروني *' : 'Email *'}
+                    {data.form.fields.email.label[lang]}
                   </label>
                   <input
                     required
@@ -169,7 +164,7 @@ const ContactUsPage: React.FC = () => {
                     name="email"
                     value={form.email}
                     onChange={handleChange}
-                    placeholder={isRTL ? 'أدخل بريدك الإلكتروني' : 'Enter your email'}
+                    placeholder={data.form.fields.email.placeholder[lang]}
                     className="w-full rounded-xl border border-gray-200 dark:border-zinc-700 bg-gray-50 dark:bg-zinc-900 px-4 py-3.5 text-gray-800 dark:text-white placeholder-gray-400 outline-none focus:border-starbucks-green focus:ring-2 focus:ring-starbucks-green/20 transition-all"
                     dir="ltr"
                   />
@@ -179,21 +174,21 @@ const ContactUsPage: React.FC = () => {
               <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
                 <div>
                   <label className="mb-2 block text-sm font-bold text-starbucks-dark dark:text-white">
-                    {isRTL ? 'رقم الهاتف' : 'Phone Number'}
+                    {data.form.fields.phone.label[lang]}
                   </label>
                   <input
                     type="tel"
                     name="phone"
                     value={form.phone}
                     onChange={handleChange}
-                    placeholder={isRTL ? 'أدخل رقم هاتفك' : 'Enter your phone number'}
+                    placeholder={data.form.fields.phone.placeholder[lang]}
                     className="w-full rounded-xl border border-gray-200 dark:border-zinc-700 bg-gray-50 dark:bg-zinc-900 px-4 py-3.5 text-gray-800 dark:text-white placeholder-gray-400 outline-none focus:border-starbucks-green focus:ring-2 focus:ring-starbucks-green/20 transition-all"
                     dir="ltr"
                   />
                 </div>
                 <div>
                   <label className="mb-2 block text-sm font-bold text-starbucks-dark dark:text-white">
-                    {isRTL ? 'موضوع الرسالة *' : 'Subject *'}
+                    {data.form.fields.subject.label[lang]}
                   </label>
                   <select
                     required
@@ -202,20 +197,19 @@ const ContactUsPage: React.FC = () => {
                     onChange={handleChange}
                     className="w-full rounded-xl border border-gray-200 dark:border-zinc-700 bg-gray-50 dark:bg-zinc-900 px-4 py-3.5 text-gray-800 dark:text-white outline-none focus:border-starbucks-green focus:ring-2 focus:ring-starbucks-green/20 transition-all"
                   >
-                    <option value="">{isRTL ? 'اختر الموضوع' : 'Select subject'}</option>
-                    <option value="general">{isRTL ? 'استفسار عام' : 'General Inquiry'}</option>
-                    <option value="complaint">{isRTL ? 'شكوى' : 'Complaint'}</option>
-                    <option value="feedback">{isRTL ? 'اقتراح أو ملاحظة' : 'Feedback / Suggestion'}</option>
-                    <option value="delivery">{isRTL ? 'خدمة التوصيل' : 'Delivery Service'}</option>
-                    <option value="rewards">{isRTL ? 'برنامج المكافآت' : 'Rewards Program'}</option>
-                    <option value="other">{isRTL ? 'أخرى' : 'Other'}</option>
+                    <option value="">{data.form.fields.subject.placeholder[lang]}</option>
+                    {data.form.subjects.map(subject => (
+                      <option key={subject.id} value={subject.id}>
+                        {subject[lang]}
+                      </option>
+                    ))}
                   </select>
                 </div>
               </div>
 
               <div>
                 <label className="mb-2 block text-sm font-bold text-starbucks-dark dark:text-white">
-                  {isRTL ? 'نص الرسالة *' : 'Message *'}
+                  {data.form.fields.message.label[lang]}
                 </label>
                 <textarea
                   required
@@ -223,7 +217,7 @@ const ContactUsPage: React.FC = () => {
                   value={form.message}
                   onChange={handleChange}
                   rows={6}
-                  placeholder={isRTL ? 'اكتب رسالتك هنا...' : 'Write your message here...'}
+                  placeholder={data.form.fields.message.placeholder[lang]}
                   className="w-full resize-none rounded-xl border border-gray-200 dark:border-zinc-700 bg-gray-50 dark:bg-zinc-900 px-4 py-3.5 text-gray-800 dark:text-white placeholder-gray-400 outline-none focus:border-starbucks-green focus:ring-2 focus:ring-starbucks-green/20 transition-all"
                 />
               </div>
@@ -239,7 +233,7 @@ const ContactUsPage: React.FC = () => {
                   ) : (
                     <Send className="h-5 w-5" />
                   )}
-                  {isRTL ? 'إرسال الرسالة' : 'Send Message'}
+                  {data.form.fields.submit[lang]}
                 </button>
               </div>
             </motion.form>

@@ -1,0 +1,88 @@
+{
+  "title": {
+    "ar": "بيان من شركة ستاربكس",
+    "en": "Starbucks Official Statement"
+  },
+  "subtitle": {
+    "ar": "حقائق حول ستاربكس في الشرق الأوسط",
+    "en": "Facts about Starbucks in the Middle East"
+  },
+  "paragraphs": {
+    "ar": [
+      "بالرغم من كونها شركة أمريكية، إلّا أن \"ستاربكس\" تعتز بكونها شركة عالمية عززت تواجدها في 86 بلداً حول العالم، بما في ذلك ما يقارب 1900 مقهى في 11 بلدان في منطقة الشرق الأوسط وشمال أفريقيا، يعمل من خلالهم أكثر من 19,000 شريك. نحن فخورون بأن نكون جزءاً من نسيج المجتمعات المحلية التي نتواجد بها ونعمل بشكل مباشر مع شركائنا المحليين الذين يديرون مقاهي ستاربكس في تلك البلدان. ونوظف آلاف الموظفين من المواطنين المحليين لخدمة الملايين من الزبائن، هذا إلى جانب الأثر الإيجابي الذي نجحنا في تركه من خلال تقديم الدعم للأحياء والمدن والمجتمعات المحلية التي نعمل من خلالها.",
+      "لدينا 400,000 شريك (موظف) حول العالم، يتبنون آراء ووجهات نظر متعددة حول مختلف القضايا، وبغض النظر عن تلك المعتقدات تبقى \"ستاربكس\" علامة تجارية لا علاقة لها بالسياسة. وكذلك، لا تقدم ستاربكس أو رئيس مجلس إدارتها والرئيس التنفيذي السابق للشركة هوارد شولتز الدعم المالي للحكومة الإسرائيلية و / أو للجيش الإسرائيلي بأي شكل من الأشكال.",
+      "ما نؤمن به ونمنحه اهتمامنا وتركيزنا فقط هو الحفاظ على تراث شركتنا العريق والعلامة التجارية ذات الشهرة العالمية، والنجاح الكبير الذي تم تحقيقه عبر تقديم أجود أنواع القهوة في أجواء تتسم بالتميز وتجعل من زيارة فروعنا التجربة الأمثل أينما وجد زبائننا."
+    ],
+    "en": [
+      "Despite being an American company, Starbucks prides itself on being a global company with a presence in 86 countries around the world, including nearly 1,900 cafes in 11 countries in the Middle East and North Africa region, employing more than 19,000 partners. We are proud to be part of the fabric of the local communities where we operate and work directly with our local partners who run Starbucks cafes in those countries. We employ thousands of local citizens to serve millions of customers, alongside the positive impact we have successfully made through supporting neighborhoods, cities, and local communities where we operate.",
+      "We have 400,000 partners (employees) worldwide who hold diverse views and perspectives on various issues. Regardless of those beliefs, Starbucks remains a non-political brand. Likewise, neither Starbucks nor its former chairman and CEO Howard Schultz provide financial support to the Israeli government and/or the Israeli military in any way.",
+      "What we believe in and give our attention and focus to is maintaining our company's rich heritage and world-renowned brand, and the great success achieved by providing the finest coffee in an atmosphere of excellence that makes visiting our branches the ideal experience wherever our customers are."
+    ]
+  },
+  "faqs": [
+    {
+      "q": {
+        "ar": "هل صحيح ما يشاع حول تقديم ستاربكس أو هوارد شولتز الدعم المالي لإسرائيل ؟",
+        "en": "Is it true that Starbucks or Howard Schultz provides financial support to Israel?"
+      },
+      "a": {
+        "ar": "لا. إنها مجرد إشاعة مغرضة لا تمت إلى الحقيقة بأية صلة. لا تقدم ستاربكس أو هوارد شولتز أي نوع من الدعم المالي للحكومة الإسرائيلية و / أو للجيش الإسرائيلي. إن ستاربكس هي شركة مساهمة عامة مدرجة في سوق الأوراق المالية وبالتالي فهي مطالبة بالإفصاح عن أي تبرع أو دعم تقدمه بشكل سنوي، وعرضه أمام المساهمين بشكل مفصل وتعمل على تطبيق أفضل الممارسات العالمية في مجالي الإدارة والشفافية.",
+        "en": "No. This is a malicious rumor with no basis in truth. Neither Starbucks nor Howard Schultz provides any kind of financial support to the Israeli government and/or the Israeli military. Starbucks is a publicly traded company listed on the stock exchange and is therefore required to disclose any donations or support it provides annually, presented in detail to shareholders, following global best practices in management and transparency."
+      }
+    },
+    {
+      "q": {
+        "ar": "هل قامت ستاربكس من قبل بإرسال جزء من أرباحها للحكومة الإسرائيلية أو الجيش الإسرائيلي؟",
+        "en": "Has Starbucks ever sent part of its profits to the Israeli government or the Israeli military?"
+      },
+      "a": {
+        "ar": "لا، لم يتم هذا على الإطلاق، إنها مجرد شائعات لا تمت إلى الحقيقة بأية صلة.",
+        "en": "No, this has never happened. These are just rumors with no basis in truth."
+      }
+    },
+    {
+      "q": {
+        "ar": "هل صحيح أن إغلاق فروع ستاربكس في إسرائيل قد تم لأسباب سياسية؟",
+        "en": "Is it true that the closure of Starbucks branches in Israel was for political reasons?"
+      },
+      "a": {
+        "ar": "لا، فإننا لا نقوم بإتخاذ أية قرارات تجارية بناء على أي مبادئ أو تغيرات سياسية، فقد قررنا حل شراكتنا في إسرائيل في عام 2003 بسبب التحديات التشغيلية المستمرة التي واجهناها هناك، وبعد عدة أشهر من النقاشات والمفاوضات مع شريكنا المحلي، توصلنا بعدها إلى هذا القرار. لقد كان قرارًا صعبًا لكلا الطرفين، إلاَ أننا مازلنا نثق في صحة القرار وأنه يصب في مصلحة عمليات الشركة ككل.",
+        "en": "No. We do not make business decisions based on political principles or changes. We decided to dissolve our partnership in Israel in 2003 due to ongoing operational challenges we faced there. After several months of discussions and negotiations with our local partner, we reached this decision. It was a difficult decision for both parties, but we remain confident it was correct and in the best interest of the company's overall operations."
+      }
+    },
+    {
+      "q": {
+        "ar": "هل هناك خطة لإعادة الفتح في حال سمحت الفرصة؟",
+        "en": "Is there a plan to reopen if the opportunity arises?"
+      },
+      "a": {
+        "ar": "قررنا حل شراكتنا في إسرائيل في عام 2003 بسبب التحديات التشغيلية المستمرة التي واجهتنا هناك. حينما وأينما نجد دراسة جدوى منطقية، تلائم علامة ستاربكس التجارية، سنقوم بالتعاون مع شريك محلي لتقييم الفرصة ودراستها بشكل جيد. نركز في الوقت الحالي على توسيع نطاق عملياتنا في منطقة الشرق الأوسط، فالمكانة التي حظيت بها علامة ستاربكس التجارية في هذه المنطقة لافتة للأنظار. نواصل العمل عن قرب مع شريكنا التجاري المحلي، مجموعة الشايع، لتطوير ما لدينا من خطط تخص عملياتنا في المنطقة.",
+        "en": "We decided to dissolve our partnership in Israel in 2003 due to ongoing operational challenges there. Whenever and wherever we find a logical feasibility study that suits the Starbucks brand, we will collaborate with a local partner to evaluate and study the opportunity thoroughly. We are currently focusing on expanding our operations in the Middle East, as the Starbucks brand has gained a remarkable position in this region. We continue to work closely with our local business partner, Alshaya Group, to develop our plans for regional operations."
+      }
+    },
+    {
+      "q": {
+        "ar": "هل تعمل ستاربكس مع شريك في الشرق الأوسط لإدارة فروعها في المنطقة ؟",
+        "en": "Does Starbucks work with a partner in the Middle East to manage its branches in the region?"
+      },
+      "a": {
+        "ar": "تعمل ستاربكس في الشرق الأوسط منذ عام 1999 وذلك من خلال اتفاقية امتياز حصرية مع شريكها التجاري، مجموعة الشايع، وهي شركة عائلية كويتية خاصة. اليوم تدير مجموعة \"الشايع\" التي تعد إحدى الشركات الرائدة في مجال تجارة التجزئة وصاحبة الامتياز الأكثر نفوذاً في المنطقة، أكثر من 1,900 فرع لستاربكس في الشرق الأوسط وشمال إفريقيا وتركيا وآسيا الوسطى. نحن سعداء جداً وفخورون بالنجاح الذي حققته تلك الشراكة مع مجموعة الشايع على مدى أكثر من 20 عاماً ونسعى للمزيد من النجاح والتقدم.",
+        "en": "Starbucks has been operating in the Middle East since 1999 through an exclusive franchise agreement with its business partner, Alshaya Group, a private Kuwaiti family-owned company. Today, Alshaya Group, one of the leading retail companies and most influential franchisees in the region, operates more than 1,900 Starbucks branches across the Middle East, North Africa, Turkey, and Central Asia. We are very pleased and proud of the success achieved through this partnership with Alshaya Group for over 20 years and look forward to further success and progress."
+      }
+    },
+    {
+      "q": {
+        "ar": "في أي دول تعمل ستاربكس على مستوى الشرق الأوسط وشمال إفريقيا؟",
+        "en": "In which countries does Starbucks operate in the Middle East and North Africa?"
+      },
+      "a": {
+        "ar": "تربطنا علاقة شراكة مع مجموعة الشايع لإدارة فروعنا في منطقة الشرق الأوسط وشمال افريقيا، وهي: مملكة البحرين، جمهورية مصر العربية، الأردن، الكويت، لبنان، المغرب، عمان، قطر، المملكة العربية السعودية، تركيا، والإمارات العربية المتحدة. إننا محظوظون لأن تتاح لنا الفرصة للعمل مع العديد من المجتمعات المحلية، ونحن ملتزمون بتوفير تجربة ستاربكس مع احترام العادات والثقافات المحلية لكل بلد نحن جزء منه. نحن ملتزمون أيضًا بالتوظيف محليًا، وتوفير الوظائف لآلاف المواطنين المحليين في البلدان التي نعمل فيها.",
+        "en": "We have a partnership with Alshaya Group to manage our branches in the MENA region: Bahrain, Egypt, Jordan, Kuwait, Lebanon, Morocco, Oman, Qatar, Saudi Arabia, Turkey, and the UAE. We are fortunate to have the opportunity to work with many local communities, and we are committed to providing the Starbucks experience while respecting local customs and cultures. We are also committed to local hiring, providing jobs for thousands of local citizens in the countries where we operate."
+      }
+    }
+  ],
+  "updateNote": {
+    "ar": "صدر هذا البيان في عام 2010، وتمّ تحديثه في أكتوبر 2023.",
+    "en": "This statement was issued in 2010 and updated in October 2023."
+  }
+}

@@ -1,20 +1,19 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
-import { Button } from './ui/button'
+import { Button } from './ui'
 import { ArrowLeft } from 'lucide-react'
-import rawData from '../data/featured-cards.json'
+import { featuredCards } from '../data'
 import type { FeaturedCardsData } from '../types'
 
-const data = rawData as unknown as FeaturedCardsData
-
 export default function FeaturedCards() {
-  const { t } = useTranslation()
+  const { i18n } = useTranslation()
+  const localizedData = (featuredCards as any)[i18n.language] || featuredCards.en
 
   return (
     <section className="py-12 dark:bg-black transition-colors">
       <div className="container mx-auto grid max-w-7xl grid-cols-1 gap-8 px-4 md:grid-cols-2">
-        {data.cards.map((card, index) => (
+        {localizedData.cards.map((card: any, index: number) => (
           <motion.div
             key={card.id}
             initial={{ opacity: 0, y: 20 }}
@@ -42,11 +41,11 @@ export default function FeaturedCards() {
               {/* Content Section */}
               <div className="flex w-full flex-col justify-center p-8 text-center md:w-1/2 md:p-12 md:text-left rtl:md:text-right">
                 <h3 className="mb-4 text-2xl font-extrabold text-starbucks-dark dark:text-foreground-dark lg:text-3xl">
-                  {t(card.title)}
+                  {card.title}
                 </h3>
                 {card.description && (
                   <p className="mb-8 text-lg leading-relaxed text-gray-700 dark:text-gray-300">
-                    {t(card.description)}
+                    {card.description}
                   </p>
                 )}
                 <div className="flex flex-wrap items-center justify-center gap-4 md:justify-start">
@@ -56,7 +55,7 @@ export default function FeaturedCards() {
                     asChild
                   >
                     <a href={card.ctaLink}>
-                      {t(card.cta)}
+                      {card.cta}
                     </a>
                   </Button>
                   
@@ -67,7 +66,7 @@ export default function FeaturedCards() {
                       asChild
                     >
                       <a href={card.secondaryCtaLink}>
-                        {t(card.secondaryCta)}
+                        {card.secondaryCta}
                         <ArrowLeft className="h-5 w-5 rtl:rotate-180" />
                       </a>
                     </Button>

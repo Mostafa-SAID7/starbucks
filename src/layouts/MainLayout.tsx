@@ -1,9 +1,5 @@
 import { Outlet } from 'react-router-dom'
-import Navbar from '../components/Navbar'
-import Footer from '../components/Footer'
-import MobileTabBar from '../components/MobileTabBar'
-import CookieConsent from '../components/CookieConsent'
-import { Toaster } from '../components/ui/toaster'
+import { Navbar, Footer, MobileTabBar, CookieConsent, Toaster } from '../components'
 
 export default function MainLayout() {
   return (

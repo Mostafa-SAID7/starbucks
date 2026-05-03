@@ -2,18 +2,19 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
-import { Button } from './ui/button'
-import data from '../data/hero.json'
+import { Button } from './ui'
+import { hero as data } from '../data'
 
 const HeroBanner: React.FC = () => {
-  const { t } = useTranslation()
+  const { i18n } = useTranslation()
+  const localizedData = (data as any)[i18n.language] || data.en
 
   return (
     <section className="relative h-[400px] md:h-[500px] lg:h-[600px] w-full overflow-hidden">
       {/* Background Image */}
       <img
-        src={data.imageUrl}
-        alt={data.imageAlt}
+        src={localizedData.imageUrl}
+        alt={localizedData.imageAlt}
         fetchPriority="high"
         decoding="async"
         className="absolute inset-0 h-full w-full object-cover"
@@ -29,17 +30,17 @@ const HeroBanner: React.FC = () => {
               transition={{ duration: 0.8 }}
             >
               <h1 className="mb-6 text-3xl font-extrabold leading-tight text-white md:text-5xl lg:text-6xl">
-                {t('hero.title', data.title)}
+                {localizedData.title}
               </h1>
               <p className="mb-8 text-lg text-white/90 md:text-xl lg:text-2xl max-w-lg">
-                {t('hero.subtitle', data.description)}
+                {localizedData.description}
               </p>
-              <Link to={data.ctaLink}>
+              <Link to={localizedData.ctaLink}>
                 <Button
                   size="lg"
                   className="rounded-full bg-starbucks-green px-10 py-7 text-lg font-bold text-white hover:bg-starbucks-dark transition-all active:scale-95 shadow-xl"
                 >
-                  {t('hero.cta', data.ctaText)}
+                  {localizedData.ctaText}
                 </Button>
               </Link>
             </motion.div>

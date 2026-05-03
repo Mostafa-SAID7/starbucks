@@ -1,0 +1,117 @@
+{
+  "title": {
+    "ar": "قائمة التوصيل | ستاربكس",
+    "en": "Delivery Menu | Starbucks"
+  },
+  "urls": {
+    "talabat": "https://www.talabat.com/ar/egypt/restaurant/516787/starbucks-city-scape-6th-of-october?aid=7935"
+  },
+  "hero": {
+    "title": {
+      "ar": "الآن أصبح الاستمتاع بتجربة ستاربكس أسهل",
+      "en": "Enjoying Starbucks is now easier than ever"
+    },
+    "description": {
+      "ar": "اكتشف إذا كانت خدمة التوصيل متوفرة في منطقتك. اطلب الآن من ستاربكس واستمتع بمشروباتك ومأكولاتك المفضلة مع خدمة التوصيل عبر Talabat.",
+      "en": "Discover if delivery is available in your area. Order now from Starbucks and enjoy your favorite beverages and food with delivery via Talabat."
+    },
+    "cta": {
+      "ar": "اطلب الآن",
+      "en": "Order Now"
+    }
+  },
+  "partners": {
+    "title": {
+      "ar": "شركاؤنا في خدمة التوصيل",
+      "en": "Our Delivery Partners"
+    },
+    "status": {
+      "ar": "خدمة التوصيل من ستاربكس متوفرة عبر Talabat",
+      "en": "Starbucks delivery is available via Talabat"
+    },
+    "subStatus": {
+      "ar": "استمتع بمشروبك المفضل من ستاربكس مع خدمة التوصيل عبر Talabat",
+      "en": "Enjoy your favorite Starbucks drink with delivery via Talabat"
+    }
+  },
+  "videoSection": {
+    "title": {
+      "ar": "خدمة التوصيل لدى ستاربكس",
+      "en": "Starbucks Delivery Service"
+    }
+  },
+  "homeSection": {
+    "title": {
+      "ar": "استمتع بتجربة ستاربكس في المنزل",
+      "en": "Enjoy Starbucks at Home"
+    },
+    "description": {
+      "ar": "الآن يمكنك الاستمتاع بمشروبات ومأكولات ستاربكس المفضلة لديك وأنت في منزلك مع خدمة التوصيل!",
+      "en": "Now you can enjoy your favorite Starbucks beverages and food at home with delivery!"
+    },
+    "cta": {
+      "ar": "تعرّف على المزيد",
+      "en": "Learn More"
+    },
+    "image": "https://www.starbucks.eg/assets/image-cache/delivery-home-ar.jpg",
+    "fallbackImage": "https://www.starbucks.eg/assets/image-cache/home-delivery.jpg"
+  },
+  "faqs": {
+    "title": {
+      "ar": "أسئلة شائعة",
+      "en": "Frequently Asked Questions"
+    },
+    "items": [
+      {
+        "q": {
+          "ar": "كيف أحصل على خدمة التوصيل من ستاربكس؟",
+          "en": "How do I get Starbucks delivery?"
+        },
+        "a": {
+          "ar": "اطلب بسهولة عبر تطبيق Talabat.",
+          "en": "Order easily through the Talabat app."
+        }
+      },
+      {
+        "q": {
+          "ar": "هل يمكن طلب كافة المأكولات والمشروبات المتوفرة ضمن قائمة ستاربكس مع خدمة التوصيل؟",
+          "en": "Can all Starbucks food and drinks be ordered for delivery?"
+        },
+        "a": {
+          "ar": "حفاظاً على معايير الجودة العالية ومستويات الخدمة التي نقدمها لزبائننا، يرجى العلم بأنه يتوفر لدينا قائمة خاصة للتوصيل، وبالتالي فإن بعض المأكولات والمشروبات المختارة غير متوفرة حالياً مع خدمة التوصيل.",
+          "en": "To maintain our high quality standards and service levels, please note that we have a specific delivery menu. Therefore, some selected food and drinks are currently not available for delivery."
+        }
+      },
+      {
+        "q": {
+          "ar": "هل يمكنني الدفع باستخدام بطاقة ستاربكس أو تطبيق ستاربكس مع خدمة التوصيل؟",
+          "en": "Can I pay using my Starbucks Card or app for delivery?"
+        },
+        "a": {
+          "ar": "يرجى العلم بأن خدمة الدفع باستخدام بطاقة ستاربكس أو عبر التطبيق غير متوفرة حالياً مع خدمة التوصيل. الرجاء الدفع عن طريق تطبيق Talabat عند الطلب مع خدمة التوصيل.",
+          "en": "Please note that payment using the Starbucks Card or app is currently not available for delivery. Please pay via the Talabat app when ordering for delivery."
+        }
+      },
+      {
+        "q": {
+          "ar": "هل خدمة توصيل ستاربكس متوفرة في منطقتي؟",
+          "en": "Is Starbucks delivery available in my area?"
+        },
+        "a": {
+          "ar": "يرجى تحديد موقعك على الخريطة (اللوكيشن) عبر تطبيق Talabat لمعرفة ما إذا كانت خدمة توصيل ستاربكس متوفرة في منطقتك.",
+          "en": "Please select your location on the map via the Talabat app to find out if Starbucks delivery is available in your area."
+        }
+      },
+      {
+        "q": {
+          "ar": "ماذا يمكنني أن أفعل إذا حدث خطأ في طلبي مع خدمة التوصيل؟",
+          "en": "What should I do if there is an error with my delivery order?"
+        },
+        "a": {
+          "ar": "يرجى التواصل مع خدمة زبائن Talabat في حال حدوث أي خطأ في طلبك مع خدمة التوصيل.",
+          "en": "Please contact Talabat customer service if there is any error with your delivery order."
+        }
+      }
+    ]
+  }
+}
