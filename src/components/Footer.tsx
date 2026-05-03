@@ -23,20 +23,20 @@ export default function Footer() {
   }
 
   return (
-    <footer className="bg-white pt-16 pb-32 dark:bg-black border-t dark:border-gray-800 transition-colors">
-      <div className="container mx-auto max-w-7xl px-4">
-        <div className="grid grid-cols-1 gap-12 border-b pb-12 lg:grid-cols-4 dark:border-gray-800 transition-colors">
+    <footer className="bg-starbucks-dark pt-20 pb-10 text-white transition-colors">
+      <div className="container mx-auto max-w-7xl px-6">
+        <div className="grid grid-cols-1 gap-12 border-b border-white/10 pb-16 lg:grid-cols-4 transition-colors">
           {data.sections.map((section) => (
             <div key={section.title}>
-              <h3 className="mb-6 text-lg font-bold text-starbucks-dark dark:text-foreground-dark uppercase tracking-wider">
+              <h3 className="mb-8 text-lg font-extrabold uppercase tracking-widest text-white">
                 {t(section.title)}
               </h3>
-              <ul className="space-y-4">
+              <ul className="space-y-6">
                 {section.links.map((link) => (
                   <li key={link.label}>
                     <Link
                       to={link.href}
-                      className="text-base text-gray-500 hover:text-starbucks-dark dark:hover:text-foreground-dark transition-colors"
+                      className="text-base text-gray-300 hover:text-white transition-colors"
                     >
                       {t(link.label)}
                     </Link>
@@ -46,26 +46,31 @@ export default function Footer() {
             </div>
           ))}
 
-          {/* Location Selector (Desktop/Mobile) */}
+          {/* Location Selector */}
           <div>
-            <h3 className="mb-6 text-lg font-bold text-starbucks-dark dark:text-foreground-dark uppercase tracking-wider">
+            <h3 className="mb-8 text-lg font-extrabold uppercase tracking-widest text-white">
               {t('footer.location_selector')}
             </h3>
-            <div className="group relative">
-              <button className="flex items-center gap-3 text-base text-gray-500 hover:text-starbucks-dark dark:hover:text-foreground-dark transition-colors">
-                <Globe className="h-5 w-5" />
-                <span>{t('footer.location_selector')}</span>
+            <div className="group relative inline-block">
+              <button className="flex items-center gap-3 text-base text-gray-300 hover:text-white transition-colors cursor-pointer py-2">
+                <Globe className="h-5 w-5 text-starbucks-green" />
+                <span className="font-bold underline decoration-white/20 underline-offset-8 group-hover:decoration-starbucks-green transition-all">
+                  {t('footer.location_selector')}
+                </span>
               </button>
               
-              <div className="invisible absolute bottom-full left-0 z-50 mb-4 h-64 w-64 overflow-y-auto rounded-xl border bg-white p-4 shadow-2xl group-hover:visible dark:bg-black dark:border-gray-800">
-                <ul className="space-y-3">
+              <div className="invisible absolute bottom-[calc(100%+12px)] left-0 z-50 h-[300px] w-72 overflow-y-auto rounded-2xl border border-white/10 bg-zinc-900 p-6 shadow-2xl transition-all opacity-0 scale-95 origin-bottom group-hover:visible group-hover:opacity-100 group-hover:scale-100">
+                <div className="mb-4 text-xs font-bold uppercase tracking-widest text-gray-400">
+                  {t('footer.select_region', 'Select Region')}
+                </div>
+                <ul className="space-y-1">
                   {data.countries.map((country) => (
                     <li key={country.name}>
                       <a
                         href={country.href}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="block text-sm text-gray-500 hover:text-starbucks-green dark:hover:text-starbucks-green transition-colors"
+                        className="block rounded-lg px-3 py-2.5 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-starbucks-green transition-all"
                       >
                         {country.name}
                       </a>
@@ -77,7 +82,7 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="flex flex-col items-center justify-between gap-8 py-12 lg:flex-row">
+        <div className="flex flex-col items-center justify-between gap-12 py-16 lg:flex-row">
           {/* Social Links */}
           <div className="flex items-center gap-6">
             {data.socials.map((social) => (
@@ -86,7 +91,7 @@ export default function Footer() {
                 href={social.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex h-10 w-10 items-center justify-center rounded-full bg-starbucks-dark text-white hover:bg-gray-800 transition-colors"
+                className="flex h-12 w-12 items-center justify-center rounded-full bg-white/10 text-white hover:bg-starbucks-green transition-all hover:scale-110 shadow-xl"
               >
                 {socialIcons[social.name]}
               </a>
@@ -94,12 +99,12 @@ export default function Footer() {
           </div>
 
           {/* Legal Links */}
-          <div className="flex flex-wrap items-center justify-center gap-6 lg:justify-end">
+          <div className="flex flex-wrap items-center justify-center gap-8 lg:justify-end">
             {data.legal.map((link) => (
               <Link
                 key={link.label}
                 to={link.href}
-                className="text-sm font-bold text-starbucks-dark hover:text-starbucks-green dark:text-foreground-dark transition-colors"
+                className="text-sm font-bold text-gray-300 hover:text-white transition-colors"
               >
                 {t(link.label)}
               </Link>
@@ -107,9 +112,9 @@ export default function Footer() {
           </div>
         </div>
 
-        <p className="text-center text-sm text-gray-400 lg:text-left">
-          {t('footer.copyright')}
-        </p>
+        <div className="text-center text-[13px] text-gray-500">
+          <p>© {new Date().getFullYear()} Starbucks Coffee Company. {t('footer.all_rights_reserved', 'جميع الحقوق محفوظة.')}</p>
+        </div>
       </div>
     </footer>
   )

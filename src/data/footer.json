@@ -10,7 +10,8 @@
     {
       "title": "footer.contact_us",
       "links": [
-        { "label": "footer.contact_us", "href": "/contact-us" }
+        { "label": "footer.contact_us", "href": "/contact-us" },
+        { "label": "footer.store_locator", "href": "/locations" }
       ]
     },
     {

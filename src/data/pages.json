@@ -11,12 +11,126 @@
   },
   "delivery": {
     "ar": {
-      "title": "قائمة التوصيل",
-      "content": "<h3>استمتع بستاربكس في أي مكان</h3><p>احصل على منتجات ستاربكس المفضلة لديك مباشرة إلى باب منزلك. لقد دخلنا في شراكة مع <strong>طلبات</strong> لنقدم لك قهوتنا المميزة وأطعمتنا الطازجة مباشرة.</p><p>ما عليك سوى فتح تطبيق طلبات، واختيار أقرب فرع ستاربكس إليك، والاختيار من قائمة التوصيل المحسنة لدينا والمصممة للحفاظ على أعلى مستويات الجودة والنضارة.</p>"
+      "title": "خدمة التوصيل",
+      "sections": [
+        {
+          "type": "hero",
+          "title": "الآن أصبح الاستمتاع بتجربة ستاربكس أسهل",
+          "description": "اكتشف إذا كانت خدمة التوصيل متوفرة في منطقتك. اطلب الآن من ستاربكس واستمتع بمشروباتك ومأكولاتك المفضلة مع خدمة التوصيل عبر Talabat.",
+          "image": "https://www.starbucks.eg/assets/image-cache/delivery-hero-ar.jpg",
+          "imageAlt": "Starbucks Delivery"
+        },
+        {
+          "type": "partners",
+          "title": "شركاؤنا في خدمة التوصيل",
+          "items": [
+            {
+              "name": "Starbucks",
+              "logo": "/logo.png"
+            },
+            {
+              "name": "Talabat",
+              "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/Talabat_logo.png/512px-Talabat_logo.png"
+            }
+          ]
+        },
+        {
+          "type": "card",
+          "title": "استمتع بتجربة ستاربكس في المنزل",
+          "description": "الآن يمكنك الاستمتاع بمشروبات ومأكولات ستاربكس المفضلة لديك وأنت في منزلك مع خدمة التوصيل!",
+          "image": "https://www.starbucks.eg/assets/image-cache/delivery-home.jpg",
+          "imageAlt": "Starbucks at Home",
+          "cta": "تعرف على المزيد",
+          "ctaLink": "/about-us"
+        },
+        {
+          "type": "faq",
+          "title": "أسئلة شائعة",
+          "items": [
+            {
+              "question": "كيف أحصل على خدمة التوصيل من ستاربكس؟",
+              "answer": "اطلب بسهولة عبر تطبيق Talabat."
+            },
+            {
+              "question": "هل يمكن طلب كافة المأكولات والمشروبات المتوفرة ضمن قائمة ستاربكس مع خدمة التوصيل؟",
+              "answer": "حفاظاً على معايير الجودة العالية ومستويات الخدمة التي تقدمها لزبائننا، يرجى العلم بأنه تتوفر لدينا قائمة خاصة لخدمة التوصيل، وبالتالي فإن بعض المأكولات والمشروبات المختارة غير متوفرة حالياً مع خدمة التوصيل."
+            },
+            {
+              "question": "هل يمكنني الدفع باستخدام بطاقة ستاربكس أو تطبيق ستاربكس مع خدمة التوصيل؟",
+              "answer": "يرجى العلم بأن خدمة الدفع باستخدام بطاقة ستاربكس أو عبر التطبيق غير متوفرة حالياً مع خدمة التوصيل. الرجاء الدفع عن طريق تطبيق Talabat عند الطلب مع خدمة التوصيل."
+            },
+            {
+              "question": "هل خدمة توصيل ستاربكس متوفرة في منطقتي؟",
+              "answer": "يرجى تحديد موقعك على الخريطة (اللوكيشن) عبر تطبيق Talabat لمعرفة ما إذا كانت خدمة توصيل ستاربكس متوفرة في منطقتك."
+            },
+            {
+              "question": "ماذا يمكنني أن أفعل إذا حدث خطأ في طلبي مع خدمة التوصيل؟",
+              "answer": "يرجى التواصل مع خدمة زبائن Talabat في حال حدوث أي خطأ في طلبك مع خدمة التوصيل."
+            }
+          ]
+        }
+      ]
     },
     "en": {
-      "title": "Delivery Menu",
-      "content": "<h3>Enjoy Starbucks Anywhere</h3><p>Get your Starbucks favorites delivered to your doorstep. We've partnered with <strong>Talabat</strong> to bring our premium coffee and fresh food directly to you.</p><p>Simply open the Talabat app, select your nearest Starbucks, and choose from our specially optimized delivery menu designed to maintain the highest quality and freshness.</p>"
+      "title": "Delivery Service",
+      "sections": [
+        {
+          "type": "hero",
+          "title": "Now enjoying Starbucks is easier",
+          "description": "Discover if delivery is available in your area. Order now from Starbucks and enjoy your favorite drinks and food with Talabat delivery service.",
+          "image": "https://www.starbucks.eg/assets/image-cache/delivery-hero-en.jpg",
+          "imageAlt": "Starbucks Delivery"
+        },
+        {
+          "type": "partners",
+          "title": "Our Delivery Partners",
+          "items": [
+            {
+              "name": "Starbucks",
+              "logo": "/logo.png"
+            },
+            {
+              "name": "Talabat",
+              "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/Talabat_logo.png/512px-Talabat_logo.png"
+            }
+          ]
+        },
+        {
+          "type": "card",
+          "title": "Enjoy Starbucks experience at home",
+          "description": "Now you can enjoy your favorite Starbucks drinks and food from the comfort of your home with delivery service!",
+          "image": "https://www.starbucks.eg/assets/image-cache/delivery-home.jpg",
+          "imageAlt": "Starbucks at Home",
+          "cta": "Learn More",
+          "ctaLink": "/about-us"
+        },
+        {
+          "type": "faq",
+          "title": "Frequently Asked Questions",
+          "items": [
+            {
+              "question": "How do I get Starbucks delivery?",
+              "answer": "Order easily through the Talabat app."
+            },
+            {
+              "question": "Can I order all Starbucks menu items for delivery?",
+              "answer": "To maintain our high quality and service standards, we offer a specialized delivery menu. Some items may not be available for delivery."
+            },
+            {
+              "question": "Can I pay with my Starbucks Card or App for delivery?",
+              "answer": "Payment via Starbucks Card or App is currently not available for delivery orders. Please pay through the Talabat app."
+            },
+            {
+              "question": "Is Starbucks delivery available in my area?",
+              "answer": "Please check your location on the map in the Talabat app to see if delivery is available."
+            },
+            {
+              "question": "What should I do if there's an error with my order?",
+              "answer": "Please contact Talabat customer service for any issues with your delivery order."
+            }
+          ]
+        }
+      ]
     }
   },
   "privacy-statement": {

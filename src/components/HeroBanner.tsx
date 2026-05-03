@@ -9,63 +9,46 @@ const HeroBanner: React.FC = () => {
   const { t } = useTranslation()
 
   return (
-    <section className="relative overflow-hidden bg-starbucks-green dark:bg-black transition-colors">
-      <div className="container mx-auto flex flex-col items-center px-4 py-16 lg:flex-row lg:py-24">
-        {/* Content */}
-        <div className="z-10 w-full text-center lg:w-1/2 lg:text-left rtl:lg:text-right">
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="mb-6 text-4xl font-extrabold leading-tight text-white lg:text-6xl"
-          >
-            {t('hero.title')}
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="mb-10 text-xl text-white/90 lg:text-2xl"
-          >
-            {t('hero.subtitle')}
-          </motion.p>
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-          >
-            <Link to={data.ctaLink}>
-              <Button
-                size="lg"
-                className="rounded-full bg-white px-8 text-lg font-bold text-starbucks-dark hover:bg-gray-100 transition-all active:scale-95"
-              >
-                {t('hero.cta')}
-              </Button>
-            </Link>
-          </motion.div>
-        </div>
-
-        {/* Image */}
-        <div className="mt-12 w-full lg:mt-0 lg:w-1/2">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8 }}
-            className="relative"
-          >
-            <div className="absolute inset-0 bg-white/10 blur-3xl rounded-full" />
-            <img
-              src={data.imageUrl}
-              alt={data.imageAlt}
-              className="relative z-10 w-full object-contain"
-            />
-          </motion.div>
+    <section className="relative h-[400px] md:h-[500px] lg:h-[600px] w-full overflow-hidden">
+      {/* Background Image */}
+      <img
+        src={data.imageUrl}
+        alt={data.imageAlt}
+        fetchPriority="high"
+        decoding="async"
+        className="absolute inset-0 h-full w-full object-cover"
+      />
+      
+      {/* Overlay */}
+      <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent rtl:bg-gradient-to-l">
+        <div className="container mx-auto h-full flex items-center px-6 lg:px-12">
+          <div className="max-w-2xl">
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8 }}
+            >
+              <h1 className="mb-6 text-3xl font-extrabold leading-tight text-white md:text-5xl lg:text-6xl">
+                {t('hero.title', data.title)}
+              </h1>
+              <p className="mb-8 text-lg text-white/90 md:text-xl lg:text-2xl max-w-lg">
+                {t('hero.subtitle', data.description)}
+              </p>
+              <Link to={data.ctaLink}>
+                <Button
+                  size="lg"
+                  className="rounded-full bg-starbucks-green px-10 py-7 text-lg font-bold text-white hover:bg-starbucks-dark transition-all active:scale-95 shadow-xl"
+                >
+                  {t('hero.cta', data.ctaText)}
+                </Button>
+              </Link>
+            </motion.div>
+          </div>
         </div>
       </div>
-      
-      {/* Background Pattern */}
-      <div className="absolute top-0 right-0 h-64 w-64 bg-white/5 blur-3xl rounded-full translate-x-1/2 -translate-y-1/2" />
-      <div className="absolute bottom-0 left-0 h-96 w-96 bg-black/10 blur-3xl rounded-full -translate-x-1/2 translate-y-1/2" />
+
+      {/* Decorative Elements */}
+      <div className="absolute bottom-0 left-0 h-32 w-full bg-gradient-to-t from-background-light dark:from-background-dark to-transparent" />
     </section>
   )
 }

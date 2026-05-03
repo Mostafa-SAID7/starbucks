@@ -19,7 +19,7 @@ const StatementSection = () => {
           <h2 className="mb-6 text-3xl font-bold text-starbucks-dark dark:text-foreground-dark md:text-4xl transition-colors">
             {data.title}
           </h2>
-          <div className="mb-8 space-y-4 text-right">
+          <div className="mb-8 space-y-4 text-center">
             <h4 className="text-xl font-semibold text-starbucks-green">
               {data.subtitle}
             </h4>

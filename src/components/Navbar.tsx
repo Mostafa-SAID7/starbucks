@@ -11,6 +11,7 @@ import {
   Sun 
 } from 'lucide-react'
 import { toast } from 'sonner'
+import Logo from './Logo'
 
 export default function Navbar() {
   const { t, i18n } = useTranslation()
@@ -30,76 +31,64 @@ export default function Navbar() {
   ]
 
   return (
-    <nav className="sticky top-0 z-50 w-full border-b bg-white/80 backdrop-blur-md dark:bg-black/80 transition-colors">
-      <div className="container mx-auto flex h-20 max-w-7xl items-center justify-between px-4">
-        {/* Logo and Nav Items */}
-        <div className="flex items-center gap-8">
-          <Link to="/" className="flex-shrink-0">
-            <img 
-              src="https://www.starbucks.eg/assets/app/icons/icon-192x192.png" 
-              alt="Starbucks" 
-              className="h-12 w-12 hover:scale-105 transition-transform"
-            />
-          </Link>
-          
-          <div className="hidden items-center gap-6 lg:flex">
-            {navItems.map((item) => (
-              <Link
-                key={item.href}
-                to={item.href}
-                className="text-sm font-bold uppercase tracking-widest text-starbucks-dark hover:text-starbucks-green dark:text-foreground-dark transition-colors"
-              >
-                {item.label}
-              </Link>
-            ))}
-          </div>
-        </div>
-
-        {/* Action Items */}
-        <div className="flex items-center gap-4">
-          <div className="hidden items-center gap-6 lg:flex">
-            <Link 
-              to="/locations" 
-              className="flex items-center gap-2 text-sm font-bold text-starbucks-dark hover:text-starbucks-green dark:text-foreground-dark transition-colors"
-            >
-              <MapPin className="h-5 w-5" />
-              {t('common.locations')}
-            </Link>
-            
-            <div className="flex items-center gap-3 border-r dark:border-gray-800 pr-6 mr-2 transition-colors">
-              <Link to="/signin">
-                <Button variant="outline" size="sm" className="font-bold border-2 rounded-full px-6 hover:bg-starbucks-green hover:border-starbucks-green hover:text-white transition-all">
-                  {t('common.sign_in')}
-                </Button>
-              </Link>
-              <Link to="/signup">
-                <Button size="sm" className="font-bold bg-black text-white rounded-full px-6 hover:bg-gray-800 transition-all">
-                  {t('common.join_now')}
-                </Button>
-              </Link>
-            </div>
-          </div>
-
+    <nav className="sticky top-0 z-50 w-full border-b bg-white dark:bg-black transition-colors">
+      <div className="container mx-auto flex h-24 max-w-7xl items-center justify-between px-6 lg:px-12">
+        {/* Left Side: Language, Locations, Search */}
+        <div className="flex items-center gap-6">
           <Button
             variant="ghost"
             size="sm"
             onClick={toggleLanguage}
             className="flex items-center gap-2 font-bold text-starbucks-dark dark:text-foreground-dark hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full"
           >
-            <Globe className="h-5 w-5" />
-            <span className="min-w-[40px]">{t('common.language')}</span>
+            <span className="text-sm font-bold uppercase tracking-wider">{i18n.language === 'ar' ? 'English' : 'AR'}</span>
           </Button>
 
+          <Link 
+            to="/locations"
+            className="group hidden items-center gap-2 text-sm font-bold text-starbucks-dark hover:text-starbucks-green dark:text-foreground-dark lg:flex transition-all"
+          >
+            <MapPin className="h-5 w-5" />
+            <span className="hidden xl:inline">{t('common.locations')}</span>
+          </Link>
+
+          <Button variant="ghost" size="icon" className="text-starbucks-dark dark:text-foreground-dark rounded-full">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-5 w-5">
+              <circle cx="11" cy="11" r="8" />
+              <path d="M21 21l-4.35-4.35" />
+            </svg>
+          </Button>
+        </div>
+
+        {/* Center: Nav Items */}
+        <div className="hidden flex-1 items-center justify-center gap-8 lg:flex">
+          {navItems.map((item) => (
+            <Link
+              key={item.href}
+              to={item.href}
+              className="text-[13px] font-extrabold uppercase tracking-[0.1em] text-starbucks-dark hover:text-starbucks-green dark:text-foreground-dark transition-colors"
+            >
+              {item.label}
+            </Link>
+          ))}
+        </div>
+
+        {/* Right Side: Logo and Theme/Mobile Menu */}
+        <div className="flex items-center gap-4">
           <Button
             variant="ghost"
             size="icon"
             onClick={toggleTheme}
-            className="text-starbucks-dark dark:text-foreground-dark hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full"
+            className="hidden text-starbucks-dark dark:text-foreground-dark hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full lg:flex"
           >
             {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
           </Button>
 
-          <Button variant="ghost" size="icon" className="lg:hidden">
+          <Link to="/" className="flex-shrink-0 lg:ml-8">
+            <Logo className="h-14 w-14 hover:scale-105 transition-transform" />
+          </Link>
+
+          <Button variant="ghost" size="icon" className="lg:hidden text-starbucks-dark dark:text-foreground-dark">
             <Menu className="h-6 w-6" />
           </Button>
         </div>

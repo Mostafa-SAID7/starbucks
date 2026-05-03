@@ -2,6 +2,7 @@ import { Outlet } from 'react-router-dom'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import MobileTabBar from '../components/MobileTabBar'
+import CookieConsent from '../components/CookieConsent'
 import { Toaster } from 'sonner'
 
 export default function MainLayout() {
@@ -13,6 +14,7 @@ export default function MainLayout() {
       </main>
       <Footer />
       <MobileTabBar />
+      <CookieConsent />
       <Toaster position="top-center" expand={true} richColors />
     </div>
   )

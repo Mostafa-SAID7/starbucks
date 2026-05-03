@@ -1,24 +1,44 @@
 {
   "cards": [
     {
-      "id": 1,
-      "title": "cards.new_menu.title",
-      "description": "cards.new_menu.description",
-      "image": "https://www.starbucks.eg/sites/starbucks-eg-pwa/files/styles/c01_square_800x800/public/2024-03/Sbx_1.jpg.webp",
-      "imageAlt": "New Season",
-      "cta": "cards.new_menu.cta",
-      "ctaLink": "/menu",
+      "id": "new-era",
+      "title": "عصر جديد. نفس النجوم.",
+      "description": "اكتشف 3 طلبات أيقونية مستوحاة من فيلم The Devil Wears Prada: قهوة ميرندا، كابتشينو آندي بحليب الشوفان، اسبرسو نايجل بالكريمة المخفوقة.",
+      "cta": "اكتشف المزيد",
+      "ctaLink": "/new-era-same-icons",
+      "image": "https://www.starbucks.eg/sites/starbucks-eg-pwa/files/styles/c22_featured_card_531x273/public/2026-05/UAE_1.jpg.webp?h=c7029006&itok=RMrK1Ggt",
+      "imageAlt": "عصر جديد",
+      "theme": "White"
+    },
+    {
+      "id": "official-statement",
+      "title": "بيان ستاربكس الرسمي",
+      "description": "الحقيقة مُهمة. رداً على المعلومات الخاطئة، فإننا نشارككم اليوم الحقائق حول ما تُؤمن به ستاربكس وتُدافع عنه.",
+      "cta": "اعرف المزيد",
+      "ctaLink": "/starbucks-for-the-record",
+      "image": "https://www.starbucks.eg/sites/starbucks-eg-pwa/files/styles/c22_featured_card_531x273/public/2024-05/Starbucks%20for%20the%20Record.png.webp?h=7025b037&itok=XLxmlz9E",
+      "imageAlt": "بيان ستاربكس",
       "theme": "Green"
     },
     {
-      "id": 2,
-      "title": "cards.locations.title",
-      "description": "cards.locations.description",
-      "image": "https://www.starbucks.eg/sites/starbucks-eg-pwa/files/styles/c01_square_800x800/public/2023-10/Sbx-Banner-2.jpg.webp",
-      "imageAlt": "Locations",
-      "cta": "cards.locations.cta",
-      "ctaLink": "/locations",
-      "theme": "Gray"
+      "id": "delivery-promo",
+      "title": "خدمة توصيل ستاربكس",
+      "description": "احصل على النكهة المفضلة لديك مباشرة عند باب منزلك عبر طلبات.",
+      "cta": "اطلب الآن",
+      "ctaLink": "/delivery",
+      "image": "https://www.starbucks.eg/sites/starbucks-eg-pwa/files/styles/c22_featured_card_531x273/public/2022-05/Summer-Website-Banners--Delivery-TC-2.png.webp?h=0d43458e&itok=KilEmmyt",
+      "imageAlt": "توصيل ستاربكس",
+      "theme": "White"
+    },
+    {
+      "id": "rewards-promo",
+      "title": "استمتع بمكافآت ستاربكس",
+      "description": "اجمع النجوم واحصل على مشروبات مجانية والعديد من المزايا الحصرية.",
+      "cta": "انضم الآن",
+      "ctaLink": "https://www.starbucks.eg/ar/account/register",
+      "image": "https://www.starbucks.eg/sites/starbucks-eg-pwa/files/styles/c22_featured_card_531x273/public/2023-11/Generic-VB.jpg.webp?h=31892f93&itok=GiFtFBDi",
+      "imageAlt": "مكافآت ستاربكس",
+      "theme": "Green"
     }
   ]
 }
