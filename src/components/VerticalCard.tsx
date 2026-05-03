@@ -14,29 +14,40 @@ interface VerticalCardProps {
 
 export default function VerticalCard({ title, image, actions }: VerticalCardProps) {
   return (
-    <div className="flex h-full flex-col overflow-hidden rounded-lg border border-border-light bg-card-light shadow-sm transition-colors dark:border-border-dark dark:bg-card-dark">
-      <div className="relative aspect-[3/4] w-full flex-1 overflow-hidden">
+    <div className="relative flex h-[500px] w-full flex-col items-center justify-center overflow-hidden rounded-2xl bg-starbucks-dark shadow-sm">
+      {/* Background Image */}
+      <div className="absolute inset-0">
         <img
           src={image}
           alt={title}
-          className="absolute inset-0 h-full w-full object-cover"
+          className="h-full w-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-        <h3 className="absolute bottom-6 right-6 text-3xl font-bold text-white">{title}</h3>
+        <div className="absolute inset-0 bg-black/40 dark:bg-black/60" />
       </div>
-      <div className="flex flex-col gap-3 p-6">
-        {actions.map((action, index) => (
-          <Button
-            key={index}
-            asChild
-            variant={action.primary ? 'default' : 'outline'}
-            className={action.primary ? 'w-full bg-starbucks-green hover:bg-starbucks-dark text-white' : 'w-full border-starbucks-green text-starbucks-green hover:bg-starbucks-green hover:text-white dark:border-starbucks-light dark:text-starbucks-light'}
-          >
-            <a href={action.href} target={action.href.startsWith('http') ? '_blank' : '_self'} rel="noreferrer">
-              {action.label}
-            </a>
-          </Button>
-        ))}
+
+      {/* Content Overlay */}
+      <div className="relative z-10 flex w-full flex-col items-center p-8 text-center mt-20">
+        <h3 className="mb-6 text-3xl font-extrabold text-white drop-shadow-md">
+          {title}
+        </h3>
+
+        <div className="flex w-full flex-col gap-4 max-w-[200px]">
+          {actions.map((action, index) => (
+            <Button
+              key={index}
+              asChild
+              className={
+                action.primary
+                  ? 'w-full rounded-2xl bg-starbucks-green font-bold text-white shadow-md hover:bg-starbucks-dark dark:bg-starbucks-light dark:text-black dark:hover:bg-white'
+                  : 'w-full rounded-2xl border-2 border-white bg-transparent font-bold text-white hover:bg-white hover:text-starbucks-dark dark:border-starbucks-light dark:text-starbucks-light dark:hover:bg-starbucks-light dark:hover:text-black'
+              }
+            >
+              <a href={action.href} target={action.href.startsWith('http') ? '_blank' : '_self'} rel="noreferrer">
+                {action.label}
+              </a>
+            </Button>
+          ))}
+        </div>
       </div>
     </div>
   )

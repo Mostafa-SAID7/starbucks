@@ -59,24 +59,28 @@ export default function Footer() {
                 </span>
               </button>
               
-              <div className="invisible absolute bottom-[calc(100%+12px)] left-0 z-50 h-[300px] w-72 overflow-y-auto rounded-2xl border border-white/10 bg-zinc-900 p-6 shadow-2xl transition-all opacity-0 scale-95 origin-bottom group-hover:visible group-hover:opacity-100 group-hover:scale-100">
-                <div className="mb-4 text-xs font-bold uppercase tracking-widest text-gray-400">
-                  {t('footer.select_region', 'Select Region')}
+              <div className="invisible absolute bottom-[calc(100%+12px)] left-0 z-50 w-80 rounded-2xl border border-white/10 bg-zinc-900 shadow-2xl transition-all opacity-0 scale-95 origin-bottom group-hover:visible group-hover:opacity-100 group-hover:scale-100 overflow-hidden">
+                <div className="h-[300px] overflow-y-auto scrollbar-thin rtl">
+                  <div className="p-5 pl-6 pr-6">
+                    <div className="mb-4 text-xs font-bold uppercase tracking-widest text-gray-400">
+                      {t('footer.select_region', 'Select Region')}
+                    </div>
+                    <ul className="space-y-1">
+                      {data.countries.map((country) => (
+                        <li key={country.name}>
+                          <a
+                            href={country.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="block rounded-lg px-3 py-2.5 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-starbucks-green transition-all"
+                          >
+                            {country.name}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
-                <ul className="space-y-1">
-                  {data.countries.map((country) => (
-                    <li key={country.name}>
-                      <a
-                        href={country.href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="block rounded-lg px-3 py-2.5 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-starbucks-green transition-all"
-                      >
-                        {country.name}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
               </div>
             </div>
           </div>

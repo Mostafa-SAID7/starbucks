@@ -3,7 +3,7 @@ import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import MobileTabBar from '../components/MobileTabBar'
 import CookieConsent from '../components/CookieConsent'
-import { Toaster } from 'sonner'
+import { Toaster } from '../components/ui/toaster'
 
 export default function MainLayout() {
   return (
@@ -15,7 +15,7 @@ export default function MainLayout() {
       <Footer />
       <MobileTabBar />
       <CookieConsent />
-      <Toaster position="top-center" expand={true} richColors />
+      <Toaster />
     </div>
   )
 }

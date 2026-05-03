@@ -134,15 +134,15 @@ const SustainabilityPage: React.FC = () => {
               <div className="bg-starbucks-green/10 dark:bg-starbucks-green/5 border border-starbucks-green/20 rounded-2xl p-6 text-right">
                 <p className="font-bold text-starbucks-dark dark:text-white mb-4">تُعد تفل القهوة المستخدمة سماداً ممتازاً، خاصةً للنباتات التي تزدهر في التربة الحمضية. فيما يلي ثلاث طرق لاستخدام قهوتنا:</p>
                 <ul className="space-y-3 text-gray-600 dark:text-gray-400">
-                  <li className="flex items-start gap-3 flex-row-reverse">
+                  <li className="flex items-start gap-3">
                     <span className="mt-1.5 h-2 w-2 flex-shrink-0 rounded-full bg-starbucks-green" />
                     <span>مختلطة مباشرة في التربة حول النباتات، مثل الهذر، رودودندرون، الأزاليات، المغنوليا، الكوبية والكاميليا.</span>
                   </li>
-                  <li className="flex items-start gap-3 flex-row-reverse">
+                  <li className="flex items-start gap-3">
                     <span className="mt-1.5 h-2 w-2 flex-shrink-0 rounded-full bg-starbucks-green" />
                     <span>يضاف إلى السماد للمساعدة في تسريع عملية التسميد.</span>
                   </li>
-                  <li className="flex items-start gap-3 flex-row-reverse">
+                  <li className="flex items-start gap-3">
                     <span className="mt-1.5 h-2 w-2 flex-shrink-0 rounded-full bg-starbucks-green" />
                     <span>يتم تطبيقه كضمادة علوية للخضروات سريعة النمو، والعزق في التربة لتجنب تلوث أوراق الشجر.</span>
                   </li>

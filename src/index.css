@@ -33,29 +33,34 @@ html {
     --sb-thumb-hover: #008b5a;
   }
 
-  html, body {
+  *, html, body {
     scrollbar-width: thin;
-    scrollbar-color: var(--sb-thumb) var(--sb-track);
+    scrollbar-color: var(--sb-thumb) transparent;
   }
 
   /* Webkit Browsers (Chrome, Safari, Edge) */
   ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+    width: 5px;
+    height: 5px;
   }
 
   ::-webkit-scrollbar-track {
-    background: var(--sb-track);
+    background: transparent;
   }
 
   ::-webkit-scrollbar-thumb {
     background: var(--sb-thumb);
     border-radius: 20px;
-    border: 2px solid var(--sb-track);
   }
 
   ::-webkit-scrollbar-thumb:hover {
     background: var(--sb-thumb-hover);
+  }
+
+  ::-webkit-scrollbar-button {
+    display: none;
+    width: 0;
+    height: 0;
   }
 }
 

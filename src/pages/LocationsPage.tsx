@@ -172,39 +172,6 @@ const LocationsPage: React.FC = () => {
         </div>
       </div>
 
-      {/* ─── Footer strip ─── */}
-      <div className="border-t border-gray-100 dark:border-zinc-800 px-8 py-6">
-        <div className="container mx-auto max-w-6xl flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-4">
-            {/* Social icons */}
-            <a href="https://facebook.com/StarbucksMiddleEast" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-starbucks-green transition-colors">
-              <svg viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5">
-                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-              </svg>
-            </a>
-            <a href="https://instagram.com/starbucksegypt" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-starbucks-green transition-colors">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-5 w-5">
-                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
-                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
-                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
-              </svg>
-            </a>
-          </div>
-          <div className="flex items-center gap-4 text-sm text-gray-500">
-            <Link to="/contact-us" className="hover:text-starbucks-dark dark:hover:text-white transition-colors">
-              {isRTL ? 'اتصل بنا' : 'Contact Us'}
-            </Link>
-            <span>|</span>
-            <Link to="/privacy-statement" className="hover:text-starbucks-dark dark:hover:text-white transition-colors">
-              {isRTL ? 'سياسة الخصوصية' : 'Privacy Policy'}
-            </Link>
-            <span>|</span>
-            <Link to="/terms-of-use" className="hover:text-starbucks-dark dark:hover:text-white transition-colors">
-              {isRTL ? 'الشروط والأحكام' : 'Terms of Use'}
-            </Link>
-          </div>
-        </div>
-      </div>
     </div>
   )
 }

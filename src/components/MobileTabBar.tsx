@@ -1,60 +1,60 @@
 import { Link, useLocation } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { Home, MapPin, ShoppingBag, User } from 'lucide-react'
+import { motion } from 'framer-motion'
 
 export default function MobileTabBar() {
   const location = useLocation()
   const { t } = useTranslation()
 
+  const tabs = [
+    { id: 'home', icon: Home, label: t('common.home'), path: '/' },
+    { id: 'menu', icon: ShoppingBag, label: t('common.menu'), path: '/menu' },
+    { id: 'locations', icon: MapPin, label: t('common.locations'), path: '/locations' },
+    { id: 'account', icon: User, label: t('common.account'), path: '/account' },
+  ]
+
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 flex h-16 w-full items-center justify-around border-t border-border-light bg-card-light pb-safe shadow-md transition-colors dark:border-border-dark dark:bg-card-dark md:hidden">
-      <Link
-        to="/"
-        className={`flex flex-col items-center justify-center gap-1 w-full h-full ${
-          location.pathname === '/' 
-            ? 'text-starbucks-green dark:text-starbucks-light' 
-            : 'text-gray-500 hover:text-starbucks-green dark:text-gray-400 dark:hover:text-starbucks-light'
-        }`}
-      >
-        <Home className="h-6 w-6" />
-        <span className="text-xs font-semibold">{t('common.home')}</span>
-      </Link>
+    <div className="fixed bottom-0 left-0 right-0 z-50 flex h-20 w-full items-center justify-around border-t bg-white/80 dark:bg-zinc-950/80 backdrop-blur-lg pb-safe shadow-[0_-1px_10px_rgba(0,0,0,0.05)] transition-all dark:border-zinc-900 md:hidden">
+      {tabs.map((tab) => {
+        const isActive = tab.path === '/' 
+          ? location.pathname === '/' 
+          : location.pathname.startsWith(tab.path)
 
-      <Link
-        to="/menu"
-        className={`flex flex-col items-center justify-center gap-1 w-full h-full ${
-          location.pathname === '/menu' 
-            ? 'text-starbucks-green dark:text-starbucks-light' 
-            : 'text-gray-500 hover:text-starbucks-green dark:text-gray-400 dark:hover:text-starbucks-light'
-        }`}
-      >
-        <ShoppingBag className="h-6 w-6" />
-        <span className="text-xs font-semibold">{t('common.menu')}</span>
-      </Link>
-      
-      <Link
-        to="/locations"
-        className={`flex flex-col items-center justify-center gap-1 w-full h-full ${
-          location.pathname === '/locations' 
-            ? 'text-starbucks-green dark:text-starbucks-light' 
-            : 'text-gray-500 hover:text-starbucks-green dark:text-gray-400 dark:hover:text-starbucks-light'
-        }`}
-      >
-        <MapPin className="h-6 w-6" />
-        <span className="text-xs font-semibold">{t('common.locations')}</span>
-      </Link>
+        return (
+          <Link
+            key={tab.id}
+            to={tab.path}
+            className="relative flex flex-col items-center justify-center gap-1 w-full h-full group"
+          >
+            <div className="relative z-10 flex flex-col items-center">
+              <motion.div
+                animate={{ 
+                  scale: isActive ? 1.2 : 1,
+                  y: isActive ? -2 : 0
+                }}
+                transition={{ type: 'spring', stiffness: 400, damping: 17 }}
+                className={isActive ? 'text-starbucks-green' : 'text-gray-400 dark:text-zinc-500'}
+              >
+                <tab.icon className="h-6 w-6" strokeWidth={isActive ? 2.5 : 2} />
+              </motion.div>
+              <span className={`text-[10px] font-bold uppercase tracking-wider transition-colors mt-1 ${
+                isActive ? 'text-starbucks-green' : 'text-gray-400 dark:text-zinc-500'
+              }`}>
+                {tab.label}
+              </span>
+            </div>
 
-      <Link
-        to="/account"
-        className={`flex flex-col items-center justify-center gap-1 w-full h-full ${
-          location.pathname.startsWith('/account') 
-            ? 'text-starbucks-green dark:text-starbucks-light' 
-            : 'text-gray-500 hover:text-starbucks-green dark:text-gray-400 dark:hover:text-starbucks-light'
-        }`}
-      >
-        <User className="h-6 w-6" />
-        <span className="text-xs font-semibold">{t('common.account')}</span>
-      </Link>
+            {isActive && (
+              <motion.div
+                layoutId="active-tab-pill"
+                className="absolute inset-x-2 inset-y-2 rounded-2xl bg-starbucks-green/10 dark:bg-starbucks-green/20"
+                transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+              />
+            )}
+          </Link>
+        )
+      })}
     </div>
   )
 }

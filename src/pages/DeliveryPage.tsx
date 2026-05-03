@@ -4,7 +4,10 @@ import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import SEO from '../components/SEO'
 import { Button } from '../components/ui/button'
+import MenuPromoVideo from '../components/MenuPromoVideo'
 import Logo from '../components/Logo'
+
+import talabatLogo from '../assets/talabat.png'
 
 const TALABAT_URL = 'https://www.talabat.com/ar/egypt/restaurant/516787/starbucks-city-scape-6th-of-october?aid=7935'
 
@@ -75,17 +78,17 @@ const DeliveryPage: React.FC = () => {
                 </p>
                 <div className="flex items-center justify-center gap-3 mb-6">
                   {/* Starbucks logo */}
-                  <div className="h-16 w-16 rounded-xl overflow-hidden border border-gray-100 dark:border-zinc-700 p-1 shadow">
-                    <Logo className="h-full w-full object-contain" />
+                  <div className="h-16 w-16 rounded-xl overflow-hidden border border-gray-100 dark:border-zinc-700 shadow">
+                    <Logo className="h-full w-full object-cover" />
                   </div>
                   {/* Plus / separator */}
                   <div className="h-8 w-px bg-gray-200 dark:bg-zinc-700" />
                   {/* Talabat logo */}
-                  <div className="h-16 w-16 rounded-xl overflow-hidden border border-gray-100 dark:border-zinc-700 p-1 bg-white shadow">
+                  <div className="h-16 w-16 rounded-xl overflow-hidden border border-gray-100 dark:border-zinc-700 shadow">
                     <img
-                      src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/Talabat_logo.png/512px-Talabat_logo.png"
+                      src={talabatLogo}
                       alt="Talabat"
-                      className="h-full w-full object-contain"
+                      className="h-full w-full object-cover"
                     />
                   </div>
                 </div>
@@ -103,31 +106,24 @@ const DeliveryPage: React.FC = () => {
               </div>
             </div>
 
-            {/* Right image */}
-            <div className="flex-1 w-full max-w-md lg:max-w-none">
+            {/* Left Section (Video + Action) */}
+            <div className="flex-1 w-full max-w-xl">
               <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="relative"
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                className="space-y-6 text-center"
               >
-                <img
-                  src="https://www.starbucks.eg/assets/image-cache/delivery-hero-ar.jpg"
-                  alt="خدمة التوصيل لدى ستاربكس"
-                  className="w-full rounded-3xl shadow-2xl"
-                  onError={(e) => {
-                    e.currentTarget.src = 'https://www.starbucks.eg/assets/image-cache/delivery.jpg'
-                  }}
-                />
-                {/* Overlay badge */}
-                <div className="absolute bottom-4 right-4 rounded-xl bg-starbucks-dark/90 backdrop-blur-sm px-4 py-3 text-white shadow-xl">
-                  <p className="text-xs font-bold">خدمة التوصيل لدى ستاربكس</p>
-                  <a
-                    href={TALABAT_URL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="mt-1 block text-xs font-extrabold text-starbucks-green underline"
-                  >
-                    اطلب الآن
+                <MenuPromoVideo />
+                
+                <div className="space-y-4">
+                  <h3 className="text-xl font-extrabold text-starbucks-dark dark:text-white">
+                    خدمة التوصيل لدى ستاربكس
+                  </h3>
+                  <a href={TALABAT_URL} target="_blank" rel="noopener noreferrer" className="block">
+                    <Button className="rounded-2xl bg-starbucks-green px-12 py-7 text-lg font-extrabold text-white shadow-xl hover:bg-starbucks-dark transition-all transform hover:scale-105 active:scale-95">
+                      اطلب الآن
+                    </Button>
                   </a>
                 </div>
               </motion.div>

@@ -5,34 +5,35 @@ import { motion } from 'framer-motion'
 import SEO from '../components/SEO'
 import VerticalCard from '../components/VerticalCard'
 import AllergyInfo from '../components/AllergyInfo'
-import { Button } from '../components/ui/button'
 import MenuPromoVideo from '../components/MenuPromoVideo'
 import menuData from '../data/menu.json'
 import NotFound from './NotFound'
+import { Button } from '../components/ui/button'
 
-export default function MenuCategoryPage() {
-  const { categoryId } = useParams<{ categoryId: string }>()
+export default function MenuItemPage() {
+  const { categoryId, itemId: subcategoryId } = useParams<{ categoryId: string; itemId: string }>()
   const { i18n } = useTranslation()
   const currentLang = (i18n.language === 'ar' ? 'ar' : 'en') as 'ar' | 'en'
   const data = menuData[currentLang]
 
   const category = data.categories.find((c) => c.id === categoryId)
+  const subcategory = category?.subcategories?.find((s: any) => s.id === subcategoryId)
 
-  if (!category) {
+  if (!category || !subcategory) {
     return <NotFound />
   }
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-7xl">
-      <SEO title={`${category.title} - ${data.title}`} />
+      <SEO title={`${subcategory.title} - ${category.title} - ${data.title}`} />
 
       <div className="flex flex-col gap-8 md:flex-row">
         {/* Sidebar (Appears on the right in RTL) */}
         <div className="w-full md:w-80 lg:w-[350px] flex-shrink-0">
           <div className="sticky top-28">
             <VerticalCard 
-              title={category.sidebarTitle || data.sidebar.title} 
-              image={category.image || data.sidebar.image} 
+              title={subcategory.title} 
+              image={subcategory.image || data.sidebar.image} 
               actions={data.sidebar.actions} 
             />
           </div>
@@ -42,17 +43,14 @@ export default function MenuCategoryPage() {
         <div className="flex-1 space-y-8">
           <div className="text-center md:text-start">
             <h1 className="mb-4 text-3xl font-bold text-foreground-light dark:text-foreground-dark">
-              {category.title}
+              {subcategory.title}
             </h1>
-            <p className="whitespace-pre-wrap text-sm text-gray-600 dark:text-gray-400">
-              {category.description}
-            </p>
           </div>
 
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {category.subcategories?.map((sub: any, index: number) => (
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-2">
+            {subcategory.items?.map((item: any, index: number) => (
               <motion.div
-                key={sub.id}
+                key={item.id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
@@ -60,21 +58,26 @@ export default function MenuCategoryPage() {
               >
                 <div className="aspect-[4/3] w-full overflow-hidden bg-starbucks-dark">
                   <img
-                    src={sub.image}
-                    alt={sub.title}
+                    src={item.image}
+                    alt={item.title}
                     className="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
                   />
                 </div>
                 <div className="flex flex-col items-center p-6 text-center">
-                  <h3 className="mb-4 text-lg font-bold text-starbucks-dark dark:text-white">
-                    {sub.title}
+                  <h3 className="mb-2 text-lg font-bold text-starbucks-dark dark:text-white">
+                    {item.title}
                   </h3>
-                  <Link
-                    to={sub.href}
-                    className="inline-block rounded-2xl bg-starbucks-green px-6 py-2 text-sm font-bold text-white shadow-sm transition-colors hover:bg-starbucks-dark dark:bg-starbucks-light dark:text-black dark:hover:bg-white"
+                  <p className="mb-6 text-sm text-gray-600 dark:text-gray-400">
+                    {item.description}
+                  </p>
+                  <Button
+                    asChild
+                    className="rounded-2xl bg-starbucks-green px-6 font-bold text-white shadow-sm hover:bg-starbucks-dark dark:bg-starbucks-light dark:text-black dark:hover:bg-white"
                   >
-                    {currentLang === 'ar' ? 'اكتشف المزيد' : 'Discover More'}
-                  </Link>
+                    <a href="https://www.talabat.com/ar/egypt/restaurant/516787/starbucks-city-scape-6th-of-october?aid=7935" target="_blank" rel="noreferrer">
+                      {currentLang === 'ar' ? 'اطلبه للتوصيل' : 'Order for delivery'}
+                    </a>
+                  </Button>
                 </div>
               </motion.div>
             ))}

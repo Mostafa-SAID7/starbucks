@@ -89,9 +89,11 @@ const MiddleEastPage: React.FC = () => {
         </div>
 
         {/* Publication Note */}
-        <p className="mt-16 text-sm text-gray-400 text-right border-t border-gray-100 dark:border-zinc-800 pt-8">
-          صدر هذا البيان في عام 2010، وتمّ تحديثه في أكتوبر 2023.
-        </p>
+        <div className="mt-12 p-6 text-center border border-gray-100 dark:border-zinc-800 rounded-2xl bg-gray-50/50 dark:bg-zinc-900/30">
+          <p className="text-sm text-gray-500 dark:text-gray-400">
+            صدر هذا البيان في عام 2010، وتمّ تحديثه في أكتوبر 2023.
+          </p>
+        </div>
       </div>
     </div>
   )

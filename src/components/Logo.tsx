@@ -10,7 +10,7 @@ export default function Logo({ className = '', ...props }: LogoProps) {
     <img 
       src={logoSrc} 
       alt="Starbucks" 
-      className={className}
+      className={`object-contain ${className}`}
       {...props} 
     />
   )
