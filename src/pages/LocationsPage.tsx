@@ -62,9 +62,9 @@ const LocationsPage: React.FC = () => {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder={isRTL ? 'ابحث عن فرع...' : 'Find a store'}
-                className="w-full rounded-full bg-white/15 backdrop-blur-sm py-3.5 pr-12 pl-4 text-white placeholder-white/60 outline-none ring-1 ring-white/20 focus:ring-white transition-all rtl:pr-4 rtl:pl-12"
+                className="w-full rounded-full bg-white/15 backdrop-blur-sm py-3.5 pe-12 ps-4 text-white placeholder-white/60 outline-none ring-1 ring-white/20 focus:ring-white transition-all"
               />
-              <Search className="absolute top-1/2 right-4 h-5 w-5 -translate-y-1/2 text-white/60 rtl:right-auto rtl:left-4" />
+              <Search className="absolute top-1/2 inset-inline-end-4 h-5 w-5 -translate-y-1/2 text-white/60" />
             </div>
 
             {/* Use my location */}
@@ -161,7 +161,7 @@ const LocationsPage: React.FC = () => {
                   href={`https://locations.starbucks.eg/directory/${city.slug}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  whileHover={{ x: -4 }}
+                  whileHover={{ x: isRTL ? 4 : -4 }}
                   className="flex items-center gap-2 text-starbucks-green font-bold hover:underline underline-offset-4"
                 >
                   <span>{isRTL ? city.nameAr : city.name}</span>

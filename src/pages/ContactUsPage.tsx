@@ -4,7 +4,7 @@ import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { Mail, Phone, Send, CheckCircle } from 'lucide-react'
 import SEO from '../components/SEO'
-import { Button } from '../components/ui'
+import { Button, Input, Select, Textarea } from '../components/ui'
 import { contactUs as data } from '../data'
 
 const ContactUsPage: React.FC = () => {
@@ -34,71 +34,67 @@ const ContactUsPage: React.FC = () => {
       <SEO title={data.hero.title[lang]} />
 
       {/* ─── Hero Split Section ─── */}
-      <section className="flex flex-col lg:flex-row min-h-[420px] border-b border-gray-100 dark:border-zinc-800">
-        {/* Left — Info */}
-        <div className="flex flex-1 flex-col justify-center bg-[#f7f7f7] dark:bg-zinc-950 px-10 py-16 text-right lg:px-16">
+      <section className="flex flex-col min-h-[450px] border-b border-gray-100 dark:border-zinc-800 lg:flex-row">
+        {/* Info Side */}
+        <div className="flex flex-1 flex-col justify-center bg-[#f7f7f7] dark:bg-zinc-950 px-10 py-16 lg:px-20 text-start">
           <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="mb-6 text-3xl font-black text-starbucks-dark dark:text-white lg:text-4xl"
+            initial={{ opacity: 0, x: isRTL ? 20 : -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="mb-8 text-4xl font-black text-starbucks-dark dark:text-white lg:text-5xl"
           >
             {data.hero.title[lang]}
           </motion.h1>
 
-          <div className="space-y-5 text-gray-600 dark:text-gray-400">
-            <p className="font-bold text-starbucks-dark dark:text-white">
+          <div className="space-y-6 text-gray-600 dark:text-gray-400 text-lg">
+            <p className="font-extrabold text-starbucks-dark dark:text-white">
               {data.info.inquiry[lang]}
             </p>
-            <p>
-              {data.info.emailLabel[lang]}
-            </p>
+            
+            <div className="flex flex-col gap-4 items-start">
+              <p className="opacity-70">{data.info.emailLabel[lang]}</p>
+              <a
+                href={`mailto:${data.info.email}`}
+                className="flex items-center gap-3 text-starbucks-green font-black text-2xl hover:underline underline-offset-8 transition-all flex-row"
+              >
+                <Mail className="h-6 w-6" />
+                {data.info.email}
+              </a>
+            </div>
 
-            <a
-              href={`mailto:${data.info.email}`}
-              className="flex items-center justify-end gap-3 text-starbucks-green font-bold hover:underline underline-offset-4"
-            >
-              {data.info.email}
-              <Mail className="h-5 w-5" />
-            </a>
-
-            <p>
-              {data.info.socialLabel[lang]}
-            </p>
-
-            <div className="pt-2">
-              <p className="font-bold text-starbucks-dark dark:text-white mb-2">
+            <div className="flex flex-col gap-4 pt-4 items-start">
+              <p className="font-extrabold text-starbucks-dark dark:text-white">
                 {data.info.phoneLabel[lang]}
               </p>
               <a
                 href={`tel:${data.info.phoneTel}`}
-                className="flex items-center justify-end gap-3 text-starbucks-green font-bold text-xl hover:underline underline-offset-4"
+                className="flex items-center gap-3 text-starbucks-green font-black text-3xl hover:underline underline-offset-8 transition-all flex-row"
                 dir="ltr"
               >
+                <Phone className="h-7 w-7" />
                 {data.info.phone}
-                <Phone className="h-5 w-5" />
               </a>
             </div>
           </div>
         </div>
 
-        {/* Right — Image */}
-        <div className="relative flex-1 min-h-[300px] overflow-hidden lg:max-w-[45%]">
+        {/* Image Side */}
+        <div className="relative flex-1 min-h-[350px] overflow-hidden lg:max-w-[45%]">
           <img
             src={data.hero.image}
             alt={data.hero.imageAlt[lang]}
-            className="absolute inset-0 h-full w-full object-cover"
+            className="absolute inset-0 h-full w-full object-cover transition-transform duration-1000 hover:scale-105"
             onError={(e) => {
               if (data.hero.fallbackImage) e.currentTarget.src = data.hero.fallbackImage
             }}
           />
-          <div className="absolute inset-0 bg-starbucks-dark/40" />
-          <div className="absolute bottom-8 right-8 left-8 text-right">
-            <p className="mb-3 text-2xl font-black text-white drop-shadow-lg">
+          <div className="absolute inset-0 bg-gradient-to-t from-starbucks-dark/80 via-transparent to-transparent" />
+          <div className="absolute bottom-10 px-10 w-full text-start inset-inline-start-0">
+            <p className="mb-4 text-3xl font-black text-white drop-shadow-2xl">
               {data.hero.imageAlt[lang]}
             </p>
             <Link
               to="/about-us"
-              className="inline-block rounded-full bg-white px-8 py-3 text-sm font-extrabold text-starbucks-dark hover:bg-starbucks-green hover:text-white transition-all shadow-lg"
+              className="inline-block rounded-full bg-starbucks-green px-10 py-4 text-base font-black text-white hover:bg-white hover:text-starbucks-dark transition-all shadow-2xl transform hover:-translate-y-1"
             >
               {isRTL ? 'اكتشف المزيد' : 'Discover More'}
             </Link>
@@ -107,13 +103,13 @@ const ContactUsPage: React.FC = () => {
       </section>
 
       {/* ─── Contact Form ─── */}
-      <section className="py-16 lg:py-24 bg-white dark:bg-black">
-        <div className="container mx-auto max-w-3xl px-6">
-          <div className="text-right mb-10">
-            <h2 className="text-3xl font-extrabold text-starbucks-dark dark:text-white mb-3">
+      <section className="py-20 lg:py-32 bg-white dark:bg-black">
+        <div className="container mx-auto max-w-4xl px-6">
+          <div className="mb-16 text-start">
+            <h2 className="text-4xl font-black text-starbucks-dark dark:text-white mb-4">
               {data.form.title[lang]}
             </h2>
-            <p className="text-gray-500 dark:text-gray-400">
+            <p className="text-xl text-gray-500 dark:text-gray-400 max-w-2xl">
               {data.form.subtitle[lang]}
             </p>
           </div>
@@ -134,101 +130,90 @@ const ContactUsPage: React.FC = () => {
             </motion.div>
           ) : (
             <motion.form
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               onSubmit={handleSubmit}
-              className="space-y-6"
+              className="space-y-8"
               dir={isRTL ? 'rtl' : 'ltr'}
             >
-              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-                <div>
-                  <label className="mb-2 block text-sm font-bold text-starbucks-dark dark:text-white">
+              <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
+                <div className="space-y-3">
+                  <label className="block text-lg font-black text-starbucks-dark dark:text-white px-2">
                     {data.form.fields.name.label[lang]}
                   </label>
-                  <input
+                  <Input
                     required
                     name="name"
                     value={form.name}
                     onChange={handleChange}
                     placeholder={data.form.fields.name.placeholder[lang]}
-                    className="w-full rounded-xl border border-gray-200 dark:border-zinc-700 bg-gray-50 dark:bg-zinc-900 px-4 py-3.5 text-gray-800 dark:text-white placeholder-gray-400 outline-none focus:border-starbucks-green focus:ring-2 focus:ring-starbucks-green/20 transition-all"
                   />
                 </div>
-                <div>
-                  <label className="mb-2 block text-sm font-bold text-starbucks-dark dark:text-white">
+                <div className="space-y-3">
+                  <label className="block text-lg font-black text-starbucks-dark dark:text-white px-2">
                     {data.form.fields.email.label[lang]}
                   </label>
-                  <input
+                  <Input
                     required
                     type="email"
                     name="email"
                     value={form.email}
                     onChange={handleChange}
                     placeholder={data.form.fields.email.placeholder[lang]}
-                    className="w-full rounded-xl border border-gray-200 dark:border-zinc-700 bg-gray-50 dark:bg-zinc-900 px-4 py-3.5 text-gray-800 dark:text-white placeholder-gray-400 outline-none focus:border-starbucks-green focus:ring-2 focus:ring-starbucks-green/20 transition-all"
                     dir="ltr"
                   />
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-                <div>
-                  <label className="mb-2 block text-sm font-bold text-starbucks-dark dark:text-white">
+              <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
+                <div className="space-y-3">
+                  <label className="block text-lg font-black text-starbucks-dark dark:text-white px-2">
                     {data.form.fields.phone.label[lang]}
                   </label>
-                  <input
+                  <Input
                     type="tel"
                     name="phone"
                     value={form.phone}
                     onChange={handleChange}
                     placeholder={data.form.fields.phone.placeholder[lang]}
-                    className="w-full rounded-xl border border-gray-200 dark:border-zinc-700 bg-gray-50 dark:bg-zinc-900 px-4 py-3.5 text-gray-800 dark:text-white placeholder-gray-400 outline-none focus:border-starbucks-green focus:ring-2 focus:ring-starbucks-green/20 transition-all"
                     dir="ltr"
                   />
                 </div>
-                <div>
-                  <label className="mb-2 block text-sm font-bold text-starbucks-dark dark:text-white">
+                <div className="space-y-3">
+                  <label className="block text-lg font-black text-starbucks-dark dark:text-white px-2">
                     {data.form.fields.subject.label[lang]}
                   </label>
-                  <select
-                    required
-                    name="subject"
+                  <Select
+                    isRTL={isRTL}
+                    options={data.form.subjects.map(s => ({ id: s.id, label: s[lang] }))}
                     value={form.subject}
-                    onChange={handleChange}
-                    className="w-full rounded-xl border border-gray-200 dark:border-zinc-700 bg-gray-50 dark:bg-zinc-900 px-4 py-3.5 text-gray-800 dark:text-white outline-none focus:border-starbucks-green focus:ring-2 focus:ring-starbucks-green/20 transition-all"
-                  >
-                    <option value="">{data.form.fields.subject.placeholder[lang]}</option>
-                    {data.form.subjects.map(subject => (
-                      <option key={subject.id} value={subject.id}>
-                        {subject[lang]}
-                      </option>
-                    ))}
-                  </select>
+                    onChange={(val) => setForm(prev => ({ ...prev, subject: val }))}
+                    placeholder={data.form.fields.subject.placeholder[lang]}
+                  />
                 </div>
               </div>
 
-              <div>
-                <label className="mb-2 block text-sm font-bold text-starbucks-dark dark:text-white">
+              <div className="space-y-3">
+                <label className="block text-lg font-black text-starbucks-dark dark:text-white px-2">
                   {data.form.fields.message.label[lang]}
                 </label>
-                <textarea
+                <Textarea
                   required
                   name="message"
                   value={form.message}
                   onChange={handleChange}
                   rows={6}
                   placeholder={data.form.fields.message.placeholder[lang]}
-                  className="w-full resize-none rounded-xl border border-gray-200 dark:border-zinc-700 bg-gray-50 dark:bg-zinc-900 px-4 py-3.5 text-gray-800 dark:text-white placeholder-gray-400 outline-none focus:border-starbucks-green focus:ring-2 focus:ring-starbucks-green/20 transition-all"
                 />
               </div>
 
-              <div className="flex items-center justify-end">
+              <div className="flex items-center justify-start">
                 <Button
                   type="submit"
                   loading={loading}
-                  className="px-12 py-6 text-base shadow-lg hover:shadow-starbucks-green/30"
+                  className="h-16 px-16 text-lg rounded-full shadow-2xl hover:shadow-starbucks-green/40 transform hover:-translate-y-1 transition-all"
                 >
-                  {!loading && <Send className="h-5 w-5" />}
+                  {!loading && <Send className="h-6 w-6 me-3 rtl:-rotate-180" />}
                   {data.form.fields.submit[lang]}
                 </Button>
               </div>

@@ -1,10 +1,10 @@
 {
   "ar": {
     "menu": "القائمة",
-    "delivery": "قائمة التوصيل",
+    "delivery": "خدمة التوصيل",
     "sustainability": "الاستدامة",
     "middle_east": "ستاربكس الشرق الأوسط",
-    "locations": "الفروع",
+    "locations": "مواقعنا",
     "search": {
       "title": "البحث",
       "placeholder": "البحث عن المنتجات والمتاجر...",
@@ -13,8 +13,31 @@
     "tabs": {
       "home": "الرئيسية",
       "menu": "القائمة",
-      "locations": "الفروع",
+      "locations": "مواقعنا",
       "account": "حسابي"
+    },
+    "auth": {
+      "login": {
+        "title": "تسجيل الدخول",
+        "email": "البريد الإلكتروني",
+        "password": "كلمة المرور",
+        "submit": "تسجيل الدخول",
+        "forgot": "نسيت كلمة المرور؟",
+        "remember": "تذكرني",
+        "no_account": "ليس لديك حساب؟",
+        "register": "سجل الآن"
+      },
+      "register": {
+        "title": "إنشاء حساب",
+        "first_name": "الاسم الأول",
+        "last_name": "اسم العائلة",
+        "email": "البريد الإلكتروني",
+        "password": "كلمة المرور",
+        "submit": "إنشاء حساب",
+        "have_account": "لديك حساب بالفعل؟",
+        "login": "تسجيل الدخول",
+        "terms": "أوافق على الشروط والأحكام"
+      }
     }
   },
   "en": {
@@ -33,6 +56,29 @@
       "menu": "Menu",
       "locations": "Locations",
       "account": "Account"
+    },
+    "auth": {
+      "login": {
+        "title": "Login",
+        "email": "Email",
+        "password": "Password",
+        "submit": "Login",
+        "forgot": "Forgot Password?",
+        "remember": "Remember Me",
+        "no_account": "Don't have an account?",
+        "register": "Register"
+      },
+      "register": {
+        "title": "Sign Up",
+        "first_name": "First Name",
+        "last_name": "Last Name",
+        "email": "Email",
+        "password": "Password",
+        "submit": "Create Account",
+        "have_account": "Already have an account?",
+        "login": "Login",
+        "terms": "I agree to Terms & Conditions"
+      }
     }
   }
 }

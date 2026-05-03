@@ -1,14 +1,14 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 
-interface InnerHeaderProps {
+interface HeaderProps {
   title: string
   subtitle?: string
   image?: string
   variant?: 'light' | 'dark'
 }
 
-const InnerHeader: React.FC<InnerHeaderProps> = ({ title, subtitle, image, variant = 'dark' }) => {
+export const Header: React.FC<HeaderProps> = ({ title, subtitle, image, variant = 'dark' }) => {
   const isDark = variant === 'dark'
 
   return (
@@ -56,5 +56,3 @@ const InnerHeader: React.FC<InnerHeaderProps> = ({ title, subtitle, image, varia
     </div>
   )
 }
-
-export default InnerHeader

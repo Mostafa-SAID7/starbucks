@@ -35,7 +35,7 @@ export interface StatementData {
 
 // Featured Card Types
 export interface FeaturedCard {
-  id: number
+  id: string | number
   title: string
   description?: string
   image: string
@@ -44,7 +44,7 @@ export interface FeaturedCard {
   ctaLink: string
   secondaryCta?: string
   secondaryCtaLink?: string
-  theme?: 'Green' | 'Gray' | null
+  theme?: 'Green' | 'Gray' | string | null
 }
 
 export interface FeaturedCardsData {

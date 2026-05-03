@@ -1,7 +1,7 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
-import { SEO, Button, InnerHeader } from '../components'
+import { SEO, Button, Header } from '../components'
 import { ExternalLink } from 'lucide-react'
 import { sustainability as data } from '../data'
 
@@ -13,9 +13,9 @@ const SustainabilityPage: React.FC = () => {
     <div className="min-h-screen bg-white dark:bg-black">
       <SEO title={data.title[lang]} />
 
-      <InnerHeader
+      <Header
         title={data.title[lang]}
-        subtitle={data.sections[0].subtitle[lang]}
+        subtitle={data.sections[0]?.subtitle?.[lang]}
         variant="dark"
       />
 
@@ -25,11 +25,11 @@ const SustainabilityPage: React.FC = () => {
         return (
           <section 
             key={section.id} 
-            className={`py-16 lg:py-24 border-b border-gray-100 dark:border-zinc-800 ${!isEven ? 'bg-[#f7f7f7] dark:bg-zinc-950' : ''}`}
+            className={`py-16 md:py-24 border-b border-gray-100 dark:border-zinc-800 ${!isEven ? 'bg-[#f7f7f7] dark:bg-zinc-950' : ''}`}
           >
-            <div className="container mx-auto max-w-5xl px-6 lg:px-8">
-              <div className={`flex flex-col ${isEven ? 'lg:flex-row-reverse' : 'lg:flex-row'} items-center gap-12`}>
-                <div className="flex-1">
+            <div className="container mx-auto max-w-6xl px-6 lg:px-8">
+              <div className={`flex flex-col ${isEven ? 'lg:flex-row-reverse' : 'lg:flex-row'} items-center gap-12 lg:gap-20`}>
+                <div className="flex-1 w-full">
                   <motion.img
                     initial={{ opacity: 0, scale: 0.96 }}
                     whileInView={{ opacity: 1, scale: 1 }}
@@ -42,7 +42,7 @@ const SustainabilityPage: React.FC = () => {
                     }}
                   />
                 </div>
-                <div className="flex-1 text-right space-y-6">
+                <div className="flex-1 space-y-6 text-center lg:text-start">
                   {section.link ? (
                     <a href={section.link} target="_blank" rel="noopener noreferrer" className="inline-block">
                       <h2 className="text-3xl font-extrabold text-starbucks-green underline underline-offset-4 lg:text-4xl leading-snug hover:text-starbucks-dark transition-colors">
@@ -74,12 +74,12 @@ const SustainabilityPage: React.FC = () => {
                   )}
 
                   {section.tipsTitle && (
-                    <div className="bg-starbucks-green/10 dark:bg-starbucks-green/5 border border-starbucks-green/20 rounded-2xl p-6 text-right">
+                    <div className="bg-starbucks-green/10 dark:bg-starbucks-green/5 border border-starbucks-green/20 rounded-2xl p-6 text-start">
                       <p className="font-bold text-starbucks-dark dark:text-white mb-4">{section.tipsTitle[lang]}</p>
                       <ul className="space-y-3 text-gray-600 dark:text-gray-400">
                         {section.tips?.map((tip: any, tIdx: number) => (
-                          <li key={tIdx} className="flex items-start gap-3">
-                            <span className="mt-1.5 h-2 w-2 flex-shrink-0 rounded-full bg-starbucks-green" />
+                          <li key={tIdx} className="flex items-start gap-3 justify-start">
+                            <span className="mt-2.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-starbucks-green" />
                             <span>{tip[lang]}</span>
                           </li>
                         ))}
@@ -94,7 +94,7 @@ const SustainabilityPage: React.FC = () => {
 
                   {section.cta && (
                     <a href={section.ctaLink} target="_blank" rel="noopener noreferrer">
-                      <Button className="rounded-full bg-starbucks-dark px-10 py-6 font-extrabold hover:bg-starbucks-green transition-all flex items-center gap-2">
+                      <Button className="rounded-full bg-starbucks-dark px-10 py-6 font-extrabold hover:bg-starbucks-green transition-all flex items-center gap-2 mx-auto lg:mx-0">
                         {section.cta[lang]}
                         <ExternalLink className="h-4 w-4" />
                       </Button>

@@ -2,21 +2,21 @@
   "ar": {
     "sections": [
       {
-        "title": "نبذة عنا",
+        "title": "عن ستاربكس",
         "links": [
-          { "label": "نبذة عنا", "href": "/about-us" },
+          { "label": "عن ستاربكس", "href": "/about-us" },
           { "label": "قهوتنا", "href": "/our-coffees" }
         ]
       },
       {
-        "title": "اتصل بنا",
+        "title": "تواصل معنا",
         "links": [
-          { "label": "اتصل بنا", "href": "/contact-us" },
-          { "label": "مواقع الفروع", "href": "/locations" }
+          { "label": "تواصل معنا", "href": "/contact-us" },
+          { "label": "ابحث عن مقهى", "href": "/locations" }
         ]
       },
       {
-        "title": "الأثر الاجتماعي",
+        "title": "الأثر المجتمعي",
         "links": [
           { "label": "الاستدامة", "href": "/social-impact-sustainability" }
         ]
@@ -29,7 +29,13 @@
       { "label": "شروط الاستخدام", "href": "/terms-of-use" },
       { "label": "سياسة ملفات تعريف الارتباط", "href": "/cookie-notice" }
     ],
-    "allRightsReserved": "جميع الحقوق محفوظة."
+    "allRightsReserved": "جميع الحقوق محفوظة.",
+    "app": {
+      "title": "ابدأ الطلب مسبقاً مع تطبيق ستاربكس®",
+      "description": "اطلب وادفع - ثم تفضل للاستلام من المقهى الذي اخترته.",
+      "appStore": "تحميل من App Store",
+      "googlePlay": "تحميل من Google Play"
+    }
   },
   "en": {
     "sections": [
@@ -61,11 +67,21 @@
       { "label": "Terms of Use", "href": "/terms-of-use" },
       { "label": "Cookie Policy", "href": "/cookie-notice" }
     ],
-    "allRightsReserved": "All Rights Reserved."
+    "allRightsReserved": "All Rights Reserved.",
+    "app": {
+      "title": "Start ordering ahead with the Starbucks® app",
+      "description": "Order and pay — then breeze in to pick up your drink at your selected store.",
+      "appStore": "Download on the App Store",
+      "googlePlay": "GET IT ON Google Play"
+    }
   },
   "socials": [
+    { "name": "spotify", "href": "https://open.spotify.com/user/starbucks" },
     { "name": "facebook", "href": "https://facebook.com/StarbucksMiddleEast" },
-    { "name": "instagram", "href": "https://instagram.com/starbucksegypt" }
+    { "name": "pinterest", "href": "https://pinterest.com/starbucks" },
+    { "name": "instagram", "href": "https://instagram.com/starbucksegypt" },
+    { "name": "youtube", "href": "https://youtube.com/starbucks" },
+    { "name": "tiktok", "href": "https://tiktok.com/@starbucks" }
   ],
   "countries": [
     { "name": "United States", "href": "https://www.starbucks.com" },

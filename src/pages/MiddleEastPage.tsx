@@ -1,7 +1,7 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { motion } from 'framer-motion'
-import { SEO, InnerHeader } from '../components'
+import { SEO, Header, Accordion } from '../components'
 import { middleEast as data } from '../data'
 
 const MiddleEastPage: React.FC = () => {
@@ -12,18 +12,18 @@ const MiddleEastPage: React.FC = () => {
     <div className="min-h-screen bg-white dark:bg-black">
       <SEO title={data.title[lang]} />
 
-      <InnerHeader
+      <Header
         title={data.title[lang]}
         subtitle={data.subtitle[lang]}
         variant="dark"
       />
 
-      <div className="container mx-auto max-w-4xl px-6 py-16 lg:px-8">
+      <div className="container mx-auto max-w-4xl px-6 py-16 md:py-24 lg:px-8">
         {/* Main Statement Paragraphs */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="space-y-6 text-right leading-relaxed text-gray-700 dark:text-gray-300 text-base lg:text-lg border-b border-gray-100 dark:border-zinc-800 pb-12 mb-12"
+          className="space-y-6 text-start leading-relaxed text-gray-700 dark:text-gray-300 text-base lg:text-lg border-b border-gray-100 dark:border-zinc-800 pb-12 mb-12"
         >
           {data.paragraphs[lang].map((p, i) => (
             <p key={i}>{p}</p>
@@ -32,27 +32,16 @@ const MiddleEastPage: React.FC = () => {
 
         {/* FAQ Section */}
         <div>
-          <h2 className="mb-10 text-2xl font-extrabold text-starbucks-green text-right">
+          <h2 className="mb-10 text-2xl font-extrabold text-starbucks-green text-start">
             {data.faqTitle[lang]}
           </h2>
-          <div className="space-y-8">
-            {data.faqs.map((faq, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 16 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.05 }}
-                className="text-right"
-              >
-                <h3 className="mb-3 text-base font-extrabold text-starbucks-dark dark:text-white lg:text-lg">
-                  {faq.q[lang]}
-                </h3>
-                <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
-                  {faq.a[lang]}
-                </p>
-              </motion.div>
-            ))}
+          <div className="mt-8">
+            <Accordion 
+              items={data.faqs.map((faq: any) => ({
+                title: faq.q[lang],
+                content: faq.a[lang]
+              }))} 
+            />
           </div>
         </div>
 

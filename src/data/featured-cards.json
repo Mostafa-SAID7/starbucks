@@ -3,8 +3,8 @@
     "cards": [
       {
         "id": "new-era",
-        "title": "عصر جديد. نفس النجوم.",
-        "description": "اكتشف 3 طلبات أيقونية مستوحاة من فيلم The Devil Wears Prada: قهوة ميرندا، كابتشينو آندي بحليب الشوفان، اسبرسو نايجل بالكريمة المخفوقة.",
+        "title": "عصر جديد. نفس الأيقونات.",
+        "description": "اكتشف 3 مشروبات أيقونية مستوحاة من فيلم The Devil Wears Prada: قهوة ميرندا، كابتشينو آندي بحليب الشوفان، واسبرسو نايجل بالكريمة المخفوقة.",
         "cta": "اكتشف المزيد",
         "ctaLink": "/new-era-same-icons",
         "image": "https://www.starbucks.eg/sites/starbucks-eg-pwa/files/styles/c22_featured_card_531x273/public/2026-05/UAE_1.jpg.webp?h=c7029006&itok=RMrK1Ggt",
@@ -14,7 +14,7 @@
       {
         "id": "official-statement",
         "title": "بيان ستاربكس الرسمي",
-        "description": "الحقيقة مُهمة. رداً على المعلومات الخاطئة، فإننا نشارككم اليوم الحقائق حول ما تُؤمن به ستاربكس وتُدافع عنه.",
+        "description": "الحقيقة هي الأهم. رداً على المعلومات المضللة، نشارككم اليوم الحقائق حول قيم ستاربكس ومبادئها.",
         "cta": "اعرف المزيد",
         "ctaLink": "/starbucks-for-the-record",
         "image": "https://www.starbucks.eg/sites/starbucks-eg-pwa/files/styles/c22_featured_card_531x273/public/2024-05/Starbucks%20for%20the%20Record.png.webp?h=7025b037&itok=XLxmlz9E",
@@ -24,7 +24,7 @@
       {
         "id": "delivery-promo",
         "title": "خدمة توصيل ستاربكس",
-        "description": "احصل على النكهة المفضلة لديك مباشرة عند باب منزلك عبر طلبات.",
+        "description": "اطلب نكهتك المفضلة لتصلك إلى باب منزلك مباشرة عبر تطبيق طلبات.",
         "cta": "اطلب الآن",
         "ctaLink": "https://www.talabat.com/ar/egypt/restaurant/516787/starbucks-city-scape-6th-of-october?aid=7935",
         "image": "https://www.starbucks.eg/sites/starbucks-eg-pwa/files/styles/c22_featured_card_531x273/public/2022-05/Summer-Website-Banners--Delivery-TC-2.png.webp?h=0d43458e&itok=KilEmmyt",
@@ -33,7 +33,7 @@
       },
       {
         "id": "rewards-promo",
-        "title": "استمتع بمكافآت ستاربكس",
+        "title": "مكافآت ستاربكس",
         "description": "اجمع النجوم واحصل على مشروبات مجانية والعديد من المزايا الحصرية.",
         "cta": "انضم الآن",
         "ctaLink": "https://www.starbucks.eg/ar/account/register",

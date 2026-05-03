@@ -2,8 +2,7 @@ import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { motion } from 'framer-motion'
 import { Home, Coffee } from 'lucide-react'
-import SEO from '../components/SEO'
-import Logo from '../components/Logo'
+import { SEO, Logo } from '../components'
 import bg404 from '../assets/bg-404.png'
 
 export default function NotFound() {
@@ -34,10 +33,7 @@ export default function NotFound() {
           transition={{ type: 'spring', stiffness: 200, damping: 18 }}
           className="mb-8"
         >
-          <Logo 
-            className="h-24 w-24 drop-shadow-2xl" 
-            onError={(e) => { e.currentTarget.style.display = 'none' }} 
-          />
+          <Logo className="h-24 w-24 drop-shadow-2xl" />
         </motion.div>
 
         {/* 404 Number */}

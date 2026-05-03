@@ -1,7 +1,7 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { motion } from 'framer-motion'
-import { SEO, InnerHeader, Logo } from '../components'
+import { SEO, Header, Logo } from '../components'
 import { cookieNotice as data } from '../data'
 
 const CookieNoticePage: React.FC = () => {
@@ -13,7 +13,7 @@ const CookieNoticePage: React.FC = () => {
     <div className="min-h-screen bg-white dark:bg-black">
       <SEO title={data.title[lang]} />
 
-      <InnerHeader
+      <Header
         title={data.header[lang]}
         variant="light"
       />

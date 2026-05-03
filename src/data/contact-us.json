@@ -7,7 +7,7 @@
   },
   "info": {
     "inquiry": { "ar": "هل لديكم أي استفسار؟", "en": "Do you have any inquiry?" },
-    "emailLabel": { "ar": "يمكنكم التواصل مع فريق خدمة الزبائن عبر البريد الإلكتروني:", "en": "You can contact our customer service team by email:" },
+    "emailLabel": { "ar": "يمكنكم التواصل مع فريق خدمة العملاء عبر البريد الإلكتروني:", "en": "You can contact our customer service team by email:" },
     "email": "starbucks.mena@alshaya.com",
     "socialLabel": { "ar": "أو عبر صفحاتنا على فيسبوك وانستغرام.", "en": "Or through our Facebook and Instagram pages." },
     "phoneLabel": { "ar": "اتصلوا بنا على الرقم:", "en": "Call us at:" },

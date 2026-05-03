@@ -1,7 +1,7 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { motion } from 'framer-motion'
-import { SEO, InnerHeader, Logo } from '../components'
+import { SEO, Header, Logo, Accordion } from '../components'
 import { privacyStatement as data } from '../data'
 
 const PrivacyStatementPage: React.FC = () => {
@@ -13,13 +13,13 @@ const PrivacyStatementPage: React.FC = () => {
     <div className="min-h-screen bg-white dark:bg-black">
       <SEO title={data.title[lang]} />
 
-      <InnerHeader
+      <Header
         title={data.header[lang]}
         variant="light"
       />
 
-      <div className="container mx-auto max-w-6xl px-6 py-14 lg:px-10">
-        <div className={`flex flex-col gap-10 ${isRTL ? 'lg:flex-row-reverse' : 'lg:flex-row'}`}>
+      <div className="container mx-auto max-w-6xl px-6 py-16 md:py-24 lg:px-10">
+        <div className="flex flex-col lg:flex-row gap-10">
 
           {/* ─── Sidebar ─── */}
           <aside className="lg:w-64 flex-shrink-0">
@@ -52,68 +52,68 @@ const PrivacyStatementPage: React.FC = () => {
           <motion.article
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className={`flex-1 ${isRTL ? 'text-right' : 'text-left'} leading-relaxed text-gray-700 dark:text-gray-300 space-y-8`}
-            dir={isRTL ? 'rtl' : 'ltr'}
+          className="flex-1 text-start"
           >
-            <div className="space-y-4">
+            <div className="space-y-4 mb-8">
               <h1 className="text-3xl font-black text-starbucks-dark dark:text-white">{data.header[lang]}</h1>
               <p className="text-sm text-gray-400">{data.lastUpdated[lang]}</p>
             </div>
 
-            {data.sections.map((section) => (
-              <Section key={section.id} title={section.title[lang]} isRTL={isRTL}>
-                {section.paragraphs?.map((p: any, idx: number) => (
-                  <p key={idx} className={idx > 0 ? 'mt-4' : ''}>
-                    {p[lang]}
-                  </p>
-                ))}
-                
-                {section.list && (
-                  <ul className={`mt-3 space-y-2 ${isRTL ? 'pr-4' : 'pl-4'}`}>
-                    {section.list.map((item: any, i: number) => (
-                      <li key={i} className={`flex items-start gap-3 ${isRTL ? 'flex-row-reverse text-right' : 'flex-row text-left'}`}>
-                        <span className="mt-2 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-starbucks-green" />
-                        <span>{item[lang]}</span>
-                      </li>
+            <Accordion 
+              items={data.sections.map((section) => ({
+                title: section.title[lang],
+                content: (
+                  <div className="space-y-4">
+                    {section.paragraphs?.map((p: any, idx: number) => (
+                      <p key={idx}>{p[lang]}</p>
                     ))}
-                  </ul>
-                )}
+                    
+                    {section.list && (
+                      <ul className="space-y-2 ps-4">
+                        {section.list.map((item: any, i: number) => (
+                          <li key={i} className="flex items-start gap-3 flex-row text-start">
+                            <span className="mt-2 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-starbucks-green" />
+                            <span>{item[lang]}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
 
-                {section.types && (
-                  <div className="space-y-3 mt-4">
-                    {section.types.map((type: any) => (
-                      <p key={type.id}>
-                        <strong className="font-extrabold text-starbucks-dark dark:text-white">
-                          {type.label[lang]}
-                        </strong> {type.text[lang]}
-                      </p>
-                    ))}
-                  </div>
-                )}
+                    {section.types && (
+                      <div className="space-y-3">
+                        {section.types.map((type: any) => (
+                          <p key={type.id}>
+                            <strong className="font-extrabold text-starbucks-dark dark:text-white">
+                              {type.label[lang]}
+                            </strong> {type.text[lang]}
+                          </p>
+                        ))}
+                      </div>
+                    )}
 
-                {section.contactNote && (
-                  <p className="mt-4">
-                    {section.contactNote[lang]}
-                  </p>
-                )}
+                    {section.contactNote && (
+                      <p>{section.contactNote[lang]}</p>
+                    )}
 
-                {section.contactInfo && (
-                  <div className={`pt-2 space-y-1 text-starbucks-green font-bold ${isRTL ? 'text-right' : 'text-left'}`}>
-                    <p dir="ltr">
-                      <a href={`mailto:${section.contactInfo.email}`} className="hover:underline">{section.contactInfo.email}</a>
-                    </p>
-                    <p dir="ltr">
-                      <a href={`tel:${section.contactInfo.phoneTel}`} className="hover:underline">{section.contactInfo.phone}</a>
-                    </p>
-                    {section.contactInfo.address && (
-                      <p className="mt-4 text-sm text-gray-400 font-normal">
-                        {section.contactInfo.address[lang]}
-                      </p>
+                    {section.contactInfo && (
+                      <div className="pt-2 space-y-1 text-starbucks-green font-bold text-start">
+                        <p dir="ltr">
+                          <a href={`mailto:${section.contactInfo.email}`} className="hover:underline">{section.contactInfo.email}</a>
+                        </p>
+                        <p dir="ltr">
+                          <a href={`tel:${section.contactInfo.phoneTel}`} className="hover:underline">{section.contactInfo.phone}</a>
+                        </p>
+                        {section.contactInfo.address && (
+                          <p className="mt-4 text-sm text-gray-400 font-normal">
+                            {section.contactInfo.address[lang]}
+                          </p>
+                        )}
+                      </div>
                     )}
                   </div>
-                )}
-              </Section>
-            ))}
+                )
+              }))}
+            />
           </motion.article>
 
         </div>
@@ -122,15 +122,5 @@ const PrivacyStatementPage: React.FC = () => {
   )
 }
 
-function Section({ title, children, isRTL }: { title: string; children: React.ReactNode; isRTL: boolean }) {
-  return (
-    <div className="space-y-3">
-      <h2 className={`text-lg font-extrabold text-starbucks-dark dark:text-white border-b border-gray-100 dark:border-zinc-800 pb-2 ${isRTL ? 'text-right' : 'text-left'}`}>
-        {title}
-      </h2>
-      <div className="space-y-2">{children}</div>
-    </div>
-  )
-}
 
 export default PrivacyStatementPage

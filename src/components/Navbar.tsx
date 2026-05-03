@@ -9,10 +9,13 @@ import {
   X,
   Search,
   Moon, 
-  Sun 
+  Sun,
+  User
 } from 'lucide-react'
 import { toast } from 'sonner'
-import { Logo, SearchModal, Button } from './ui'
+import { Logo, Button, Tooltip } from './ui'
+import SearchModal from './SearchModal'
+import AuthModal from './AuthModal'
 import { navbar } from '../data'
 
 export default function Navbar() {
@@ -20,6 +23,7 @@ export default function Navbar() {
   const { theme, toggleTheme } = useTheme()
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [isSearchOpen, setIsSearchOpen] = useState(false)
+  const [isAuthOpen, setIsAuthOpen] = useState(false)
   const location = useLocation()
   
   const lang = (i18n.language === 'ar' ? 'ar' : 'en') as 'ar' | 'en'
@@ -48,98 +52,106 @@ export default function Navbar() {
     <>
       <nav className="sticky top-0 z-50 w-full border-b border-gray-100 dark:border-zinc-800 bg-white/80 dark:bg-black/80 backdrop-blur-xl transition-all duration-500">
         <div className="container mx-auto flex h-20 lg:h-24 max-w-7xl items-center justify-between px-6 lg:px-12">
-          {/* Left Side: Language, Locations, Search */}
-          <div className="flex items-center gap-2 lg:gap-6">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={toggleLanguage}
-              className="group relative flex items-center gap-2 font-bold text-starbucks-dark dark:text-foreground-dark hover:bg-gray-100 dark:hover:bg-zinc-900 rounded-full h-11 px-5 transition-all overflow-hidden"
-            >
-              <AnimatePresence mode="wait">
-                <motion.span
-                  key={i18n.language}
-                  initial={{ y: 20, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  exit={{ y: -20, opacity: 0 }}
-                  className="text-sm font-black tracking-tighter"
-                >
-                  {i18n.language === 'ar' ? 'EN' : 'AR'}
-                </motion.span>
-              </AnimatePresence>
-              <div className="absolute inset-0 bg-starbucks-green/5 opacity-0 group-hover:opacity-100 transition-opacity" />
-            </Button>
-
-            <NavLink 
-              to="/locations"
-              className={({ isActive }) => `group hidden items-center gap-3 text-sm font-black lg:flex transition-all ${
-                isActive ? 'text-starbucks-green' : 'text-starbucks-dark hover:text-starbucks-green dark:text-foreground-dark'
-              }`}
-            >
-              <div className="relative p-2 rounded-full group-hover:bg-starbucks-green/10 transition-colors">
-                <MapPin className="h-5 w-5" />
-              </div>
-              <span className="hidden xl:inline uppercase tracking-widest">{navData.locations || (lang === 'ar' ? 'الفروع' : 'Locations')}</span>
-            </NavLink>
-
-            <Button 
-              variant="ghost" 
-              size="icon" 
-              onClick={() => setIsSearchOpen(true)}
-              className="text-starbucks-dark dark:text-foreground-dark rounded-full h-11 w-11 hover:bg-gray-100 dark:hover:bg-zinc-900 hover:scale-110 active:scale-95 transition-all"
-            >
-              <Search className="h-5 w-5" />
-            </Button>
-          </div>
-
-          {/* Center: Nav Items (Desktop) */}
-          <div className="hidden flex-1 items-center justify-center gap-10 lg:flex h-full">
-            {navItems.map((item) => (
-              <NavLink
-                key={item.href}
-                to={item.href}
-                className={({ isActive }) => `
-                  relative flex h-full items-center text-[13px] font-black uppercase tracking-[0.2em] transition-all py-1 group
-                  ${isActive 
-                    ? 'text-starbucks-green' 
-                    : 'text-starbucks-dark hover:text-starbucks-green dark:text-foreground-dark'
-                  }
-                `}
-              >
-                <span className="relative z-10">{item.label}</span>
-                {location.pathname === item.href ? (
-                  <motion.div
-                    layoutId="nav-underline"
-                    className="absolute bottom-0 left-0 right-0 h-1.5 bg-starbucks-green rounded-t-full"
-                    transition={{ type: 'spring', stiffness: 380, damping: 30 }}
-                  />
-                ) : (
-                  <div className="absolute bottom-0 left-1/2 right-1/2 h-1 bg-starbucks-green opacity-0 group-hover:left-0 group-hover:right-0 group-hover:opacity-100 transition-all duration-300 rounded-t-full" />
-                )}
-              </NavLink>
-            ))}
-          </div>
-
-          {/* Right Side: Logo and Theme/Mobile Menu */}
-          <div className="flex items-center gap-3 lg:gap-6">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={toggleTheme}
-              className="hidden text-starbucks-dark dark:text-foreground-dark hover:bg-gray-100 dark:hover:bg-zinc-900 rounded-full h-11 w-11 lg:flex transition-all hover:scale-110 active:scale-95"
-            >
-              <motion.div
-                initial={false}
-                animate={{ rotate: theme === 'dark' ? 180 : 0, scale: [1, 1.2, 1] }}
-                transition={{ duration: 0.5 }}
-              >
-                {theme === 'dark' ? <Sun className="h-5 w-5 text-amber-400" /> : <Moon className="h-5 w-5 text-starbucks-dark" />}
-              </motion.div>
-            </Button>
-
-            <Link to="/" className="flex-shrink-0 lg:ml-4">
-              <Logo className="h-10 lg:h-16 w-auto aspect-square object-contain hover:scale-110 transition-transform active:scale-95" />
+          {/* Left Side: Logo & Nav Items */}
+          <div className="flex items-center gap-8 lg:gap-12">
+            <Link to="/" className="flex-shrink-0">
+              <Logo className="h-10 lg:h-12 w-auto aspect-square object-contain hover:scale-110 transition-transform active:scale-95" />
             </Link>
+
+            {/* Nav Items (Desktop) */}
+            <div className="hidden items-center gap-8 lg:flex h-full">
+              {navItems.map((item) => (
+                <NavLink
+                  key={item.href}
+                  to={item.href}
+                  className={({ isActive }) => `
+                    relative flex h-full items-center text-[13px] font-black uppercase tracking-[0.2em] transition-all py-1 group
+                    ${isActive 
+                      ? 'text-starbucks-green' 
+                      : 'text-starbucks-dark hover:text-starbucks-green dark:text-foreground-dark'
+                    }
+                  `}
+                >
+                  <span className="relative z-10">{item.label}</span>
+                  {location.pathname === item.href ? (
+                    <motion.div
+                      layoutId="nav-underline"
+                      className="absolute -bottom-6 left-0 right-0 h-1 bg-starbucks-green rounded-t-full"
+                      transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                    />
+                  ) : (
+                    <div className="absolute -bottom-6 left-1/2 right-1/2 h-1 bg-starbucks-green opacity-0 group-hover:left-0 group-hover:right-0 group-hover:opacity-100 transition-all duration-300 rounded-t-full" />
+                  )}
+                </NavLink>
+              ))}
+            </div>
+          </div>
+
+          {/* Right Side: Utilities (Search, Location, Language, Theme, Profile) */}
+          <div className="flex items-center gap-2 lg:gap-3">
+            <Tooltip content={lang === 'ar' ? 'الفروع' : 'Find a store'}>
+              <NavLink 
+                to="/locations"
+                className={({ isActive }) => `group flex items-center justify-center h-11 w-11 rounded-full hover:bg-gray-100 dark:hover:bg-zinc-900 transition-all ${
+                  isActive ? 'text-starbucks-green' : 'text-starbucks-dark hover:text-starbucks-green dark:text-foreground-dark'
+                }`}
+              >
+                <MapPin className="h-5 w-5" />
+              </NavLink>
+            </Tooltip>
+
+            <Tooltip content={lang === 'ar' ? 'بحث' : 'Search'}>
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                onClick={() => setIsSearchOpen(true)}
+                className="text-starbucks-dark dark:text-foreground-dark rounded-full h-11 w-11 hover:bg-gray-100 dark:hover:bg-zinc-900 hover:scale-110 active:scale-95 transition-all"
+              >
+                <Search className="h-5 w-5" />
+              </Button>
+            </Tooltip>
+
+            <div className="hidden lg:flex items-center gap-3">
+              <Tooltip content={lang === 'ar' ? 'تغيير اللغة' : 'Change Language'}>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={toggleLanguage}
+                  className="group relative flex items-center gap-2 font-bold text-starbucks-dark dark:text-foreground-dark hover:bg-gray-100 dark:hover:bg-zinc-900 rounded-full h-11 px-4 transition-all"
+                >
+                  <span className="text-sm font-black uppercase tracking-tighter">
+                    {i18n.language === 'ar' ? 'EN' : 'AR'}
+                  </span>
+                </Button>
+              </Tooltip>
+
+              <Tooltip content={theme === 'dark' ? (lang === 'ar' ? 'الوضع الفاتح' : 'Light Mode') : (lang === 'ar' ? 'الوضع الداكن' : 'Dark Mode')}>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={toggleTheme}
+                  className="text-starbucks-dark dark:text-foreground-dark hover:bg-gray-100 dark:hover:bg-zinc-900 rounded-full h-11 w-11 transition-all hover:scale-110 active:scale-95"
+                >
+                  <motion.div
+                    initial={false}
+                    animate={{ rotate: theme === 'dark' ? 180 : 0 }}
+                  >
+                    {theme === 'dark' ? <Sun className="h-5 w-5 text-amber-400" /> : <Moon className="h-5 w-5" />}
+                  </motion.div>
+                </Button>
+              </Tooltip>
+
+              <Tooltip content={lang === 'ar' ? 'الحساب' : 'Account'}>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setIsAuthOpen(true)}
+                  className="text-starbucks-dark dark:text-foreground-dark hover:bg-gray-100 dark:hover:bg-zinc-900 rounded-full h-11 w-11 transition-all hover:scale-110 active:scale-95 border-2 border-transparent hover:border-starbucks-green/20"
+                >
+                  <User className="h-5 w-5" />
+                </Button>
+              </Tooltip>
+            </div>
 
             <Button 
               variant="ghost" 
@@ -170,7 +182,7 @@ export default function Navbar() {
               animate={{ height: 'auto', opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
               transition={{ type: 'spring', damping: 30, stiffness: 300 }}
-              className="lg:hidden border-t border-gray-100 dark:border-zinc-800 bg-white dark:bg-zinc-950 overflow-hidden shadow-2xl"
+              className="lg:hidden border-t border-gray-100 dark:border-zinc-800 bg-white dark:bg-zinc-950 overflow-y-auto max-h-[calc(100vh-5rem)] lg:max-h-[calc(100vh-6rem)] shadow-2xl scrollbar-hide"
             >
               <div className="container mx-auto px-8 py-12 flex flex-col gap-8">
                 {navItems.map((item, i) => (
@@ -198,18 +210,39 @@ export default function Navbar() {
                   transition={{ delay: 0.35 }}
                   className="mt-6 pt-10 border-t border-gray-100 dark:border-zinc-800 flex flex-col sm:flex-row items-center gap-6 justify-between"
                 >
-                  <Button
-                    variant="outline"
-                    onClick={toggleTheme}
-                    className="flex items-center gap-4 text-lg font-bold text-starbucks-dark dark:text-white rounded-full px-8 py-6 w-full sm:w-auto border-2 border-gray-100 dark:border-zinc-800"
-                  >
-                    <motion.div
-                      animate={{ rotate: theme === 'dark' ? 180 : 0 }}
+                  <div className="flex flex-col gap-4 w-full sm:w-auto">
+                    <Button
+                      variant="outline"
+                      onClick={toggleTheme}
+                      className="flex items-center gap-4 text-lg font-bold text-starbucks-dark dark:text-white rounded-full px-8 py-6 w-full border-2 border-gray-100 dark:border-zinc-800"
                     >
-                      {theme === 'dark' ? <Sun className="h-6 w-6 text-amber-400" /> : <Moon className="h-6 w-6" />}
-                    </motion.div>
-                    {theme === 'dark' ? (lang === 'ar' ? 'الوضع الفاتح' : 'Light Mode') : (lang === 'ar' ? 'الوضع الداكن' : 'Dark Mode')}
-                  </Button>
+                      <motion.div animate={{ rotate: theme === 'dark' ? 180 : 0 }}>
+                        {theme === 'dark' ? <Sun className="h-6 w-6 text-amber-400" /> : <Moon className="h-6 w-6" />}
+                      </motion.div>
+                      {theme === 'dark' ? (lang === 'ar' ? 'الوضع الفاتح' : 'Light Mode') : (lang === 'ar' ? 'الوضع الداكن' : 'Dark Mode')}
+                    </Button>
+
+                    <Button
+                      variant="outline"
+                      onClick={toggleLanguage}
+                      className="flex items-center gap-4 text-lg font-bold text-starbucks-dark dark:text-white rounded-full px-8 py-6 w-full border-2 border-gray-100 dark:border-zinc-800"
+                    >
+                      <span className="text-xl font-black">{lang === 'ar' ? 'EN' : 'AR'}</span>
+                      {lang === 'ar' ? 'English' : 'العربية'}
+                    </Button>
+
+                    <Button
+                      variant="outline"
+                      onClick={() => {
+                        setIsMobileMenuOpen(false)
+                        setIsAuthOpen(true)
+                      }}
+                      className="flex items-center gap-4 text-lg font-bold text-starbucks-dark dark:text-white rounded-full px-8 py-6 w-full border-2 border-gray-100 dark:border-zinc-800"
+                    >
+                      <User className="h-6 w-6" />
+                      {lang === 'ar' ? 'الحساب' : 'Account'}
+                    </Button>
+                  </div>
 
                   <NavLink to="/locations" className="flex items-center gap-3 text-starbucks-green font-black text-xl uppercase tracking-wider group">
                     <div className="p-3 rounded-full bg-starbucks-green/10 group-hover:bg-starbucks-green group-hover:text-white transition-all">
@@ -225,6 +258,7 @@ export default function Navbar() {
       </nav>
 
       <SearchModal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
+      <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} />
     </>
   )
 }

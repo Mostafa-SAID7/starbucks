@@ -2,7 +2,7 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
-import { SEO, Button, Logo, MenuPromoVideo } from '../components'
+import { SEO, Button, Logo, MenuPromoVideo, Accordion } from '../components'
 import { delivery as data } from '../data'
 
 import talabatLogo from '../assets/talabat.png'
@@ -17,11 +17,11 @@ const DeliveryPage: React.FC = () => {
       <SEO title={data.title[lang]} />
 
       {/* ─── Hero Section ─── */}
-      <section className="bg-[#f7f7f7] dark:bg-zinc-950 py-12 lg:py-20">
+      <section className="bg-[#f7f7f7] dark:bg-zinc-950 py-16 md:py-24">
         <div className="container mx-auto max-w-6xl px-6 lg:px-12">
-          <div className={`flex flex-col-reverse items-center gap-10 ${isRTL ? 'lg:flex-row' : 'lg:flex-row-reverse'}`}>
+          <div className="flex flex-col-reverse items-center gap-10 lg:flex-row-reverse">
             {/* Main Text */}
-            <div className={`flex-1 ${isRTL ? 'text-right' : 'text-left'} space-y-5`}>
+            <div className="flex-1 text-start space-y-5">
               <motion.h1
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -100,9 +100,9 @@ const DeliveryPage: React.FC = () => {
       </section>
 
       {/* ─── Enjoy at Home Section ─── */}
-      <section className="py-16 lg:py-24 border-b border-gray-100 dark:border-zinc-800">
+      <section className="py-16 md:py-24 border-b border-gray-100 dark:border-zinc-800">
         <div className="container mx-auto max-w-6xl px-6 lg:px-12">
-          <div className={`flex flex-col items-center gap-10 ${isRTL ? 'lg:flex-row-reverse' : 'lg:flex-row'}`}>
+          <div className="flex flex-col items-center gap-10 lg:flex-row">
             <div className="flex-1">
               <motion.img
                 initial={{ opacity: 0, x: isRTL ? 20 : -20 }}
@@ -116,7 +116,7 @@ const DeliveryPage: React.FC = () => {
                 }}
               />
             </div>
-            <div className={`flex-1 ${isRTL ? 'text-right' : 'text-left'} space-y-6`}>
+            <div className="flex-1 text-start space-y-6">
               <h2 className="text-3xl font-extrabold text-starbucks-dark dark:text-white lg:text-4xl leading-snug">
                 {data.homeSection.title[lang]}
               </h2>
@@ -137,29 +137,18 @@ const DeliveryPage: React.FC = () => {
       </section>
 
       {/* ─── FAQ Section ─── */}
-      <section className="py-16 lg:py-24 bg-[#f9f9f9] dark:bg-zinc-950">
+      <section className="py-16 md:py-24 bg-[#f9f9f9] dark:bg-zinc-950">
         <div className="container mx-auto max-w-4xl px-6">
-          <h2 className={`mb-12 ${isRTL ? 'text-right' : 'text-left'} text-3xl font-extrabold text-starbucks-dark dark:text-white`}>
+          <h2 className="mb-12 text-start text-3xl font-extrabold text-starbucks-dark dark:text-white">
             {data.faqs.title[lang]}
           </h2>
-          <div className="space-y-8">
-            {data.faqs.items.map((faq: any, i: number) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 12 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.05 }}
-                className={isRTL ? 'text-right' : 'text-left'}
-              >
-                <h3 className="mb-2 text-base font-extrabold text-starbucks-dark dark:text-white lg:text-lg">
-                  {faq.q[lang]}
-                </h3>
-                <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
-                  {faq.a[lang]}
-                </p>
-              </motion.div>
-            ))}
+          <div className="mt-12">
+            <Accordion 
+              items={data.faqs.items.map((faq: any) => ({
+                title: faq.q[lang],
+                content: faq.a[lang]
+              }))} 
+            />
           </div>
         </div>
       </section>

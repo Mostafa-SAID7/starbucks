@@ -2,7 +2,7 @@ import React from 'react'
 import { useParams, Navigate, useLocation } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { motion } from 'framer-motion'
-import { SEO, Button, InnerHeader } from '../components'
+import { SEO, Button, Header, Accordion } from '../components'
 import pagesData from '../data/pages.json'
 
 interface Section {
@@ -63,10 +63,10 @@ export default function GenericPage() {
         </div>
       ) : (
         <>
-          <InnerHeader title={page.title} variant="dark" />
-          <div className="container mx-auto max-w-4xl px-6 py-20">
+          <Header title={page.title} variant="dark" />
+          <div className="container mx-auto max-w-4xl px-6 py-16 md:py-24">
             <div 
-              className="prose prose-lg max-w-none dark:prose-invert prose-headings:text-starbucks-dark dark:prose-headings:text-foreground-dark prose-p:text-gray-600 dark:prose-p:text-gray-400 rtl:text-right ltr:text-left"
+              className="prose prose-lg max-w-none dark:prose-invert prose-headings:text-starbucks-dark dark:prose-headings:text-foreground-dark prose-p:text-gray-600 dark:prose-p:text-gray-400 text-center md:text-start"
               dangerouslySetInnerHTML={{ __html: page.content || '' }}
             />
           </div>
@@ -82,10 +82,10 @@ function PageSection({ section }: { section: Section }) {
   switch (section.type) {
     case 'hero':
       return (
-        <section className="relative overflow-hidden bg-[#f7f7f7] dark:bg-zinc-900 py-16 lg:py-24">
-          <div className="container mx-auto px-6 lg:px-12">
+        <section className="relative overflow-hidden bg-[#f7f7f7] dark:bg-zinc-950 py-16 md:py-24">
+          <div className="container mx-auto px-6 lg:px-8 max-w-7xl">
             <div className="flex flex-col-reverse items-center gap-12 lg:flex-row">
-              <div className="flex-1 text-center lg:text-right rtl:lg:text-right ltr:lg:text-left">
+              <div className="flex-1 text-center md:text-start">
                 <motion.h1 
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -97,7 +97,7 @@ function PageSection({ section }: { section: Section }) {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.1 }}
-                  className="mb-8 text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto lg:mx-0"
+                  className="mb-8 text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto md:mx-0"
                 >
                   {section.description}
                 </motion.p>
@@ -123,8 +123,8 @@ function PageSection({ section }: { section: Section }) {
 
     case 'partners':
       return (
-        <section className="py-20 border-b dark:border-zinc-800">
-          <div className="container mx-auto px-6 text-center">
+        <section className="py-16 md:py-24 border-b dark:border-zinc-800">
+          <div className="container mx-auto px-6 text-center max-w-7xl">
             <h2 className="mb-12 text-3xl font-extrabold text-starbucks-dark dark:text-white">
               {section.title}
             </h2>
@@ -144,13 +144,13 @@ function PageSection({ section }: { section: Section }) {
 
     case 'card':
       return (
-        <section className={`py-20 ${section.bgColor || 'bg-white dark:bg-black'}`}>
-          <div className="container mx-auto px-6 lg:px-12">
+        <section className={`py-16 md:py-24 ${section.bgColor || 'bg-white dark:bg-black'}`}>
+          <div className="container mx-auto px-6 lg:px-8 max-w-7xl">
             <div className={`flex flex-col items-center gap-12 lg:flex-row ${section.reverse ? 'lg:flex-row-reverse' : ''}`}>
               <div className="flex-1">
-                <img src={section.image} alt={section.imageAlt} className="w-full rounded-2xl shadow-lg" />
+                <img src={section.image} alt={section.imageAlt} className="w-full rounded-3xl shadow-lg" />
               </div>
-              <div className="flex-1 text-center lg:text-right rtl:lg:text-right ltr:lg:text-left">
+              <div className="flex-1 text-center md:text-start">
                 <h2 className="mb-6 text-3xl font-extrabold text-starbucks-dark dark:text-white lg:text-4xl">
                   {section.title}
                 </h2>
@@ -170,22 +170,18 @@ function PageSection({ section }: { section: Section }) {
 
     case 'faq':
       return (
-        <section className="py-20 bg-[#f9f9f9] dark:bg-zinc-950">
+        <section className="py-16 md:py-24 bg-[#f9f9f9] dark:bg-zinc-950">
           <div className="container mx-auto max-w-4xl px-6">
-            <h2 className="mb-12 text-3xl font-extrabold text-starbucks-dark dark:text-white text-center">
+            <h2 className="mb-12 text-3xl font-black text-starbucks-dark dark:text-white text-center md:text-start">
               {section.title}
             </h2>
-            <div className="space-y-6">
-              {section.items?.map((item, i) => (
-                <div key={i} className="rounded-2xl bg-white p-8 shadow-sm dark:bg-zinc-900 border dark:border-zinc-800 transition-all hover:shadow-md">
-                  <h3 className="mb-4 text-xl font-bold text-starbucks-dark dark:text-white">
-                    {item.question}
-                  </h3>
-                  <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
-                    {item.answer}
-                  </p>
-                </div>
-              ))}
+            <div className="mt-8">
+              <Accordion 
+                items={section.items?.map((item: any) => ({
+                  title: item.question,
+                  content: item.answer
+                })) || []} 
+              />
             </div>
           </div>
         </section>
@@ -193,7 +189,7 @@ function PageSection({ section }: { section: Section }) {
 
     case 'content':
       return (
-        <section className="container mx-auto max-w-4xl px-6 py-20">
+        <section className="container mx-auto max-w-4xl px-6 py-16 md:py-24">
           <div 
             className="prose prose-lg max-w-none dark:prose-invert prose-headings:text-starbucks-dark dark:prose-headings:text-foreground-dark prose-p:text-gray-600 dark:prose-p:text-gray-400"
             dangerouslySetInnerHTML={{ __html: section.content || '' }}

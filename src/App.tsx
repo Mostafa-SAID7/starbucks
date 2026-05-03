@@ -23,12 +23,38 @@ import {
   NotFound 
 } from './pages'
 
-import { Spinner } from './components/ui'
+import { Skeleton } from './components/ui'
 
-// Simple loading fallback
+// Premium Skeleton loading fallback
 const PageLoader = () => (
-  <div className="flex h-screen w-full items-center justify-center bg-background-light dark:bg-background-dark">
-    <Spinner size="lg" />
+  <div className="min-h-screen bg-white dark:bg-black">
+    {/* Hero Skeleton */}
+    <div className="h-[350px] lg:h-[450px] w-full bg-gray-50 dark:bg-zinc-950 flex flex-col lg:flex-row border-b border-gray-100 dark:border-zinc-800">
+      <div className="flex-1 p-10 lg:p-20 flex flex-col justify-center space-y-8">
+        <Skeleton className="h-14 w-3/4 rounded-xl" />
+        <div className="space-y-4">
+          <Skeleton className="h-6 w-full rounded-lg" />
+          <Skeleton className="h-6 w-5/6 rounded-lg" />
+          <Skeleton className="h-6 w-2/3 rounded-lg" />
+        </div>
+        <Skeleton className="h-12 w-48 rounded-full" />
+      </div>
+      <div className="hidden lg:block flex-1 bg-gray-100 dark:bg-zinc-900 animate-pulse" />
+    </div>
+
+    {/* Content Area Skeleton */}
+    <div className="container mx-auto max-w-4xl px-6 py-20 space-y-12">
+      <div className="space-y-4">
+        <Skeleton className="h-10 w-64 rounded-xl" />
+        <Skeleton className="h-4 w-full rounded-md" />
+      </div>
+      
+      <div className="grid grid-cols-1 gap-6">
+        <Skeleton className="h-24 w-full rounded-3xl" />
+        <Skeleton className="h-24 w-full rounded-3xl" />
+        <Skeleton className="h-24 w-full rounded-3xl" />
+      </div>
+    </div>
   </div>
 )
 

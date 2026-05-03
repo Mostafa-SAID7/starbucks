@@ -15,7 +15,7 @@ export default function MenuPage() {
   const data = menuData[currentLang]
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-7xl">
+    <div className="container mx-auto px-6 py-16 md:py-24 max-w-7xl">
       <SEO title={data.title} />
       <div className="flex flex-col gap-8 md:flex-row">
         {/* Sidebar (Appears on the right in RTL) */}
@@ -27,11 +27,11 @@ export default function MenuPage() {
 
         {/* Main Content Area */}
         <div className="flex-1 space-y-8">
-          <div>
-            <h1 className="mb-6 text-4xl font-bold text-foreground-light dark:text-foreground-dark">
+          <div className="text-center md:text-start">
+            <h1 className="mb-6 text-4xl font-black text-starbucks-dark dark:text-white lg:text-5xl">
               {data.title}
             </h1>
-            <p className="whitespace-pre-wrap text-lg leading-relaxed text-gray-700 dark:text-gray-300">
+            <p className="whitespace-pre-wrap text-lg leading-relaxed text-gray-700 dark:text-gray-300 lg:text-xl">
               {data.description}
             </p>
           </div>

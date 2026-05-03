@@ -3,8 +3,8 @@
   "sections": [
     {
       "id": "hero",
-      "title": { "ar": "نعمل معاً لإعادة ابتكار المستقبل لأجل أمورٍ، كثيرة", "en": "Working together to reinvent the future for many things" },
-      "subtitle": { "ar": "نعمل معاً لإعادة ابتكار المستقبل لأجل أمورٍ، كثيرة", "en": "Working together to reinvent the future for many things" },
+      "title": { "ar": "نعمل معاً لإعادة ابتكار المستقبل لأجل أمورٍ كثيرة", "en": "Working together to reinvent the future for many things" },
+      "subtitle": { "ar": "نعمل معاً لإعادة ابتكار المستقبل لأجل أمورٍ كثيرة", "en": "Working together to reinvent the future for many things" },
       "image": "https://www.starbucks.eg/assets/image-cache/sustainability-hero-ar.jpg",
       "fallbackImage": "https://www.starbucks.eg/assets/image-cache/social-impact.jpg",
       "content": [
@@ -19,7 +19,7 @@
       ],
       "subHeading": { "ar": "نحقق أهدافنا بالعمل الجماعي", "en": "Achieving our goals through collective action" },
       "subContent": {
-        "ar": "إبدأ بخطوات بسيطة فمثلاً في كل مرة تخرج فيها احمل معك كوب قابل لإعادة الاستخدام و#اصنعوا_الفرق بطريقة سهلة وفعالة لتكونوا جزءاً من نجاحنا في الحفاظ على البيئة حيث نقدم أكثر مما نستهلك. لذا ندعوكم لجعل المواد القابلة لإعادة الاستخدام جزء من روتينكم اليومي فمن خلال خطوات صغيرة نستطيع أن نحدث فرقاً كبيراً.",
+        "ar": "ابدأ بخطوات بسيطة، فمثلاً في كل مرة تخرج فيها احمل معك كوباً قابلاً لإعادة الاستخدام و#اصنعوا_الفرق بطريقة سهلة وفعالة لتكونوا جزءاً من نجاحنا في الحفاظ على البيئة حيث نقدم أكثر مما نستهلك. لذا ندعوكم لجعل المواد القابلة لإعادة الاستخدام جزءاً من روتينكم اليومي، فمن خلال خطوات صغيرة نستطيع أن نحدث فرقاً كبيراً.",
         "en": "Start with simple steps. For example, carry a reusable cup every time you go out and #MakeADifference in an easy and effective way to be part of our success in preserving the environment where we give back more than we consume. We invite you to make reusables part of your daily routine; small steps can make a big difference."
       },
       "cta": { "ar": "قم بإجراء التغيير", "en": "Make the Change" },
@@ -27,7 +27,7 @@
     },
     {
       "id": "reusable",
-      "title": { "ar": "طريقة استعمال الأكواب القابلة لإعادة الاستخدام", "en": "How to use reusable cups" },
+      "title": { "ar": "كيفية استخدام الأكواب القابلة لإعادة الاستخدام", "en": "How to use reusable cups" },
       "image": "https://www.starbucks.eg/assets/image-cache/reusable-cup.jpg",
       "fallbackImage": "https://www.starbucks.eg/assets/image-cache/sustainability-cup.jpg",
       "content": {
@@ -65,7 +65,7 @@
     },
     {
       "id": "strawless",
-      "title": { "ar": "أغطية بدون أعواد الشرب في الشرق الأوسط", "en": "Strawless Lids in the Middle East" },
+      "title": { "ar": "أغطية بدون قشات شرب في الشرق الأوسط", "en": "Strawless Lids in the Middle East" },
       "image": "https://www.starbucks.eg/assets/image-cache/cold-cup-ar.jpg",
       "fallbackImage": "https://www.starbucks.eg/assets/image-cache/strawless-lid.jpg",
       "link": "https://www.alshaya.com/campaigns/Starbucks/Strawless_Lid_Launch/ar/strawless.html",

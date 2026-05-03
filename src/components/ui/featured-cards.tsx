@@ -4,24 +4,26 @@ import { useTranslation } from 'react-i18next'
 import { Button } from './button'
 import { ArrowLeft } from 'lucide-react'
 import { featuredCards } from '../../data'
+import type { FeaturedCard, FeaturedCardsData } from '../../types'
 
 export const FeaturedCards: React.FC = () => {
   const { i18n } = useTranslation()
-  const localizedData = (featuredCards as any)[i18n.language] || featuredCards.en
+  const localizedData: FeaturedCardsData =
+    (featuredCards as unknown as Record<string, FeaturedCardsData>)[i18n.language] ?? featuredCards.en
 
   return (
-    <section className="py-12 dark:bg-black transition-colors">
-      <div className="container mx-auto grid max-w-7xl grid-cols-1 gap-8 px-4 md:grid-cols-2">
-        {localizedData.cards.map((card: any, index: number) => (
+    <section className="py-16 md:py-24 dark:bg-black transition-colors">
+      <div className="container mx-auto grid max-w-7xl grid-cols-1 gap-12 px-6 lg:px-8 md:grid-cols-2">
+        {localizedData.cards.map((card: FeaturedCard, index: number) => (
           <motion.div
             key={card.id}
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: index * 0.1 }}
-            className={`group relative overflow-hidden rounded-xl shadow-lg transition-all hover:shadow-xl ${
-              card.theme === 'Green' 
-                ? 'bg-[#d4e9e2] dark:bg-[#1e3932]' 
+            className={`group relative overflow-hidden rounded-3xl shadow-lg transition-all hover:shadow-xl ${
+              card.theme === 'Green'
+                ? 'bg-[#d4e9e2] dark:bg-[#1e3932]'
                 : 'bg-[#f2f0eb] dark:bg-[#2d2926]'
             }`}
           >
@@ -39,7 +41,7 @@ export const FeaturedCards: React.FC = () => {
 
               {/* Content Section */}
               <div className="flex w-full flex-col justify-center p-8 text-center md:w-1/2 md:p-12 md:text-left rtl:md:text-right">
-                <h3 className="mb-4 text-2xl font-extrabold text-starbucks-dark dark:text-foreground-dark lg:text-3xl">
+                <h3 className="mb-4 text-2xl font-black text-starbucks-dark dark:text-white lg:text-3xl">
                   {card.title}
                 </h3>
                 {card.description && (
@@ -50,18 +52,16 @@ export const FeaturedCards: React.FC = () => {
                 <div className="flex flex-wrap items-center justify-center gap-4 md:justify-start">
                   <Button
                     variant="outline"
-                    className="rounded-full border-2 border-starbucks-dark px-8 py-6 text-lg font-bold text-starbucks-dark hover:bg-starbucks-dark hover:text-white dark:border-foreground-dark dark:text-foreground-dark dark:hover:bg-foreground-dark dark:hover:text-black transition-all"
+                    className="rounded-full border-2 border-starbucks-dark px-8 py-6 text-lg font-bold text-starbucks-dark hover:bg-starbucks-dark hover:text-white dark:border-white dark:text-white dark:hover:bg-white dark:hover:text-black transition-all"
                     asChild
                   >
-                    <a href={card.ctaLink}>
-                      {card.cta}
-                    </a>
+                    <a href={card.ctaLink}>{card.cta}</a>
                   </Button>
-                  
+
                   {card.secondaryCta && card.secondaryCtaLink && (
                     <Button
                       variant="ghost"
-                      className="flex items-center gap-2 text-lg font-bold text-starbucks-dark dark:text-foreground-dark hover:bg-black/5 dark:hover:bg-white/5"
+                      className="flex items-center gap-2 text-lg font-bold text-starbucks-dark dark:text-white hover:bg-black/5 dark:hover:bg-white/5"
                       asChild
                     >
                       <a href={card.secondaryCtaLink}>
@@ -79,22 +79,26 @@ export const FeaturedCards: React.FC = () => {
     </section>
   )
 }
+
 export const FeaturedCardsSkeleton: React.FC = () => {
   return (
-    <section className="py-12 dark:bg-black transition-colors">
-      <div className="container mx-auto grid max-w-7xl grid-cols-1 gap-8 px-4 md:grid-cols-2">
-        {[1, 2].map((i) => (
-          <div key={i} className="group relative overflow-hidden rounded-xl bg-zinc-100 dark:bg-zinc-900 shadow-lg">
+    <section className="py-16 md:py-24 dark:bg-black transition-colors">
+      <div className="container mx-auto grid max-w-7xl grid-cols-1 gap-12 px-6 lg:px-8 md:grid-cols-2">
+        {[0, 1].map((i) => (
+          <div
+            key={i}
+            className="relative overflow-hidden rounded-3xl bg-zinc-100 dark:bg-zinc-900 shadow-lg"
+          >
             <div className="flex flex-col md:flex-row h-full">
               {/* Image Skeleton */}
               <div className="h-64 w-full animate-pulse bg-zinc-200 dark:bg-zinc-800 md:h-[400px] md:w-1/2" />
-              
+
               {/* Content Skeleton */}
-              <div className="flex w-full flex-col justify-center p-8 md:w-1/2 md:p-12">
-                <div className="mb-4 h-8 w-3/4 animate-pulse rounded bg-zinc-200 dark:bg-zinc-800" />
-                <div className="mb-4 h-4 w-full animate-pulse rounded bg-zinc-200 dark:bg-zinc-800" />
-                <div className="mb-8 h-4 w-5/6 animate-pulse rounded bg-zinc-200 dark:bg-zinc-800" />
-                <div className="h-12 w-32 animate-pulse rounded-full bg-zinc-200 dark:bg-zinc-800" />
+              <div className="flex w-full flex-col justify-center p-8 md:w-1/2 md:p-12 gap-3">
+                <div className="h-8 w-3/4 animate-pulse rounded bg-zinc-200 dark:bg-zinc-800" />
+                <div className="h-4 w-full animate-pulse rounded bg-zinc-200 dark:bg-zinc-800" />
+                <div className="h-4 w-5/6 animate-pulse rounded bg-zinc-200 dark:bg-zinc-800 mb-4" />
+                <div className="h-12 w-36 animate-pulse rounded-full bg-zinc-200 dark:bg-zinc-800" />
               </div>
             </div>
           </div>

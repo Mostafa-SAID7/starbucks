@@ -82,6 +82,15 @@ html {
     background: rgba(15, 20, 25, 0.7) !important;
     box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3) !important;
   }
+
+  /* Utility to hide scrollbar but maintain functionality */
+  .scrollbar-hide {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none; /* Chrome, Safari and Opera */
+  }
 }
 
 

@@ -2,10 +2,10 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
-import { Button } from './ui'
-import { hero as data } from '../data'
+import { Button } from './button'
+import { hero as data } from '../../data'
 
-const HeroBanner: React.FC = () => {
+export const Banner: React.FC = () => {
   const { i18n } = useTranslation()
   const localizedData = (data as any)[i18n.language] || data.en
 
@@ -25,7 +25,7 @@ const HeroBanner: React.FC = () => {
         <div className="container mx-auto h-full flex items-center px-6 lg:px-12">
           <div className="max-w-2xl">
             <motion.div
-              initial={{ opacity: 0, x: -30 }}
+              initial={{ opacity: 0, x: i18n.language === 'ar' ? 30 : -30 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8 }}
             >
@@ -49,9 +49,7 @@ const HeroBanner: React.FC = () => {
       </div>
 
       {/* Decorative Elements */}
-      <div className="absolute bottom-0 left-0 h-32 w-full bg-gradient-to-t from-background-light dark:from-background-dark to-transparent" />
+      <div className="absolute bottom-0 inset-inline-start-0 h-32 w-full bg-gradient-to-t from-background-light dark:from-background-dark to-transparent" />
     </section>
   )
 }
-
-export default HeroBanner

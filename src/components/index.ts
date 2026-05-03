@@ -15,5 +15,8 @@ export { default as MenuPromoVideo } from './MenuPromoVideo'
 export { default as MenuGrid } from './MenuGrid'
 export { default as AllergyInfo } from './AllergyInfo'
 
+// Modals
+export { default as SearchModal } from './SearchModal'
+
 // UI Components
 export * from './ui'

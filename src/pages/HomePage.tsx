@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import { HeroBanner, StatementSection, FeaturedCards, SEO } from '../components'
+import { Banner, StatementSection, FeaturedCards, SEO } from '../components'
 import { pages } from '../data'
 
 export default function HomePage() {
@@ -9,7 +9,7 @@ export default function HomePage() {
   return (
     <div className="flex flex-col">
       <SEO title={pageData.title} />
-      <HeroBanner />
+      <Banner />
       <StatementSection />
       <FeaturedCards />
     </div>

@@ -5,9 +5,9 @@
       "cup": "https://www.starbucks.eg/assets/image-cache/about-us-cup.jpg"
     },
     "text": {
-      "history": { "ar": "تعرف على تاريخنا", "en": "Learn our history" },
-      "title": { "ar": "نبذة عنا", "en": "About Us" },
-      "cta": { "ar": "قابلني في ستاربكس", "en": "Find a Starbucks" }
+      "history": { "ar": "تاريخنا العريق", "en": "Learn our history" },
+      "title": { "ar": "عن ستاربكس", "en": "About Us" },
+      "cta": { "ar": "جد أقرب مقهى", "en": "Find a Starbucks" }
     }
   },
   "sections": [
@@ -27,7 +27,7 @@
         },
         {
           "type": "heading",
-          "ar": "التواصل مع الزبائن",
+          "ar": "التواصل مع ضيوفنا",
           "en": "Connecting with Customers"
         },
         {
@@ -74,6 +74,6 @@
   },
   "buttons": {
     "order": { "ar": "اطلب الآن", "en": "Order Now" },
-    "discover": { "ar": "اكتشف مواقع محلاتنا", "en": "Find Our Stores" }
+    "discover": { "ar": "جد مواقع مقاهينا", "en": "Find Our Stores" }
   }
 }
