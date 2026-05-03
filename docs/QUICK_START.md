@@ -1,143 +1,81 @@
-# ⚡ Quick Start Guide
+# ⚡ Quick Start
 
-## 🚀 Get Started in 3 Steps
+## Prerequisites
 
-### 1️⃣ Install Dependencies
+- **Node.js** 20+ · **npm** · **Git**
+
+---
+
+## 1 · Clone & Install
+
 ```bash
-cd starbucks-eg-react
-npm install
+git clone https://github.com/Mostafa-SAID7/starbucks.git
+cd starbucks
+npm install --legacy-peer-deps
 ```
 
-### 2️⃣ Start Development Server
+> `--legacy-peer-deps` is required due to the `vite-plugin-pwa` peer dependency override.
+
+## 2 · Start Dev Server
+
 ```bash
 npm run dev
+# → http://localhost:5173
 ```
 
-### 3️⃣ Open in Browser
-Navigate to: **http://localhost:5173**
+## 3 · (Optional) Docker
+
+```bash
+docker-compose up -d
+# → http://localhost:3000
+```
 
 ---
 
-## 📱 What You'll See
+## Available Scripts
 
-✅ **Sticky Navbar** with Starbucks logo and Arabic menu  
-✅ **Hero Banner** with Gaza donation message  
-✅ **Statement Section** with official Starbucks content  
-✅ **5 Featured Cards** with hover effects and CTAs  
-✅ **Footer** with links and country selector  
-
----
-
-## 🎨 Key Features
-
-- **RTL Layout** - Full Arabic right-to-left support
-- **Responsive** - Works on mobile, tablet, and desktop
-- **Animated** - Smooth Framer Motion transitions
-- **Modern** - React 18 + TypeScript + Vite
-- **Styled** - Tailwind CSS with Starbucks theme
-
----
-
-## 🛠️ Available Commands
-
-| Command | Description |
-|---------|-------------|
-| `npm run dev` | Start development server |
-| `npm run build` | Build for production |
-| `npm run preview` | Preview production build |
+| Command | Action |
+|---------|--------|
+| `npm run dev` | Start Vite dev server with HMR |
+| `npm run build` | Production build → `dist/` |
+| `npm run preview` | Serve the production build locally |
 | `npm run lint` | Run ESLint |
+| `npx tsc --noEmit` | TypeScript type check only |
 
 ---
 
-## 📂 Project Structure
+## Customisation
 
-```
-src/
-├── components/
-│   ├── ui/              # Reusable UI components
-│   ├── Navbar.tsx       # Top navigation
-│   ├── HeroBanner.tsx   # Hero section
-│   ├── StatementSection.tsx
-│   ├── FeaturedCards.tsx
-│   └── Footer.tsx
-├── lib/
-│   └── utils.ts         # Helper functions
-├── App.tsx              # Main app
-├── main.tsx             # Entry point
-└── index.css            # Global styles
-```
-
----
-
-## 🎯 Customization
-
-### Change Colors
+### Brand Colours
 Edit `tailwind.config.js`:
-```javascript
-colors: {
-  starbucks: {
-    green: '#006241',
-    dark: '#1e3932',
-    gold: '#cba258',
-  }
+```js
+starbucks: {
+  green: '#006241',  // primary
+  dark:  '#1e3932',  // hover
+  gold:  '#cba258',  // accent
 }
 ```
 
-### Update Content
-Edit component files in `src/components/`
+### Add a New Page
+1. Create `src/pages/MyPage.tsx`
+2. Export it from `src/pages/index.ts`
+3. Add a route in `src/App.tsx`
 
-### Add New Section
-1. Create component in `src/components/YourSection.tsx`
-2. Import in `src/App.tsx`
-3. Add to JSX: `<YourSection />`
-
----
-
-## 🐛 Troubleshooting
-
-### Port Already in Use?
-```bash
-# Kill process on port 5173
-npx kill-port 5173
-npm run dev
-```
-
-### Dependencies Issue?
-```bash
-# Clean install
-rm -rf node_modules package-lock.json
-npm install
-```
-
-### Build Errors?
-```bash
-# Clear cache
-rm -rf node_modules/.vite
-npm run dev
-```
+### Switch Language
+The app reads from `i18n.language` — toggle via the language button in the Navbar. Content lives in `src/data/*.json` under `ar` / `en` keys.
 
 ---
 
-## 📚 Learn More
+## Troubleshooting
 
-- [React Documentation](https://react.dev)
-- [Vite Guide](https://vitejs.dev)
-- [Tailwind CSS](https://tailwindcss.com)
-- [shadcn/ui](https://ui.shadcn.com)
-- [Framer Motion](https://www.framer.com/motion)
-
----
-
-## ✨ Tips
-
-1. **Hot Reload** - Changes appear instantly in browser
-2. **TypeScript** - Hover over code for type hints
-3. **Tailwind** - Use IntelliSense for class suggestions
-4. **Components** - Reuse UI components from `ui/` folder
-5. **RTL** - All layouts automatically support Arabic
+| Problem | Fix |
+|---------|-----|
+| Port 5173 busy | `npx kill-port 5173` |
+| Peer dep errors | `npm install --legacy-peer-deps` |
+| Stale Vite cache | `rm -rf node_modules/.vite && npm run dev` |
+| Clean reinstall | `rm -rf node_modules && npm install --legacy-peer-deps` |
 
 ---
 
-**Happy Coding! 🎉**
-
-Built with ❤️ using React + Vite + TypeScript + Tailwind CSS
+➡️ **For full deployment options see [DEPLOYMENT.md](DEPLOYMENT.md)**
+➡️ **For architecture details see [ARCHITECTURE.md](ARCHITECTURE.md)**

@@ -30,7 +30,7 @@ Complete guide for deploying the Starbucks Egypt React application to various pl
 
 ```bash
 # Install dependencies
-npm install
+npm install --legacy-peer-deps
 
 # Build the project
 npm run build
@@ -386,11 +386,16 @@ Sentry.init({
 
 ## CI/CD Pipeline
 
-The project includes GitHub Actions workflows:
+The project includes the following GitHub Actions workflows:
 
-- **CI Pipeline** (`.github/workflows/ci.yml`): Runs on every push
-- **Deploy Pipeline** (`.github/workflows/deploy.yml`): Deploys on main branch
-- **Security Scan** (`.github/workflows/codeql.yml`): Weekly security analysis
+| Workflow | Trigger | Purpose |
+|----------|---------|--------|
+| `ci.yml` | push/PR to `main`, `develop` | Lint, TypeCheck, Build, Docker |
+| `codeql.yml` | push/PR + weekly | Static security analysis |
+| `security-audit.yml` | push to package files + weekly | npm vulnerability audit |
+| `stale.yml` | daily | Close stale issues/PRs |
+
+Vercel auto-deploys from `main` when the GitHub repo is connected — no manual deploy step required.
 
 ---
 
