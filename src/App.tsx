@@ -23,10 +23,12 @@ import {
   NotFound 
 } from './pages'
 
+import { Spinner } from './components/ui'
+
 // Simple loading fallback
 const PageLoader = () => (
   <div className="flex h-screen w-full items-center justify-center bg-background-light dark:bg-background-dark">
-    <div className="h-10 w-10 animate-spin rounded-full border-4 border-starbucks-green border-t-transparent"></div>
+    <Spinner size="lg" />
   </div>
 )
 

@@ -1,12 +1,11 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
-import { Button } from './ui'
+import { Button } from './button'
 import { ArrowLeft } from 'lucide-react'
-import { featuredCards } from '../data'
-import type { FeaturedCardsData } from '../types'
+import { featuredCards } from '../../data'
 
-export default function FeaturedCards() {
+export const FeaturedCards: React.FC = () => {
   const { i18n } = useTranslation()
   const localizedData = (featuredCards as any)[i18n.language] || featuredCards.en
 
@@ -80,11 +79,11 @@ export default function FeaturedCards() {
     </section>
   )
 }
-export function FeaturedCardsSkeleton() {
+export const FeaturedCardsSkeleton: React.FC = () => {
   return (
     <section className="py-12 dark:bg-black transition-colors">
       <div className="container mx-auto grid max-w-7xl grid-cols-1 gap-8 px-4 md:grid-cols-2">
-        {Array.from({ length: 2 }).map((_, i) => (
+        {[1, 2].map((i) => (
           <div key={i} className="group relative overflow-hidden rounded-xl bg-zinc-100 dark:bg-zinc-900 shadow-lg">
             <div className="flex flex-col md:flex-row h-full">
               {/* Image Skeleton */}

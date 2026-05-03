@@ -223,18 +223,14 @@ const ContactUsPage: React.FC = () => {
               </div>
 
               <div className="flex items-center justify-end">
-                <button
+                <Button
                   type="submit"
-                  disabled={loading}
-                  className="flex items-center gap-3 rounded-full bg-starbucks-green px-12 py-4 font-extrabold text-white hover:bg-starbucks-dark disabled:opacity-60 transition-all shadow-lg hover:shadow-starbucks-green/30"
+                  loading={loading}
+                  className="px-12 py-6 text-base shadow-lg hover:shadow-starbucks-green/30"
                 >
-                  {loading ? (
-                    <span className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent" />
-                  ) : (
-                    <Send className="h-5 w-5" />
-                  )}
+                  {!loading && <Send className="h-5 w-5" />}
                   {data.form.fields.submit[lang]}
-                </button>
+                </Button>
               </div>
             </motion.form>
           )}

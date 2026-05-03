@@ -1,8 +1,7 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { motion } from 'framer-motion'
-import SEO from '../components/SEO'
-import InnerHeader from '../components/InnerHeader'
+import { SEO, InnerHeader } from '../components'
 import { middleEast as data } from '../data'
 
 const MiddleEastPage: React.FC = () => {

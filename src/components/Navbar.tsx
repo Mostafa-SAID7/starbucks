@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useTheme } from '../contexts/ThemeContext'
-import { Button } from './ui/button'
 import { motion, AnimatePresence } from 'framer-motion'
 import { 
   MapPin, 
@@ -13,8 +12,7 @@ import {
   Sun 
 } from 'lucide-react'
 import { toast } from 'sonner'
-import Logo from './Logo'
-import SearchModal from './SearchModal'
+import { Logo, SearchModal, Button } from './ui'
 import { navbar } from '../data'
 
 export default function Navbar() {

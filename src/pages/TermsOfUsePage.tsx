@@ -1,9 +1,7 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { motion } from 'framer-motion'
-import SEO from '../components/SEO'
-import InnerHeader from '../components/InnerHeader'
-import Logo from '../components/Logo'
+import { SEO, InnerHeader, Logo } from '../components'
 import { termsOfUse as data } from '../data'
 
 const TermsOfUsePage: React.FC = () => {

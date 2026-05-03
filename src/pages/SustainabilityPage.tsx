@@ -1,9 +1,7 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
-import SEO from '../components/SEO'
-import InnerHeader from '../components/InnerHeader'
-import { Button } from '../components/ui'
+import { SEO, Button, InnerHeader } from '../components'
 import { ExternalLink } from 'lucide-react'
 import { sustainability as data } from '../data'
 

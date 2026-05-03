@@ -2,10 +2,8 @@ import React from 'react'
 import { useParams, Navigate, useLocation } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { motion } from 'framer-motion'
-import SEO from '../components/SEO'
+import { SEO, Button, InnerHeader } from '../components'
 import pagesData from '../data/pages.json'
-import { Button } from '../components/ui/button'
-import InnerHeader from '../components/InnerHeader'
 
 interface Section {
   type: 'hero' | 'partners' | 'card' | 'faq' | 'content'
