@@ -7,10 +7,16 @@ import { useTranslation } from 'react-i18next'
 export const ChatWidget = () => {
   const [isOpen, setIsOpen] = useState(false)
   const [message, setMessage] = useState('')
-  const [messages, setMessages] = useState<{ id: number; text: string; isBot: boolean }[]>([])
-  const messagesEndRef = useRef<HTMLDivElement>(null)
   const { i18n } = useTranslation()
   const isRTL = i18n.language === 'ar'
+  const [messages, setMessages] = useState<{ id: number; text: string; isBot: boolean }[]>(() => [{
+    id: 1,
+    text: i18n.language === 'ar' 
+      ? "مرحباً! كيف يمكننا مساعدتك اليوم؟ نحن هنا لخدمتك." 
+      : "Hello! How can we help you today? We're here to assist you.",
+    isBot: true
+  }])
+  const messagesEndRef = useRef<HTMLDivElement>(null)
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -21,19 +27,6 @@ export const ChatWidget = () => {
       scrollToBottom()
     }
   }, [messages, isOpen])
-
-  // Initial message based on language
-  useEffect(() => {
-    if (messages.length === 0) {
-      setMessages([{
-        id: 1,
-        text: isRTL 
-          ? "مرحباً! كيف يمكننا مساعدتك اليوم؟ نحن هنا لخدمتك." 
-          : "Hello! How can we help you today? We're here to assist you.",
-        isBot: true
-      }])
-    }
-  }, [isRTL, messages.length])
 
   const handleSend = () => {
     if (!message.trim()) return
@@ -76,7 +69,7 @@ export const ChatWidget = () => {
               </div>
               <button 
                 onClick={() => setIsOpen(false)}
-                className={`absolute top-6 ${isRTL ? 'left-6' : 'right-6'} p-2 hover:bg-white/10 rounded-2xl transition-colors`}
+                className="absolute top-6 end-6 p-2 hover:bg-white/10 rounded-2xl transition-colors z-10"
               >
                 <X className="w-6 h-6" />
               </button>
@@ -93,8 +86,8 @@ export const ChatWidget = () => {
                   )}
                   <div className={`p-5 rounded-3xl shadow-sm text-base border max-w-[80%] text-start ${
                     msg.isBot 
-                      ? `bg-white dark:bg-zinc-800 border-gray-100 dark:border-zinc-700 ${isRTL ? 'rounded-tr-none' : 'rounded-tl-none'}` 
-                      : `bg-starbucks-green text-white border-starbucks-green ${isRTL ? 'rounded-tl-none' : 'rounded-tr-none'}`
+                      ? 'bg-white dark:bg-zinc-800 border-gray-100 dark:border-zinc-700 rounded-ss-none' 
+                      : 'bg-starbucks-green text-white border-starbucks-green rounded-se-none'
                   }`}>
                     <p className="leading-relaxed">{msg.text}</p>
                   </div>
@@ -104,21 +97,22 @@ export const ChatWidget = () => {
             </div>
 
             {/* Input Area */}
-            <div className="p-6 bg-white dark:bg-zinc-900 border-t border-gray-100 dark:border-zinc-800">
+            <div className="p-6 bg-white dark:bg-zinc-900 border-t border-gray-100 dark:border-zinc-800 relative z-20">
               <form 
                 onSubmit={(e) => { e.preventDefault(); handleSend(); }}
-                className="relative"
+                className="relative flex items-center"
               >
                 <Input 
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                   placeholder={isRTL ? "اكتب رسالتك..." : "Type your message..."}
-                  className={`h-14 ${isRTL ? 'pl-14 pr-6' : 'pr-14 pl-6'} rounded-2xl border-gray-100 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-950 focus:bg-white transition-all text-base`}
+                  className="h-14 pe-14 ps-6 rounded-2xl border-gray-100 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-950 focus:bg-white transition-all text-base w-full"
+                  dir="auto"
                 />
                 <button 
                   type="submit"
                   disabled={!message.trim()}
-                  className={`absolute top-1/2 -translate-y-1/2 ${isRTL ? 'left-3' : 'right-3'} p-2.5 text-starbucks-green hover:bg-starbucks-green/10 disabled:opacity-30 disabled:hover:bg-transparent rounded-xl transition-all`}
+                  className="absolute end-3 p-2.5 text-starbucks-green hover:bg-starbucks-green/10 disabled:opacity-30 disabled:hover:bg-transparent rounded-xl transition-all z-30"
                 >
                   <Send className={`w-6 h-6 ${isRTL ? 'scale-x-[-1]' : ''}`} />
                 </button>

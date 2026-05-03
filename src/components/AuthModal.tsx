@@ -39,7 +39,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
   const isRTL = lang === 'ar'
   
   // Safe type access for navbar auth data
-  const authData = ((navbar as any)[lang].auth) as AuthData
+  const authData = navbar[lang as keyof typeof navbar].auth as AuthData
 
   const [mode, setMode] = useState<'login' | 'register'>('login')
 

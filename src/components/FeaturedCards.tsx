@@ -4,16 +4,29 @@ import { useTranslation } from 'react-i18next'
 import { Button } from './ui'
 import { ArrowLeft } from 'lucide-react'
 import { featuredCards } from '../data'
-import type { FeaturedCardsData } from '../types'
+
+interface CardData {
+  id: string;
+  title: string;
+  description: string;
+  cta: string;
+  ctaLink: string;
+  image: string;
+  imageAlt: string;
+  theme: string;
+  secondaryCta?: string;
+  secondaryCtaLink?: string;
+}
 
 export default function FeaturedCards() {
   const { i18n } = useTranslation()
-  const localizedData = (featuredCards as any)[i18n.language] || featuredCards.en
+  const lang = i18n.language as keyof typeof featuredCards
+  const localizedData = featuredCards[lang] || featuredCards.en
 
   return (
     <section className="py-12 dark:bg-black transition-colors">
       <div className="container mx-auto grid max-w-7xl grid-cols-1 gap-8 px-4 md:grid-cols-2">
-        {localizedData.cards.map((card: any, index: number) => (
+        {localizedData.cards.map((card: CardData, index: number) => (
           <motion.div
             key={card.id}
             initial={{ opacity: 0, y: 20 }}

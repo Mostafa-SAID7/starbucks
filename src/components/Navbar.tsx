@@ -28,14 +28,14 @@ export default function Navbar() {
   
   const lang = (i18n.language === 'ar' ? 'ar' : 'en') as 'ar' | 'en'
   const isRTL = lang === 'ar'
-  const navData = (navbar as Record<string, any>)[lang]
+  const navData = navbar[lang]
 
   // Close mobile menu on route change
   useEffect(() => {
     if (isMobileMenuOpen) {
-      setIsMobileMenuOpen(false)
+      setTimeout(() => setIsMobileMenuOpen(false), 0)
     }
-  }, [location.pathname])
+  }, [location.pathname, isMobileMenuOpen])
 
   const toggleLanguage = () => {
     const newLang = i18n.language === 'ar' ? 'en' : 'ar'

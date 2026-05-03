@@ -5,6 +5,34 @@ import { useTranslation } from 'react-i18next'
 import { navbar, menu } from '../data'
 import { Modal, Input } from './ui'
 
+interface SearchMenuItem {
+  id: string;
+  title: string;
+  description?: string;
+  image?: string;
+  href: string;
+  categoryTitle?: string;
+  subcategoryTitle?: string;
+}
+
+interface SearchSubcategory {
+  id: string;
+  title: string;
+  image?: string;
+  href?: string;
+  items?: SearchMenuItem[];
+}
+
+interface SearchCategory {
+  id: string;
+  title: string;
+  description?: string;
+  image?: string;
+  href?: string;
+  sidebarTitle?: string;
+  subcategories?: SearchSubcategory[];
+}
+
 interface SearchModalProps {
   isOpen: boolean
   onClose: () => void
@@ -17,14 +45,14 @@ const SearchModal: React.FC<SearchModalProps> = ({ isOpen, onClose }) => {
   
   const isRTL = i18n.language === 'ar'
   const lang = (i18n.language === 'ar' ? 'ar' : 'en') as 'ar' | 'en'
-  const searchData = (navbar as any)[lang].search
-  const menuData = (menu as any)[lang]
+  const searchData = navbar[lang].search
+  const menuData = menu[lang]
 
   useEffect(() => {
     if (isOpen) {
       setTimeout(() => inputRef.current?.focus(), 200)
     } else {
-      setSearchTerm('')
+      setTimeout(() => setSearchTerm(''), 0)
     }
   }, [isOpen])
 
@@ -39,13 +67,13 @@ const SearchModal: React.FC<SearchModalProps> = ({ isOpen, onClose }) => {
 
   // Flatten menu items for search
   const allMenuItems = useMemo(() => {
-    const items: any[] = []
+    const items: SearchMenuItem[] = []
     if (menuData && menuData.categories) {
-      menuData.categories.forEach((category: any) => {
+      menuData.categories.forEach((category: SearchCategory) => {
         if (category.subcategories) {
-          category.subcategories.forEach((sub: any) => {
+          category.subcategories.forEach((sub: SearchSubcategory) => {
             if (sub.items) {
-              sub.items.forEach((item: any) => {
+              sub.items.forEach((item: SearchMenuItem) => {
                 items.push({
                   ...item,
                   categoryTitle: category.title,

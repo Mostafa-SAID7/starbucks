@@ -4,10 +4,20 @@ import { useTranslation } from 'react-i18next'
 import { Globe } from 'lucide-react'
 import { footer as data } from '../data'
 
+interface FooterLink {
+  label: string;
+  href: string;
+}
+
+interface FooterSection {
+  title: string;
+  links: FooterLink[];
+}
+
 export default function Footer() {
   const { i18n } = useTranslation()
   const lang = (i18n.language === 'ar' ? 'ar' : 'en') as 'ar' | 'en'
-  const footerData = (data as any)[lang]
+  const footerData = data[lang]
 
   const socialIcons: Record<string, React.ReactNode> = {
     spotify: (
@@ -48,13 +58,13 @@ export default function Footer() {
     <footer className="bg-starbucks-dark pt-16 pb-12 text-white">
       <div className="container mx-auto max-w-7xl px-6">
         <div className="grid grid-cols-1 gap-12 border-b border-white/10 pb-16 lg:grid-cols-4">
-          {footerData.sections.map((section: any) => (
+          {footerData.sections.map((section: FooterSection) => (
             <div key={section.title}>
               <h3 className="mb-6 text-lg font-extrabold uppercase tracking-widest text-white">
                 {section.title}
               </h3>
               <ul className="space-y-4">
-                {section.links.map((link: any) => (
+                {section.links.map((link: FooterLink) => (
                   <li key={link.label}>
                     <Link
                       to={link.href}
@@ -116,7 +126,7 @@ export default function Footer() {
           <div className="flex flex-col gap-10">
             {/* Legal Links */}
             <div className="flex flex-wrap items-center gap-x-10 gap-y-4">
-              {footerData.legal.map((link: any) => (
+              {footerData.legal.map((link: FooterLink) => (
                 <Link
                   key={link.label}
                   to={link.href}

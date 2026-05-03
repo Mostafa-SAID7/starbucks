@@ -29,18 +29,11 @@ const Toggle = ({ checked, onChange }: { checked: boolean; onChange: () => void 
 const CookieConsent: React.FC = () => {
   const { i18n } = useTranslation()
   const lang = (i18n.language === 'ar' ? 'ar' : 'en') as 'ar' | 'en'
-  const cookieData = (data as Record<string, any>)[lang]
+  const cookieData = data[lang]
 
-  const [visible, setVisible] = useState(false)
+  const [visible, setVisible] = useState(() => !localStorage.getItem(COOKIE_KEY))
   const [showPrefs, setShowPrefs] = useState(false)
   const [prefs, setPrefs] = useState<Prefs>({ functional: true, advertising: false })
-
-  useEffect(() => {
-    const saved = localStorage.getItem(COOKIE_KEY)
-    if (!saved) {
-      setVisible(true)
-    }
-  }, [])
 
   const save = (value: string) => {
     localStorage.setItem(COOKIE_KEY, value)

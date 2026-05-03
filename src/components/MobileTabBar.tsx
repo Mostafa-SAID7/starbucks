@@ -9,7 +9,7 @@ export default function MobileTabBar() {
   const location = useLocation()
   const { i18n } = useTranslation()
   const lang = (i18n.language === 'ar' ? 'ar' : 'en') as 'ar' | 'en'
-  const navData = (navbar as any)[lang].tabs
+  const navData = navbar[lang].tabs
 
   const tabs = [
     { id: 'home', icon: Home, label: navData.home, path: '/' },
