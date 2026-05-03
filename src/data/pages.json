@@ -232,5 +232,13 @@
       "title": "New Era, Same Icons",
       "content": "<h3>The Same Taste You Love</h3><p>We are proud to provide the best coffee experience in Egypt. A new era begins, but our passion for quality and excellence remains constant.</p>"
     }
+  },
+  "home": {
+    "ar": {
+      "title": "الصفحة الرئيسية"
+    },
+    "en": {
+      "title": "Home"
+    }
   }
 }

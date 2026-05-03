@@ -13,6 +13,7 @@ import termsOfUse from './terms-of-use.json'
 import privacyStatement from './privacy-statement.json'
 import delivery from './delivery.json'
 import cookieNotice from './cookie-notice.json'
+import cookies from './cookies.json'
 
 export {
   featuredCards,
@@ -29,5 +30,6 @@ export {
   termsOfUse,
   privacyStatement,
   delivery,
-  cookieNotice
+  cookieNotice,
+  cookies
 }

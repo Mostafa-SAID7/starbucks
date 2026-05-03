@@ -34,7 +34,7 @@ const MiddleEastPage: React.FC = () => {
         {/* FAQ Section */}
         <div>
           <h2 className="mb-10 text-2xl font-extrabold text-starbucks-green text-right">
-            {lang === 'ar' ? 'أسئلة وأجوبة :' : 'Q&A :'}
+            {data.faqTitle[lang]}
           </h2>
           <div className="space-y-8">
             {data.faqs.map((faq, i) => (

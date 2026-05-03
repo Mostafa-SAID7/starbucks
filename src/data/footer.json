@@ -1,34 +1,71 @@
 {
-  "sections": [
-    {
-      "title": "footer.about_us",
-      "links": [
-        { "label": "footer.about_us", "href": "/about-us" },
-        { "label": "footer.our_coffees", "href": "/our-coffees" }
-      ]
-    },
-    {
-      "title": "footer.contact_us",
-      "links": [
-        { "label": "footer.contact_us", "href": "/contact-us" },
-        { "label": "footer.store_locator", "href": "/locations" }
-      ]
-    },
-    {
-      "title": "footer.social_impact",
-      "links": [
-        { "label": "footer.sustainability", "href": "/social-impact-sustainability" }
-      ]
-    }
-  ],
+  "ar": {
+    "sections": [
+      {
+        "title": "نبذة عنا",
+        "links": [
+          { "label": "نبذة عنا", "href": "/about-us" },
+          { "label": "قهوتنا", "href": "/our-coffees" }
+        ]
+      },
+      {
+        "title": "اتصل بنا",
+        "links": [
+          { "label": "اتصل بنا", "href": "/contact-us" },
+          { "label": "مواقع الفروع", "href": "/locations" }
+        ]
+      },
+      {
+        "title": "الأثر الاجتماعي",
+        "links": [
+          { "label": "الاستدامة", "href": "/social-impact-sustainability" }
+        ]
+      }
+    ],
+    "locationSelector": "مصر",
+    "selectRegion": "اختر المنطقة",
+    "legal": [
+      { "label": "سياسة الخصوصية", "href": "/privacy-statement" },
+      { "label": "شروط الاستخدام", "href": "/terms-of-use" },
+      { "label": "سياسة ملفات تعريف الارتباط", "href": "/cookie-notice" }
+    ],
+    "allRightsReserved": "جميع الحقوق محفوظة."
+  },
+  "en": {
+    "sections": [
+      {
+        "title": "About Us",
+        "links": [
+          { "label": "About Us", "href": "/about-us" },
+          { "label": "Our Coffees", "href": "/our-coffees" }
+        ]
+      },
+      {
+        "title": "Contact Us",
+        "links": [
+          { "label": "Contact Us", "href": "/contact-us" },
+          { "label": "Store Locator", "href": "/locations" }
+        ]
+      },
+      {
+        "title": "Social Impact",
+        "links": [
+          { "label": "Sustainability", "href": "/social-impact-sustainability" }
+        ]
+      }
+    ],
+    "locationSelector": "Egypt",
+    "selectRegion": "Select Region",
+    "legal": [
+      { "label": "Privacy Policy", "href": "/privacy-statement" },
+      { "label": "Terms of Use", "href": "/terms-of-use" },
+      { "label": "Cookie Policy", "href": "/cookie-notice" }
+    ],
+    "allRightsReserved": "All Rights Reserved."
+  },
   "socials": [
     { "name": "facebook", "href": "https://facebook.com/StarbucksMiddleEast" },
     { "name": "instagram", "href": "https://instagram.com/starbucksegypt" }
-  ],
-  "legal": [
-    { "label": "footer.privacy_policy", "href": "/privacy-statement" },
-    { "label": "footer.terms_conditions", "href": "/terms-of-use" },
-    { "label": "footer.cookie_policy", "href": "/cookie-notice" }
   ],
   "countries": [
     { "name": "United States", "href": "https://www.starbucks.com" },

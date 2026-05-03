@@ -12,20 +12,23 @@ export function Toaster() {
       theme={theme as 'light' | 'dark'}
       dir={isRTL ? 'rtl' : 'ltr'}
       className="toaster group"
-      position="top-center"
+      position={isRTL ? 'top-center' : 'top-center'}
       expand={true}
       richColors
       closeButton
       toastOptions={{
         style: {
-          borderRadius: '12px',
-          padding: '16px',
-          fontSize: '14px',
-          fontWeight: '600',
-          border: 'none',
-          boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)',
+          borderRadius: '20px',
+          padding: '20px',
+          fontSize: '15px',
+          fontWeight: '700',
+          border: '1px solid rgba(0,0,0,0.05)',
+          boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+          background: theme === 'dark' ? 'rgba(24, 24, 27, 0.8)' : 'rgba(255, 255, 255, 0.8)',
+          backdropFilter: 'blur(12px)',
+          color: theme === 'dark' ? '#fff' : '#1e3932',
         },
-        className: 'group toast group-[.toaster]:bg-white group-[.toaster]:text-starbucks-dark group-[.toaster]:border-gray-100 group-[.toaster]:shadow-lg dark:group-[.toaster]:bg-zinc-900 dark:group-[.toaster]:text-white dark:group-[.toaster]:border-zinc-800 backdrop-blur-md',
+        className: 'group toast',
       }}
     />
   )

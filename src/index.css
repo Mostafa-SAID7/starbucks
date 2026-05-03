@@ -18,49 +18,69 @@ html {
     @apply text-foreground-light dark:text-foreground-dark;
     @apply transition-colors duration-300;
     font-feature-settings: "rlig" 1, "calt" 1;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    width: 100%;
   }
 
   /* Global Premium Scrollbar Configuration */
   :root {
     --sb-thumb: #006241;
-    --sb-track: #f8f9fa;
+    --sb-track: transparent;
     --sb-thumb-hover: #004d33;
   }
 
   .dark {
     --sb-thumb: #00754a;
-    --sb-track: #111827;
+    --sb-track: transparent;
     --sb-thumb-hover: #008b5a;
   }
 
-  *, html, body {
+  html {
+    scrollbar-gutter: stable;
     scrollbar-width: thin;
-    scrollbar-color: var(--sb-thumb) transparent;
+    scrollbar-color: var(--sb-thumb) var(--sb-track);
   }
 
   /* Webkit Browsers (Chrome, Safari, Edge) */
   ::-webkit-scrollbar {
-    width: 5px;
-    height: 5px;
+    width: 6px;
+    height: 6px;
   }
 
   ::-webkit-scrollbar-track {
-    background: transparent;
+    background: var(--sb-track);
   }
 
   ::-webkit-scrollbar-thumb {
     background: var(--sb-thumb);
     border-radius: 20px;
+    border: 1px solid transparent;
+    background-clip: content-box;
   }
 
   ::-webkit-scrollbar-thumb:hover {
     background: var(--sb-thumb-hover);
+    background-clip: content-box;
   }
 
   ::-webkit-scrollbar-button {
     display: none;
     width: 0;
     height: 0;
+  }
+
+  /* Premium Sonner Glassmorphism */
+  .toast-glass {
+    @apply backdrop-blur-xl border border-white/20 dark:border-white/10 !important;
+    background: rgba(255, 255, 255, 0.7) !important;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.08) !important;
+  }
+
+  .dark .toast-glass {
+    background: rgba(15, 20, 25, 0.7) !important;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3) !important;
   }
 }
 

@@ -3,15 +3,19 @@ import { useTranslation } from 'react-i18next'
 import { Home, MapPin, ShoppingBag, User } from 'lucide-react'
 import { motion } from 'framer-motion'
 
+import { navbar } from '../data'
+
 export default function MobileTabBar() {
   const location = useLocation()
-  const { t } = useTranslation()
+  const { i18n } = useTranslation()
+  const lang = (i18n.language === 'ar' ? 'ar' : 'en') as 'ar' | 'en'
+  const navData = (navbar as any)[lang].tabs
 
   const tabs = [
-    { id: 'home', icon: Home, label: t('common.home'), path: '/' },
-    { id: 'menu', icon: ShoppingBag, label: t('common.menu'), path: '/menu' },
-    { id: 'locations', icon: MapPin, label: t('common.locations'), path: '/locations' },
-    { id: 'account', icon: User, label: t('common.account'), path: '/account' },
+    { id: 'home', icon: Home, label: navData.home, path: '/' },
+    { id: 'menu', icon: ShoppingBag, label: navData.menu, path: '/menu' },
+    { id: 'locations', icon: MapPin, label: navData.locations, path: '/locations' },
+    { id: 'account', icon: User, label: navData.account, path: '/account' },
   ]
 
   return (

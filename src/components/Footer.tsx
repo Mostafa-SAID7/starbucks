@@ -5,7 +5,9 @@ import { Globe } from 'lucide-react'
 import { footer as data } from '../data'
 
 export default function Footer() {
-  const { t } = useTranslation()
+  const { i18n } = useTranslation()
+  const lang = (i18n.language === 'ar' ? 'ar' : 'en') as 'ar' | 'en'
+  const footerData = (data as any)[lang]
 
   const socialIcons: Record<string, React.ReactNode> = {
     facebook: (
@@ -26,19 +28,19 @@ export default function Footer() {
     <footer className="bg-starbucks-dark pt-20 pb-10 text-white transition-colors">
       <div className="container mx-auto max-w-7xl px-6">
         <div className="grid grid-cols-1 gap-12 border-b border-white/10 pb-16 lg:grid-cols-4 transition-colors">
-          {data.sections.map((section) => (
+          {footerData.sections.map((section: any) => (
             <div key={section.title}>
               <h3 className="mb-8 text-lg font-extrabold uppercase tracking-widest text-white">
-                {t(section.title)}
+                {section.title}
               </h3>
               <ul className="space-y-6">
-                {section.links.map((link) => (
+                {section.links.map((link: any) => (
                   <li key={link.label}>
                     <Link
                       to={link.href}
                       className="text-base text-gray-300 hover:text-white transition-colors"
                     >
-                      {t(link.label)}
+                      {link.label}
                     </Link>
                   </li>
                 ))}
@@ -49,13 +51,13 @@ export default function Footer() {
           {/* Location Selector */}
           <div>
             <h3 className="mb-8 text-lg font-extrabold uppercase tracking-widest text-white">
-              {t('footer.location_selector')}
+              {footerData.locationSelector}
             </h3>
             <div className="group relative inline-block">
               <button className="flex items-center gap-3 text-base text-gray-300 hover:text-white transition-colors cursor-pointer py-2">
                 <Globe className="h-5 w-5 text-starbucks-green" />
                 <span className="font-bold underline decoration-white/20 underline-offset-8 group-hover:decoration-starbucks-green transition-all">
-                  {t('footer.location_selector')}
+                  {footerData.locationSelector}
                 </span>
               </button>
               
@@ -63,7 +65,7 @@ export default function Footer() {
                 <div className="h-[300px] overflow-y-auto scrollbar-thin rtl">
                   <div className="p-5 pl-6 pr-6">
                     <div className="mb-4 text-xs font-bold uppercase tracking-widest text-gray-400">
-                      {t('footer.select_region', 'Select Region')}
+                      {footerData.selectRegion}
                     </div>
                     <ul className="space-y-1">
                       {data.countries.map((country) => (
@@ -104,20 +106,20 @@ export default function Footer() {
 
           {/* Legal Links */}
           <div className="flex flex-wrap items-center justify-center gap-8 lg:justify-end">
-            {data.legal.map((link) => (
+            {footerData.legal.map((link: any) => (
               <Link
                 key={link.label}
                 to={link.href}
                 className="text-sm font-bold text-gray-300 hover:text-white transition-colors"
               >
-                {t(link.label)}
+                {link.label}
               </Link>
             ))}
           </div>
         </div>
 
         <div className="text-center text-[13px] text-gray-500">
-          <p>© {new Date().getFullYear()} Starbucks Coffee Company. {t('footer.all_rights_reserved', 'جميع الحقوق محفوظة.')}</p>
+          <p>© {new Date().getFullYear()} Starbucks Coffee Company. {footerData.allRightsReserved}</p>
         </div>
       </div>
     </footer>

@@ -1,26 +1,38 @@
 {
-  "menuItems": [
-    {
-      "label": "القائمة",
-      "href": "/menu"
+  "ar": {
+    "menu": "القائمة",
+    "delivery": "قائمة التوصيل",
+    "sustainability": "الاستدامة",
+    "middle_east": "ستاربكس الشرق الأوسط",
+    "locations": "الفروع",
+    "search": {
+      "title": "البحث",
+      "placeholder": "البحث عن المنتجات والمتاجر...",
+      "trending": "الأكثر بحثاً"
     },
-    {
-      "label": "قائمة التوصيل",
-      "href": "/delivery"
-    },
-    {
-      "label": "الاستدامة",
-      "href": "/social-impact-sustainability"
-    },
-    {
-      "label": "ستاربكس الشرق الأوسط",
-      "href": "/starbucks-middle-east"
+    "tabs": {
+      "home": "الرئيسية",
+      "menu": "القائمة",
+      "locations": "الفروع",
+      "account": "حسابي"
     }
-  ],
-  "actions": {
-    "location": "العثور على متجر",
-    "cart": "السلة",
-    "login": "تسجيل الدخول",
-    "findStore": "العثور على متجر"
+  },
+  "en": {
+    "menu": "Menu",
+    "delivery": "Delivery",
+    "sustainability": "Sustainability",
+    "middle_east": "Starbucks Middle East",
+    "locations": "Locations",
+    "search": {
+      "title": "Search",
+      "placeholder": "Search products & stores...",
+      "trending": "Trending Now"
+    },
+    "tabs": {
+      "home": "Home",
+      "menu": "Menu",
+      "locations": "Locations",
+      "account": "Account"
+    }
   }
 }
