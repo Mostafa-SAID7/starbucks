@@ -1,5 +1,5 @@
 import { Toaster as Sonner } from 'sonner'
-import { useTheme } from '../../contexts/ThemeContext'
+import { useTheme } from '@/hooks'
 import { useTranslation } from 'react-i18next'
 
 export function Toaster() {

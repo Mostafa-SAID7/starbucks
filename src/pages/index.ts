@@ -1,17 +1,12 @@
-import { lazy } from 'react'
-
-export const HomePage = lazy(() => import('./HomePage'))
-export const MenuPage = lazy(() => import('./MenuPage'))
-export const MenuCategoryPage = lazy(() => import('./MenuCategoryPage'))
-export const MenuItemPage = lazy(() => import('./MenuItemPage'))
-export const LocationsPage = lazy(() => import('./LocationsPage'))
-export const DeliveryPage = lazy(() => import('./DeliveryPage'))
-export const AboutUsPage = lazy(() => import('./AboutUsPage'))
-export const SustainabilityPage = lazy(() => import('./SustainabilityPage'))
-export const MiddleEastPage = lazy(() => import('./MiddleEastPage'))
-export const NotFound = lazy(() => import('./NotFound'))
-export const TermsOfUsePage = lazy(() => import('./TermsOfUsePage'))
-export const PrivacyStatementPage = lazy(() => import('./PrivacyStatementPage'))
-export const ContactUsPage = lazy(() => import('./ContactUsPage'))
-export const CookieNoticePage = lazy(() => import('./CookieNoticePage'))
-export const GenericPage = lazy(() => import('./GenericPage'))
+export * from './HomePage'
+export * from './DeliveryPage'
+export * from './LocationsPage'
+export * from './ContactUsPage'
+export * from './SustainabilityPage'
+export * from './MenuCategoryPage'
+export * from './MenuItemPage'
+export * from './AboutUsPage'
+export * from './PrivacyStatementPage'
+export * from './TermsOfUsePage'
+export * from './CookieNoticePage'
+export * from './NotFound'

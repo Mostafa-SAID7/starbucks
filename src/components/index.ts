@@ -1,27 +1,27 @@
-// Common Components
-export { default as SEO } from './SEO'
-export { default as CookieConsent } from './CookieConsent'
+// Layout
+export * from './layout/Navbar'
+export * from './layout/Footer'
+export * from './layout/MobileTabBar'
+export * from './layout/MainLayout'
+export * from './layout/ScrollToTop'
+export * from './layout/SEO'
+export * from './layout/StaticPageLayout'
+export * from './layout/StaticSection'
 
-// Layout Components
-export { default as Navbar } from './Navbar'
-export { default as Footer } from './Footer'
-export { default as MobileTabBar } from './MobileTabBar'
+// Widgets
+export * from './widgets/ChatWidget'
+export * from './widgets/CookieConsent'
+export * from './widgets/AuthModal'
+export * from './widgets/AllergyInfo'
 
-// Home Components
-export { default as StatementSection } from './StatementSection'
-export { default as MenuPromoVideo } from './MenuPromoVideo'
+// Search
+export * from './search/SearchModal'
 
-// Menu Components
-export { default as MenuGrid } from './MenuGrid'
-export { default as AllergyInfo } from './AllergyInfo'
+// Sections
+export * from './sections/FeaturedCards'
+export * from './sections/StatementSection'
+export * from './sections/MenuGrid'
+export * from './sections/MenuPromoVideo'
 
-// Modals
-export { default as SearchModal } from './SearchModal'
-export { default as AuthModal } from './AuthModal'
-
-// Shared Widgets
-export * from './ChatWidget'
-export * from './ScrollToTop'
-
-// UI Components
+// UI Primitives
 export * from './ui'

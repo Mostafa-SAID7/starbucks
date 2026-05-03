@@ -11,6 +11,8 @@ html {
 
   * {
     @apply border-border-light dark:border-border-dark;
+    scrollbar-width: thin;
+    scrollbar-color: var(--sb-thumb) var(--sb-track);
   }
   
   body {
@@ -39,8 +41,6 @@ html {
 
   html {
     scrollbar-gutter: stable;
-    scrollbar-width: thin;
-    scrollbar-color: var(--sb-thumb) var(--sb-track);
   }
 
   /* Webkit Browsers (Chrome, Safari, Edge) */

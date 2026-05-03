@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
 import { Button } from './button'
-import { hero as data } from '../../data'
+import { hero as data } from '@/data'
 
 interface HeroData {
   title: string

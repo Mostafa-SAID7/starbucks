@@ -1,29 +1,26 @@
-import { Suspense, useEffect } from 'react'
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom'
+import { lazy, Suspense, useEffect } from 'react'
+import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { motion, AnimatePresence } from 'framer-motion'
-import MainLayout from './layouts/MainLayout'
 
-// Lazy load pages for performance optimization
-import { 
-  HomePage, 
-  MenuPage, 
-  MenuCategoryPage, 
-  MenuItemPage, 
-  DeliveryPage, 
-  AboutUsPage, 
-  SustainabilityPage, 
-  MiddleEastPage, 
-  LocationsPage, 
-  TermsOfUsePage, 
-  PrivacyStatementPage, 
-  ContactUsPage, 
-  CookieNoticePage, 
-  GenericPage, 
-  NotFound 
-} from './pages'
+// Layout & Components
+import { MainLayout } from '@/components'
+import { Skeleton } from '@/components/ui'
+import { ANIMATIONS } from '@/constants'
 
-import { Skeleton } from './components/ui'
+// Lazy loaded Pages for performance
+const HomePage = lazy(() => import('@/pages/HomePage'))
+const MenuCategoryPage = lazy(() => import('@/pages/MenuCategoryPage'))
+const MenuItemPage = lazy(() => import('@/pages/MenuItemPage'))
+const DeliveryPage = lazy(() => import('@/pages/DeliveryPage'))
+const AboutUsPage = lazy(() => import('@/pages/AboutUsPage'))
+const SustainabilityPage = lazy(() => import('@/pages/SustainabilityPage'))
+const LocationsPage = lazy(() => import('@/pages/LocationsPage'))
+const TermsOfUsePage = lazy(() => import('@/pages/TermsOfUsePage'))
+const PrivacyStatementPage = lazy(() => import('@/pages/PrivacyStatementPage'))
+const ContactUsPage = lazy(() => import('@/pages/ContactUsPage'))
+const CookieNoticePage = lazy(() => import('@/pages/CookieNoticePage'))
+const NotFound = lazy(() => import('@/pages/NotFound'))
 
 // Premium Skeleton loading fallback
 const PageLoader = () => (
@@ -58,13 +55,13 @@ const PageLoader = () => (
   </div>
 )
 
-// Page Wrapper for transitions
+// Page Wrapper for transitions using centralized constants
 const PageWrapper = ({ children }: { children: React.ReactNode }) => (
   <motion.div
-    initial={{ opacity: 0, y: 10 }}
-    animate={{ opacity: 1, y: 0 }}
+    initial={ANIMATIONS.fadeInUp.initial}
+    animate={ANIMATIONS.fadeInUp.animate}
     exit={{ opacity: 0, y: -10 }}
-    transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+    transition={ANIMATIONS.fadeInUp.transition}
   >
     {children}
   </motion.div>
@@ -91,10 +88,15 @@ const AnimatedRoutes = () => {
       <Routes location={location} key={location.pathname}>
         <Route path="/" element={<MainLayout />}>
           <Route index element={<PageWrapper><HomePage /></PageWrapper>} />
-          <Route path="menu" element={<PageWrapper><MenuPage /></PageWrapper>} />
           <Route path="menu/:categoryId" element={<PageWrapper><MenuCategoryPage /></PageWrapper>} />
           <Route path="menu/:categoryId/:itemId" element={<PageWrapper><MenuItemPage /></PageWrapper>} />
           <Route path="locations" element={<PageWrapper><LocationsPage /></PageWrapper>} />
+          
+          {/* Redirects to prevent 404s on generic sections */}
+          <Route path="menu" element={<Navigate to="/menu/drinks" replace />} />
+          <Route path="our-coffees" element={<Navigate to="/menu/drinks" replace />} />
+          <Route path="starbucks-middle-east" element={<Navigate to="/about-us" replace />} />
+          <Route path="account" element={<Navigate to="/" replace />} />
           
           {/* Informational Pages */}
           <Route path="delivery" element={<PageWrapper><DeliveryPage /></PageWrapper>} />
@@ -102,13 +104,8 @@ const AnimatedRoutes = () => {
           <Route path="social-impact-sustainability" element={<PageWrapper><SustainabilityPage /></PageWrapper>} />
           <Route path="privacy-statement" element={<PageWrapper><PrivacyStatementPage /></PageWrapper>} />
           <Route path="terms-of-use" element={<PageWrapper><TermsOfUsePage /></PageWrapper>} />
-          <Route path="our-coffees" element={<PageWrapper><GenericPage /></PageWrapper>} />
           <Route path="contact-us" element={<PageWrapper><ContactUsPage /></PageWrapper>} />
           <Route path="cookie-notice" element={<PageWrapper><CookieNoticePage /></PageWrapper>} />
-          <Route path="starbucks-middle-east" element={<PageWrapper><MiddleEastPage /></PageWrapper>} />
-          <Route path="starbucks-for-the-record" element={<PageWrapper><GenericPage /></PageWrapper>} />
-          <Route path="community-impact-starbucks" element={<PageWrapper><GenericPage /></PageWrapper>} />
-          <Route path="new-era-same-icons" element={<PageWrapper><GenericPage /></PageWrapper>} />
           
           <Route path="*" element={<PageWrapper><NotFound /></PageWrapper>} />
         </Route>
