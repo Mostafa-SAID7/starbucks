@@ -1,38 +1,37 @@
-import { Skeleton } from "./skeleton"
-import { Spinner } from "./spinner"
+import * as React from "react"
+import { cn } from "@/lib/utils"
 
-interface LoaderProps {
-  isLoading: boolean
-  variant?: "skeleton" | "spinner"
-  skeletonCount?: number
-  skeletonClassName?: string
-  spinnerSize?: "sm" | "md" | "lg"
-  children: React.ReactNode
+export interface LoaderProps {
+  size?: "sm" | "md" | "lg"
+  className?: string
 }
 
-export function Loader({
-  isLoading,
-  variant = "skeleton",
-  skeletonCount = 1,
-  skeletonClassName,
-  spinnerSize = "md",
-  children,
-}: LoaderProps) {
-  if (!isLoading) return <>{children}</>
+export const Loader = React.forwardRef<HTMLDivElement, LoaderProps>(
+  ({ size = "md", className }, ref) => {
+    const sizeClasses = {
+      sm: "h-4 w-4",
+      md: "h-8 w-8",
+      lg: "h-12 w-12"
+    }
 
-  if (variant === "spinner") {
     return (
-      <div className="flex items-center justify-center p-8">
-        <Spinner size={spinnerSize} />
+      <div
+        ref={ref}
+        className={cn(
+          "inline-block animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]",
+          "text-starbucks-green",
+          sizeClasses[size],
+          className
+        )}
+        role="status"
+        aria-label="Loading"
+      >
+        <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">
+          Loading...
+        </span>
       </div>
     )
   }
+)
 
-  return (
-    <div className="space-y-4">
-      {Array.from({ length: skeletonCount }).map((_, i) => (
-        <Skeleton key={i} className={skeletonClassName} />
-      ))}
-    </div>
-  )
-}
+Loader.displayName = "Loader"

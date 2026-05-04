@@ -1,109 +1,110 @@
 import * as React from "react"
-import { motion, AnimatePresence } from "framer-motion"
-import { ChevronDown, Check } from "lucide-react"
+import { Check, ChevronDown } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 export interface SelectOption {
   id: string
   label: string
+  value?: string
 }
 
 export interface SelectProps {
   options: SelectOption[]
-  value: string
-  onChange: (value: string) => void
+  value?: string
+  onChange?: (value: string) => void
   placeholder?: string
-  className?: string
   isRTL?: boolean
+  className?: string
 }
 
-const Select: React.FC<SelectProps> = ({
-  options,
-  value,
-  onChange,
-  placeholder = "Select an option",
-  className,
-  isRTL = false,
-}) => {
-  const [isOpen, setIsOpen] = React.useState(false)
-  const containerRef = React.useRef<HTMLDivElement>(null)
+const Select = React.forwardRef<HTMLDivElement, SelectProps>(
+  ({ options, value, onChange, placeholder, isRTL, className }, ref) => {
+    const [isOpen, setIsOpen] = React.useState(false)
+    const [selectedOption, setSelectedOption] = React.useState<SelectOption | undefined>()
+    const dropdownRef = React.useRef<HTMLDivElement>(null)
 
-  const selectedOption = options.find((opt) => opt.id === value)
+    React.useEffect(() => {
+      const selected = options.find(opt => opt.id === value || opt.value === value)
+      setSelectedOption(selected)
+    }, [value, options])
 
-  // Close when clicking outside
-  React.useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
-        setIsOpen(false)
+    React.useEffect(() => {
+      const handleClickOutside = (event: MouseEvent) => {
+        if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+          setIsOpen(false)
+        }
       }
+
+      document.addEventListener('mousedown', handleClickOutside)
+      return () => document.removeEventListener('mousedown', handleClickOutside)
+    }, [])
+
+    const handleSelect = (option: SelectOption) => {
+      setSelectedOption(option)
+      onChange?.(option.id)
+      setIsOpen(false)
     }
-    document.addEventListener("mousedown", handleClickOutside)
-    return () => document.removeEventListener("mousedown", handleClickOutside)
-  }, [])
 
-  return (
-    <div className={cn("relative w-full", className)} ref={containerRef}>
-      <button
-        type="button"
-        onClick={() => setIsOpen(!isOpen)}
-        className={cn(
-          "flex h-14 w-full items-center justify-between rounded-full border-2 border-gray-100 dark:border-zinc-800 bg-gray-50/50 dark:bg-zinc-950/50 px-6 py-2 text-lg font-bold text-starbucks-dark dark:text-white outline-none ring-offset-background focus:border-starbucks-green focus:ring-[12px] focus:ring-starbucks-green/5 transition-all",
-          isOpen && "border-starbucks-green ring-[12px] ring-starbucks-green/5"
-        )}
-      >
-        <span className={cn(selectedOption ? "text-starbucks-dark dark:text-white" : "text-gray-400")}>
-          {selectedOption ? selectedOption.label : placeholder}
-        </span>
-        <ChevronDown
+    return (
+      <div className={cn("relative", className)} ref={dropdownRef}>
+        <button
+          type="button"
+          onClick={() => setIsOpen(!isOpen)}
           className={cn(
-            "h-5 w-5 text-gray-400 transition-transform duration-300",
-            isOpen && "rotate-180"
+            "flex h-11 w-full items-center justify-between rounded-full border border-gray-200 bg-white px-4 py-3 text-sm text-gray-900 transition-all duration-300",
+            "hover:border-starbucks-green focus:border-starbucks-green focus:outline-none focus:ring-2 focus:ring-starbucks-green/20",
+            "dark:border-zinc-700 dark:bg-zinc-900 dark:text-white dark:hover:border-starbucks-light",
+            isRTL && "flex-row-reverse"
           )}
-        />
-      </button>
+          aria-haspopup="listbox"
+          aria-expanded={isOpen}
+        >
+          <span className={cn(!selectedOption && "text-gray-400")}>
+            {selectedOption?.label || placeholder}
+          </span>
+          <ChevronDown className={cn(
+            "h-4 w-4 text-gray-400 transition-transform duration-200",
+            isOpen && "rotate-180",
+            isRTL && "rotate-180"
+          )} />
+        </button>
 
-      <AnimatePresence>
         {isOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: 5, scale: 0.98 }}
-            animate={{ opacity: 1, y: 5, scale: 1 }}
-            exit={{ opacity: 0, y: 5, scale: 0.98 }}
-            transition={{ duration: 0.15, ease: "easeOut" }}
-            className="absolute z-[100] mt-1 w-full overflow-hidden rounded-2xl border border-gray-100 dark:border-zinc-800 bg-white dark:bg-zinc-950 shadow-2xl"
-            dir={isRTL ? "rtl" : "ltr"}
+          <div
+            className={cn(
+              "absolute z-50 mt-1 w-full rounded-xl border border-gray-100 bg-white shadow-lg dark:border-zinc-700 dark:bg-zinc-900",
+              isRTL && "right-0"
+            )}
+            role="listbox"
           >
-            <div className="max-h-64 overflow-y-auto scrollbar-thin scrollbar-thumb-starbucks-green scrollbar-track-transparent">
-              <div className="p-1.5">
-                {options.map((option) => {
-                  const isSelected = option.id === value
-                  return (
-                    <button
-                      key={option.id}
-                      type="button"
-                      onClick={() => {
-                        onChange(option.id)
-                        setIsOpen(false)
-                      }}
-                      className={cn(
-                        "flex w-full items-center justify-between rounded-xl px-4 py-3 text-lg font-bold transition-all",
-                        isSelected 
-                          ? "bg-starbucks-green text-white" 
-                          : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-zinc-900",
-                        isRTL ? "text-right" : "text-left"
-                      )}
-                    >
-                      <span>{option.label}</span>
-                      {isSelected && <Check className="h-5 w-5" />}
-                    </button>
-                  )
-                })}
-              </div>
-            </div>
-          </motion.div>
+            {options.map((option) => (
+              <button
+                key={option.id}
+                type="button"
+                onClick={() => handleSelect(option)}
+                className={cn(
+                  "flex w-full items-center gap-2 px-4 py-3 text-sm text-gray-900 transition-colors hover:bg-gray-50 dark:text-white dark:hover:bg-zinc-800",
+                  selectedOption?.id === option.id && "bg-starbucks-green/10 text-starbucks-green dark:bg-starbucks-light/10",
+                  isRTL && "flex-row-reverse"
+                )}
+                role="option"
+                aria-selected={selectedOption?.id === option.id}
+              >
+                <Check
+                  className={cn(
+                    "h-4 w-4",
+                    selectedOption?.id !== option.id && "invisible"
+                  )}
+                />
+                {option.label}
+              </button>
+            ))}
+          </div>
         )}
-      </AnimatePresence>
-    </div>
-  )
-}
+      </div>
+    )
+  }
+)
+Select.displayName = "Select"
 
 export { Select }

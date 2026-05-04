@@ -1,39 +1,95 @@
-import React from 'react'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from './dialog'
-import { useTranslation } from 'react-i18next'
+import * as React from "react"
+import { motion, AnimatePresence } from "framer-motion"
+import { cn } from "@/lib/utils"
 
-interface ModalProps {
+export interface ModalProps {
   isOpen: boolean
   onClose: () => void
-  title?: string
-  description?: string
   children: React.ReactNode
   className?: string
+  title?: string
 }
 
-export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, description, children, className = '' }) => {
-  const { i18n } = useTranslation()
-  const isRTL = i18n.language === 'ar'
+export const Modal = React.forwardRef<HTMLDivElement, ModalProps>(
+  ({ isOpen, onClose, children, className, title }, ref) => {
+    const [isBrowser, setIsBrowser] = React.useState(false)
 
-  return (
-    <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className={`max-w-3xl overflow-hidden rounded-[2.5rem] bg-white/95 dark:bg-zinc-900/95 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.3)] backdrop-blur-md border border-white/20 dark:border-zinc-800/50 p-8 md:p-12 ${className}`}>
-        {(title || description) && (
-          <DialogHeader className={`flex flex-col mb-10 ${isRTL ? 'items-end' : 'items-start'}`}>
-            {title && (
-              <DialogTitle className="text-3xl font-black text-starbucks-dark dark:text-white uppercase tracking-tighter">
-                {title}
-              </DialogTitle>
-            )}
-            {description && (
-              <DialogDescription className={`text-gray-500 dark:text-gray-400 mt-2 ${isRTL ? 'text-right' : 'text-left'}`}>
-                {description}
-              </DialogDescription>
-            )}
-          </DialogHeader>
+    React.useEffect(() => {
+      setIsBrowser(true)
+    }, [])
+
+    React.useEffect(() => {
+      if (isOpen) {
+        document.body.style.overflow = 'hidden'
+      } else {
+        document.body.style.overflow = 'unset'
+      }
+
+      return () => {
+        document.body.style.overflow = 'unset'
+      }
+    }, [isOpen])
+
+    const handleEscape = React.useCallback((e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose()
+      }
+    }, [onClose])
+
+    React.useEffect(() => {
+      if (isOpen) {
+        document.addEventListener('keydown', handleEscape)
+      }
+      return () => {
+        document.removeEventListener('keydown', handleEscape)
+      }
+    }, [isOpen, handleEscape])
+
+    if (!isBrowser) {
+      return null
+    }
+
+    return (
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
+            onClick={onClose}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby={title ? "modal-title" : undefined}
+          >
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              className={cn(
+                "relative w-full max-w-lg rounded-2xl bg-white dark:bg-zinc-900 shadow-2xl",
+                className
+              )}
+              onClick={(e) => e.stopPropagation()}
+              ref={ref}
+            >
+              {title && (
+                <div className="border-b border-gray-100 dark:border-zinc-800 p-6">
+                  <h2 id="modal-title" className="text-xl font-bold text-gray-900 dark:text-white">
+                    {title}
+                  </h2>
+                </div>
+              )}
+              <div className="p-6">
+                {children}
+              </div>
+            </motion.div>
+          </motion.div>
         )}
-        {children}
-      </DialogContent>
-    </Dialog>
-  )
-}
+      </AnimatePresence>
+    )
+  }
+)
+
+Modal.displayName = "Modal"

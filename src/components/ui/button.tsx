@@ -1,28 +1,25 @@
-/* eslint-disable react-refresh/only-export-components */
 import * as React from "react"
 import { Slot } from "@radix-ui/react-slot"
 import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
-import { Spinner } from "./spinner"
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full text-sm font-semibold ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full text-sm font-bold uppercase tracking-widest transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-starbucks-green focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
   {
     variants: {
       variant: {
-        default: "bg-starbucks-green text-white hover:bg-starbucks-dark dark:bg-starbucks-green dark:hover:bg-starbucks-dark",
-        outline: "border-2 border-starbucks-green text-starbucks-green hover:bg-starbucks-green hover:text-white dark:border-starbucks-green dark:text-starbucks-green dark:hover:bg-starbucks-green dark:hover:text-white",
-        ghost: "hover:bg-accent hover:text-accent-foreground dark:hover:bg-gray-800",
-        link: "text-starbucks-green underline-offset-4 hover:underline",
-        primary: "bg-starbucks-green text-white hover:bg-starbucks-dark transition-colors shadow-lg hover:shadow-xl",
-        secondary: "bg-white text-starbucks-dark border-2 border-starbucks-dark hover:bg-starbucks-dark hover:text-white transition-all",
+        default: "bg-starbucks-green text-white hover:bg-starbucks-dark shadow-lg shadow-starbucks-green/20 hover:scale-105 active:scale-95",
+        destructive: "bg-red-500 text-white hover:bg-red-600 dark:bg-red-600 dark:hover:bg-red-700",
+        outline: "border-2 border-starbucks-green text-starbucks-green hover:bg-starbucks-green hover:text-white dark:border-starbucks-light dark:text-starbucks-light dark:hover:bg-starbucks-light dark:hover:text-black",
+        secondary: "bg-gray-100 text-gray-900 hover:bg-gray-200 dark:bg-zinc-800 dark:text-gray-100 dark:hover:bg-zinc-700",
+        ghost: "hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-zinc-800 dark:hover:text-gray-100",
+        link: "text-starbucks-green underline-offset-4 hover:underline dark:text-starbucks-light",
       },
       size: {
-        default: "h-11 px-8 py-2",
-        sm: "h-9 rounded-full px-6",
-        lg: "h-12 rounded-full px-10",
-        xl: "h-14 rounded-full px-12 text-lg",
-        icon: "h-10 w-10",
+        default: "h-11 px-6 py-3",
+        sm: "h-9 px-4 text-xs",
+        lg: "h-14 px-8 text-lg",
+        icon: "h-11 w-11",
       },
     },
     defaultVariants: {
@@ -37,43 +34,32 @@ export interface ButtonProps
     VariantProps<typeof buttonVariants> {
   asChild?: boolean
   loading?: boolean
-  leftIcon?: React.ReactNode
-  rightIcon?: React.ReactNode
-  icon?: React.ReactNode
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, loading, children, disabled, leftIcon, rightIcon, icon, ...props }, ref) => {
+  ({ className, variant, size, asChild = false, loading, children, disabled, ...props }, ref) => {
     const Comp = asChild ? Slot : "button"
-    const finalLeftIcon = leftIcon || icon
     
-    if (asChild) {
-      // Radix Slot clones its child and passes props to it.
-      // If we have icons, we must ensure the child of Slot is a SINGLE element
-      // that contains the icons.
-      return (
-        <Comp
-          className={cn(buttonVariants({ variant, size, className }))}
-          ref={ref}
-          {...props}
-        >
-          {children}
-        </Comp>
-      )
-    }
-
     return (
-      <button
+      <Comp
         className={cn(buttonVariants({ variant, size, className }))}
         ref={ref}
-        disabled={loading || disabled}
+        disabled={disabled || loading}
+        aria-busy={loading}
         {...props}
       >
-        {loading && <Spinner size="sm" className="mr-2 border-current border-t-transparent" />}
-        {!loading && finalLeftIcon && <span className="inline-flex shrink-0">{finalLeftIcon}</span>}
-        <span className="truncate">{children}</span>
-        {!loading && rightIcon && <span className="inline-flex shrink-0">{rightIcon}</span>}
-      </button>
+        {loading ? (
+          <>
+            <svg className="animate-spin h-4 w-4 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            Processing...
+          </>
+        ) : (
+          children
+        )}
+      </Comp>
     )
   }
 )

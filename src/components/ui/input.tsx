@@ -1,18 +1,29 @@
 import * as React from "react"
 import { cn } from "@/lib/utils"
 
-export type InputProps = React.InputHTMLAttributes<HTMLInputElement>
+export interface InputProps
+  extends React.InputHTMLAttributes<HTMLInputElement> {
+  error?: boolean
+  success?: boolean
+}
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type, ...props }, ref) => {
+  ({ className, type, error, success, ...props }, ref) => {
     return (
       <input
         type={type}
         className={cn(
-          "flex h-12 w-full rounded-full border-2 border-gray-100 dark:border-zinc-800 bg-gray-50/50 dark:bg-zinc-950/50 px-6 py-2 text-lg font-bold text-starbucks-dark dark:text-white ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-gray-300 dark:placeholder:text-zinc-700 focus-visible:outline-none focus-visible:border-starbucks-green focus-visible:ring-[12px] focus-visible:ring-starbucks-green/5 disabled:cursor-not-allowed disabled:opacity-50 transition-all",
+          "flex h-11 w-full rounded-full border border-gray-200 bg-white px-4 py-3 text-sm text-gray-900 transition-all duration-300",
+          "placeholder:text-gray-400 focus:border-starbucks-green focus:outline-none focus:ring-2 focus:ring-starbucks-green/20",
+          "dark:border-zinc-700 dark:bg-zinc-900 dark:text-white dark:placeholder:text-gray-500",
+          "disabled:cursor-not-allowed disabled:opacity-50",
+          error && "border-red-500 focus:border-red-500 focus:ring-red-500/20",
+          success && "border-green-500 focus:border-green-500 focus:ring-green-500/20",
           className
         )}
         ref={ref}
+        aria-invalid={error}
+        aria-describedby={error ? `${props.id}-error` : undefined}
         {...props}
       />
     )

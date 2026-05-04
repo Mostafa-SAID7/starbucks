@@ -1,35 +1,30 @@
-import { Toaster as Sonner } from 'sonner'
+import { Toaster as SonnerToaster } from 'sonner'
 import { useTheme } from '@/hooks'
-import { useTranslation } from 'react-i18next'
 
-export function Toaster() {
+export const Toaster = () => {
   const { theme } = useTheme()
-  const { i18n } = useTranslation()
-  const isRTL = i18n.language === 'ar'
 
   return (
-    <Sonner
+    <SonnerToaster
       theme={theme as 'light' | 'dark'}
-      dir={isRTL ? 'rtl' : 'ltr'}
-      className="toaster group"
-      position={isRTL ? 'top-center' : 'top-center'}
-      expand={true}
-      richColors
-      closeButton
+      className="toast-glass"
       toastOptions={{
-        style: {
-          borderRadius: '20px',
-          padding: '20px',
-          fontSize: '15px',
-          fontWeight: '700',
-          border: '1px solid rgba(0,0,0,0.05)',
-          boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-          background: theme === 'dark' ? 'rgba(24, 24, 27, 0.8)' : 'rgba(255, 255, 255, 0.8)',
-          backdropFilter: 'blur(12px)',
-          color: theme === 'dark' ? '#fff' : '#1e3932',
+        classNames: {
+          toast: "toast-glass",
+          title: "text-gray-900 dark:text-white font-bold",
+          description: "text-gray-600 dark:text-gray-400",
+          actionButton: "bg-starbucks-green text-white hover:bg-starbucks-dark",
+          cancelButton: "bg-gray-200 text-gray-900 hover:bg-gray-300 dark:bg-zinc-800 dark:text-white dark:hover:bg-zinc-700",
         },
-        className: 'group toast',
+        style: {
+          background: theme === 'dark' ? 'rgba(15, 20, 25, 0.9)' : 'rgba(255, 255, 255, 0.9)',
+          border: theme === 'dark' ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(0, 0, 0, 0.1)',
+          backdropFilter: 'blur(12px)',
+          WebkitBackdropFilter: 'blur(12px)',
+        },
       }}
+      closeButton
+      richColors
     />
   )
 }

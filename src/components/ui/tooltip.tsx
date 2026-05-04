@@ -1,58 +1,65 @@
 import * as React from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { cn } from "../../lib/utils"
+import { cn } from "@/lib/utils"
 
-interface TooltipProps {
-  children: React.ReactNode
+export interface TooltipProps {
   content: string
+  children: React.ReactNode
   side?: "top" | "bottom" | "left" | "right"
+  align?: "start" | "center" | "end"
   className?: string
 }
 
-export function Tooltip({ children, content, side = "bottom", className }: TooltipProps) {
-  const [isVisible, setIsVisible] = React.useState(false)
+export const Tooltip = React.forwardRef<HTMLDivElement, TooltipProps>(
+  ({ content, children, side = "top", align = "center", className }, ref) => {
+    const [isVisible, setIsVisible] = React.useState(false)
 
-  const animation = {
-    top: { opacity: 0, y: 10, scale: 0.95 },
-    bottom: { opacity: 0, y: -10, scale: 0.95 },
-    left: { opacity: 0, x: 10, scale: 0.95 },
-    right: { opacity: 0, x: -10, scale: 0.95 },
-  }[side]
+    const positions = {
+      top: "bottom-full left-1/2 -translate-x-1/2 mb-2",
+      bottom: "top-full left-1/2 -translate-x-1/2 mt-2",
+      left: "right-full top-1/2 -translate-y-1/2 mr-2",
+      right: "left-full top-1/2 -translate-y-1/2 ml-2"
+    }
 
-  return (
-    <div 
-      className="relative flex items-center justify-center"
-      onMouseEnter={() => setIsVisible(true)}
-      onMouseLeave={() => setIsVisible(false)}
-      onFocusCapture={() => setIsVisible(true)}
-      onBlurCapture={() => setIsVisible(false)}
-    >
-      {children}
-      <AnimatePresence>
-        {isVisible && (
-          <motion.div
-            initial={animation}
-            animate={{ opacity: 1, x: "-50%", y: 0, scale: 1 }}
-            exit={animation}
-            transition={{ duration: 0.2, ease: [0.23, 1, 0.32, 1] }}
-            style={{ left: "50%" }}
-            className={cn(
-              "absolute z-[100] px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.15em] text-white bg-starbucks-dark/95 dark:bg-zinc-800/95 backdrop-blur-md rounded-md whitespace-nowrap shadow-2xl pointer-events-none border border-white/10",
-              side === "top" ? "bottom-full mb-3" : "top-full mt-3",
-              className
-            )}
-          >
-            {content}
-            <div className={cn(
-              "absolute w-2 h-2 bg-starbucks-dark dark:bg-zinc-800 rotate-45",
-              {
-                "bottom-[-4px] left-1/2 -translate-x-1/2": side === "top",
-                "top-[-4px] left-1/2 -translate-x-1/2": side === "bottom",
-              }
-            )} />
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
-  )
-}
+    const alignments = {
+      start: "translate-x-0",
+      center: "-translate-x-1/2",
+      end: "-translate-x-full"
+    }
+
+    return (
+      <div
+        ref={ref}
+        className="relative inline-block"
+        onMouseEnter={() => setIsVisible(true)}
+        onMouseLeave={() => setIsVisible(false)}
+        onFocus={() => setIsVisible(true)}
+        onBlur={() => setIsVisible(false)}
+      >
+        {children}
+        <AnimatePresence>
+          {isVisible && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.8 }}
+              transition={{ duration: 0.15 }}
+              className={cn(
+                "absolute z-50 px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-lg whitespace-nowrap",
+                positions[side],
+                side === "top" || side === "bottom" ? alignments[align] : "",
+                className
+              )}
+              role="tooltip"
+            >
+              {content}
+              <div className="absolute w-2 h-2 bg-gray-900 rotate-45" />
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    )
+  }
+)
+
+Tooltip.displayName = "Tooltip"

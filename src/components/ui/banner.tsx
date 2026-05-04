@@ -1,65 +1,108 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
-import { motion } from 'framer-motion'
-import { useTranslation } from 'react-i18next'
-import { Button } from './button'
-import { hero as data } from '@/data'
+import * as React from "react"
+import { motion } from "framer-motion"
+import { cn } from "@/lib/utils"
 
-interface HeroData {
+export interface BannerProps {
   title: string
-  description: string
-  imageUrl: string
-  imageAlt: string
-  ctaText: string
-  ctaLink: string
+  subtitle?: string
+  description?: string
+  ctaText?: string
+  ctaLink?: string
+  imageUrl?: string
+  imageAlt?: string
+  variant?: "default" | "reverse"
+  className?: string
 }
 
-export const Banner: React.FC = () => {
-  const { i18n } = useTranslation()
-  const lang = i18n.language as keyof typeof data
-  const localizedData = (data[lang] || data.en) as HeroData
-
-  return (
-    <section className="relative h-[400px] md:h-[500px] lg:h-[600px] w-full overflow-hidden">
-      {/* Background Image */}
-      <img
-        src={localizedData.imageUrl}
-        alt={localizedData.imageAlt}
-        fetchPriority="high"
-        decoding="async"
-        className="absolute inset-0 h-full w-full object-cover"
-      />
-      
-      {/* Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent rtl:bg-gradient-to-l">
-        <div className="container mx-auto h-full flex items-center px-6 lg:px-12">
-          <div className="max-w-2xl">
+export const Banner = React.forwardRef<HTMLDivElement, BannerProps>(
+  ({ 
+    title, 
+    subtitle, 
+    description, 
+    ctaText, 
+    ctaLink, 
+    imageUrl, 
+    imageAlt, 
+    variant = "default",
+    className 
+  }, ref) => {
+    return (
+      <section
+        ref={ref}
+        className={cn(
+          "relative overflow-hidden bg-gradient-to-br from-starbucks-green/10 to-transparent",
+          className
+        )}
+      >
+        <div className="container mx-auto px-6 py-16 lg:py-24">
+          <div className={cn(
+            "flex flex-col items-center gap-12 lg:flex-row",
+            variant === "reverse" ? "lg:flex-row-reverse" : ""
+          )}>
+            {/* Content */}
             <motion.div
-              initial={{ opacity: 0, x: i18n.language === 'ar' ? 30 : -30 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8 }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="flex-1 text-center lg:text-left space-y-6 max-w-2xl"
             >
-              <h1 className="mb-6 text-3xl font-extrabold leading-tight text-white md:text-5xl lg:text-6xl">
-                {localizedData.title}
+              {subtitle && (
+                <span className="inline-block text-sm font-bold uppercase tracking-widest text-starbucks-green">
+                  {subtitle}
+                </span>
+              )}
+              <h1 className="text-4xl lg:text-6xl font-black text-gray-900 dark:text-white leading-tight">
+                {title}
               </h1>
-              <p className="mb-8 text-lg text-white/90 md:text-xl lg:text-2xl max-w-lg">
-                {localizedData.description}
-              </p>
-              <Link to={localizedData.ctaLink}>
-                <Button
-                  size="lg"
-                  className="rounded-full bg-starbucks-green px-10 py-7 text-lg font-bold text-white hover:bg-starbucks-dark transition-all active:scale-95 shadow-xl"
+              {description && (
+                <p className="text-lg text-gray-600 dark:text-gray-400 leading-relaxed">
+                  {description}
+                </p>
+              )}
+              {ctaText && ctaLink && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3 }}
                 >
-                  {localizedData.ctaText}
-                </Button>
-              </Link>
+                  <a
+                    href={ctaLink}
+                    className="inline-block rounded-full bg-starbucks-green px-8 py-4 text-lg font-bold text-white shadow-lg shadow-starbucks-green/20 hover:bg-starbucks-dark hover:scale-105 transition-all duration-300"
+                  >
+                    {ctaText}
+                  </a>
+                </motion.div>
+              )}
             </motion.div>
+
+            {/* Image */}
+            {imageUrl && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+                className="flex-1 max-w-lg"
+              >
+                <div className="relative aspect-square rounded-3xl overflow-hidden shadow-2xl">
+                  <img
+                    src={imageUrl}
+                    alt={imageAlt || title}
+                    className="h-full w-full object-cover transition-transform duration-700 hover:scale-110"
+                    loading="eager"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+                </div>
+              </motion.div>
+            )}
           </div>
         </div>
-      </div>
 
-      {/* Decorative Elements */}
-      <div className="absolute bottom-0 inset-inline-start-0 h-32 w-full bg-gradient-to-t from-background-light dark:from-background-dark to-transparent" />
-    </section>
-  )
-}
+        {/* Decorative elements */}
+        <div className="absolute top-0 right-0 w-96 h-96 bg-starbucks-green/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-starbucks-green/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
+      </section>
+    )
+  }
+)
+
+Banner.displayName = "Banner"
