@@ -1,61 +1,93 @@
-import * as React from "react"
-import { motion } from "framer-motion"
-import { cn } from "@/lib/utils"
+import * as React from "react";
+import { motion } from "framer-motion";
+import { cn } from "@/lib/utils";
 
 export interface BannerProps {
-  title: string
-  subtitle?: string
-  description?: string
-  ctaText?: string
-  ctaLink?: string
-  imageUrl?: string
-  imageAlt?: string
-  variant?: "default" | "reverse"
-  className?: string
+  title: string;
+  subtitle?: string;
+  description?: string;
+  ctaText?: string;
+  ctaLink?: string;
+  imageUrl?: string;
+  imageAlt?: string;
+  variant?: "default" | "reverse";
+  className?: string;
 }
 
 export const Banner = React.forwardRef<HTMLDivElement, BannerProps>(
-  ({ 
-    title, 
-    subtitle, 
-    description, 
-    ctaText, 
-    ctaLink, 
-    imageUrl, 
-    imageAlt, 
-    variant = "default",
-    className 
-  }, ref) => {
+  (
+    {
+      title,
+      subtitle,
+      description,
+      ctaText,
+      ctaLink,
+      imageUrl,
+      imageAlt,
+      variant = "default",
+      className,
+    },
+    ref,
+  ) => {
     return (
       <section
         ref={ref}
         className={cn(
-          "relative overflow-hidden bg-gradient-to-br from-starbucks-green/10 to-transparent",
-          className
+          "relative overflow-hidden min-h-[70vh] lg:min-h-[80vh] flex items-center",
+          className,
         )}
+        style={
+          imageUrl
+            ? {
+                backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${imageUrl})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                backgroundRepeat: "no-repeat",
+              }
+            : {}
+        }
       >
-        <div className="container mx-auto px-6 py-16 lg:py-24">
-          <div className={cn(
-            "flex flex-col items-center gap-12 lg:flex-row",
-            variant === "reverse" ? "lg:flex-row-reverse" : ""
-          )}>
+        {/* Fallback gradient if no image */}
+        {!imageUrl && (
+          <div className="absolute inset-0 bg-gradient-to-br from-starbucks-green/10 to-transparent" />
+        )}
+
+        <div className="container mx-auto px-6 py-16 lg:py-32 relative z-10">
+          <div className="flex flex-col items-center text-center max-w-4xl mx-auto">
             {/* Content */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              className="flex-1 text-center lg:text-left space-y-6 max-w-2xl"
+              className="space-y-6"
             >
               {subtitle && (
-                <span className="inline-block text-sm font-bold uppercase tracking-widest text-starbucks-green">
+                <span
+                  className={cn(
+                    "inline-block text-sm font-bold uppercase tracking-widest",
+                    imageUrl ? "text-white/90" : "text-starbucks-green",
+                  )}
+                >
                   {subtitle}
                 </span>
               )}
-              <h1 className="text-4xl lg:text-6xl font-black text-gray-900 dark:text-white leading-tight">
+              <h1
+                className={cn(
+                  "text-4xl lg:text-6xl xl:text-7xl font-black leading-tight",
+                  imageUrl ? "text-white" : "text-gray-900 dark:text-white",
+                )}
+              >
                 {title}
               </h1>
               {description && (
-                <p className="text-lg text-gray-600 dark:text-gray-400 leading-relaxed">
+                <p
+                  className={cn(
+                    "text-lg lg:text-xl leading-relaxed max-w-3xl mx-auto",
+                    imageUrl
+                      ? "text-white/90"
+                      : "text-gray-600 dark:text-gray-400",
+                  )}
+                >
                   {description}
                 </p>
               )}
@@ -64,6 +96,7 @@ export const Banner = React.forwardRef<HTMLDivElement, BannerProps>(
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.3 }}
+                  className="pt-4"
                 >
                   <a
                     href={ctaLink}
@@ -74,35 +107,19 @@ export const Banner = React.forwardRef<HTMLDivElement, BannerProps>(
                 </motion.div>
               )}
             </motion.div>
-
-            {/* Image */}
-            {imageUrl && (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.6, delay: 0.2 }}
-                className="flex-1 max-w-lg"
-              >
-                <div className="relative aspect-square rounded-3xl overflow-hidden shadow-2xl">
-                  <img
-                    src={imageUrl}
-                    alt={imageAlt || title}
-                    className="h-full w-full object-cover transition-transform duration-700 hover:scale-110"
-                    loading="eager"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
-                </div>
-              </motion.div>
-            )}
           </div>
         </div>
 
-        {/* Decorative elements */}
-        <div className="absolute top-0 right-0 w-96 h-96 bg-starbucks-green/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-starbucks-green/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
+        {/* Decorative elements - only show if no background image */}
+        {!imageUrl && (
+          <>
+            <div className="absolute top-0 right-0 w-96 h-96 bg-starbucks-green/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+            <div className="absolute bottom-0 left-0 w-96 h-96 bg-starbucks-green/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
+          </>
+        )}
       </section>
-    )
-  }
-)
+    );
+  },
+);
 
-Banner.displayName = "Banner"
+Banner.displayName = "Banner";
