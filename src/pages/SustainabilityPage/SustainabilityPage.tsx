@@ -1,35 +1,36 @@
-import React from 'react'
-import { motion } from 'framer-motion'
-import { useTranslation } from 'react-i18next'
-import { SEO, Button, Header } from '@/components'
-import { ExternalLink, Play } from 'lucide-react'
-import { sustainability as data } from '@/data'
-import type { SustainabilitySection as Section } from '@/types'
+import React from "react";
+import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
+import { SEO, Button, Header } from "@/components";
+import { ExternalLink, Play } from "lucide-react";
+import { sustainability as data } from "@/data";
+import type { SustainabilitySection as Section } from "@/types";
 
 export const SustainabilityPage: React.FC = () => {
-  const { i18n } = useTranslation()
-  const lang = (i18n.language === 'ar' ? 'ar' : 'en') as 'ar' | 'en'
+  const { i18n } = useTranslation();
+  const lang = (i18n.language === "ar" ? "ar" : "en") as "ar" | "en";
 
   return (
-    <div className="min-h-screen bg-white dark:bg-black overflow-hidden">
+    <div className="min-h-screen bg-white dark:bg-black">
       <SEO title={data.title[lang]} />
 
-      <Header
-        title={data.title[lang]}
-        variant="dark"
-      />
+      <Header title={data.title[lang]} variant="dark" />
 
       {data.sections.map((section: Section, index) => (
         <section
           key={section.id}
           className={`relative py-24 lg:py-32 ${
-            index % 2 === 1 ? 'bg-gray-50 dark:bg-zinc-900/30' : 'bg-white dark:bg-black'
+            index % 2 === 1
+              ? "bg-gray-50 dark:bg-zinc-900/30"
+              : "bg-white dark:bg-black"
           }`}
         >
           <div className="container mx-auto px-6">
-            <div className={`flex flex-col lg:flex-row items-center gap-16 ${
-              index % 2 === 1 ? 'lg:flex-row-reverse' : ''
-            }`}>
+            <div
+              className={`flex flex-col lg:flex-row items-center gap-16 ${
+                index % 2 === 1 ? "lg:flex-row-reverse" : ""
+              }`}
+            >
               {/* Content */}
               <div className="flex-1 space-y-8">
                 <motion.div
@@ -55,13 +56,11 @@ export const SustainabilityPage: React.FC = () => {
                   transition={{ delay: 0.2 }}
                   className="space-y-6 text-lg text-gray-600 dark:text-gray-400 leading-relaxed"
                 >
-                  {Array.isArray(section.content) ? (
-                    section.content.map((p, idx) => (
-                      <p key={idx}>{p[lang]}</p>
-                    ))
-                  ) : (
-                    section.content && <p>{section.content[lang]}</p>
-                  )}
+                  {Array.isArray(section.content)
+                    ? section.content.map((p, idx) => (
+                        <p key={idx}>{p[lang]}</p>
+                      ))
+                    : section.content && <p>{section.content[lang]}</p>}
 
                   {section.subHeading && (
                     <div className="pt-6 space-y-4">
@@ -102,11 +101,11 @@ export const SustainabilityPage: React.FC = () => {
                     transition={{ delay: 0.4 }}
                     className="pt-4"
                   >
-                    {section.ctaLink?.includes('youtube') ? (
+                    {section.ctaLink?.includes("youtube") ? (
                       <Button
                         variant="outline"
                         leftIcon={<Play className="w-5 h-5" />}
-                        onClick={() => window.open(section.ctaLink, '_blank')}
+                        onClick={() => window.open(section.ctaLink, "_blank")}
                       >
                         {section.cta?.[lang]}
                       </Button>
@@ -114,9 +113,12 @@ export const SustainabilityPage: React.FC = () => {
                       <Button
                         variant="outline"
                         leftIcon={<ExternalLink className="w-5 h-5" />}
-                        onClick={() => window.open(section.ctaLink || section.link, '_blank')}
+                        onClick={() =>
+                          window.open(section.ctaLink || section.link, "_blank")
+                        }
                       >
-                        {section.cta?.[lang] || (lang === 'ar' ? 'اعرف المزيد' : 'Learn More')}
+                        {section.cta?.[lang] ||
+                          (lang === "ar" ? "اعرف المزيد" : "Learn More")}
                       </Button>
                     )}
                   </motion.div>
@@ -137,16 +139,21 @@ export const SustainabilityPage: React.FC = () => {
                     className="w-full h-full object-cover transition-transform duration-700 hover:scale-110"
                     onError={(e) => {
                       if (section.fallbackImage) {
-                        ;(e.target as HTMLImageElement).src = section.fallbackImage
+                        (e.target as HTMLImageElement).src =
+                          section.fallbackImage;
                       }
                     }}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
                 </div>
                 {/* Decorative element */}
-                <div className={`absolute -z-10 w-64 h-64 bg-starbucks-green/10 rounded-full blur-3xl ${
-                  index % 2 === 1 ? '-top-10 -left-10' : '-bottom-10 -right-10'
-                }`} />
+                <div
+                  className={`absolute -z-10 w-64 h-64 bg-starbucks-green/10 rounded-full blur-3xl ${
+                    index % 2 === 1
+                      ? "-top-10 -left-10"
+                      : "-bottom-10 -right-10"
+                  }`}
+                />
               </motion.div>
             </div>
           </div>
@@ -163,20 +170,22 @@ export const SustainabilityPage: React.FC = () => {
             className="max-w-3xl mx-auto space-y-8"
           >
             <h2 className="text-4xl lg:text-5xl font-extrabold italic">
-              {lang === 'ar' ? 'نصنع الفرق معاً' : 'Making a difference together'}
+              {lang === "ar"
+                ? "نصنع الفرق معاً"
+                : "Making a difference together"}
             </h2>
             <p className="text-xl text-gray-400">
-              {lang === 'ar' 
-                ? 'انضم إلينا في رحلتنا لنكون شركة إيجابية الموارد ونقدم للبيئة أكثر مما نأخذ.'
-                : 'Join us on our journey to be a resource-positive company and give back more to the environment than we take.'}
+              {lang === "ar"
+                ? "انضم إلينا في رحلتنا لنكون شركة إيجابية الموارد ونقدم للبيئة أكثر مما نأخذ."
+                : "Join us on our journey to be a resource-positive company and give back more to the environment than we take."}
             </p>
             <Button
               variant="outline"
               size="lg"
               className="px-12"
-              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
             >
-              {lang === 'ar' ? 'اكتشف المزيد' : 'Discover More'}
+              {lang === "ar" ? "اكتشف المزيد" : "Discover More"}
             </Button>
           </motion.div>
         </div>
@@ -184,7 +193,7 @@ export const SustainabilityPage: React.FC = () => {
         <div className="absolute top-1/2 right-0 -translate-y-1/2 w-96 h-96 bg-starbucks-green/10 rounded-full blur-[120px]" />
       </section>
     </div>
-  )
-}
+  );
+};
 
-export default SustainabilityPage
+export default SustainabilityPage;

@@ -1,21 +1,21 @@
-import React from 'react'
-import { motion } from 'framer-motion'
-import { useTranslation } from 'react-i18next'
-import { SEO, Button } from '@/components'
-import { MapPin, ShoppingBag } from 'lucide-react'
-import { aboutUs as data } from '@/data'
-import type { AboutUsSection as Section } from '@/types'
+import React from "react";
+import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
+import { SEO, Button } from "@/components";
+import { MapPin, ShoppingBag } from "lucide-react";
+import { aboutUs as data } from "@/data";
+import type { AboutUsSection as Section } from "@/types";
 
 export const AboutUsPage: React.FC = () => {
-  const { i18n } = useTranslation()
-  const lang = (i18n.language === 'ar' ? 'ar' : 'en') as 'ar' | 'en'
+  const { i18n } = useTranslation();
+  const lang = (i18n.language === "ar" ? "ar" : "en") as "ar" | "en";
 
   return (
     <div className="min-h-screen bg-white dark:bg-black">
       <SEO title={data.hero.text.title[lang]} />
 
       {/* Hero Section */}
-      <section className="relative h-[80vh] overflow-hidden">
+      <section className="relative min-h-[600px] lg:min-h-[80vh] overflow-hidden">
         <div className="absolute inset-0 grid grid-cols-1 lg:grid-cols-2">
           <div className="relative overflow-hidden group">
             <img
@@ -53,7 +53,7 @@ export const AboutUsPage: React.FC = () => {
                 size="lg"
                 leftIcon={<MapPin className="w-5 h-5" />}
                 className="px-12 py-6 text-xl rounded-full"
-                onClick={() => window.open(data.links.locations, '_blank')}
+                onClick={() => window.open(data.links.locations, "_blank")}
               >
                 {data.hero.text.cta[lang]}
               </Button>
@@ -84,17 +84,18 @@ export const AboutUsPage: React.FC = () => {
                 <div className="space-y-8">
                   {section.content?.map((item, idx) => (
                     <div key={idx}>
-                      {item.type === 'lead' && (
+                      {item.type === "lead" && (
                         <p className="text-2xl lg:text-3xl text-starbucks-green font-bold leading-relaxed">
                           {item[lang]}
                         </p>
                       )}
-                      {item.type === 'heading' && (
+                      {item.type === "heading" && (
                         <h3 className="text-2xl lg:text-3xl font-bold text-starbucks-dark dark:text-white pt-4">
                           {item[lang]}
                         </h3>
                       )}
-                      {(item.type === 'paragraph' || !['lead', 'heading'].includes(item.type)) && (
+                      {(item.type === "paragraph" ||
+                        !["lead", "heading"].includes(item.type)) && (
                         <p className="text-xl text-gray-600 dark:text-gray-400 leading-relaxed">
                           {item[lang]}
                         </p>
@@ -110,14 +111,19 @@ export const AboutUsPage: React.FC = () => {
 
                   {section.timeline && (
                     <div className="space-y-12 pt-8">
-                      {section.timeline.map((text: { ar: string; en: string }, idx: number) => (
-                        <div key={idx} className="relative ps-8 border-s-2 border-gray-100 dark:border-zinc-800 pb-8 last:pb-0">
-                          <div className="absolute top-0 -start-[9px] w-4 h-4 rounded-full bg-starbucks-green border-4 border-white dark:border-black" />
-                          <p className="text-xl text-gray-600 dark:text-gray-400 leading-relaxed">
-                            {text[lang]}
-                          </p>
-                        </div>
-                      ))}
+                      {section.timeline.map(
+                        (text: { ar: string; en: string }, idx: number) => (
+                          <div
+                            key={idx}
+                            className="relative ps-8 border-s-2 border-gray-100 dark:border-zinc-800 pb-8 last:pb-0"
+                          >
+                            <div className="absolute top-0 -start-[9px] w-4 h-4 rounded-full bg-starbucks-green border-4 border-white dark:border-black" />
+                            <p className="text-xl text-gray-600 dark:text-gray-400 leading-relaxed">
+                              {text[lang]}
+                            </p>
+                          </div>
+                        ),
+                      )}
                     </div>
                   )}
                 </div>
@@ -142,7 +148,9 @@ export const AboutUsPage: React.FC = () => {
                   {data.buttons.discover[lang]}
                 </h3>
                 <p className="text-lg text-white/80">
-                  {lang === 'ar' ? 'اكتشف مواقعنا واستمتع بتجربة ستاربكس القريبة منك.' : 'Discover our locations and enjoy the Starbucks experience near you.'}
+                  {lang === "ar"
+                    ? "اكتشف مواقعنا واستمتع بتجربة ستاربكس القريبة منك."
+                    : "Discover our locations and enjoy the Starbucks experience near you."}
                 </p>
               </div>
               <div>
@@ -150,7 +158,7 @@ export const AboutUsPage: React.FC = () => {
                   variant="secondary"
                   size="lg"
                   leftIcon={<MapPin className="w-5 h-5" />}
-                  onClick={() => window.open(data.links.locations, '_blank')}
+                  onClick={() => window.open(data.links.locations, "_blank")}
                   className="w-full md:w-auto"
                 >
                   {data.hero.text.cta[lang]}
@@ -169,7 +177,9 @@ export const AboutUsPage: React.FC = () => {
                   {data.buttons.order[lang]}
                 </h3>
                 <p className="text-lg text-gray-400">
-                  {lang === 'ar' ? 'اطلب مشروبك المفضل عبر طلبات واستمتع به في منزلك.' : 'Order your favorite drink via Talabat and enjoy it at home.'}
+                  {lang === "ar"
+                    ? "اطلب مشروبك المفضل عبر طلبات واستمتع به في منزلك."
+                    : "Order your favorite drink via Talabat and enjoy it at home."}
                 </p>
               </div>
               <div>
@@ -177,7 +187,7 @@ export const AboutUsPage: React.FC = () => {
                   variant="primary"
                   size="lg"
                   leftIcon={<ShoppingBag className="w-5 h-5" />}
-                  onClick={() => window.open(data.links.talabat, '_blank')}
+                  onClick={() => window.open(data.links.talabat, "_blank")}
                   className="w-full md:w-auto"
                 >
                   {data.buttons.order[lang]}
@@ -188,7 +198,7 @@ export const AboutUsPage: React.FC = () => {
         </div>
       </section>
     </div>
-  )
-}
+  );
+};
 
-export default AboutUsPage
+export default AboutUsPage;

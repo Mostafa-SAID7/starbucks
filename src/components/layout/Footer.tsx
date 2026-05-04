@@ -1,8 +1,9 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Globe } from "lucide-react";
+import { Globe, ChevronDown } from "lucide-react";
 import { footer as data } from "@/data";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface FooterLink {
   label: string;
@@ -16,8 +17,25 @@ interface FooterSection {
 
 export function Footer() {
   const { i18n } = useTranslation();
-  const lang = (i18n.language === "ar" ? "ar" : "en") as "ar" | "en";
+  const { lang: urlLang } = useParams<{ lang: string }>();
+  const lang = (
+    urlLang && (urlLang === "ar" || urlLang === "en")
+      ? urlLang
+      : i18n.language === "ar"
+        ? "ar"
+        : "en"
+  ) as "ar" | "en";
   const footerData = data[lang];
+  const [openSection, setOpenSection] = useState<string | null>(null);
+
+  const toggleSection = (key: string) => {
+    console.log("Toggle clicked:", key, "Current open:", openSection);
+    setOpenSection((prev) => {
+      const newValue = prev === key ? null : key;
+      console.log("Setting to:", newValue);
+      return newValue;
+    });
+  };
 
   const socialIcons: Record<string, React.ReactNode> = {
     spotify: (
@@ -63,65 +81,132 @@ export function Footer() {
   };
 
   return (
-    <footer className="bg-starbucks-dark pt-16 pb-12 text-white">
+    <footer className="bg-starbucks-dark pt-16 pb-12 md:pb-12 text-white mb-20 md:mb-0">
       <div className="container mx-auto max-w-7xl px-6">
-        <div className="grid grid-cols-1 gap-12 border-b border-white/10 pb-16 lg:grid-cols-4">
-          {footerData.sections.map((section: FooterSection) => (
-            <div key={section.title}>
-              <h3 className="mb-6 text-lg font-extrabold uppercase tracking-widest text-white">
-                {section.title}
-              </h3>
-              <ul className="space-y-4">
-                {section.links.map((link: FooterLink) => (
-                  <li key={link.label}>
-                    <Link
-                      to={link.href}
-                      className="text-base text-gray-400 hover:text-white transition-colors"
+        {/* Desktop: Regular grid, Mobile: 2x2 grid with collapsible sections */}
+        <div className="border-b border-white/10 pb-16">
+          {/* Mobile: 2x2 Grid with Accordions */}
+          <div className="grid grid-cols-2 gap-4 lg:hidden">
+            {footerData.sections.map(
+              (section: FooterSection, index: number) => {
+                const sectionId = `mobile-section-${lang}-${index}-${section.title.replace(/\s+/g, "-")}`;
+                const isOpen = openSection === sectionId;
+
+                return (
+                  <div
+                    key={sectionId}
+                    className="border border-white/10 rounded-lg overflow-hidden"
+                  >
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        toggleSection(sectionId);
+                      }}
+                      className="flex w-full items-center justify-between p-4 text-left hover:bg-white/5 transition-colors"
+                      aria-expanded={isOpen}
                     >
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+                      <span className="text-sm font-extrabold uppercase tracking-wider text-white">
+                        {section.title}
+                      </span>
+                      <motion.div
+                        animate={{
+                          rotate: isOpen ? 180 : 0,
+                        }}
+                        transition={{ duration: 0.2 }}
+                      >
+                        <ChevronDown className="h-4 w-4 text-gray-400" />
+                      </motion.div>
+                    </button>
+                    <AnimatePresence initial={false} mode="wait">
+                      {isOpen && (
+                        <motion.div
+                          key={`content-${sectionId}`}
+                          initial="collapsed"
+                          animate="open"
+                          exit="collapsed"
+                          variants={{
+                            open: { opacity: 1, height: "auto" },
+                            collapsed: { opacity: 0, height: 0 },
+                          }}
+                          transition={{
+                            duration: 0.3,
+                            ease: [0.04, 0.62, 0.23, 0.98],
+                          }}
+                        >
+                          <ul className="px-4 pb-4 space-y-3">
+                            {section.links.map((link: FooterLink) => (
+                              <li key={link.label}>
+                                <Link
+                                  to={`/${lang}${link.href}`}
+                                  className="text-sm text-gray-400 hover:text-white transition-colors block"
+                                >
+                                  {link.label}
+                                </Link>
+                              </li>
+                            ))}
+                          </ul>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                );
+              },
+            )}
 
-          {/* Location Selector */}
-          <div>
-            <h3 className="mb-6 text-lg font-extrabold uppercase tracking-widest text-white">
-              {footerData.locationSelector}
-            </h3>
-            <div className="group relative inline-block">
-              <button className="flex items-center gap-3 text-base text-gray-400 hover:text-white transition-colors cursor-pointer py-2">
-                <Globe className="h-5 w-5 text-starbucks-green" />
-                <span className="font-bold underline decoration-white/20 underline-offset-8 group-hover:decoration-starbucks-green transition-all">
-                  {footerData.locationSelector}
-                </span>
-                <svg
-                  className="h-4 w-4 transition-transform group-hover:rotate-180"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
+            {/* Location Selector as 4th item in grid */}
+            <div className="border border-white/10 rounded-lg overflow-hidden">
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  toggleSection("mobile-location-selector");
+                }}
+                className="flex w-full items-center justify-between p-4 text-left hover:bg-white/5 transition-colors"
+                aria-expanded={openSection === "mobile-location-selector"}
+              >
+                <div className="flex items-center gap-2">
+                  <Globe className="h-4 w-4 text-starbucks-green" />
+                  <span className="text-sm font-extrabold uppercase tracking-wider text-white">
+                    {footerData.locationSelector}
+                  </span>
+                </div>
+                <motion.div
+                  animate={{
+                    rotate:
+                      openSection === "mobile-location-selector" ? 180 : 0,
+                  }}
+                  transition={{ duration: 0.2 }}
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M19 9l-7 7-7-7"
-                  />
-                </svg>
+                  <ChevronDown className="h-4 w-4 text-gray-400" />
+                </motion.div>
               </button>
-
-              <div className="invisible absolute bottom-[calc(100%+12px)] inset-inline-start-0 z-50 w-80 rounded-2xl border border-white/10 bg-zinc-900 shadow-2xl transition-all opacity-0 scale-95 origin-bottom-start group-hover:visible group-hover:opacity-100 group-hover:scale-100 overflow-hidden">
-                <div className="h-[300px] overflow-y-auto scrollbar-thin rtl">
-                  <div className="p-5 px-6">
-                    <div className="mb-4 text-xs font-bold uppercase tracking-widest text-gray-400">
-                      {footerData.selectRegion}
-                    </div>
-                    <ul className="space-y-1">
-                      {data.countries.map((country) => (
-                        <li key={country.name}>
+              <AnimatePresence initial={false} mode="wait">
+                {openSection === "mobile-location-selector" && (
+                  <motion.div
+                    key="content-mobile-location-selector"
+                    initial="collapsed"
+                    animate="open"
+                    exit="collapsed"
+                    variants={{
+                      open: { opacity: 1, height: "auto" },
+                      collapsed: { opacity: 0, height: 0 },
+                    }}
+                    transition={{
+                      duration: 0.3,
+                      ease: [0.04, 0.62, 0.23, 0.98],
+                    }}
+                  >
+                    <div className="px-4 pb-4">
+                      <div className="mb-3 text-xs font-bold uppercase tracking-widest text-gray-400">
+                        {footerData.selectRegion}
+                      </div>
+                      <div className="max-h-[200px] overflow-y-auto scrollbar-thin space-y-1">
+                        {data.countries.map((country) => (
                           <a
+                            key={country.name}
                             href={country.href}
                             target="_blank"
                             rel="noopener noreferrer"
@@ -129,9 +214,84 @@ export function Footer() {
                           >
                             {country.name}
                           </a>
-                        </li>
-                      ))}
-                    </ul>
+                        ))}
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          </div>
+
+          {/* Desktop: Regular 4-column grid */}
+          <div className="hidden lg:grid lg:grid-cols-4 gap-12">
+            {footerData.sections.map((section: FooterSection) => (
+              <div key={section.title}>
+                <h3 className="mb-6 text-lg font-extrabold uppercase tracking-widest text-white">
+                  {section.title}
+                </h3>
+                <ul className="space-y-4">
+                  {section.links.map((link: FooterLink) => (
+                    <li key={link.label}>
+                      <Link
+                        to={`/${lang}${link.href}`}
+                        className="text-base text-gray-400 hover:text-white transition-colors"
+                      >
+                        {link.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+
+            {/* Location Selector - Desktop Only */}
+            <div>
+              <h3 className="mb-6 text-lg font-extrabold uppercase tracking-widest text-white">
+                {footerData.locationSelector}
+              </h3>
+              <div className="group relative inline-block">
+                <button className="flex items-center gap-3 text-base text-gray-400 hover:text-white transition-colors cursor-pointer py-2">
+                  <Globe className="h-5 w-5 text-starbucks-green" />
+                  <span className="font-bold underline decoration-white/20 underline-offset-8 group-hover:decoration-starbucks-green transition-all">
+                    {footerData.locationSelector}
+                  </span>
+                  <svg
+                    className="h-4 w-4 transition-transform group-hover:rotate-180"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M19 9l-7 7-7-7"
+                    />
+                  </svg>
+                </button>
+
+                <div className="invisible absolute bottom-[calc(100%+12px)] inset-inline-start-0 z-50 w-80 rounded-2xl border border-white/10 bg-zinc-900 shadow-2xl transition-all opacity-0 scale-95 origin-bottom-start group-hover:visible group-hover:opacity-100 group-hover:scale-100 overflow-hidden">
+                  <div className="h-[300px] overflow-y-auto scrollbar-thin rtl">
+                    <div className="p-5 px-6">
+                      <div className="mb-4 text-xs font-bold uppercase tracking-widest text-gray-400">
+                        {footerData.selectRegion}
+                      </div>
+                      <ul className="space-y-1">
+                        {data.countries.map((country) => (
+                          <li key={country.name}>
+                            <a
+                              href={country.href}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="block rounded-lg px-3 py-2.5 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-starbucks-green transition-all"
+                            >
+                              {country.name}
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -141,18 +301,27 @@ export function Footer() {
 
         {/* Bottom Section: Socials, Legal and App */}
         <div className="grid grid-cols-1 gap-12 py-12 lg:grid-cols-2">
-          <div className="flex flex-col gap-10">
+          <div className="flex flex-col gap-6 justify-between">
             {/* Legal Links */}
             <div className="flex flex-wrap items-center gap-x-10 gap-y-4">
               {footerData.legal.map((link: FooterLink) => (
                 <Link
                   key={link.label}
-                  to={link.href}
+                  to={`/${lang}${link.href}`}
                   className="text-base font-bold text-gray-300 hover:text-white transition-colors"
                 >
                   {link.label}
                 </Link>
               ))}
+            </div>
+
+            {/* Starbucks Brief Description */}
+            <div className="text-gray-400 text-sm leading-relaxed">
+              <p>
+                {lang === "ar"
+                  ? "ستاربكس هي أكبر سلسلة مقاهي في العالم، تقدم أجود أنواع القهوة والمشروبات الساخنة والباردة. نلتزم بتقديم تجربة استثنائية لعملائنا في كل زيارة."
+                  : "Starbucks is the world's largest coffeehouse chain, offering the finest coffee and hot and cold beverages. We are committed to providing an exceptional experience for our customers with every visit."}
+              </p>
             </div>
 
             {/* Social Links */}
@@ -173,13 +342,15 @@ export function Footer() {
 
           {/* App Download Card */}
           <div className="flex justify-end lg:justify-end">
-            <div className="w-full max-w-md rounded-xl border border-white/10 bg-white/5 p-8 transition-colors hover:bg-white/10">
-              <h4 className="mb-3 text-xl font-extrabold text-white">
-                {footerData.app.title}
-              </h4>
-              <p className="mb-8 text-base text-gray-400">
-                {footerData.app.description}
-              </p>
+            <div className="w-full max-w-md rounded-xl border border-white/10 bg-white/5 p-8 transition-colors hover:bg-white/10 h-full flex flex-col justify-between">
+              <div>
+                <h4 className="mb-3 text-xl font-extrabold text-white">
+                  {footerData.app.title}
+                </h4>
+                <p className="mb-8 text-base text-gray-400">
+                  {footerData.app.description}
+                </p>
+              </div>
               <div className="flex flex-wrap gap-4">
                 <a
                   href="#"
@@ -230,10 +401,23 @@ export function Footer() {
         </div>
 
         <div className="pt-8 text-start text-[13px] text-gray-500 border-t border-white/10">
-          <p>
-            © {new Date().getFullYear()} Starbucks Coffee Company.{" "}
-            {footerData.allRightsReserved}
-          </p>
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+            <p>
+              © {new Date().getFullYear()} Starbucks Coffee Company.{" "}
+              {footerData.allRightsReserved}
+            </p>
+            <p className="flex items-center gap-2">
+              <span>{lang === "ar" ? "تصميم" : "Designed by"}</span>
+              <a
+                href="https://m-said-portfolio.netlify.app"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-bold text-starbucks-green hover:text-starbucks-dark dark:hover:text-starbucks-green/80 transition-colors no-underline"
+              >
+                M.Said
+              </a>
+            </p>
+          </div>
         </div>
       </div>
     </footer>

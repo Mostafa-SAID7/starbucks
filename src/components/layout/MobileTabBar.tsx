@@ -1,4 +1,4 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Home, MapPin, ShoppingBag, User } from "lucide-react";
 import { motion } from "framer-motion";
@@ -8,27 +8,45 @@ import { navbar } from "@/data";
 export function MobileTabBar() {
   const location = useLocation();
   const { i18n } = useTranslation();
-  const lang = (i18n.language === "ar" ? "ar" : "en") as "ar" | "en";
+  const { lang: urlLang } = useParams<{ lang: string }>();
+  const lang = (
+    urlLang && (urlLang === "ar" || urlLang === "en")
+      ? urlLang
+      : i18n.language === "ar"
+        ? "ar"
+        : "en"
+  ) as "ar" | "en";
   const navData = navbar[lang].tabs;
 
   const tabs = [
-    { id: "home", icon: Home, label: navData.home, path: "/" },
-    { id: "menu", icon: ShoppingBag, label: navData.menu, path: "/menu" },
+    { id: "home", icon: Home, label: navData.home, path: `/${lang}` },
+    {
+      id: "menu",
+      icon: ShoppingBag,
+      label: navData.menu,
+      path: `/${lang}/menu`,
+    },
     {
       id: "locations",
       icon: MapPin,
       label: navData.locations,
-      path: "/locations",
+      path: `/${lang}/locations`,
     },
-    { id: "account", icon: User, label: navData.account, path: "/account" },
+    {
+      id: "account",
+      icon: User,
+      label: navData.account,
+      path: `/${lang}/account`,
+    },
   ];
 
   return (
     <div className="fixed bottom-0 left-0 right-0 z-40 flex h-20 w-full items-center justify-around border-t bg-white/80 dark:bg-zinc-950/80 backdrop-blur-lg pb-safe shadow-[0_-1px_10px_rgba(0,0,0,0.05)] transition-all dark:border-zinc-900 md:hidden">
       {tabs.map((tab) => {
         const isActive =
-          tab.path === "/"
-            ? location.pathname === "/"
+          tab.path === `/${lang}`
+            ? location.pathname === `/${lang}` ||
+              location.pathname === `/${lang}/`
             : location.pathname.startsWith(tab.path);
 
         return (

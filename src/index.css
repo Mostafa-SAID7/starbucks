@@ -1,32 +1,74 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-html {
-  scroll-behavior: smooth;
-}
-
 @layer base {
+  /* ============================================
+     SCROLLBAR ARCHITECTURE - Single Main Scrollbar
+     ============================================ */
 
+  /* HTML: Main scrollbar container */
+  html {
+    scroll-behavior: smooth;
+    overflow-x: hidden !important;
+    overflow-y: scroll !important; /* Force main scrollbar always visible */
+    width: 100%;
+    max-width: 100vw;
+    height: 100%;
+  }
+
+  /* Body: No scrollbar, let HTML handle it */
+  body {
+    @apply bg-background-light dark:bg-background-dark text-foreground-light dark:text-foreground-dark transition-colors duration-300;
+    font-feature-settings:
+      "rlig" 1,
+      "calt" 1;
+    overflow: visible !important; /* Never create own scrollbar */
+    width: 100%;
+    max-width: 100vw;
+    height: auto;
+    min-height: 100%;
+  }
+
+  /* Root: No scrollbar, let HTML handle it */
+  #root {
+    overflow: visible !important; /* Never create own scrollbar */
+    width: 100%;
+    max-width: 100vw;
+    min-height: 100%;
+  }
+
+  /* RTL Support - Keep scrollbar on right side */
+  html[dir="rtl"] {
+    direction: ltr; /* Keep scrollbar on right */
+  }
+
+  html[dir="rtl"] body {
+    direction: rtl; /* Content flows RTL */
+  }
+
+  /* Prevent sections from creating scrollbars */
+  section,
+  main,
+  article,
+  div[class*="page"],
+  div[class*="Page"] {
+    overflow-y: visible !important;
+    overflow-x: hidden;
+  }
+
+  /* Base border and scrollbar styling */
   * {
     @apply border-border-light dark:border-border-dark;
     scrollbar-width: thin;
     scrollbar-color: var(--sb-thumb) var(--sb-track);
   }
-  
-  body {
-    @apply bg-background-light dark:bg-background-dark;
-    @apply text-foreground-light dark:text-foreground-dark;
-    @apply transition-colors duration-300;
-    font-feature-settings: "rlig" 1, "calt" 1;
-    margin: 0;
-    padding: 0;
-    overflow-x: hidden;
-    width: 100%;
-  }
 
-  /* Global Premium Scrollbar Configuration */
+  /* ============================================
+     SCROLLBAR STYLING
+     ============================================ */
+
+  /* Scrollbar color variables */
   :root {
     --sb-thumb: #006241;
     --sb-track: transparent;
@@ -39,11 +81,7 @@ html {
     --sb-thumb-hover: #008b5a;
   }
 
-  html {
-    scrollbar-gutter: stable;
-  }
-
-  /* Webkit Browsers (Chrome, Safari, Edge) */
+  /* Webkit scrollbar (Chrome, Safari, Edge) */
   ::-webkit-scrollbar {
     width: 6px;
     height: 6px;
@@ -56,41 +94,61 @@ html {
   ::-webkit-scrollbar-thumb {
     background: var(--sb-thumb);
     border-radius: 20px;
-    border: 1px solid transparent;
     background-clip: content-box;
   }
 
   ::-webkit-scrollbar-thumb:hover {
     background: var(--sb-thumb-hover);
-    background-clip: content-box;
   }
 
-  ::-webkit-scrollbar-button {
+  /* ============================================
+     TOAST STYLING (Sonner)
+     ============================================ */
+
+  [data-sonner-toast] {
+    @apply backdrop-blur-xl border border-white/20 dark:border-white/10;
+    background: rgba(255, 255, 255, 0.7);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.08);
+  }
+
+  .dark [data-sonner-toast] {
+    background: rgba(15, 20, 25, 0.7);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+  }
+
+  /* Hide toast progress bar */
+  [data-sonner-toast] [data-progress],
+  [data-sonner-toast]::after {
     display: none;
-    width: 0;
-    height: 0;
-  }
-
-  /* Premium Sonner Glassmorphism */
-  .toast-glass {
-    @apply backdrop-blur-xl border border-white/20 dark:border-white/10 !important;
-    background: rgba(255, 255, 255, 0.7) !important;
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.08) !important;
-  }
-
-  .dark .toast-glass {
-    background: rgba(15, 20, 25, 0.7) !important;
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3) !important;
-  }
-
-  /* Utility to hide scrollbar but maintain functionality */
-  .scrollbar-hide {
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
-  }
-  .scrollbar-hide::-webkit-scrollbar {
-    display: none; /* Chrome, Safari and Opera */
   }
 }
 
+@layer utilities {
+  /* ============================================
+     UTILITY CLASSES
+     ============================================ */
 
+  /* Hide scrollbar for modals/dropdowns */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Thin scrollbar for small areas */
+  .scrollbar-thin {
+    scrollbar-width: thin;
+  }
+
+  /* Line clamp utility */
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    overflow: hidden;
+  }
+}

@@ -1,4 +1,5 @@
 import * as React from "react";
+import { Link, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
@@ -12,6 +13,7 @@ export interface BannerProps {
   imageAlt?: string;
   variant?: "default" | "reverse";
   className?: string;
+  isRTL?: boolean;
 }
 
 export const Banner = React.forwardRef<HTMLDivElement, BannerProps>(
@@ -23,17 +25,27 @@ export const Banner = React.forwardRef<HTMLDivElement, BannerProps>(
       ctaText,
       ctaLink,
       imageUrl,
-      imageAlt,
+      imageAlt = "",
       variant = "default",
       className,
+      isRTL = false,
     },
     ref,
   ) => {
+    const { lang } = useParams<{ lang: string }>();
+    const currentLang = lang || "ar";
+
+    // Add language prefix to internal links
+    const finalCtaLink =
+      ctaLink && !ctaLink.startsWith("http")
+        ? `/${currentLang}${ctaLink}`
+        : ctaLink;
+
     return (
       <section
         ref={ref}
         className={cn(
-          "relative overflow-hidden min-h-[70vh] lg:min-h-[80vh] flex items-center w-full",
+          "relative overflow-hidden min-h-[600px] lg:min-h-[80vh] flex items-center w-full",
           className,
         )}
         style={
@@ -46,28 +58,32 @@ export const Banner = React.forwardRef<HTMLDivElement, BannerProps>(
               }
             : {}
         }
+        aria-label={imageAlt || title}
+        role={variant === "default" ? "banner" : "section"}
       >
         {/* Fallback gradient if no image */}
         {!imageUrl && (
           <div className="absolute inset-0 bg-gradient-to-br from-starbucks-green/10 to-transparent" />
         )}
 
-        {/* Smooth blur transition at bottom for both modes */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.5, duration: 0.8 }}
-          className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-white dark:from-zinc-950 via-white/70 dark:via-zinc-950/70 to-transparent backdrop-blur-[2px] z-20"
-        />
+        {/* Remove any blur transition from inside hero - it should be completely outside */}
 
-        <div className="container mx-auto px-6 py-16 lg:py-32 relative z-10 w-full">
-          <div className="flex flex-col items-center text-center max-w-4xl mx-auto">
+        <div className="container mx-auto px-6 py-20 lg:py-32 relative z-10 w-full max-w-7xl">
+          <div
+            className={cn(
+              "flex flex-col max-w-2xl w-full lg:w-1/2",
+              isRTL ? "items-end ml-auto" : "items-start mr-auto",
+            )}
+          >
             {/* Content */}
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, y: 20, x: isRTL ? 50 : -50 }}
+              animate={{ opacity: 1, y: 0, x: 0 }}
               transition={{ duration: 0.6 }}
-              className="space-y-6"
+              className={cn(
+                "space-y-6 w-full",
+                isRTL ? "text-right" : "text-left",
+              )}
             >
               {subtitle && (
                 <span
@@ -101,19 +117,30 @@ export const Banner = React.forwardRef<HTMLDivElement, BannerProps>(
                   {description}
                 </p>
               )}
-              {ctaText && ctaLink && (
+              {ctaText && finalCtaLink && (
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.3 }}
                   className="pt-4"
                 >
-                  <a
-                    href={ctaLink}
-                    className="inline-block rounded-full bg-starbucks-green px-8 py-4 text-lg font-bold text-white shadow-lg shadow-starbucks-green/20 hover:bg-starbucks-dark hover:scale-105 transition-all duration-300 drop-shadow-lg"
-                  >
-                    {ctaText}
-                  </a>
+                  {finalCtaLink.startsWith("http") ? (
+                    <a
+                      href={finalCtaLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-block rounded-full bg-starbucks-green px-8 py-4 text-lg font-bold text-white shadow-lg shadow-starbucks-green/20 hover:bg-starbucks-dark hover:scale-105 transition-all duration-300 drop-shadow-lg"
+                    >
+                      {ctaText}
+                    </a>
+                  ) : (
+                    <Link
+                      to={finalCtaLink}
+                      className="inline-block rounded-full bg-starbucks-green px-8 py-4 text-lg font-bold text-white shadow-lg shadow-starbucks-green/20 hover:bg-starbucks-dark hover:scale-105 transition-all duration-300 drop-shadow-lg"
+                    >
+                      {ctaText}
+                    </Link>
+                  )}
                 </motion.div>
               )}
             </motion.div>

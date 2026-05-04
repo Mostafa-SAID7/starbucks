@@ -1,5 +1,11 @@
 import { useState, useEffect, useRef, useCallback } from "react";
-import { Link, NavLink, useLocation } from "react-router-dom";
+import {
+  Link,
+  NavLink,
+  useLocation,
+  useNavigate,
+  useParams,
+} from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useTheme } from "@/hooks";
 import { motion, AnimatePresence } from "framer-motion";
@@ -21,15 +27,23 @@ import { navbar } from "@/data";
 export function Navbar() {
   const { i18n } = useTranslation();
   const { theme, toggleTheme } = useTheme();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { lang: urlLang } = useParams<{ lang: string }>();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isAuthOpen, setIsAuthOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const location = useLocation();
   const mobileMenuRef = useRef<HTMLDivElement>(null);
   const hamburgerButtonRef = useRef<HTMLButtonElement>(null);
 
-  const lang = (i18n.language === "ar" ? "ar" : "en") as "ar" | "en";
+  const lang = (
+    urlLang && (urlLang === "ar" || urlLang === "en")
+      ? urlLang
+      : i18n.language === "ar"
+        ? "ar"
+        : "en"
+  ) as "ar" | "en";
   const isRTL = lang === "ar";
   const navData = navbar[lang];
 
@@ -48,9 +62,13 @@ export function Navbar() {
   }, [isMobileMenuOpen]);
 
   // Close mobile menu on route change
+  const prevPathname = useRef(location.pathname);
   useEffect(() => {
-    setIsMobileMenuOpen(false);
-  }, [location.pathname]);
+    if (prevPathname.current !== location.pathname && isMobileMenuOpen) {
+      setIsMobileMenuOpen(false);
+    }
+    prevPathname.current = location.pathname;
+  }, [location.pathname, isMobileMenuOpen]);
 
   // Handle scroll effect
   useEffect(() => {
@@ -79,14 +97,34 @@ export function Navbar() {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as Node;
 
-      // Don't close if clicking inside the mobile menu
-      if (mobileMenuRef.current && !mobileMenuRef.current.contains(target)) {
+      console.log("Click outside detected, target:", target);
+      console.log("Mobile menu ref:", mobileMenuRef.current);
+      console.log("Hamburger ref:", hamburgerButtonRef.current);
+
+      // Don't close if clicking inside the mobile menu or on the hamburger button
+      if (
+        mobileMenuRef.current &&
+        !mobileMenuRef.current.contains(target) &&
+        hamburgerButtonRef.current &&
+        !hamburgerButtonRef.current.contains(target)
+      ) {
+        console.log("Closing mobile menu via click outside");
         setIsMobileMenuOpen(false);
       }
     };
 
     if (isMobileMenuOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
+      console.log("Adding click outside listener");
+      // Add a small delay to prevent immediate closing
+      const timeoutId = setTimeout(() => {
+        document.addEventListener("mousedown", handleClickOutside);
+      }, 100);
+
+      return () => {
+        console.log("Removing click outside listener");
+        clearTimeout(timeoutId);
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
     }
 
     return () => {
@@ -95,20 +133,34 @@ export function Navbar() {
   }, [isMobileMenuOpen]);
 
   const toggleLanguage = useCallback(() => {
-    const newLang = i18n.language === "ar" ? "en" : "ar";
+    const newLang = lang === "ar" ? "en" : "ar";
+
+    // Extract the path after the language prefix
+    // Split by '/' and remove the first two elements (empty string and language)
+    const pathParts = location.pathname.split("/");
+    const pathWithoutLang = pathParts.slice(2).join("/");
+
+    // Build the new path with the new language
+    const newPath = `/${newLang}${pathWithoutLang ? "/" + pathWithoutLang : ""}`;
+
     i18n.changeLanguage(newLang);
+    navigate(newPath);
+
     toast.success(
       newLang === "ar"
         ? "تم تغيير اللغة إلى العربية"
         : "Language changed to English",
     );
-  }, [i18n]);
+  }, [i18n, lang, location.pathname, navigate]);
 
   const navItems = [
-    { label: navData.menu, href: "/menu" },
-    { label: navData.delivery, href: "/delivery" },
-    { label: navData.sustainability, href: "/social-impact-sustainability" },
-    { label: navData.middle_east, href: "/starbucks-middle-east" },
+    { label: navData.menu, href: `/${lang}/menu` },
+    { label: navData.delivery, href: `/${lang}/delivery` },
+    {
+      label: navData.sustainability,
+      href: `/${lang}/social-impact-sustainability`,
+    },
+    { label: navData.middle_east, href: `/${lang}/starbucks-middle-east` },
   ];
 
   const handleNavClick = useCallback((href: string) => {
@@ -136,7 +188,7 @@ export function Navbar() {
           {/* Left Side: Logo & Nav Items */}
           <div className="flex items-center gap-8 lg:gap-12">
             <Link
-              to="/"
+              to={`/${lang}`}
               className="flex-shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-starbucks-green focus-visible:rounded-lg"
               aria-label="Starbucks Home"
             >
@@ -183,16 +235,16 @@ export function Navbar() {
           </div>
 
           {/* Right Side: Utilities */}
-          <div className="flex items-center gap-2 lg:gap-3">
-            {/* Location Tooltip */}
+          <div className="flex items-center gap-1 sm:gap-2 lg:gap-3">
+            {/* Location */}
             <Tooltip content={lang === "ar" ? "الفروع" : "Find a store"}>
               <NavLink
-                to="/locations"
+                to={`/${lang}/locations`}
                 className={({ isActive }) => `
                   group flex items-center justify-center h-11 w-11 rounded-full hover:bg-gray-100 dark:hover:bg-zinc-900 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-starbucks-green
                   ${isActive ? "text-starbucks-green" : "text-starbucks-dark hover:text-starbucks-green dark:text-foreground-dark"}
                 `}
-                onClick={() => handleNavClick("/locations")}
+                onClick={() => handleNavClick(`/${lang}/locations`)}
               >
                 <MapPin className="h-5 w-5" />
               </NavLink>
@@ -211,73 +263,70 @@ export function Navbar() {
               </Button>
             </Tooltip>
 
-            {/* Desktop Utilities */}
-            <div className="hidden lg:flex items-center gap-3">
-              {/* Language Toggle */}
-              <Tooltip
-                content={lang === "ar" ? "تغيير اللغة" : "Change Language"}
+            {/* Language Toggle */}
+            <Tooltip
+              content={lang === "ar" ? "تغيير اللغة" : "Change Language"}
+            >
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={toggleLanguage}
+                className="group relative flex items-center justify-center font-bold text-starbucks-dark dark:text-foreground-dark hover:bg-gray-100 dark:hover:bg-zinc-900 rounded-full h-11 w-11 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-starbucks-green"
               >
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={toggleLanguage}
-                  className="group relative flex items-center gap-2 font-bold text-starbucks-dark dark:text-foreground-dark hover:bg-gray-100 dark:hover:bg-zinc-900 rounded-full h-11 px-4 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-starbucks-green"
-                >
-                  <span className="text-sm font-black uppercase tracking-tighter">
-                    {i18n.language === "ar" ? "EN" : "AR"}
-                  </span>
-                </Button>
-              </Tooltip>
+                <span className="text-sm font-black uppercase tracking-tighter">
+                  {lang === "ar" ? "EN" : "AR"}
+                </span>
+              </Button>
+            </Tooltip>
 
-              {/* Theme Toggle */}
-              <Tooltip
-                content={
+            {/* Theme Toggle */}
+            <Tooltip
+              content={
+                theme === "dark"
+                  ? lang === "ar"
+                    ? "الوضع الفاتح"
+                    : "Light Mode"
+                  : lang === "ar"
+                    ? "الوضع الداكن"
+                    : "Dark Mode"
+              }
+            >
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={toggleTheme}
+                className="text-starbucks-dark dark:text-foreground-dark hover:bg-gray-100 dark:hover:bg-zinc-900 rounded-full h-11 w-11 transition-all hover:scale-110 active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-starbucks-green"
+                aria-label={
                   theme === "dark"
-                    ? lang === "ar"
-                      ? "الوضع الفاتح"
-                      : "Light Mode"
-                    : lang === "ar"
-                      ? "الوضع الداكن"
-                      : "Dark Mode"
+                    ? "Switch to light mode"
+                    : "Switch to dark mode"
                 }
               >
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={toggleTheme}
-                  className="text-starbucks-dark dark:text-foreground-dark hover:bg-gray-100 dark:hover:bg-zinc-900 rounded-full h-11 w-11 transition-all hover:scale-110 active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-starbucks-green"
-                  aria-label={
-                    theme === "dark"
-                      ? "Switch to light mode"
-                      : "Switch to dark mode"
-                  }
+                <motion.div
+                  initial={false}
+                  animate={{ rotate: theme === "dark" ? 180 : 0 }}
                 >
-                  <motion.div
-                    initial={false}
-                    animate={{ rotate: theme === "dark" ? 180 : 0 }}
-                  >
-                    {theme === "dark" ? (
-                      <Sun className="h-5 w-5 text-amber-400" />
-                    ) : (
-                      <Moon className="h-5 w-5" />
-                    )}
-                  </motion.div>
-                </Button>
-              </Tooltip>
+                  {theme === "dark" ? (
+                    <Sun className="h-5 w-5 text-amber-400" />
+                  ) : (
+                    <Moon className="h-5 w-5" />
+                  )}
+                </motion.div>
+              </Button>
+            </Tooltip>
 
-              {/* Account Button */}
-              <Tooltip content={lang === "ar" ? "الحساب" : "Account"}>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => setIsAuthOpen(true)}
-                  className="text-starbucks-dark dark:text-foreground-dark hover:bg-gray-100 dark:hover:bg-zinc-900 rounded-full h-11 w-11 transition-all hover:scale-110 active:scale-95 border-2 border-transparent hover:border-starbucks-green/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-starbucks-green"
-                  aria-label="Account"
-                >
-                  <User className="h-5 w-5" />
-                </Button>
-              </Tooltip>
-            </div>
+            {/* Account Button */}
+            <Tooltip content={lang === "ar" ? "الحساب" : "Account"}>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setIsAuthOpen(true)}
+                className="text-starbucks-dark dark:text-foreground-dark hover:bg-gray-100 dark:hover:bg-zinc-900 rounded-full h-11 w-11 transition-all hover:scale-110 active:scale-95 border-2 border-transparent hover:border-starbucks-green/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-starbucks-green"
+                aria-label="Account"
+              >
+                <User className="h-5 w-5" />
+              </Button>
+            </Tooltip>
 
             {/* Mobile Menu Button */}
             <Button
@@ -285,7 +334,12 @@ export function Navbar() {
               variant="ghost"
               size="icon"
               onClick={(e) => {
+                e.preventDefault();
                 e.stopPropagation();
+                console.log(
+                  "Hamburger clicked, current state:",
+                  isMobileMenuOpen,
+                );
                 setIsMobileMenuOpen(!isMobileMenuOpen);
               }}
               className="lg:hidden text-starbucks-dark dark:text-foreground-dark rounded-full h-11 w-11 hover:bg-gray-100 dark:hover:bg-zinc-900 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-starbucks-green"
@@ -320,9 +374,12 @@ export function Navbar() {
               animate={{ height: "auto", opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
               transition={{ type: "spring", damping: 30, stiffness: 300 }}
-              className="lg:hidden border-t border-gray-100 dark:border-zinc-800 bg-white dark:bg-zinc-950 overflow-y-auto max-h-[calc(100dvh-5rem)] lg:max-h-[calc(100dvh-6rem)] shadow-2xl scrollbar-hide"
+              className="lg:hidden border-t border-gray-100/50 dark:border-zinc-800/50 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-xl overflow-hidden shadow-2xl rounded-b-3xl"
+              role="menu"
+              aria-label="Mobile navigation menu"
             >
-              <div className="container mx-auto px-8 py-12 flex flex-col gap-8">
+              <div className="container mx-auto px-8 py-8">
+                {/* Navigation Links Only - Clean and Simple */}
                 {navItems.map((item, i) => (
                   <motion.div
                     key={item.href}
@@ -338,79 +395,15 @@ export function Navbar() {
                       to={item.href}
                       onClick={() => handleNavClick(item.href)}
                       className={({ isActive }) => `
-                        text-3xl font-black uppercase tracking-widest block py-2 active:scale-95 transition-transform
+                        text-2xl lg:text-3xl font-black uppercase tracking-widest block py-4 active:scale-95 transition-transform
                         ${isActive ? "text-starbucks-green" : "text-starbucks-dark dark:text-white"}
                       `}
+                      role="menuitem"
                     >
                       {item.label}
                     </NavLink>
                   </motion.div>
                 ))}
-
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.35 }}
-                  className="mt-6 pt-10 border-t border-gray-100 dark:border-zinc-800 flex flex-col sm:flex-row items-center gap-6 justify-between"
-                >
-                  <div className="flex flex-col gap-4 w-full sm:w-auto">
-                    <Button
-                      variant="outline"
-                      onClick={toggleTheme}
-                      className="flex items-center gap-4 text-lg font-bold text-starbucks-dark dark:text-white rounded-full px-8 py-6 w-full border-2 border-gray-100 dark:border-zinc-800 active:scale-95 transition-transform"
-                    >
-                      <motion.div
-                        animate={{ rotate: theme === "dark" ? 180 : 0 }}
-                      >
-                        {theme === "dark" ? (
-                          <Sun className="h-6 w-6 text-amber-400" />
-                        ) : (
-                          <Moon className="h-6 w-6" />
-                        )}
-                      </motion.div>
-                      {theme === "dark"
-                        ? lang === "ar"
-                          ? "الوضع الفاتح"
-                          : "Light Mode"
-                        : lang === "ar"
-                          ? "الوضع الداكن"
-                          : "Dark Mode"}
-                    </Button>
-
-                    <Button
-                      variant="outline"
-                      onClick={toggleLanguage}
-                      className="flex items-center gap-4 text-lg font-bold text-starbucks-dark dark:text-white rounded-full px-8 py-6 w-full border-2 border-gray-100 dark:border-zinc-800 active:scale-95 transition-transform"
-                    >
-                      <span className="text-xl font-black">
-                        {lang === "ar" ? "EN" : "AR"}
-                      </span>
-                      {lang === "ar" ? "English" : "العربية"}
-                    </Button>
-
-                    <Button
-                      variant="outline"
-                      onClick={() => {
-                        setIsMobileMenuOpen(false);
-                        setIsAuthOpen(true);
-                      }}
-                      className="flex items-center gap-4 text-lg font-bold text-starbucks-dark dark:text-white rounded-full px-8 py-6 w-full border-2 border-gray-100 dark:border-zinc-800 active:scale-95 transition-transform"
-                    >
-                      <User className="h-6 w-6" />
-                      {lang === "ar" ? "الحساب" : "Account"}
-                    </Button>
-                  </div>
-
-                  <NavLink
-                    to="/locations"
-                    className="flex items-center gap-3 text-starbucks-green font-black text-xl uppercase tracking-wider group active:scale-95 transition-transform"
-                  >
-                    <div className="p-3 rounded-full bg-starbucks-green/10 group-hover:bg-starbucks-green group-hover:text-white transition-all">
-                      <MapPin className="h-6 w-6" />
-                    </div>
-                    {lang === "ar" ? "الفروع" : "Locations"}
-                  </NavLink>
-                </motion.div>
               </div>
             </motion.div>
           )}

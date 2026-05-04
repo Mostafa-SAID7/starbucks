@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { Banner, StatementSection, FeaturedCards, SEO } from "@/components";
 import { pages, hero } from "@/data";
+import { motion } from "framer-motion";
 
 interface LocalizedContent {
   title: string;
@@ -34,7 +35,7 @@ export const HomePage = () => {
   )[lang];
 
   return (
-    <div className="flex flex-col w-full">
+    <div className="flex flex-col">
       <SEO title={pageData.title} />
       <Banner
         title={heroData.title}
@@ -43,8 +44,26 @@ export const HomePage = () => {
         ctaLink={heroData.ctaLink}
         imageUrl="/Hero-Banner.webp"
         imageAlt={heroData.imageAlt}
-        className="w-full"
+        isRTL={lang === "ar"}
       />
+
+      {/* Elegant Blur Transition - Best Quality */}
+      <div className="relative -mt-16 h-32 overflow-hidden">
+        {/* Main blur layer */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4, duration: 1.5, ease: [0.25, 0.1, 0.25, 1] }}
+          className="absolute inset-0 bg-gradient-to-b from-transparent via-white/40 dark:via-zinc-950/40 to-white dark:to-zinc-950 backdrop-blur-lg"
+        />
+
+        {/* Subtle overlay for depth */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/8 via-black/3 to-transparent"></div>
+
+        {/* Edge softening */}
+        <div className="absolute top-0 left-0 right-0 h-8 bg-gradient-to-b from-transparent to-white/20 dark:to-zinc-950/20"></div>
+      </div>
+
       <StatementSection />
       <FeaturedCards />
     </div>

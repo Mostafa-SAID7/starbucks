@@ -26,7 +26,8 @@
     "selectRegion": "اختر المنطقة",
     "legal": [
       { "label": "سياسة الخصوصية", "href": "/privacy-statement" },
-      { "label": "شروط الاستخدام", "href": "/terms-of-use" },
+      { "label": "الشروط والأحكام", "href": "/terms-of-use" },
+      { "label": "إشعار الكوكيز", "href": "/cookie-notice" },
       { "label": "سياسة ملفات تعريف الارتباط", "href": "/cookie-notice" }
     ],
     "allRightsReserved": "جميع الحقوق محفوظة.",
