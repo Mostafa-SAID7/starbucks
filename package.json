@@ -42,11 +42,10 @@
     "typescript": "~6.0.2",
     "typescript-eslint": "^8.58.2",
     "vite": "^8.0.10",
-    "vite-plugin-pwa": "^1.2.0"
+    "vite-plugin-pwa": "^0.19.8"
   },
   "overrides": {
-    "vite-plugin-pwa": {
-      "vite": "$vite"
-    }
+    "serialize-javascript": "^7.0.5",
+    "@rollup/plugin-terser": "^1.0.0"
   }
 }
