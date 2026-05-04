@@ -212,9 +212,18 @@ export const ContactUsPage: React.FC = () => {
                   type="submit"
                   loading={loading}
                   className="h-16 px-16 text-lg rounded-full shadow-2xl hover:shadow-starbucks-green/40 transform hover:-translate-y-1 transition-all"
-                  leftIcon={!loading ? <Send className="h-6 w-6 rtl:-rotate-180" /> : undefined}
                 >
-                  {data.form.fields.submit[lang]}
+                  {loading ? (
+                    <div className="flex items-center gap-2">
+                      <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+                      <span>{data.form.fields.submit[lang]}</span>
+                    </div>
+                  ) : (
+                    <>
+                      <Send className="h-6 w-6 rtl:-rotate-180" />
+                      <span className="ml-2">{data.form.fields.submit[lang]}</span>
+                    </>
+                  )}
                 </Button>
               </div>
             </motion.form>

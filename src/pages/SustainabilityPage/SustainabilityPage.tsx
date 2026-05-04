@@ -104,7 +104,7 @@ export const SustainabilityPage: React.FC = () => {
                   >
                     {section.ctaLink?.includes('youtube') ? (
                       <Button
-                        variant="primary"
+                        variant="outline"
                         leftIcon={<Play className="w-5 h-5" />}
                         onClick={() => window.open(section.ctaLink, '_blank')}
                       >
@@ -171,7 +171,7 @@ export const SustainabilityPage: React.FC = () => {
                 : 'Join us on our journey to be a resource-positive company and give back more to the environment than we take.'}
             </p>
             <Button
-              variant="primary"
+              variant="outline"
               size="lg"
               className="px-12"
               onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}

@@ -16,7 +16,7 @@ export const HomePage = () => {
   return (
     <div className="flex flex-col">
       <SEO title={pageData.title} />
-      <Banner />
+      <Banner title={pageData.title} />
       <StatementSection />
       <FeaturedCards />
     </div>
