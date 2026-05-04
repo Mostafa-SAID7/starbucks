@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useTheme } from '@/hooks'
@@ -24,7 +24,9 @@ export function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [isSearchOpen, setIsSearchOpen] = useState(false)
   const [isAuthOpen, setIsAuthOpen] = useState(false)
+  const [isScrolled, setIsScrolled] = useState(false)
   const location = useLocation()
+  const mobileMenuRef = useRef<HTMLDivElement>(null)
   
   const lang = (i18n.language === 'ar' ? 'ar' : 'en') as 'ar' | 'en'
   const isRTL = lang === 'ar'
@@ -37,11 +39,50 @@ export function Navbar() {
     }
   }, [location.pathname, isMobileMenuOpen])
 
-  const toggleLanguage = () => {
+  // Handle scroll effect
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20)
+    }
+    
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  // Close mobile menu on escape key
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isMobileMenuOpen) {
+        setIsMobileMenuOpen(false)
+      }
+    }
+    
+    document.addEventListener('keydown', handleEscape)
+    return () => document.removeEventListener('keydown', handleEscape)
+  }, [isMobileMenuOpen])
+
+  // Handle click outside mobile menu
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (mobileMenuRef.current && !mobileMenuRef.current.contains(event.target as Node)) {
+        setIsMobileMenuOpen(false)
+      }
+    }
+    
+    if (isMobileMenuOpen) {
+      document.addEventListener('mousedown', handleClickOutside)
+    }
+    
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [isMobileMenuOpen])
+
+  const toggleLanguage = useCallback(() => {
     const newLang = i18n.language === 'ar' ? 'en' : 'ar'
     i18n.changeLanguage(newLang)
     toast.success(newLang === 'ar' ? 'تم تغيير اللغة إلى العربية' : 'Language changed to English')
-  }
+  }, [i18n])
 
   const navItems = [
     { label: navData.menu, href: '/menu' },
@@ -50,29 +91,55 @@ export function Navbar() {
     { label: navData.middle_east, href: '/starbucks-middle-east' },
   ]
 
+  const handleNavClick = useCallback((href: string) => {
+    if (href.startsWith('/')) {
+      // Internal navigation handled by React Router
+    } else {
+      // External link
+      window.open(href, '_blank', 'noopener,noreferrer')
+    }
+    setIsMobileMenuOpen(false)
+  }, [])
+
   return (
     <>
-      <nav className="sticky top-0 z-50 w-full border-b border-gray-100 dark:border-zinc-800 bg-white/80 dark:bg-black/80 backdrop-blur-xl transition-all duration-500">
-        <div className="container mx-auto flex h-20 lg:h-24 max-w-7xl items-center justify-between px-6 lg:px-12">
+      <nav 
+        className={`sticky top-0 z-50 w-full border-b transition-all duration-300 ${
+          isScrolled 
+            ? 'bg-white/95 dark:bg-zinc-900/95 backdrop-blur-md shadow-sm border-gray-100 dark:border-zinc-800'
+            : 'bg-white/80 dark:bg-black/80 backdrop-blur-xl border-gray-100/50 dark:border-zinc-800/50'
+        }`}
+        role="navigation"
+        aria-label="Main navigation"
+      >
+        <div className="container mx-auto max-w-7xl flex h-20 lg:h-24 items-center justify-between px-6 lg:px-12">
           {/* Left Side: Logo & Nav Items */}
           <div className="flex items-center gap-8 lg:gap-12">
-            <Link to="/" className="flex-shrink-0">
-              <Logo className="h-10 lg:h-12 w-auto aspect-square object-contain hover:scale-110 transition-transform active:scale-95" />
+            <Link 
+              to="/" 
+              className="flex-shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-starbucks-green focus-visible:rounded-lg"
+              aria-label="Starbucks Home"
+            >
+              <Logo 
+                className="h-10 lg:h-12 w-auto aspect-square object-contain hover:scale-105 transition-transform duration-300" 
+              />
             </Link>
 
-            {/* Nav Items (Desktop) */}
-            <div className="hidden items-center gap-8 lg:flex h-full">
+            {/* Desktop Nav Items */}
+            <div className="hidden items-center gap-8 lg:flex h-full" role="menubar">
               {navItems.map((item) => (
                 <NavLink
                   key={item.href}
                   to={item.href}
+                  onClick={() => handleNavClick(item.href)}
                   className={({ isActive }) => `
-                    relative flex h-full items-center text-[13px] font-black uppercase tracking-[0.2em] transition-all py-1 group
+                    relative flex h-full items-center text-[13px] font-black uppercase tracking-[0.2em] transition-all py-1 group focus:outline-none focus-visible:ring-2 focus-visible:ring-starbucks-green focus-visible:rounded
                     ${isActive 
                       ? 'text-starbucks-green' 
-                      : 'text-starbucks-dark hover:text-starbucks-green dark:text-foreground-dark'
+                      : 'text-starbucks-dark hover:text-starbucks-green dark:text-foreground-dark dark:hover:text-starbucks-green'
                     }
                   `}
+                  role="menuitem"
                 >
                   <span className="relative z-10">{item.label}</span>
                   {location.pathname === item.href ? (
@@ -89,37 +156,44 @@ export function Navbar() {
             </div>
           </div>
 
-          {/* Right Side: Utilities (Search, Location, Language, Theme, Profile) */}
+          {/* Right Side: Utilities */}
           <div className="flex items-center gap-2 lg:gap-3">
+            {/* Location Tooltip */}
             <Tooltip content={lang === 'ar' ? 'الفروع' : 'Find a store'}>
               <NavLink 
                 to="/locations"
-                className={({ isActive }) => `group flex items-center justify-center h-11 w-11 rounded-full hover:bg-gray-100 dark:hover:bg-zinc-900 transition-all ${
-                  isActive ? 'text-starbucks-green' : 'text-starbucks-dark hover:text-starbucks-green dark:text-foreground-dark'
-                }`}
+                className={({ isActive }) => `
+                  group flex items-center justify-center h-11 w-11 rounded-full hover:bg-gray-100 dark:hover:bg-zinc-900 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-starbucks-green
+                  ${isActive ? 'text-starbucks-green' : 'text-starbucks-dark hover:text-starbucks-green dark:text-foreground-dark'}
+                `}
+                onClick={() => handleNavClick('/locations')}
               >
                 <MapPin className="h-5 w-5" />
               </NavLink>
             </Tooltip>
 
+            {/* Search Button */}
             <Tooltip content={lang === 'ar' ? 'بحث' : 'Search'}>
               <Button 
                 variant="ghost" 
                 size="icon" 
                 onClick={() => setIsSearchOpen(true)}
-                className="text-starbucks-dark dark:text-foreground-dark rounded-full h-11 w-11 hover:bg-gray-100 dark:hover:bg-zinc-900 hover:scale-110 active:scale-95 transition-all"
+                className="rounded-full h-11 w-11 hover:bg-gray-100 dark:hover:bg-zinc-900 hover:scale-110 active:scale-95 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-starbucks-green"
+                aria-label="Search"
               >
                 <Search className="h-5 w-5" />
               </Button>
             </Tooltip>
 
+            {/* Desktop Utilities */}
             <div className="hidden lg:flex items-center gap-3">
+              {/* Language Toggle */}
               <Tooltip content={lang === 'ar' ? 'تغيير اللغة' : 'Change Language'}>
                 <Button
                   variant="ghost"
                   size="sm"
                   onClick={toggleLanguage}
-                  className="group relative flex items-center gap-2 font-bold text-starbucks-dark dark:text-foreground-dark hover:bg-gray-100 dark:hover:bg-zinc-900 rounded-full h-11 px-4 transition-all"
+                  className="group relative flex items-center gap-2 font-bold text-starbucks-dark dark:text-foreground-dark hover:bg-gray-100 dark:hover:bg-zinc-900 rounded-full h-11 px-4 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-starbucks-green"
                 >
                   <span className="text-sm font-black uppercase tracking-tighter">
                     {i18n.language === 'ar' ? 'EN' : 'AR'}
@@ -127,12 +201,14 @@ export function Navbar() {
                 </Button>
               </Tooltip>
 
+              {/* Theme Toggle */}
               <Tooltip content={theme === 'dark' ? (lang === 'ar' ? 'الوضع الفاتح' : 'Light Mode') : (lang === 'ar' ? 'الوضع الداكن' : 'Dark Mode')}>
                 <Button
                   variant="ghost"
                   size="icon"
                   onClick={toggleTheme}
-                  className="text-starbucks-dark dark:text-foreground-dark hover:bg-gray-100 dark:hover:bg-zinc-900 rounded-full h-11 w-11 transition-all hover:scale-110 active:scale-95"
+                  className="text-starbucks-dark dark:text-foreground-dark hover:bg-gray-100 dark:hover:bg-zinc-900 rounded-full h-11 w-11 transition-all hover:scale-110 active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-starbucks-green"
+                  aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
                 >
                   <motion.div
                     initial={false}
@@ -143,23 +219,28 @@ export function Navbar() {
                 </Button>
               </Tooltip>
 
+              {/* Account Button */}
               <Tooltip content={lang === 'ar' ? 'الحساب' : 'Account'}>
                 <Button
                   variant="ghost"
                   size="icon"
                   onClick={() => setIsAuthOpen(true)}
-                  className="text-starbucks-dark dark:text-foreground-dark hover:bg-gray-100 dark:hover:bg-zinc-900 rounded-full h-11 w-11 transition-all hover:scale-110 active:scale-95 border-2 border-transparent hover:border-starbucks-green/20"
+                  className="text-starbucks-dark dark:text-foreground-dark hover:bg-gray-100 dark:hover:bg-zinc-900 rounded-full h-11 w-11 transition-all hover:scale-110 active:scale-95 border-2 border-transparent hover:border-starbucks-green/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-starbucks-green"
+                  aria-label="Account"
                 >
                   <User className="h-5 w-5" />
                 </Button>
               </Tooltip>
             </div>
 
+            {/* Mobile Menu Button */}
             <Button 
               variant="ghost" 
               size="icon" 
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="lg:hidden text-starbucks-dark dark:text-foreground-dark rounded-full h-11 w-11 hover:bg-gray-100 dark:hover:bg-zinc-900 transition-all"
+              className="lg:hidden text-starbucks-dark dark:text-foreground-dark rounded-full h-11 w-11 hover:bg-gray-100 dark:hover:bg-zinc-900 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-starbucks-green"
+              aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
+              aria-expanded={isMobileMenuOpen}
             >
               <AnimatePresence mode="wait">
                 <motion.div
@@ -180,6 +261,7 @@ export function Navbar() {
         <AnimatePresence>
           {isMobileMenuOpen && (
             <motion.div
+              ref={mobileMenuRef}
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: 'auto', opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
@@ -196,6 +278,7 @@ export function Navbar() {
                   >
                     <NavLink
                       to={item.href}
+                      onClick={() => handleNavClick(item.href)}
                       className={({ isActive }) => `
                         text-3xl font-black uppercase tracking-widest block py-2
                         ${isActive ? 'text-starbucks-green' : 'text-starbucks-dark dark:text-white'}
