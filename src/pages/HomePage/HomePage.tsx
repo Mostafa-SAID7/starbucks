@@ -8,8 +8,7 @@ interface LocalizedContent {
 
 export const HomePage = () => {
   const { i18n } = useTranslation()
-  const lang = (i18n.language === 'ar' ? 'ar' : 'en') as 'ar' | 'en'
-  
+  const lang = (i18n.language === 'ar' ? 'ar' : 'en') as 'ar' | 'en'  
   // Safe access to home page data from pages.json
   const homeData = (pages as Record<string, Record<'ar' | 'en', LocalizedContent>>)['home']
   const pageData = homeData?.[lang] || { title: lang === 'ar' ? 'ستاربكس مصر' : 'Starbucks Egypt' }

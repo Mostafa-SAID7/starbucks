@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from 'react'
+import { createContext, useContext as useReactContext } from 'react'
 import type { ReactNode } from 'react'
 import type { Theme, ThemeContextType } from '@/types'
 
@@ -37,3 +37,11 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 }
 
 export { ThemeContext }
+
+export function useTheme() {
+  const context = useReactContext(ThemeContext)
+  if (context === undefined) {
+    throw new Error('useTheme must be used within a ThemeProvider')
+  }
+  return context
+}
