@@ -34,7 +34,7 @@ export const HomePage = () => {
   )[lang];
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col w-full">
       <SEO title={pageData.title} />
       <Banner
         title={heroData.title}
@@ -43,6 +43,7 @@ export const HomePage = () => {
         ctaLink={heroData.ctaLink}
         imageUrl="/Hero-Banner.webp"
         imageAlt={heroData.imageAlt}
+        className="w-full"
       />
       <StatementSection />
       <FeaturedCards />
