@@ -1,9 +1,8 @@
-import React from 'react'
-import { motion } from 'framer-motion'
-import { useTranslation } from 'react-i18next'
-import { Button } from '@/components/ui'
-import { ArrowLeft } from 'lucide-react'
-import { featuredCards } from '@/data'
+import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
+import { Button } from "@/components/ui";
+import { ArrowLeft } from "lucide-react";
+import { featuredCards } from "@/data";
 
 interface CardData {
   id: string;
@@ -19,9 +18,9 @@ interface CardData {
 }
 
 export function FeaturedCards() {
-  const { i18n } = useTranslation()
-  const lang = i18n.language as keyof typeof featuredCards
-  const localizedData = featuredCards[lang] || featuredCards.en
+  const { i18n } = useTranslation();
+  const lang = i18n.language as keyof typeof featuredCards;
+  const localizedData = featuredCards[lang] || featuredCards.en;
 
   return (
     <section className="py-12 dark:bg-black transition-colors">
@@ -34,9 +33,9 @@ export function FeaturedCards() {
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: index * 0.1 }}
             className={`group relative overflow-hidden rounded-xl shadow-lg transition-all hover:shadow-xl ${
-              card.theme === 'Green' 
-                ? 'bg-[#d4e9e2] dark:bg-[#1e3932]' 
-                : 'bg-[#f2f0eb] dark:bg-[#2d2926]'
+              card.theme === "Green"
+                ? "bg-[#d4e9e2] dark:bg-[#1e3932]"
+                : "bg-[#f2f0eb] dark:bg-[#2d2926]"
             }`}
           >
             <div className="flex flex-col md:flex-row">
@@ -67,11 +66,9 @@ export function FeaturedCards() {
                     className="rounded-full border-2 border-starbucks-dark px-8 py-6 text-lg font-bold text-starbucks-dark hover:bg-starbucks-dark hover:text-white dark:border-foreground-dark dark:text-foreground-dark dark:hover:bg-foreground-dark dark:hover:text-black transition-all"
                     asChild
                   >
-                    <a href={card.ctaLink}>
-                      {card.cta}
-                    </a>
+                    <a href={card.ctaLink}>{card.cta}</a>
                   </Button>
-                  
+
                   {card.secondaryCta && card.secondaryCtaLink && (
                     <Button
                       variant="ghost"
@@ -91,7 +88,7 @@ export function FeaturedCards() {
         ))}
       </div>
     </section>
-  )
+  );
 }
 
 export function FeaturedCardsSkeleton() {
@@ -99,11 +96,14 @@ export function FeaturedCardsSkeleton() {
     <section className="py-12 dark:bg-black transition-colors">
       <div className="container mx-auto grid max-w-7xl grid-cols-1 gap-8 px-4 md:grid-cols-2">
         {Array.from({ length: 2 }).map((_, i) => (
-          <div key={i} className="group relative overflow-hidden rounded-xl bg-zinc-100 dark:bg-zinc-900 shadow-lg">
+          <div
+            key={i}
+            className="group relative overflow-hidden rounded-xl bg-zinc-100 dark:bg-zinc-900 shadow-lg"
+          >
             <div className="flex flex-col md:flex-row h-full">
               {/* Image Skeleton */}
               <div className="h-64 w-full animate-pulse bg-zinc-200 dark:bg-zinc-800 md:h-[400px] md:w-1/2" />
-              
+
               {/* Content Skeleton */}
               <div className="flex w-full flex-col justify-center p-8 md:w-1/2 md:p-12">
                 <div className="mb-4 h-8 w-3/4 animate-pulse rounded bg-zinc-200 dark:bg-zinc-800" />
@@ -116,5 +116,5 @@ export function FeaturedCardsSkeleton() {
         ))}
       </div>
     </section>
-  )
+  );
 }

@@ -1,23 +1,30 @@
-import React, { forwardRef } from 'react'
-import { cn } from '@/lib/utils'
-import { Button } from '@/components/ui'
+import React, { forwardRef } from "react";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui";
+
+interface Action {
+  label: string;
+  href: string;
+  primary?: boolean;
+}
 
 interface VerticalCardProps extends React.HTMLAttributes<HTMLDivElement> {
-  title: string
-  description?: string
-  image?: string
-  href?: string
-  className?: string
+  title: string;
+  description?: string;
+  image?: string;
+  href?: string;
+  actions?: Action[];
+  className?: string;
 }
 
 export const VerticalCard = forwardRef<HTMLDivElement, VerticalCardProps>(
-  ({ title, description, image, href, className, ...props }, ref) => {
+  ({ title, description, image, href, actions, className, ...props }, ref) => {
     const CardContent = (
       <div
         ref={ref}
         className={cn(
-          'group relative overflow-hidden rounded-2xl bg-white dark:bg-zinc-900 shadow-sm transition-all hover:shadow-md border border-gray-100 dark:border-zinc-800',
-          className
+          "group relative overflow-hidden rounded-2xl bg-white dark:bg-zinc-900 shadow-sm transition-all hover:shadow-md border border-gray-100 dark:border-zinc-800",
+          className,
         )}
         {...props}
       >
@@ -31,29 +38,48 @@ export const VerticalCard = forwardRef<HTMLDivElement, VerticalCardProps>(
           </div>
         )}
         <div className="p-6">
-          <h3 className="mb-2 text-lg font-bold text-starbucks-dark dark:text-white">{title}</h3>
+          <h3 className="mb-2 text-lg font-bold text-starbucks-dark dark:text-white">
+            {title}
+          </h3>
           {description && (
-            <p className="text-sm text-gray-600 dark:text-gray-400">{description}</p>
+            <p className="text-sm text-gray-600 dark:text-gray-400">
+              {description}
+            </p>
           )}
-          {href && (
+          {actions && actions.length > 0 && (
+            <div className="mt-4 space-y-2">
+              {actions.map((action, index) => (
+                <Button
+                  key={index}
+                  variant={action.primary ? "default" : "outline"}
+                  size="sm"
+                  className="w-full"
+                  asChild
+                >
+                  <a href={action.href}>{action.label}</a>
+                </Button>
+              ))}
+            </div>
+          )}
+          {href && !actions && (
             <Button variant="outline" size="sm" className="mt-4 w-full">
               Learn More
             </Button>
           )}
         </div>
       </div>
-    )
+    );
 
-    if (href) {
+    if (href && !actions) {
       return (
         <a href={href} className="block h-full">
           {CardContent}
         </a>
-      )
+      );
     }
 
-    return CardContent
-  }
-)
+    return CardContent;
+  },
+);
 
-VerticalCard.displayName = 'VerticalCard'
+VerticalCard.displayName = "VerticalCard";

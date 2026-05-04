@@ -1,5 +1,3 @@
-import React from 'react'
-
 interface AllergyInfoProps {
   title: string
   description: string

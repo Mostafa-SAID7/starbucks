@@ -1,5 +1,3 @@
-import React from 'react'
-
 export function MenuPromoVideo() {
   return (
     <div className="relative mx-auto aspect-square w-full max-w-lg overflow-hidden rounded-2xl bg-black">
@@ -12,7 +10,7 @@ export function MenuPromoVideo() {
         title="Starbucks Promo Video"
       ></iframe>
     </div>
-  )
+  );
 }
 
-export default MenuPromoVideo
+export default MenuPromoVideo;

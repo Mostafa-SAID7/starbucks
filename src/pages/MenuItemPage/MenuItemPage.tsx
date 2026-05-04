@@ -1,23 +1,33 @@
-import React from 'react'
-import { useParams, Link } from 'react-router-dom'
-import { useTranslation } from 'react-i18next'
-import { motion } from 'framer-motion'
-import { SEO, AllergyInfo, MenuPromoVideo, VerticalCard, Button } from '@/components'
-import menuData from '@/data/menu.json'
-import { NotFound } from '@/pages'
-import type { MenuData } from '@/types'
+import { useParams, Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { motion } from "framer-motion";
+import {
+  SEO,
+  AllergyInfo,
+  MenuPromoVideo,
+  VerticalCard,
+  Button,
+} from "@/components";
+import menuData from "@/data/menu.json";
+import { NotFound } from "@/pages";
+import type { MenuData } from "@/types";
 
 export const MenuItemPage = () => {
-  const { categoryId, itemId: subcategoryId } = useParams<{ categoryId: string; itemId: string }>()
-  const { i18n } = useTranslation()
-  const currentLang = (i18n.language === 'ar' ? 'ar' : 'en') as 'ar' | 'en'
-  const data = (menuData as unknown as Record<string, MenuData>)[currentLang]
+  const { categoryId, itemId: subcategoryId } = useParams<{
+    categoryId: string;
+    itemId: string;
+  }>();
+  const { i18n } = useTranslation();
+  const currentLang = (i18n.language === "ar" ? "ar" : "en") as "ar" | "en";
+  const data = (menuData as unknown as Record<string, MenuData>)[currentLang];
 
-  const category = data.categories.find((c) => c.id === categoryId)
-  const subcategory = category?.subcategories?.find((s) => s.id === subcategoryId)
+  const category = data.categories.find((c) => c.id === categoryId);
+  const subcategory = category?.subcategories?.find(
+    (s) => s.id === subcategoryId,
+  );
 
   if (!category || !subcategory) {
-    return <NotFound />
+    return <NotFound />;
   }
 
   return (
@@ -28,10 +38,10 @@ export const MenuItemPage = () => {
         {/* Sidebar (Appears on the right in RTL) */}
         <div className="w-full md:w-80 lg:w-[350px] flex-shrink-0">
           <div className="sticky top-28">
-            <VerticalCard 
-              title={subcategory.title} 
-              image={subcategory.image || data.sidebar.image} 
-              actions={data.sidebar.actions} 
+            <VerticalCard
+              title={subcategory.title}
+              image={subcategory.image || data.sidebar.image}
+              actions={data.sidebar.actions}
             />
           </div>
         </div>
@@ -72,7 +82,9 @@ export const MenuItemPage = () => {
                     className="rounded-2xl bg-starbucks-green px-6 font-bold text-white shadow-sm hover:bg-starbucks-dark dark:bg-starbucks-light dark:text-black dark:hover:bg-white"
                   >
                     <a href={item.href} target="_blank" rel="noreferrer">
-                      {currentLang === 'ar' ? 'اطلبه للتوصيل' : 'Order for delivery'}
+                      {currentLang === "ar"
+                        ? "اطلبه للتوصيل"
+                        : "Order for delivery"}
                     </a>
                   </Button>
                 </div>
@@ -83,17 +95,22 @@ export const MenuItemPage = () => {
           {/* Bottom Video & Links */}
           <div className="mt-12 space-y-8 text-center">
             <MenuPromoVideo />
-            
+
             <div>
-              <Button asChild className="rounded-2xl bg-starbucks-green font-bold text-white shadow-sm hover:bg-starbucks-dark dark:bg-starbucks-light dark:text-black dark:hover:bg-white">
+              <Button
+                asChild
+                className="rounded-2xl bg-starbucks-green font-bold text-white shadow-sm hover:bg-starbucks-dark dark:bg-starbucks-light dark:text-black dark:hover:bg-white"
+              >
                 <Link to="/locations">
-                  {currentLang === 'ar' ? 'مواقع محلاتنا' : 'Our Store Locations'}
+                  {currentLang === "ar"
+                    ? "مواقع محلاتنا"
+                    : "Our Store Locations"}
                 </Link>
               </Button>
             </div>
 
             <div className="mt-8 text-start">
-              <AllergyInfo 
+              <AllergyInfo
                 title={data.allergyInfo.title}
                 description={data.allergyInfo.description}
                 link={data.allergyInfo.link}
@@ -104,7 +121,7 @@ export const MenuItemPage = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default MenuItemPage
+export default MenuItemPage;

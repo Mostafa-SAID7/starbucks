@@ -1,57 +1,72 @@
-import React, { useState, useEffect, useRef } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { MessageCircle, X, Send, User } from 'lucide-react'
-import { Input } from '@/components/ui'
-import { useTranslation } from 'react-i18next'
+import { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { MessageCircle, X, Send, User } from "lucide-react";
+import { Input } from "@/components/ui";
+import { useTranslation } from "react-i18next";
 
 export const ChatWidget = () => {
-  const [isOpen, setIsOpen] = useState(false)
-  const [message, setMessage] = useState('')
-  const { i18n } = useTranslation()
-  const isRTL = i18n.language === 'ar'
-  const [messages, setMessages] = useState<{ id: number; text: string; isBot: boolean }[]>(() => [{
-    id: 1,
-    text: i18n.language === 'ar' 
-      ? "مرحباً! كيف يمكننا مساعدتك اليوم؟ نحن هنا لخدمتك." 
-      : "Hello! How can we help you today? We're here to assist you.",
-    isBot: true
-  }])
-  const messagesEndRef = useRef<HTMLDivElement>(null)
+  const [isOpen, setIsOpen] = useState(false);
+  const [message, setMessage] = useState("");
+  const { i18n } = useTranslation();
+  const isRTL = i18n.language === "ar";
+  const [messages, setMessages] = useState<
+    { id: number; text: string; isBot: boolean }[]
+  >(() => [
+    {
+      id: 1,
+      text:
+        i18n.language === "ar"
+          ? "مرحباً! كيف يمكننا مساعدتك اليوم؟ نحن هنا لخدمتك."
+          : "Hello! How can we help you today? We're here to assist you.",
+      isBot: true,
+    },
+  ]);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
 
   useEffect(() => {
     if (isOpen) {
-      scrollToBottom()
+      scrollToBottom();
     }
-  }, [messages, isOpen])
+  }, [messages, isOpen]);
 
   const handleSend = () => {
-    if (!message.trim()) return
-    
-    const userMsg = { id: Date.now(), text: message, isBot: false }
-    setMessages(prev => [...prev, userMsg])
-    setMessage('')
+    if (!message.trim()) return;
+
+    const userMsg = { id: Date.now(), text: message, isBot: false };
+    setMessages((prev) => [...prev, userMsg]);
+    setMessage("");
 
     // Mock bot response
     setTimeout(() => {
-      setMessages(prev => [...prev, {
-        id: Date.now() + 1,
-        text: isRTL ? "شكراً لتواصلك معنا. سيقوم أحد ممثلينا بالرد عليك قريباً." : "Thank you for reaching out. One of our representatives will get back to you shortly.",
-        isBot: true
-      }])
-    }, 1000)
-  }
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: Date.now() + 1,
+          text: isRTL
+            ? "شكراً لتواصلك معنا. سيقوم أحد ممثلينا بالرد عليك قريباً."
+            : "Thank you for reaching out. One of our representatives will get back to you shortly.",
+          isBot: true,
+        },
+      ]);
+    }, 1000);
+  };
 
   return (
-    <div className="fixed bottom-6 right-6 z-[100]" dir={isRTL ? 'rtl' : 'ltr'}>
+    <div className="fixed bottom-6 right-6 z-[100]" dir={isRTL ? "rtl" : "ltr"}>
       <AnimatePresence mode="wait">
         {isOpen ? (
           <motion.div
             key="chat-window"
-            initial={{ opacity: 0, scale: 0.9, y: 20, transformOrigin: 'bottom right' }}
+            initial={{
+              opacity: 0,
+              scale: 0.9,
+              y: 20,
+              transformOrigin: "bottom right",
+            }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
             className="w-[90vw] md:w-[400px] bg-white dark:bg-zinc-900 rounded-[2.5rem] shadow-2xl border border-gray-100 dark:border-zinc-800 overflow-hidden flex flex-col h-[600px] max-h-[80vh]"
@@ -64,10 +79,12 @@ export const ChatWidget = () => {
                 </div>
                 <div>
                   <h3 className="font-black text-xl">Starbucks Support</h3>
-                  <p className="text-white/80 text-sm italic">Online and ready to help</p>
+                  <p className="text-white/80 text-sm italic">
+                    Online and ready to help
+                  </p>
                 </div>
               </div>
-              <button 
+              <button
                 onClick={() => setIsOpen(false)}
                 className="absolute top-6 end-6 p-2 hover:bg-white/10 rounded-2xl transition-colors z-10"
               >
@@ -78,17 +95,22 @@ export const ChatWidget = () => {
             {/* Messages Area */}
             <div className="flex-1 p-8 overflow-y-auto space-y-6 bg-gray-50/50 dark:bg-zinc-950/50">
               {messages.map((msg) => (
-                <div key={msg.id} className={`flex gap-4 ${msg.isBot ? '' : 'flex-row-reverse'}`}>
+                <div
+                  key={msg.id}
+                  className={`flex gap-4 ${msg.isBot ? "" : "flex-row-reverse"}`}
+                >
                   {msg.isBot && (
                     <div className="w-10 h-10 bg-starbucks-green/10 rounded-2xl flex items-center justify-center flex-shrink-0">
                       <User className="w-5 h-5 text-starbucks-green" />
                     </div>
                   )}
-                  <div className={`p-5 rounded-3xl shadow-sm text-base border max-w-[80%] text-start ${
-                    msg.isBot 
-                      ? 'bg-white dark:bg-zinc-800 border-gray-100 dark:border-zinc-700 rounded-ss-none' 
-                      : 'bg-starbucks-green text-white border-starbucks-green rounded-se-none'
-                  }`}>
+                  <div
+                    className={`p-5 rounded-3xl shadow-sm text-base border max-w-[80%] text-start ${
+                      msg.isBot
+                        ? "bg-white dark:bg-zinc-800 border-gray-100 dark:border-zinc-700 rounded-ss-none"
+                        : "bg-starbucks-green text-white border-starbucks-green rounded-se-none"
+                    }`}
+                  >
                     <p className="leading-relaxed">{msg.text}</p>
                   </div>
                 </div>
@@ -98,23 +120,28 @@ export const ChatWidget = () => {
 
             {/* Input Area */}
             <div className="p-6 bg-white dark:bg-zinc-900 border-t border-gray-100 dark:border-zinc-800 relative z-20">
-              <form 
-                onSubmit={(e) => { e.preventDefault(); handleSend(); }}
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  handleSend();
+                }}
                 className="relative flex items-center"
               >
-                <Input 
+                <Input
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
-                  placeholder={isRTL ? "اكتب رسالتك..." : "Type your message..."}
+                  placeholder={
+                    isRTL ? "اكتب رسالتك..." : "Type your message..."
+                  }
                   className="h-14 pe-14 ps-6 rounded-2xl border-gray-100 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-950 focus:bg-white transition-all text-base w-full"
                   dir="auto"
                 />
-                <button 
+                <button
                   type="submit"
                   disabled={!message.trim()}
                   className="absolute end-3 p-2.5 text-starbucks-green hover:bg-starbucks-green/10 disabled:opacity-30 disabled:hover:bg-transparent rounded-xl transition-all z-30"
                 >
-                  <Send className={`w-6 h-6 ${isRTL ? 'scale-x-[-1]' : ''}`} />
+                  <Send className={`w-6 h-6 ${isRTL ? "scale-x-[-1]" : ""}`} />
                 </button>
               </form>
             </div>
@@ -136,5 +163,5 @@ export const ChatWidget = () => {
         )}
       </AnimatePresence>
     </div>
-  )
-}
+  );
+};

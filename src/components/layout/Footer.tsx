@@ -1,8 +1,8 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
-import { useTranslation } from 'react-i18next'
-import { Globe } from 'lucide-react'
-import { footer as data } from '@/data'
+import React from "react";
+import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { Globe } from "lucide-react";
+import { footer as data } from "@/data";
 
 interface FooterLink {
   label: string;
@@ -15,28 +15,36 @@ interface FooterSection {
 }
 
 export function Footer() {
-  const { i18n } = useTranslation()
-  const lang = (i18n.language === 'ar' ? 'ar' : 'en') as 'ar' | 'en'
-  const footerData = data[lang]
+  const { i18n } = useTranslation();
+  const lang = (i18n.language === "ar" ? "ar" : "en") as "ar" | "en";
+  const footerData = data[lang];
 
   const socialIcons: Record<string, React.ReactNode> = {
     spotify: (
       <svg viewBox="0 0 24 24" fill="currentColor" className="h-6 w-6">
-        <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.503 17.306c-.215.352-.676.463-1.028.248-2.856-1.745-6.452-2.14-10.686-1.171-.403.093-.812-.154-.905-.557-.093-.404.154-.813.557-.906 1.805-1.059 8.618-.604 11.804 1.341.352.439.581.844.311 1.282zM1.468-3.26c-.27.439-.844.582-1.282.311-3.268-2.009-8.25-2.593-11.645-1.42-.496.151-1.022-.128-1.173-.625-.152-.496.128-1.022.625-1.173.496 4.305-1.306 11.438-.051 15.945 1.625.539.32.713 1.014.394 1.554zm.127-3.418c-.27.439-.844.582-1.282.311-3.918-2.327-10.375-2.541-14.135-1.399-.6.182-1.235-.164-1.417-.765-.183-.601.164-1.236.765-1.418 4.305-1.306 11.438-.051 15.945 1.625.539.32.713 1.014.394 1.554z"/>
+        <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z" />
       </svg>
     ),
     facebook: (
       <svg viewBox="0 0 24 24" fill="currentColor" className="h-6 w-6">
-        <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+        <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
       </svg>
     ),
     pinterest: (
       <svg viewBox="0 0 24 24" fill="currentColor" className="h-6 w-6">
-        <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.162-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.965 1.406-5.965s-.359-.72-.359-1.781c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283.949.599 1.369 2.239 1.369 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738a.36.36 0 0 1 .083.36 31.493 1.296 1.312 2.25.062 2.594z"/>
+        <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.162-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.965 1.406-5.965s-.359-.72-.359-1.781c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738.098.119.112.223.083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.631-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24 12 24c6.627 0 12-5.373 12-12 0-6.628-5.373-12-12-12z" />
       </svg>
     ),
     instagram: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6">
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className="h-6 w-6"
+      >
         <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
         <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
         <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
@@ -44,15 +52,15 @@ export function Footer() {
     ),
     youtube: (
       <svg viewBox="0 0 24 24" fill="currentColor" className="h-6 w-6">
-        <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+        <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
       </svg>
     ),
     tiktok: (
       <svg viewBox="0 0 24 24" fill="currentColor" className="h-6 w-6">
-        <path d="M12.525.02c1.31 0 2.59.34 3.72 1a6.49 6.49 0 0 1 3.57 5.1c0 .02 0 .04 0 .06a6.49 6.49 0 0 0-3.15-1.55v7.2a4.91 4.91 0 0 1-4.91 4.91 4.91 4.91 0 0 1-4.91-4.91 4.91 4.91 0 0 1 4.91-4.91c.21 0 .41.01.62.04v2.54a2.41 2.41 0 0 0-.62-.08 2.37 2.37 0 1 0 2.37 2.37v-12c0-.02 0-.04 0-.06.01-1.07.72-2.01 1.75-2.28a2.38 2.38 0 0 1 1.65.57 6.49 6.49 0 0 0 3.15 1.55c0-.2 0-.41 0-.62 0-1.33-.42-2.61-1.2-3.69A6.49 6.49 0 0 0 16.245.02h-3.72z"/>
+        <path d="M12.525.02c1.31 0 2.59.34 3.72 1a6.49 6.49 0 0 1 3.57 5.1c0 .02 0 .04 0 .06a6.49 6.49 0 0 0-3.15-1.55v7.2a4.91 4.91 0 0 1-4.91 4.91 4.91 4.91 0 0 1-4.91-4.91 4.91 4.91 0 0 1 4.91-4.91c.21 0 .41.01.62.04v2.54a2.41 2.41 0 0 0-.62-.08 2.37 2.37 0 1 0 2.37 2.37v-12c0-.02 0-.04 0-.06.01-1.07.72-2.01 1.75-2.28a2.38 2.38 0 0 1 1.65.57 6.49 6.49 0 0 0 3.15 1.55c0-.2 0-.41 0-.62 0-1.33-.42-2.61-1.2-3.69A6.49 6.49 0 0 0 16.245.02h-3.72z" />
       </svg>
-    )
-  }
+    ),
+  };
 
   return (
     <footer className="bg-starbucks-dark pt-16 pb-12 text-white">
@@ -89,11 +97,21 @@ export function Footer() {
                 <span className="font-bold underline decoration-white/20 underline-offset-8 group-hover:decoration-starbucks-green transition-all">
                   {footerData.locationSelector}
                 </span>
-                <svg className="h-4 w-4 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                <svg
+                  className="h-4 w-4 transition-transform group-hover:rotate-180"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M19 9l-7 7-7-7"
+                  />
                 </svg>
               </button>
-              
+
               <div className="invisible absolute bottom-[calc(100%+12px)] inset-inline-start-0 z-50 w-80 rounded-2xl border border-white/10 bg-zinc-900 shadow-2xl transition-all opacity-0 scale-95 origin-bottom-start group-hover:visible group-hover:opacity-100 group-hover:scale-100 overflow-hidden">
                 <div className="h-[300px] overflow-y-auto scrollbar-thin rtl">
                   <div className="p-5 px-6">
@@ -167,24 +185,43 @@ export function Footer() {
                   href="#"
                   className="flex h-12 items-center gap-3 rounded-lg border border-white/20 bg-black px-5 transition-all hover:bg-white/5"
                 >
-                  <svg className="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M17.05 20.28c-.98.95-2.05.88-3.08.4-.4-.18-.84-.28-1.29-.28s-.9.1-1.3.28c-1.01.47-2.02.51-2.95-.42C5.9 17.78 4.28 12.35 6.8 7.9c1.23-2.17 3.4-3.4 5.6-3.4 1.1 0 2.15.25 3 .75.65.35 1.25.35 1.9 0 .95-.5 2-.8 3.1-.75 1.55.05 2.85.7 3.65 1.85-3.35 1.95-2.8 6.35.55 7.8-.8 2-1.95 3.95-5.13-.55 7.13zM12 4.45c0-2.3 1.9-4.2 4.2-4.2.1 0 .2 0 .3.05.1 2.3-1.8 4.2-1.8 4.2-.1 0-.2 0-.3-.05z"/>
+                  <svg
+                    className="h-6 w-6"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                  >
+                    <path d="M17.05 20.28c-.98.95-2.05.88-3.08.4-1.09-.46-2.23-.46-3.38 0-1.02.48-2.02.42-2.91-.42C5.98 18.04 4.28 12.57 6.82 7.85c1.23-2.17 3.41-3.41 5.61-3.41 1.1 0 2.15.25 3 .75 1.28.75 2.76.75 4.04 0 .95-.5 2-.8 3.1-.75 1.55.05 2.85.7 3.65 1.85-3.35 1.95-2.8 6.35.55 7.8-.8 2-1.95 3.95-3.55 5.55-.98.95-2.05.88-3.08.4-1.09-.46-2.23-.46-3.38 0-.98.48-2.02.42-2.91-.42zM12 4.45c-.1-2.2 1.8-4.2 4.2-4.2.1 2.2-1.8 4.2-4.2 4.2z" />
                   </svg>
                   <div className="text-start">
-                    <div className="text-[10px] uppercase leading-none text-gray-400">{footerData.app.appStore.split(' ')[0]}</div>
-                    <div className="text-sm font-bold leading-tight">{footerData.app.appStore.split(' ').slice(1).join(' ')}</div>
+                    <div className="text-[10px] uppercase leading-none text-gray-400">
+                      {footerData.app.appStore.split(" ")[0]}
+                    </div>
+                    <div className="text-sm font-bold leading-tight">
+                      {footerData.app.appStore.split(" ").slice(1).join(" ")}
+                    </div>
                   </div>
                 </a>
                 <a
                   href="#"
                   className="flex h-12 items-center gap-3 rounded-lg border border-white/20 bg-black px-5 transition-all hover:bg-white/5"
                 >
-                  <svg className="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M3.609 1.814L13.792 12 3.61 22.186a.996.996 0 0 1-.41-.814V2.628c0-.34.17-.65.41-.814zm11.233 11.233l2.84 2.84L5.672 21.01l9.17-7.963zm2.84-2.84l-2.84 2.84 9.17 7.963L5.672 2.99 3.609 1.814 13.792 12zM14.842 12l-1.05-1.05 4.95-2.115 1.874 1.874a.996.996 0 0 1 0 1.414l-1.874 1.874-3.9-3z"/>
+                  <svg
+                    className="h-6 w-6"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                  >
+                    <path d="M3.609 1.814L13.792 12 3.609 22.186A.996.996 0 013.2 21.372V2.628c0-.34.17-.65.409-.814zm10.591 10.186l2.84 2.84-11.01 6.124 8.17-8.964zm2.84-2.84l-2.84 2.84 8.17-8.964-11.01 6.124 5.68 0zm.362 1.394l4.617-2.556c.362-.2.594-.611.594-1.074 0-.463-.232-.873-.594-1.074L17.402 3.294c-.362-.2-.826-.2-1.188 0L3.609 10.186 13.792 12l3.61-1.446z" />
                   </svg>
                   <div className="text-start">
-                    <div className="text-[10px] uppercase leading-none text-gray-400">{footerData.app.googlePlay.split(' ').slice(0, 2).join(' ')}</div>
-                    <div className="text-sm font-bold leading-tight">{footerData.app.googlePlay.split(' ').slice(2).join(' ')}</div>
+                    <div className="text-[10px] uppercase leading-none text-gray-400">
+                      {footerData.app.googlePlay
+                        .split(" ")
+                        .slice(0, 2)
+                        .join(" ")}
+                    </div>
+                    <div className="text-sm font-bold leading-tight">
+                      {footerData.app.googlePlay.split(" ").slice(2).join(" ")}
+                    </div>
                   </div>
                 </a>
               </div>
@@ -193,9 +230,12 @@ export function Footer() {
         </div>
 
         <div className="pt-8 text-start text-[13px] text-gray-500 border-t border-white/10">
-          <p>© {new Date().getFullYear()} Starbucks Coffee Company. {footerData.allRightsReserved}</p>
+          <p>
+            © {new Date().getFullYear()} Starbucks Coffee Company.{" "}
+            {footerData.allRightsReserved}
+          </p>
         </div>
       </div>
     </footer>
-  )
+  );
 }

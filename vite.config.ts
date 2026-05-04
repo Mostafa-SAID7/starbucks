@@ -1,61 +1,56 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import path from 'path'
-import { VitePWA } from 'vite-plugin-pwa'
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import path from "path";
+import { VitePWA } from "vite-plugin-pwa";
 
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
-    react({
-      // Enable React Compiler for better performance (React 19 feature)
-      babel: {
-        plugins: [
-          ['babel-plugin-react-compiler'],
-        ],
-      },
-    }),
+    react(),
     VitePWA({
-      registerType: 'autoUpdate',
-      includeAssets: ['favicon.ico', 'favicon.png', 'favicon.svg', 'logo.png', 'robots.txt'],
+      registerType: "autoUpdate",
+      includeAssets: ["favicon.png", "favicon.svg", "logo.png", "robots.txt"],
       manifest: {
-        name: 'Starbucks Egypt',
-        short_name: 'Starbucks EG',
-        description: 'Starbucks Egypt - Official Clone',
-        theme_color: '#006241',
-        background_color: '#ffffff',
-        display: 'standalone',
-        orientation: 'portrait-primary',
+        name: "Starbucks Egypt",
+        short_name: "Starbucks EG",
+        description: "Starbucks Egypt - Official Clone",
+        theme_color: "#006241",
+        background_color: "#ffffff",
+        display: "standalone",
+        orientation: "portrait-primary",
         icons: [
           {
-            src: '/favicon.ico',
-            sizes: '64x64 32x32 24x24 16x16',
-            type: 'image/x-icon'
+            src: "/favicon.png",
+            sizes: "512x512",
+            type: "image/png",
+            purpose: "any maskable",
           },
           {
-            src: '/favicon.png',
-            sizes: '512x512',
-            type: 'image/png'
+            src: "/favicon.svg",
+            sizes: "any",
+            type: "image/svg+xml",
           },
           {
-            src: '/favicon.svg',
-            sizes: 'any',
-            type: 'image/svg+xml'
-          }
+            src: "/logo.png",
+            sizes: "512x512",
+            type: "image/png",
+          },
         ],
-        categories: ['food', 'drink', 'coffee'],
-        lang: 'en',
-        dir: 'ltr',
-        start_url: '/',
-        scope: '/',
+        categories: ["food", "drink", "coffee"],
+        lang: "en",
+        dir: "ltr",
+        start_url: "/",
+        scope: "/",
       },
       workbox: {
-        globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2,woff,ttf,eot}'],
+        globPatterns: ["**/*.{js,css,html,ico,png,svg,woff2,woff,ttf,eot}"],
         runtimeCaching: [
           {
-            urlPattern: /^https:\/\/www\.starbucks\.eg\/.*\.(?:jpg|jpeg|png|webp|svg)$/i,
-            handler: 'CacheFirst',
+            urlPattern:
+              /^https:\/\/www\.starbucks\.eg\/.*\.(?:jpg|jpeg|png|webp|svg)$/i,
+            handler: "CacheFirst",
             options: {
-              cacheName: 'starbucks-images',
+              cacheName: "starbucks-images",
               expiration: {
                 maxEntries: 100,
                 maxAgeSeconds: 60 * 60 * 24 * 30, // 30 days
@@ -67,9 +62,9 @@ export default defineConfig({
           },
           {
             urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
-            handler: 'CacheFirst',
+            handler: "CacheFirst",
             options: {
-              cacheName: 'google-fonts-stylesheets',
+              cacheName: "google-fonts-stylesheets",
               expiration: {
                 maxEntries: 10,
                 maxAgeSeconds: 60 * 60 * 24 * 365, // 1 year
@@ -78,9 +73,9 @@ export default defineConfig({
           },
           {
             urlPattern: /^https:\/\/fonts\.gstatic\.com\/.*/i,
-            handler: 'CacheFirst',
+            handler: "CacheFirst",
             options: {
-              cacheName: 'google-fonts-webfonts',
+              cacheName: "google-fonts-webfonts",
               expiration: {
                 maxEntries: 20,
                 maxAgeSeconds: 60 * 60 * 24 * 365, // 1 year
@@ -92,23 +87,23 @@ export default defineConfig({
       devOptions: {
         enabled: false, // Set to true to test PWA in dev mode
       },
-    })
+    }),
   ],
   resolve: {
     alias: [
       {
-        find: '@',
-        replacement: path.resolve(__dirname, './src'),
+        find: "@",
+        replacement: path.resolve(__dirname, "./src"),
       },
     ],
   },
   optimizeDeps: {
-    exclude: ['lucide-react'],
-    include: ['react', 'react-dom', 'react-router-dom', 'framer-motion'],
+    exclude: ["lucide-react"],
+    include: ["react", "react-dom", "react-router-dom", "framer-motion"],
   },
   build: {
-    target: 'esnext',
-    minify: 'terser',
+    target: "esnext",
+    minify: "terser",
     terserOptions: {
       compress: {
         drop_console: true,
@@ -117,11 +112,29 @@ export default defineConfig({
     },
     rollupOptions: {
       output: {
-        manualChunks: {
-          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
-          'motion-vendor': ['framer-motion'],
-          'ui-vendor': ['lucide-react', 'clsx', 'tailwind-merge'],
-          'i18n-vendor': ['i18next', 'react-i18next'],
+        manualChunks(id) {
+          if (id.includes("node_modules")) {
+            if (
+              id.includes("react") ||
+              id.includes("react-dom") ||
+              id.includes("react-router")
+            ) {
+              return "react-vendor";
+            }
+            if (id.includes("framer-motion")) {
+              return "motion-vendor";
+            }
+            if (
+              id.includes("lucide-react") ||
+              id.includes("clsx") ||
+              id.includes("tailwind-merge")
+            ) {
+              return "ui-vendor";
+            }
+            if (id.includes("i18next")) {
+              return "i18n-vendor";
+            }
+          }
         },
       },
     },
@@ -132,4 +145,4 @@ export default defineConfig({
       overlay: false, // Disable HMR overlay for cleaner UX
     },
   },
-})
+});
