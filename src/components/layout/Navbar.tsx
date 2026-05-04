@@ -27,6 +27,7 @@ export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
   const mobileMenuRef = useRef<HTMLDivElement>(null);
+  const hamburgerButtonRef = useRef<HTMLButtonElement>(null);
 
   const lang = (i18n.language === "ar" ? "ar" : "en") as "ar" | "en";
   const isRTL = lang === "ar";
@@ -48,10 +49,8 @@ export function Navbar() {
 
   // Close mobile menu on route change
   useEffect(() => {
-    if (isMobileMenuOpen) {
-      setTimeout(() => setIsMobileMenuOpen(false), 0);
-    }
-  }, [location.pathname, isMobileMenuOpen]);
+    setIsMobileMenuOpen(false);
+  }, [location.pathname]);
 
   // Handle scroll effect
   useEffect(() => {
@@ -78,10 +77,10 @@ export function Navbar() {
   // Handle click outside mobile menu
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (
-        mobileMenuRef.current &&
-        !mobileMenuRef.current.contains(event.target as Node)
-      ) {
+      const target = event.target as Node;
+
+      // Don't close if clicking inside the mobile menu
+      if (mobileMenuRef.current && !mobileMenuRef.current.contains(target)) {
         setIsMobileMenuOpen(false);
       }
     };
@@ -282,9 +281,13 @@ export function Navbar() {
 
             {/* Mobile Menu Button */}
             <Button
+              ref={hamburgerButtonRef}
               variant="ghost"
               size="icon"
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsMobileMenuOpen(!isMobileMenuOpen);
+              }}
               className="lg:hidden text-starbucks-dark dark:text-foreground-dark rounded-full h-11 w-11 hover:bg-gray-100 dark:hover:bg-zinc-900 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-starbucks-green"
               aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
               aria-expanded={isMobileMenuOpen}
