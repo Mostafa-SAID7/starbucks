@@ -93,6 +93,7 @@ export function FeaturedCards() {
     </section>
   )
 }
+
 export function FeaturedCardsSkeleton() {
   return (
     <section className="py-12 dark:bg-black transition-colors">
