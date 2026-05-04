@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { motion, AnimatePresence } from 'framer-motion'
 
 // Layout & Components
-import { MainLayout } from '@/components'
+import { MainLayout, SkipNav } from '@/components'
 import { ANIMATIONS } from '@/constants'
 import { 
   HomeSkeleton, 
@@ -91,6 +91,8 @@ const AnimatedRoutes = () => {
 function App() {
   return (
     <Router>
+      <SkipNav />
+      <div id="main-content" />
       <LanguageDirectionHandler />
       <AnimatedRoutes />
     </Router>

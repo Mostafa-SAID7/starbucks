@@ -25,3 +25,7 @@ export * from './sections/MenuPromoVideo'
 
 // UI Primitives
 export * from './ui'
+
+// Error Boundary
+export { ErrorBoundary } from './ErrorBoundary'
+export { SkipNav } from './ui/skip-nav'
