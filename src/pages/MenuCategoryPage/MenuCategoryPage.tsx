@@ -91,7 +91,7 @@ export const MenuCategoryPage = () => {
                 asChild
                 className="rounded-2xl bg-starbucks-green font-bold text-white shadow-sm hover:bg-starbucks-dark dark:bg-starbucks-light dark:text-black dark:hover:bg-white"
               >
-                <Link to="/locations">
+              <Link to={`/${currentLang}/locations`}>
                   {currentLang === "ar"
                     ? "مواقع محلاتنا"
                     : "Our Store Locations"}

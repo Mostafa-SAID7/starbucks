@@ -9,6 +9,7 @@ import { cities, TALABAT_URL } from './constants'
 export const LocationsPage: React.FC = () => {
   const { i18n } = useTranslation()
   const isRTL = i18n.language === 'ar'
+  const currentLang = (i18n.language === 'ar' ? 'ar' : 'en') as 'ar' | 'en'
   const [search, setSearch] = useState('')
 
   return (
@@ -70,8 +71,8 @@ export const LocationsPage: React.FC = () => {
         {/* Right — Cards */}
         <div className="flex flex-1 flex-col divide-y divide-gray-100 dark:divide-zinc-800 lg:max-w-[55%]">
           {/* Card 1 — Joy of Coffee */}
-          <div className="flex flex-row-reverse overflow-hidden">
-            <div className="w-1/2 flex-shrink-0">
+          <div className="flex flex-col overflow-hidden md:flex-row-reverse">
+            <div className="w-full md:w-1/2 flex-shrink-0">
               <img
                 src="https://www.starbucks.eg/assets/image-cache/coffee-beans-hero.jpg"
                 alt="The Joy of Starbucks Coffee"
@@ -92,7 +93,7 @@ export const LocationsPage: React.FC = () => {
                 }
               </p>
               <Link
-                to="/our-coffees"
+                to={`/${currentLang}/our-coffees`}
                 className="inline-block rounded-full border border-starbucks-dark dark:border-white px-5 py-2 text-sm font-bold text-starbucks-dark dark:text-white hover:bg-starbucks-dark hover:text-white dark:hover:bg-white dark:hover:text-black transition-all w-fit"
               >
                 {isRTL ? 'اقرأ المزيد' : 'Read more'}
@@ -101,8 +102,8 @@ export const LocationsPage: React.FC = () => {
           </div>
 
           {/* Card 2 — Starbucks Delivers */}
-          <div className="flex flex-row-reverse overflow-hidden">
-            <div className="w-1/2 flex-shrink-0">
+          <div className="flex flex-col overflow-hidden md:flex-row-reverse">
+            <div className="w-full md:w-1/2 flex-shrink-0">
               <img
                 src="https://www.starbucks.eg/assets/image-cache/delivery-cups.jpg"
                 alt="Starbucks Delivers"

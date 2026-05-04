@@ -59,7 +59,6 @@ export interface GenericPageData {
       content: string;
     }[];
   };
-  sidebar?: React.ReactNode;
   sidebarImage?: string; // URL for sticky sidebar image
 }
 
@@ -172,14 +171,16 @@ export const GenericPage: React.FC<GenericPageProps> = ({
 
               {/* Sticky Sidebar Image Column */}
               <div className="hidden lg:block flex-shrink-0 lg:w-1/2">
-                <div className="sticky top-24 h-[calc(100vh-8rem)] w-full rounded-3xl shadow-2xl">
-                  <img
-                    src={data.sidebarImage}
-                    alt={data.title[lang]}
-                    className="w-full h-full object-cover rounded-3xl"
-                    loading="eager"
-                  />
-                </div>
+                <aside className="lg:sticky lg:top-24">
+                  <div className="max-h-[calc(100vh-8rem)] w-full rounded-3xl shadow-2xl overflow-hidden">
+                    <img
+                      src={data.sidebarImage}
+                      alt={data.title[lang]}
+                      className="w-full h-full object-cover rounded-3xl"
+                      loading="eager"
+                    />
+                  </div>
+                </aside>
               </div>
             </div>
           </div>
@@ -195,7 +196,6 @@ export const GenericPage: React.FC<GenericPageProps> = ({
       <StaticPageLayout
         title={data.title}
         headerSubtitle={data.lastUpdated}
-        sidebar={data.sidebar}
         isRTL={isRTL}
       >
         {/* Intro Section */}

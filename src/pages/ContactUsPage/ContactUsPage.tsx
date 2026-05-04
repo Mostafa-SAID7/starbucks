@@ -93,7 +93,7 @@ export const ContactUsPage: React.FC = () => {
               {data.hero.imageAlt[lang]}
             </p>
             <Link
-              to="/about-us"
+              to={`/${lang}/about-us`}
               className="inline-block rounded-full bg-starbucks-green px-10 py-4 text-base font-black text-white hover:bg-white hover:text-starbucks-dark transition-all shadow-2xl transform hover:-translate-y-1"
             >
               {isRTL ? 'اكتشف المزيد' : 'Discover More'}
