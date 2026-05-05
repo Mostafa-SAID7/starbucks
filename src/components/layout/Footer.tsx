@@ -26,16 +26,13 @@ export function Footer() {
         : "en"
   ) as "ar" | "en";
   const footerData = data[lang];
-  const [openSection, setOpenSection] = useState<string | null>(null);
+  // Single unified state: only ONE accordion can ever be open at a time
+  const [activeAccordion, setActiveAccordion] = useState<string | null>(null);
 
-  const toggleSection = (key: string) => {
-    console.log("Toggle clicked:", key, "Current open:", openSection);
-    setOpenSection((prev) => {
-      const newValue = prev === key ? null : key;
-      console.log("Setting to:", newValue);
-      return newValue;
-    });
+  const toggleAccordion = (id: string) => {
+    setActiveAccordion((prev) => (prev === id ? null : id));
   };
+
 
   const socialIcons: Record<string, React.ReactNode> = {
     spotify: (
@@ -89,21 +86,17 @@ export function Footer() {
           <div className="grid grid-cols-2 gap-4 lg:hidden">
             {footerData.sections.map(
               (section: FooterSection, index: number) => {
-                const sectionId = `mobile-section-${lang}-${index}-${section.title.replace(/\s+/g, "-")}`;
-                const isOpen = openSection === sectionId;
+                const accordionId = `section-${index}`;
+                const isOpen = activeAccordion === accordionId;
 
                 return (
                   <div
-                    key={sectionId}
-                    className="border border-white/10 rounded-lg overflow-hidden"
+                    key={index}
+                    className="border border-white/10 rounded-lg overflow-hidden self-start"
                   >
                     <button
                       type="button"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        toggleSection(sectionId);
-                      }}
+                      onClick={() => toggleAccordion(accordionId)}
                       className="flex w-full items-center justify-between p-4 text-left hover:bg-white/5 transition-colors"
                       aria-expanded={isOpen}
                     >
@@ -111,18 +104,16 @@ export function Footer() {
                         {section.title}
                       </span>
                       <motion.div
-                        animate={{
-                          rotate: isOpen ? 180 : 0,
-                        }}
+                        animate={{ rotate: isOpen ? 180 : 0 }}
                         transition={{ duration: 0.2 }}
                       >
                         <ChevronDown className="h-4 w-4 text-gray-400" />
                       </motion.div>
                     </button>
-                    <AnimatePresence initial={false} mode="wait">
+                    <AnimatePresence initial={false}>
                       {isOpen && (
                         <motion.div
-                          key={`content-${sectionId}`}
+                          key={`content-${accordionId}`}
                           initial="collapsed"
                           animate="open"
                           exit="collapsed"
@@ -156,16 +147,12 @@ export function Footer() {
             )}
 
             {/* Location Selector as 4th item in grid */}
-            <div className="border border-white/10 rounded-lg overflow-hidden">
+            <div className="border border-white/10 rounded-lg overflow-hidden self-start">
               <button
                 type="button"
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  toggleSection("mobile-location-selector");
-                }}
+                onClick={() => toggleAccordion('location')}
                 className="flex w-full items-center justify-between p-4 text-left hover:bg-white/5 transition-colors"
-                aria-expanded={openSection === "mobile-location-selector"}
+                aria-expanded={activeAccordion === 'location'}
               >
                 <div className="flex items-center gap-2">
                   <Globe className="h-4 w-4 text-starbucks-green" />
@@ -174,19 +161,16 @@ export function Footer() {
                   </span>
                 </div>
                 <motion.div
-                  animate={{
-                    rotate:
-                      openSection === "mobile-location-selector" ? 180 : 0,
-                  }}
+                  animate={{ rotate: activeAccordion === 'location' ? 180 : 0 }}
                   transition={{ duration: 0.2 }}
                 >
                   <ChevronDown className="h-4 w-4 text-gray-400" />
                 </motion.div>
               </button>
-              <AnimatePresence initial={false} mode="wait">
-                {openSection === "mobile-location-selector" && (
+              <AnimatePresence initial={false}>
+                {activeAccordion === 'location' && (
                   <motion.div
-                    key="content-mobile-location-selector"
+                    key="content-location"
                     initial="collapsed"
                     animate="open"
                     exit="collapsed"
