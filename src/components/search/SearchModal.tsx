@@ -207,7 +207,7 @@ const SearchModal: React.FC<SearchModalProps> = ({ isOpen, onClose }) => {
                   initial={{ opacity: 0, x: isRTL ? -20 : 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: index * 0.05 }}
-                  className={`group flex items-center gap-4 p-4 rounded-xl hover:bg-gray-50 dark:hover:bg-zinc-800/50 transition-colors border border-transparent hover:border-gray-200 dark:hover:border-zinc-700 w-full ${isRTL ? "text-right flex-row-reverse" : "text-left"}`}
+                  className={`group flex items-center gap-4 p-4 rounded-xl hover:bg-gray-50 dark:hover:bg-zinc-800/50 transition-colors border border-transparent hover:border-gray-200 dark:hover:border-zinc-700 w-full ${isRTL ? "text-right" : "text-left"}`}
                 >
                   <div className="flex-shrink-0 w-16 h-16 rounded-full overflow-hidden bg-gray-100 dark:bg-zinc-800">
                     {item.image ? (
@@ -230,7 +230,7 @@ const SearchModal: React.FC<SearchModalProps> = ({ isOpen, onClose }) => {
                       {item.description}
                     </p>
                     <div
-                      className={`flex items-center gap-2 mt-1 text-xs text-gray-400 ${isRTL ? "flex-row-reverse" : ""}`}
+                      className="flex items-center gap-2 mt-1 text-xs text-gray-400"
                     >
                       <span>{item.categoryTitle}</span>
                       <span>•</span>

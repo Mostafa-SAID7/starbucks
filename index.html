@@ -2,6 +2,15 @@
 <html lang="ar" dir="rtl">
   <head>
     <meta charset="UTF-8" />
+    <!-- Immediately set dir from URL to prevent flash of incorrect direction (FOID) -->
+    <script>
+      (function () {
+        var m = window.location.pathname.match(/^\/(ar|en)(\/|$)/);
+        var l = m ? m[1] : 'ar';
+        document.documentElement.setAttribute('dir', l === 'ar' ? 'rtl' : 'ltr');
+        document.documentElement.setAttribute('lang', l);
+      })();
+    </script>
     <link rel="icon" type="image/png" href="/favicon.png" />
     <link rel="apple-touch-icon" href="/favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />

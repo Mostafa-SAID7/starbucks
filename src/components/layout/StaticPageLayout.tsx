@@ -9,7 +9,6 @@ interface StaticPageLayoutProps {
   headerVariant?: 'light' | 'dark'
   children: React.ReactNode
   sidebar?: React.ReactNode
-  isRTL?: boolean
 }
 
 export const StaticPageLayout: React.FC<StaticPageLayoutProps> = ({
@@ -18,7 +17,6 @@ export const StaticPageLayout: React.FC<StaticPageLayoutProps> = ({
   headerVariant = 'light',
   children,
   sidebar,
-  isRTL
 }) => {
   const { i18n } = useTranslation()
   const lang = (i18n.language === 'ar' ? 'ar' : 'en') as 'ar' | 'en'
@@ -34,7 +32,7 @@ export const StaticPageLayout: React.FC<StaticPageLayoutProps> = ({
       />
 
       <div className="container mx-auto max-w-6xl px-6 py-16 lg:py-24">
-        <div className={`flex flex-col gap-10 ${sidebar ? (isRTL ? 'lg:flex-row-reverse' : 'lg:flex-row') : ''}`}>
+        <div className={`flex flex-col gap-10 ${sidebar ? 'lg:flex-row' : ''}`}>
           {sidebar && (
             <aside className="lg:w-64 flex-shrink-0">
               <div className="sticky top-24">

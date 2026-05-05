@@ -39,7 +39,6 @@ export const CookieNoticePage: React.FC = () => {
     <StaticPageLayout
       title={data.title as LocalizedText}
       sidebar={Sidebar}
-      isRTL={isRTL}
     >
       <div className="space-y-12">
         <div className="space-y-4">

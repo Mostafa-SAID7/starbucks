@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect } from "react";
+import { lazy, Suspense, useLayoutEffect } from "react";
 import {
   BrowserRouter as Router,
   Routes,
@@ -115,18 +115,17 @@ const LanguageDirectionHandler = () => {
   const { i18n } = useTranslation();
   const { lang } = useParams<{ lang: string }>();
 
-  useEffect(() => {
-    // Sync i18n with URL parameter
-    if (lang && (lang === "ar" || lang === "en") && i18n.language !== lang) {
-      i18n.changeLanguage(lang);
+  // useLayoutEffect: fires synchronously before paint — prevents direction flash
+  useLayoutEffect(() => {
+    if (lang && (lang === "ar" || lang === "en")) {
+      const dir = lang === "ar" ? "rtl" : "ltr";
+      document.documentElement.setAttribute("dir", dir);
+      document.documentElement.setAttribute("lang", lang);
+      if (i18n.language !== lang) {
+        i18n.changeLanguage(lang);
+      }
     }
   }, [lang, i18n]);
-
-  useEffect(() => {
-    const dir = i18n.language === "ar" ? "rtl" : "ltr";
-    document.documentElement.dir = dir;
-    document.documentElement.lang = i18n.language;
-  }, [i18n.language]);
 
   return null;
 };
@@ -141,7 +140,7 @@ const AnimatedRoutes = () => {
         <Route path="/" element={<Navigate to="/ar" replace />} />
 
         {/* Language-prefixed routes */}
-        <Route path="/:lang" element={<MainLayout />}>
+        <Route path="/:lang" element={<><LanguageDirectionHandler /><MainLayout /></>}>
           <Route
             index
             element={
@@ -279,7 +278,6 @@ function App() {
     <Router>
       <SkipNav />
       <div id="main-content" />
-      <LanguageDirectionHandler />
       <AnimatedRoutes />
     </Router>
   );

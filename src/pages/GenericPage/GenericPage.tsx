@@ -90,7 +90,7 @@ export const GenericPage: React.FC<GenericPageProps> = ({
           {/* Container for both content and image */}
           <div className="container mx-auto max-w-7xl px-6 py-16 lg:py-24 overflow-visible">
             <div
-              className={`flex ${isRTL ? "flex-row-reverse" : "flex-row"} gap-8 lg:gap-12 w-full`}
+              className="flex flex-col lg:flex-row gap-8 lg:gap-12 w-full"
             >
               {/* Content Column - Scrollable */}
               <div className="flex-1 min-w-0 lg:w-1/2">
@@ -196,7 +196,6 @@ export const GenericPage: React.FC<GenericPageProps> = ({
       <StaticPageLayout
         title={data.title}
         headerSubtitle={data.lastUpdated}
-        isRTL={isRTL}
       >
         {/* Intro Section */}
         {data.intro && (

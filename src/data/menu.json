@@ -14,14 +14,14 @@
           {
             "id": "espresso",
             "title": "مشروبات الاسبرسو",
-            "image": "https://www.starbucks.eg/sites/starbucks-eg-pwa/files/styles/c06_cards_grid_314x176/public/2021-01/ProductShot_5.jpg.webp?h=34e43602&itok=OqHJvNZs",
+            "image": "/menu/deink.webp",
             "href": "/menu/drinks/espresso",
             "items": [
               {
                 "id": "caffe-latte",
                 "title": "كافيه لاتيه",
                 "description": "إسبريسو غني متوازن مع الحليب المبخر وطبقة خفيفة من الرغوة.",
-                "image": "https://www.starbucks.eg/sites/starbucks-eg-pwa/files/styles/c06_cards_grid_314x176/public/2021-01/ProductShot_5.jpg.webp?h=34e43602&itok=OqHJvNZs",
+                "image": "/menu/deink.webp",
                 "href": "https://www.talabat.com/ar/egypt/restaurant/516787/starbucks-city-scape-6th-of-october?aid=7935"
               }
             ]
@@ -29,7 +29,7 @@
           {
             "id": "frappuccino",
             "title": "فرابوتشينو - مع القهوة",
-            "image": "https://www.starbucks.eg/sites/starbucks-eg-pwa/files/styles/c06_cards_grid_314x176/public/2021-01/ProductShot_5.jpg.webp?h=34e43602&itok=OqHJvNZs",
+            "image": "/menu/deink.webp",
             "href": "/menu/drinks/frappuccino",
             "items": []
           }
@@ -46,21 +46,21 @@
           {
             "id": "sandwiches",
             "title": "سندويشات",
-            "image": "https://www.starbucks.eg/sites/starbucks-eg-pwa/files/styles/c06_cards_grid_314x176/public/2021-01/Image-104_0.jpg.webp?h=04d92ac6&itok=JbtQOzRa",
+            "image": "/menu/food.webp",
             "href": "/menu/food/sandwiches",
             "items": [
               {
                 "id": "halloumi",
                 "title": "بانيني الحلوم على الطريقة العربية",
                 "description": "حلوم مشوي مع أعشاب، محضر على الطريقة العربية مع جبنة حلوم مشوية وطماطم مجففة ومعجون زيتون أسود.",
-                "image": "https://www.starbucks.eg/sites/starbucks-eg-pwa/files/styles/c06_cards_grid_314x176/public/2021-01/Image-104_0.jpg.webp?h=04d92ac6&itok=JbtQOzRa",
+                "image": "/menu/food.webp",
                 "href": "https://www.talabat.com/ar/egypt/restaurant/516787/starbucks-city-scape-6th-of-october?aid=7935"
               },
               {
                 "id": "focaccia",
                 "title": "فركاتشيا الأجبان الأربعة مع الطماطم المشوية",
                 "description": "خبز فوكاتشيا بالأعشاب محشوة بخلطة غنية من أربعة أنواع من الأجبان.",
-                "image": "https://www.starbucks.eg/sites/starbucks-eg-pwa/files/styles/c06_cards_grid_314x176/public/2021-01/Image-104_0.jpg.webp?h=04d92ac6&itok=JbtQOzRa",
+                "image": "/menu/food.webp",
                 "href": "https://www.talabat.com/ar/egypt/restaurant/516787/starbucks-city-scape-6th-of-october?aid=7935"
               }
             ]
@@ -68,7 +68,7 @@
           {
             "id": "salads",
             "title": "سلطات",
-            "image": "https://www.starbucks.eg/sites/starbucks-eg-pwa/files/styles/c06_cards_grid_314x176/public/2021-01/Image-104_0.jpg.webp?h=04d92ac6&itok=JbtQOzRa",
+            "image": "/menu/food.webp",
             "href": "/menu/food/salads",
             "items": []
           }
@@ -83,7 +83,7 @@
     },
     "sidebar": {
       "title": "القائمة",
-      "image": "https://www.starbucks.eg/sites/starbucks-eg-pwa/files/styles/c01_vertical_card_1287x1792/public/2021-01/MenuImg2.jpg.webp?h=8a7fc05e&itok=R8sPwZHl",
+      "image": "/menu/Menu.webp",
       "actions": [
         {
           "label": "اطلب الآن",
@@ -113,14 +113,14 @@
           {
             "id": "espresso",
             "title": "Espresso Beverages",
-            "image": "https://www.starbucks.eg/sites/starbucks-eg-pwa/files/styles/c06_cards_grid_314x176/public/2021-01/ProductShot_5.jpg.webp?h=34e43602&itok=OqHJvNZs",
+            "image": "/menu/deink.webp",
             "href": "/menu/drinks/espresso",
             "items": [
               {
                 "id": "caffe-latte",
                 "title": "Caffe Latte",
                 "description": "Our dark, rich espresso balanced with steamed milk and a light layer of foam.",
-                "image": "https://www.starbucks.eg/sites/starbucks-eg-pwa/files/styles/c06_cards_grid_314x176/public/2021-01/ProductShot_5.jpg.webp?h=34e43602&itok=OqHJvNZs",
+                "image": "/menu/deink.webp",
                 "href": "https://www.talabat.com/en/egypt/restaurant/516787/starbucks-city-scape-6th-of-october?aid=7935"
               }
             ]
@@ -138,14 +138,14 @@
           {
             "id": "sandwiches",
             "title": "Sandwiches",
-            "image": "https://www.starbucks.eg/sites/starbucks-eg-pwa/files/styles/c06_cards_grid_314x176/public/2021-01/Image-104_0.jpg.webp?h=04d92ac6&itok=JbtQOzRa",
+            "image": "/menu/food.webp",
             "href": "/menu/food/sandwiches",
             "items": [
               {
                 "id": "halloumi",
                 "title": "Arabic Style Halloumi Panini",
                 "description": "Grilled halloumi with herbs, prepared Arabic style with grilled halloumi cheese, dried tomatoes and black olive paste.",
-                "image": "https://www.starbucks.eg/sites/starbucks-eg-pwa/files/styles/c06_cards_grid_314x176/public/2021-01/Image-104_0.jpg.webp?h=04d92ac6&itok=JbtQOzRa",
+                "image": "/menu/food.webp",
                 "href": "https://www.talabat.com/en/egypt/restaurant/516787/starbucks-city-scape-6th-of-october?aid=7935"
               }
             ]
@@ -161,7 +161,7 @@
     },
     "sidebar": {
       "title": "Menu",
-      "image": "https://www.starbucks.eg/sites/starbucks-eg-pwa/files/styles/c01_vertical_card_1287x1792/public/2021-01/MenuImg2.jpg.webp?h=8a7fc05e&itok=R8sPwZHl",
+      "image": "/menu/Menu.webp",
       "actions": [
         {
           "label": "Order Now",

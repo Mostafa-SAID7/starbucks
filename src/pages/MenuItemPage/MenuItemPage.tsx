@@ -34,18 +34,7 @@ export const MenuItemPage = () => {
     <div className="container mx-auto px-4 py-8 max-w-7xl">
       <SEO title={`${subcategory.title} - ${category.title} - ${data.title}`} />
 
-      <div className="flex flex-col gap-8 md:flex-row">
-        {/* Sidebar (Appears on the right in RTL) */}
-        <div className="w-full md:w-80 lg:w-[350px] flex-shrink-0">
-          <div className="sticky top-28">
-            <VerticalCard
-              title={subcategory.title}
-              image={subcategory.image || data.sidebar.image}
-              actions={data.sidebar.actions}
-            />
-          </div>
-        </div>
-
+      <div className="flex flex-col-reverse gap-8 md:flex-row">
         {/* Main Content Area */}
         <div className="flex-1 space-y-8">
           <div className="text-center md:text-start">
@@ -117,6 +106,17 @@ export const MenuItemPage = () => {
                 linkLabel={data.allergyInfo.linkLabel}
               />
             </div>
+          </div>
+        </div>
+
+        {/* Sidebar */}
+        <div className="w-full md:w-80 lg:w-[350px] flex-shrink-0">
+          <div className="sticky top-28">
+            <VerticalCard
+              title={subcategory.title}
+              image={subcategory.image || data.sidebar.image}
+              actions={data.sidebar.actions}
+            />
           </div>
         </div>
       </div>

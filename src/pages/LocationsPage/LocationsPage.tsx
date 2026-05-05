@@ -71,18 +71,8 @@ export const LocationsPage: React.FC = () => {
         {/* Right — Cards */}
         <div className="flex flex-1 flex-col divide-y divide-gray-100 dark:divide-zinc-800 lg:max-w-[55%]">
           {/* Card 1 — Joy of Coffee */}
-          <div className="flex flex-col overflow-hidden md:flex-row-reverse">
-            <div className="w-full md:w-1/2 flex-shrink-0">
-              <img
-                src="https://www.starbucks.eg/assets/image-cache/coffee-beans-hero.jpg"
-                alt="The Joy of Starbucks Coffee"
-                className="h-full w-full object-cover"
-                onError={(e) => {
-                  e.currentTarget.src = 'https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=600&q=80'
-                }}
-              />
-            </div>
-            <div className="flex flex-1 flex-col justify-center p-8">
+          <div className="flex flex-col overflow-hidden md:flex-row">
+            <div className="flex flex-1 flex-col justify-center p-8 order-2 md:order-1">
               <h2 className="mb-2 text-xl font-bold text-starbucks-dark dark:text-white">
                 {isRTL ? 'بهجة قهوة ستاربكس' : 'The Joy of Starbucks Coffee'}
               </h2>
@@ -99,21 +89,21 @@ export const LocationsPage: React.FC = () => {
                 {isRTL ? 'اقرأ المزيد' : 'Read more'}
               </Link>
             </div>
-          </div>
-
-          {/* Card 2 — Starbucks Delivers */}
-          <div className="flex flex-col overflow-hidden md:flex-row-reverse">
-            <div className="w-full md:w-1/2 flex-shrink-0">
+            <div className="w-full md:w-1/2 flex-shrink-0 order-1 md:order-2">
               <img
-                src="https://www.starbucks.eg/assets/image-cache/delivery-cups.jpg"
-                alt="Starbucks Delivers"
+                src="https://www.starbucks.eg/assets/image-cache/coffee-beans-hero.jpg"
+                alt="The Joy of Starbucks Coffee"
                 className="h-full w-full object-cover"
                 onError={(e) => {
-                  e.currentTarget.src = 'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=600&q=80'
+                  e.currentTarget.src = 'https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=600&q=80'
                 }}
               />
             </div>
-            <div className="flex flex-1 flex-col justify-center p-8">
+          </div>
+
+          {/* Card 2 — Starbucks Delivers */}
+          <div className="flex flex-col overflow-hidden md:flex-row">
+            <div className="flex flex-1 flex-col justify-center p-8 order-2 md:order-1">
               <h2 className="mb-2 text-xl font-bold text-starbucks-dark dark:text-white">
                 {isRTL ? 'ستاربكس توصل' : 'Starbucks Delivers'}
               </h2>
@@ -130,6 +120,16 @@ export const LocationsPage: React.FC = () => {
               >
                 {isRTL ? 'اطلب الآن' : 'Order now'}
               </a>
+            </div>
+            <div className="w-full md:w-1/2 flex-shrink-0 order-1 md:order-2">
+              <img
+                src="https://www.starbucks.eg/assets/image-cache/delivery-cups.jpg"
+                alt="Starbucks Delivers"
+                className="h-full w-full object-cover"
+                onError={(e) => {
+                  e.currentTarget.src = 'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=600&q=80'
+                }}
+              />
             </div>
           </div>
         </div>

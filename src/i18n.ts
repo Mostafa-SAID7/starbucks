@@ -4,7 +4,14 @@ import { initReactI18next } from 'react-i18next'
 import en from './locales/en.json'
 import ar from './locales/ar.json'
 
-// We will add translations here as we develop features
+// Detect language from URL immediately (before React renders)
+const urlLangMatch = window.location.pathname.match(/^\/(ar|en)(\/|$)/)
+const initialLang = urlLangMatch ? urlLangMatch[1] : 'ar'
+
+// Apply direction synchronously so first React render is already correct
+document.documentElement.setAttribute('dir', initialLang === 'ar' ? 'rtl' : 'ltr')
+document.documentElement.setAttribute('lang', initialLang)
+
 const resources = {
   ar: {
     translation: ar
@@ -18,10 +25,10 @@ i18n
   .use(initReactI18next)
   .init({
     resources,
-    lng: 'ar', // default language
+    lng: initialLang,
     fallbackLng: 'en',
     interpolation: {
-      escapeValue: false // react already safes from xss
+      escapeValue: false
     }
   })
 

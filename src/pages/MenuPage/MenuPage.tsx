@@ -2,6 +2,7 @@ import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import * as data from "@/data";
 import { motion } from "framer-motion";
+import { AllergyInfo } from "@/components";
 
 interface MenuCategory {
   id: string;
@@ -9,20 +10,32 @@ interface MenuCategory {
   description: string;
   image: string;
   href: string;
+  sidebarTitle?: string;
 }
 
-interface AllergyInfo {
+interface AllergyInfoType {
   title: string;
   description: string;
   link: string;
   linkLabel: string;
 }
 
+interface SidebarAction {
+  label: string;
+  href: string;
+  primary: boolean;
+}
+
 interface MenuData {
   title: string;
   description: string;
   categories: MenuCategory[];
-  allergyInfo: AllergyInfo;
+  allergyInfo: AllergyInfoType;
+  sidebar: {
+    title: string;
+    image: string;
+    actions: SidebarAction[];
+  };
 }
 
 export const MenuPage = () => {
@@ -32,7 +45,6 @@ export const MenuPage = () => {
   // Access menu data safely
   const menuData = data.menu as Record<string, MenuData>;
   const pageData = menuData?.[lang];
-  const isRTL = lang === "ar";
 
   // Safety check
   if (!pageData) {
@@ -46,144 +58,113 @@ export const MenuPage = () => {
   const categories = Array.isArray(pageData.categories)
     ? pageData.categories
     : [];
-  const allergyInfo = pageData.allergyInfo || ({} as AllergyInfo);
+  const allergyInfo = pageData.allergyInfo || ({} as AllergyInfoType);
+  const sidebar = pageData.sidebar;
 
   return (
-    <div className="min-h-screen bg-background-light dark:bg-background-dark">
-      {/* Hero Section */}
-      <section className="relative bg-starbucks-green py-20 md:py-32">
-        <div className="container mx-auto max-w-7xl px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-center text-white"
-          >
-            <h1 className="mb-6 text-4xl font-bold md:text-5xl lg:text-6xl">
-              {String(pageData.title || "Menu")}
-            </h1>
-            <p className="mx-auto max-w-3xl text-lg md:text-xl leading-relaxed opacity-90 whitespace-pre-line">
-              {String(pageData.description || "")}
-            </p>
-          </motion.div>
-        </div>
-      </section>
+    <div className="flex flex-col-reverse lg:flex-row min-h-screen bg-background-light dark:bg-background-dark">
+      {/* Content Column */}
+      <div className="w-full lg:w-2/3 p-8 md:p-12 lg:p-20 xl:p-24 flex flex-col justify-center">
+        {/* Description Text */}
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-lg md:text-xl font-bold text-gray-900 dark:text-white mb-16 leading-relaxed max-w-4xl whitespace-pre-line"
+        >
+          {pageData.description}
+        </motion.p>
 
-      {/* Menu Categories Grid */}
-      <section className="py-16 md:py-24">
-        <div className="container mx-auto max-w-7xl px-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
-            {categories.map((category: MenuCategory, index: number) => (
-              <motion.div
-                key={String(category.id || index)}
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.2 }}
+        {/* Categories Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 md:gap-10 w-full max-w-6xl mb-16">
+          {categories.map((category, index) => (
+            <motion.div
+              key={category.id || index}
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.1 }}
+              className="flex flex-col h-full bg-white dark:bg-zinc-900 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow border border-gray-100 dark:border-zinc-800"
+            >
+              <Link
+                to={category.href || "#"}
+                className="group flex flex-col h-full"
               >
-                <Link
-                  to={String(category.href || "#")}
-                  className="group block overflow-hidden rounded-2xl bg-white dark:bg-zinc-900 shadow-lg hover:shadow-2xl transition-all duration-300"
-                >
-                  {/* Image */}
-                  <div className="relative h-64 md:h-80 overflow-hidden">
-                    <img
-                      src={String(category.image || "")}
-                      alt={String(category.title || "")}
-                      className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
-                  </div>
+                <div className="relative h-48 sm:h-56 overflow-hidden">
+                  <img
+                    src={category.image}
+                    alt={category.title}
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                </div>
+                <div className="p-6 flex flex-col flex-1 items-center text-center">
+                  <h2 className="text-xl md:text-2xl font-black text-gray-900 dark:text-white mb-3">
+                    {category.title}
+                  </h2>
+                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-6 flex-1">
+                    {category.description}
+                  </p>
+                  <span className="inline-flex items-center justify-center px-6 py-2 border-2 border-starbucks-green text-starbucks-green font-bold rounded-full hover:bg-starbucks-green/5 transition-colors">
+                    {category.sidebarTitle ||
+                      (lang === "ar" ? "اكتشف" : "Explore")}
+                  </span>
+                </div>
+              </Link>
+            </motion.div>
+          ))}
+        </div>
 
-                  {/* Content */}
-                  <div className="p-8">
-                    <h2
-                      className={`mb-4 text-2xl md:text-3xl font-bold text-gray-900 dark:text-white ${
-                        isRTL ? "text-right" : "text-left"
-                      }`}
-                    >
-                      {String(category.title || "")}
-                    </h2>
-                    <p
-                      className={`text-base md:text-lg text-gray-600 dark:text-gray-400 leading-relaxed mb-6 ${
-                        isRTL ? "text-right" : "text-left"
-                      }`}
-                    >
-                      {String(category.description || "")}
-                    </p>
+        {/* Allergy Info */}
+        {allergyInfo.title && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            className="w-full max-w-6xl mt-8"
+          >
+            <AllergyInfo
+              title={allergyInfo.title}
+              description={allergyInfo.description}
+              link={allergyInfo.link}
+              linkLabel={allergyInfo.linkLabel}
+            />
+          </motion.div>
+        )}
+      </div>
 
-                    {/* CTA Button */}
-                    <div className="flex justify-start">
-                      <span className="inline-flex items-center gap-2 text-starbucks-green font-bold text-lg group-hover:gap-4 transition-all">
-                        {isRTL ? "استكشف الآن" : "Explore Now"}
-                        <svg
-                          className={`h-5 w-5 transition-transform group-hover:translate-x-1 ${
-                            isRTL ? "rotate-180" : ""
-                          }`}
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M9 5l7 7-7 7"
-                          />
-                        </svg>
-                      </span>
-                    </div>
-                  </div>
-                </Link>
-              </motion.div>
+      {/* Sidebar Image Column */}
+      <div className="w-full lg:w-1/3 relative min-h-[60vh] lg:min-h-screen">
+        <div className="absolute inset-0">
+          <img
+            src={sidebar?.image || ""}
+            alt={sidebar?.title || "Menu"}
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+        </div>
+
+        <div className="absolute inset-0 flex flex-col items-center justify-end pb-16 px-8 text-center text-white">
+          <h1 className="text-4xl md:text-5xl font-black mb-10">
+            {sidebar?.title}
+          </h1>
+
+          <div className="flex flex-col gap-4 w-full max-w-sm">
+            {sidebar?.actions?.map((action, index) => (
+              <Link
+                key={index}
+                to={action.href}
+                className={`w-full py-3 px-6 rounded-full font-bold text-lg transition-all ${
+                  action.primary
+                    ? "bg-white text-gray-900 hover:bg-gray-100"
+                    : "border-2 border-white/80 text-white hover:bg-white/10"
+                }`}
+              >
+                {action.label}
+              </Link>
             ))}
           </div>
         </div>
-      </section>
-
-      {/* Allergy Info Section */}
-      {allergyInfo.title && (
-        <section className="py-12 bg-gray-50 dark:bg-zinc-900/50">
-          <div className="container mx-auto max-w-7xl px-6">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="text-center"
-            >
-              <h3 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">
-                {String(allergyInfo.title)}
-              </h3>
-              <p className="mb-6 text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
-                {String(allergyInfo.description)}
-              </p>
-              {allergyInfo.link && (
-                <a
-                  href={String(allergyInfo.link)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 text-starbucks-green font-bold hover:text-starbucks-dark transition-colors"
-                >
-                  {String(allergyInfo.linkLabel)}
-                  <svg
-                    className={`h-4 w-4 ${isRTL ? "rotate-180" : ""}`}
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M9 5l7 7-7 7"
-                    />
-                  </svg>
-                </a>
-              )}
-            </motion.div>
-          </div>
-        </section>
-      )}
+      </div>
     </div>
   );
 };
+
+export default MenuPage;
