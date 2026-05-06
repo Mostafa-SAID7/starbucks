@@ -1,85 +1,134 @@
 {
-  "title": { "ar": "الاستدامة والتأثير الاجتماعي", "en": "Sustainability & Social Impact" },
+  "title": {
+    "ar": "الاستدامة: ريادة الطريق نحو مستقبل إيجابي للموارد",
+    "en": "#MakeTheChange: Leading The Way To A Resource Positive Future"
+  },
+  "sidebarImage": {
+    "ar": "/sustainability/Sustainability-ar.webp",
+    "en": "/sustainability/Sustainability-en.webp"
+  },
+  "layoutType": "sidebar",
+  "hideMainTitle": true,
+  "intro": {
+    "image": "/sustainability/Sustainability1.webp",
+    "paragraphs": [
+      {
+        "ar": "نحن نحب حبك للقهوة. سواء كنت متوجهاً إلى العمل، أو تقابل أصدقاءك، أو تذهب إلى صالة الألعاب الرياضية، أو مجرد الخروج، فنحن جزء من روتينك اليومي أو عادتك أو طقوسك. أينما ذهبت، نذهب معك. تماماً كما أنك جزء من رحلتنا لنكون شركة إيجابية للموارد.",
+        "en": "We love your love for coffee. Whether you’re headed to work, meeting friends, going to the gym, or just out-and-about, we are part of your daily routine, habit, or ritual. Wherever you go, we go. Just as you are part of our journey to be a resource-positive company."
+      },
+      {
+        "ar": "إن العناية بالبيئة لا تقل أهمية بالنسبة لنا عن صناعة القهوة. لهذا السبب نقوم بتوسيع قائمتنا القائمة على النباتات والصديقة للبيئة، والتحول من العبوات ذات الاستخدام الواحد إلى العبوات القابلة لإعادة الاستخدام، والابتكار لتطوير متاجر أكثر صداقة للبيئة. بصفتكم شركاءنا وعملاءنا وأصحاب المصلحة، يمكنك مساعدتنا في #إحداث_التغيير واتخاذ خطوات في رحلة الاستدامة لدينا عبر 900 متجر في منطقة الشرق الأوسط وشمال إفريقيا.",
+        "en": "Taking care of the environment is as important to us as our coffee craft. That’s why we’re expanding our plant-based and environmentally-friendly-based menu, shifting from single-use to reusable packaging, and innovating to develop greener stores. As our partners, customers, and stakeholders, you can help us #MakeTheChange and take steps on our sustainability journey across our 900 stores in the MENA region."
+      },
+      {
+        "ar": "لا يمكننا القيام بذلك بمفردنا؛ الأمر يتطلب منا جميعاً. انتبه للاختيارات الصغيرة. اتخذ خطوات بسيطة. إليك واحدة: في كل مرة تخرج فيها، احمل معك كوباً قابلة لإعادة الاستخدام و#إحداث_التغيير. إنه أمر سهل وفعال في نفس الوقت. تصبح جزءاً من نجاحنا في رد الجميل للكوكب أكثر مما نأخذ منه. لذا، ندعوك لجعل الأكواب القابلة لإعادة الاستخدام جزءاً من روتينك اليومي. كل جهد صغير يحدث فرقاً كبيراً بالنسبة لنا.",
+        "en": "We can’t do this alone; it takes all of us. Pay attention to the little choices. Take simple steps. Here’s one: every time you head out, carry a reusable cup with you and #MakeTheChange. It’s easy yet effective. You become a part of our success in giving back more than we take from the planet. So, we invite you to make reusables a part of your everyday routine. Every small effort makes a huge difference to us."
+      }
+    ]
+  },
   "sections": [
     {
-      "id": "hero",
-      "title": { "ar": "نعمل معاً لإعادة ابتكار المستقبل لأجل أمورٍ كثيرة", "en": "Working together to reinvent the future for many things" },
-      "subtitle": { "ar": "نعمل معاً لإعادة ابتكار المستقبل لأجل أمورٍ كثيرة", "en": "Working together to reinvent the future for many things" },
-      "image": "https://www.starbucks.eg/assets/image-cache/sustainability-hero-ar.jpg",
-      "fallbackImage": "https://www.starbucks.eg/assets/image-cache/social-impact.jpg",
-      "content": [
+      "id": "reusables",
+      "title": {
+        "ar": "إحداث التغيير",
+        "en": "Make The Change"
+      },
+      "subtitle": {
+        "ar": "الاستدامة القابلة لإعادة الاستخدام",
+        "en": "Sustainability Reusable Demonstrate"
+      },
+      "paragraphs": [
         {
-          "ar": "نحب شغفكم للقهوة سواء كنتم في الطريق الى العمل أو لمقابلة الأصدقاء أو الذهاب إلى النادي الرياضي، فنحن معكم في كل مكان وجزء من روتينكم اليومي مثلما أنكم أيضاً جزء من رحلتنا لنكون شركة إيجابية الموارد.",
-          "en": "We love your passion for coffee whether you are on your way to work, meeting friends, or going to the gym. We are with you everywhere and part of your daily routine just as you are part of our journey to be a resource-positive company."
-        },
-        {
-          "ar": "تتمثل أهمية البيئة بالنسبة لنا كأهمية صناعة القهوة ولهذا السبب قمنا بزيادة خيارات قائمة الطعام النباتي والصديق للبيئة، كما قمنا بالتخلص من المواد ذات الاستخدام الواحد واستبدالها بمواد قابلة لإعادة الاستخدام، وقمنا بالاستثمار في ممارسات مبتكرة وجديدة لتطوير مقاهي صديقة للبيئة ومستدامة. فبإمكان شركائنا وزبائننا المساهمة في صنع التغير #اصنعوا_الفرق ومساعدتنا في رحلتنا للاستدامة البيئية من خلال مقاهينا ال 900 الموجودة في منطقة الشرق الأوسط وشمال إفريقيا.",
-          "en": "The environment is as important to us as coffee making. That's why we've increased plant-based and eco-friendly menu options, eliminated single-use materials in favor of reusables, and invested in innovative practices to develop sustainable cafes. Our partners and customers can contribute to change #MakeADifference and help our sustainability journey across 900 cafes in the MENA region."
+          "ar": "إليك كيف تعمل تجربة الأكواب القابلة لإعادة الاستخدام في المتجر. إنها آمنة، بدون تلامس، وأثناء التنقل! أحضر كوبك النظيف القابل لإعادة الاستخدام للاستمتاع بمشروب ستاربكس المفضل لديك وساعدنا في #إحداث_التغيير.",
+          "en": "Here’s how the reusables experience works in-store. It’s safe, contactless, and on the go! Bring your clean reusable cup to enjoy your favorite Starbucks beverage and help us #MakeTheChange."
         }
       ],
-      "subHeading": { "ar": "نحقق أهدافنا بالعمل الجماعي", "en": "Achieving our goals through collective action" },
-      "subContent": {
-        "ar": "ابدأ بخطوات بسيطة، فمثلاً في كل مرة تخرج فيها احمل معك كوباً قابلاً لإعادة الاستخدام و#اصنعوا_الفرق بطريقة سهلة وفعالة لتكونوا جزءاً من نجاحنا في الحفاظ على البيئة حيث نقدم أكثر مما نستهلك. لذا ندعوكم لجعل المواد القابلة لإعادة الاستخدام جزءاً من روتينكم اليومي، فمن خلال خطوات صغيرة نستطيع أن نحدث فرقاً كبيراً.",
-        "en": "Start with simple steps. For example, carry a reusable cup every time you go out and #MakeADifference in an easy and effective way to be part of our success in preserving the environment where we give back more than we consume. We invite you to make reusables part of your daily routine; small steps can make a big difference."
+      "image": "/sustainability/Sustainability2.webp",
+      "imagePosition": "right",
+      "cta": {
+        "ar": "شاهد كيف",
+        "en": "Watch How"
       },
-      "cta": { "ar": "قم بإجراء التغيير", "en": "Make the Change" },
-      "ctaLink": "https://www.youtube.com/watch?v=ybWV-w6M_0U"
+      "ctaLink": "#",
+      "hideSideBorder": true
     },
     {
-      "id": "reusable",
-      "title": { "ar": "كيفية استخدام الأكواب القابلة لإعادة الاستخدام", "en": "How to use reusable cups" },
-      "image": "https://www.starbucks.eg/assets/image-cache/reusable-cup.jpg",
-      "fallbackImage": "https://www.starbucks.eg/assets/image-cache/sustainability-cup.jpg",
-      "content": {
-        "ar": "تعد آمنة وبدون تلامس! ما عليك سوى أن تحضر كوبك النظيف القابل لإعادة الاستخدام للاستمتاع بمشروبك المفضل من ستاربكس و#اصنعوا_الفرق",
-        "en": "Safe and contactless! Simply bring your clean reusable cup to enjoy your favorite Starbucks drink and #MakeADifference."
+      "id": "coffee-grounds",
+      "title": {
+        "ar": "الزهور تحب القهوة",
+        "en": "Flowers Love Coffee"
       },
-      "cta": { "ar": "شاهد كيف", "en": "Watch How" },
-      "ctaLink": "https://www.youtube.com/watch?v=qY160wQXkfM"
-    },
-    {
-      "id": "grounds",
-      "title": { "ar": "الزهور تحب القهوة أيضاً!", "en": "Flowers love coffee too!" },
-      "image": "https://www.starbucks.eg/assets/image-cache/flowers-sustainability.jpg",
-      "fallbackImage": "https://www.starbucks.eg/assets/image-cache/coffee-grounds.jpg",
-      "content": [
+      "subtitle": {
+        "ar": "الزهور تحب القهوة أيضاً!",
+        "en": "Flowers love coffee too!"
+      },
+      "paragraphs": [
         {
-          "ar": "هل تساءلت يومًا إلى أي مدى يمكن أن تذهب حبة البن؟ بالإضافة إلى فنجان القهوة الساخن الذي تستمتع به يوميًا، لقد وجدنا طريقة لاستخدام القهوة المطحونة في تغذية البيئة.",
-          "en": "Have you ever wondered how far a coffee bean can go? Beyond your daily hot cup, we've found a way to use coffee grounds to nourish the environment."
+          "ar": "هل تساءلت يوماً إلى أي مدى يمكن أن تذهب حبة القهوة؟ بعيداً عن فنجان القهوة الساخن اليومي الذي تستمتع به، وجدنا طريقة لاستخدام تفل القهوة لتغذية البيئة ورد الجميل لها.",
+          "en": "Ever wonder how far a coffee bean could go? Beyond the daily hot cup of coffee you enjoy, we have found a way to use coffee grounds to nurture and give back to the environment."
         },
         {
-          "ar": "القهوة مصدر كبير للعناصر الغذائية لزهورك ونباتاتك. مستوحاة من هذا، بدأت ستاربكس برنامج Grounds for Your Garden في عام 1995. هذا هو المكان الذي يتم فيه تعبئة بقايا القهوة المستهلكة بعناية في أكياس، لتأخذها إلى المنزل وتستخدمها في حديقتك.",
-          "en": "Coffee is a great source of nutrients for your flowers and plants. Inspired by this, Starbucks started the 'Grounds for Your Garden' program in 1995, where used grounds are packaged for you to take home for your garden."
+          "ar": "تفل القهوة مصدر رائع للعناصر الغذائية لأزهارك ونباتاتك. مستوحاة من هذا، بدأت ستاربكس برنامجها \"Grounds for Your Garden\" في عام 1995.",
+          "en": "Coffee grounds are a great source of nutrients for your flowers and plants. Inspired by this, Starbucks started its Grounds for Your Garden program in 1995."
+        },
+        {
+          "ar": "هذا هو المكان الذي يتم فيه تعبئة تفل القهوة المستخدم بعناية في أكياس، لتأخذها معك إلى المنزل وتستخدمها في حديقتك. يشكل تفل القهوة المستعمل سماداً ممتازاً، خاصة للنباتات التي تزدهر في التربة الحمضية. إليك ثلاث طرق لاستخدام تفل القهوة لدينا:",
+          "en": "This is where spent coffee grounds are carefully packed into bags, for you to take home and use on your garden. Used coffee grounds make excellent compost, particularly for plants that flourish in acidic soils. Here are three ways for you to use our coffee grounds."
         }
       ],
-      "tipsTitle": { "ar": "تُعد تفل القهوة المستخدمة سماداً ممتازاً، خاصةً للنباتات التي تزدهر في التربة الحمضية. فيما يلي ثلاث طرق لاستخدام قهوتنا:", "en": "Used coffee grounds make excellent fertilizer, especially for acid-loving plants. Here are three ways to use our grounds:" },
-      "tips": [
-        { "ar": "مختلطة مباشرة في التربة حول النباتات، مثل الهذر، رودودندرون، الأزاليات، المغنوليا، الكوبية والكاميليا.", "en": "Mixed directly into the soil around plants like heather, rhododendrons, azaleas, magnolias, hydrangeas, and camellias." },
-        { "ar": "يضاف إلى السماد للمساعدة في تسريع عملية التسميد.", "en": "Added to compost to help speed up the composting process." },
-        { "ar": "يتم تطبيقه كضمادة علوية للخضروات سريعة النمو، والعزق في التربة لتجنب تلوث أوراق الشجر.", "en": "Applied as a top dressing for fast-growing vegetables, hoed into the soil to avoid foliage contamination." }
+      "list": [
+        {
+          "ar": "يُخلط مباشرة في التربة حول النباتات، مثل الخلنج والرودودندرون والأزالية والمغنوليا والهيدرانجيا والكاميليا.",
+          "en": "Mixed directly into soil around plants, such as heathers, rhododendrons, azaleas, magnolias, hydrangeas and camellias"
+        },
+        {
+          "ar": "يُضاف إلى السماد للمساعدة في تسريع عملية التسميد.",
+          "en": "Added to compost to help accelerate the composting process"
+        },
+        {
+          "ar": "يُطبق كغطاء علوي للخضروات سريعة النمو، مع العزق في التربة لتجنب تلوث الأوراق.",
+          "en": "Applied as top-dressing to fast growing vegetables, hoeing into the soil to avoid contamination of foliage"
+        }
       ],
       "note": {
-        "ar": "للحصول على أفضل النتائج، يجب ألا تزيد نسبة القهوة المطحونة عن 25٪ من إجمالي محتوى كومة السماد. يجب استخدام القهوة المطحونة في غضون 2-3 أسابيع من التخمير للحصول على أكبر قيمة غذائية.",
-        "en": "For best results, grounds should not exceed 25% of the total compost content. Use within 2-3 weeks of brewing for maximum nutritional value."
-      }
+        "ar": "للحصول على أفضل النتائج، يجب ألا تزيد نسبة القهوة المطحونة عن 25٪ من إجمالي محتوى كومة السماد؛ الـ 75٪ المتبقية يجب أن تكون التربة. يجب خلط القهوة المطحونة جيداً مع التربة للسماح بتهوية كومة السماد. يجب استخدام القهوة المطحونة في غضون 2-3 أسابيع من التخمير للحصول على أكبر قيمة غذائية.",
+        "en": "For best results, the coffee grounds should be no more than 25% of the total compost pile content; the remaining 75% would be the soil. Coffee grounds should be mixed well with the soil to allow air to ventilate the compost pile. Coffee grounds should be used within 2-3 weeks of brewing in order to capture the most nutritional value."
+      },
+      "image": "/sustainability/Sustainability3.webp",
+      "imagePosition": "left",
+      "hideSideBorder": true
     },
     {
-      "id": "strawless",
-      "title": { "ar": "أغطية بدون قشات شرب في الشرق الأوسط", "en": "Strawless Lids in the Middle East" },
-      "image": "https://www.starbucks.eg/assets/image-cache/cold-cup-ar.jpg",
-      "fallbackImage": "https://www.starbucks.eg/assets/image-cache/strawless-lid.jpg",
-      "link": "https://www.alshaya.com/campaigns/Starbucks/Strawless_Lid_Launch/ar/strawless.html",
-      "subHeading": { "ar": "تقليل النفايات + تمكين الابتكار", "en": "Reducing Waste + Enabling Innovation" },
-      "content": [
+      "id": "strawless-lids",
+      "title": {
+        "ar": "أغطية بدون شفاطات",
+        "en": "Strawless Lids"
+      },
+      "subtitle": {
+        "ar": "غطاء جديد بدون شفاطة في منطقة الشرق الأوسط وشمال إفريقيا",
+        "en": "New Strawless Lid in MENA"
+      },
+      "paragraphs": [
         {
-          "ar": "يمكن للأمور الصغيرة التي نفعلها أن تحقق أثراً كبيراً على العالم. يعد اتخاذ قرار البدء في التوقف عن استخدام أعواد الشرب البلاستيكية من قبل مقاهي ستاربكس خطوةً صغيرةً لكنها مهمة في رحلتنا لتعزيز وعينا تجاه البيئة وتقليل تأثيرنا على العالم من خلال الحد من النفايات التي ننتجها والوصول إلى هدفنا المتمثل في أن نكون شركة إيجابية الموارد هنا في منطقة الشرق الأوسط وشمال أفريقيا.",
-          "en": "Small things we do can make a big impact. Phasing out plastic straws is a small but important step in our journey to reduce waste and reach our goal of being a resource-positive company in the MENA region."
+          "ar": "تقليل النفايات وتمكين الابتكار. الأشياء الصغيرة التي نقوم بها يمكن أن يكون لها تأثير كبير على عالمنا.",
+          "en": "Reducing Waste and Enabling Innovation. The small things we do can have a big impact on our world."
         },
         {
-          "ar": "ومن خلال مزيج من التصميم الرائع والتفكير المبتكر والتركيز على إيجاد حلول أفضل للحفاظ على البيئة، قدمنا أغطية الأكواب الخالية من اعواد الشرب والقابلة لإعادة التدوير بالكامل. ويمثل وصول أغطية الأكواب الخالية من الأعواد إلى منطقة الشرق الأوسط وشمال أفريقيا، قفزةً إلى الأمام في ما يتعلق بالتفكير الصديق للبيئة وحل المشكلات، كما أنه يعد دليلاً على أن التغييرات الصغيرة يمكنها أن تحقق أثراً كبيراً.",
-          "en": "Through great design and innovative thinking, we've introduced fully recyclable strawless lids. Their arrival in the MENA region is a leap forward in eco-friendly problem-solving, proving that small changes can make a big impact."
+          "ar": "إن اتخاذقرار البدء في إزالة الشفاطات البلاستيكية من متاجر ستاربكس لدينا هو خطوة صغيرة ولكنها مهمة في رحلتنا لنكون أكثر وعياً بالبيئة، ولتقليل تأثيرنا على العالم من حولنا، وتقليل كمية النفايات التي ننتجها والوصول إلى هدفنا المتمثل في أن نكون إيجابيين للموارد هنا في منطقة الشرق الأوسط وشمال إفريقيا.",
+          "en": "Taking the decision to start removing plastic straws from our Starbucks stores is a small but important step on our journey to be more environmentally conscious, to lessen our impact on the world around us, reduce the amount of waste we produce and reach our goal of being resource positive here in the MENA region."
+        },
+        {
+          "ar": "بدأت هذه الرحلة في يوليو 2018 عندما أعلنت ستاربكس عالمياً أنه سيتم التخلص التدريجي من الشفاطات البلاستيكية وسيبدأ الانتقال نحو استخدام الشفاطات الورقية فقط. الآن، ذهبنا خطوة أبعد وبدأنا في إزالة الحاجة إلى الشفاطات تماماً من خلال تقديم أغطيةنا الجديدة بدون شفاطات لمجموعة المشروبات الباردة لدينا.",
+          "en": "This journey began in July 2018 when globally Starbucks announced that plastic straws would be phased out and a transition towards using only paper straws would get underway. Now, we’ve gone one step further and started to remove the need for straws altogether through the introduction of our new strawless lids for our cold beverages range."
+        },
+        {
+          "ar": "من خلال مزيج من التصميم الرائع والتفكير الابتكاري والتركيز على إيجاد حل أفضل وأكثر اخضراراً، وُلد الغطاء الخالي من الشفاطات القابل لإعادة التدوير بالكامل. يمثل وصول الغطاء الخالي من الشفاطات إلى منطقة الشرق الأوسط وشمال إفريقيا قفزة إلى الأمام في التفكير الصديق للبيئة وحل المشكلات. دليل على أن التغييرات الصغيرة يمكن أن يكون لها بالفعل تأثير كبير.",
+          "en": "Through a combination of great design, innovative thinking and a focus on finding a better, greener solution, the fully recyclable strawless lid was born. The arrival of the strawless lid in the MENA region represents a leap forward in eco-friendly thinking and problem solving. Proof that small changes really can have a big impact."
         }
-      ]
+      ],
+      "image": "/sustainability/Sustainability4.webp",
+      "imagePosition": "right",
+      "hideSideBorder": true
     }
   ]
 }

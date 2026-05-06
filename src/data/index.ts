@@ -15,6 +15,7 @@ import delivery from "./delivery.json";
 import cookieNotice from "./cookie-notice.json";
 import cookies from "./cookies.json";
 import communityImpact from "./community-impact.json";
+import newEra from "./new-era.json";
 
 export {
   featuredCards,
@@ -34,4 +35,5 @@ export {
   cookieNotice,
   cookies,
   communityImpact,
+  newEra,
 };

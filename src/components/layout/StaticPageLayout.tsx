@@ -42,8 +42,8 @@ export const StaticPageLayout: React.FC<StaticPageLayoutProps> = ({
           )}
 
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
             className="flex-1 space-y-12"
           >
             {children}

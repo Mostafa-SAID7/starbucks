@@ -1,37 +1,35 @@
 {
-  "hero": {
-    "images": {
-      "store": "https://www.starbucks.eg/assets/image-cache/about-us-hero.jpg",
-      "cup": "https://www.starbucks.eg/assets/image-cache/about-us-cup.jpg"
+  "title": {
+    "ar": "عن ستاربكس",
+    "en": "About Us"
+  },
+  "layoutType": "sidebar",
+  "sidebarImage": "https://www.starbucks.eg/assets/image-cache/about-us-hero.jpg",
+  "intro": {
+    "title": {
+      "ar": "نبذة عنا",
+      "en": "About Us"
     },
-    "text": {
-      "history": { "ar": "تاريخنا العريق", "en": "Learn our history" },
-      "title": { "ar": "عن ستاربكس", "en": "About Us" },
-      "cta": { "ar": "جد أقرب مقهى", "en": "Find a Starbucks" }
-    }
+    "paragraphs": [
+      {
+        "ar": "تقدم ستاربكس مشروبات القهوة للملايين من زبائنها حول العالم كل أسبوع، ومع ذلك فنحن نقدم لكل زبون مشروبه الخاص بطريقة خاصة.",
+        "en": "Starbucks serves coffee to millions of customers worldwide each week, yet we serve each customer their unique drink in a special way."
+      },
+      {
+        "ar": "ومع أن الأمر يبدو بسيطاً، وهو تقديم مشروب قهوة خلال لحظات للزبون، إلا أن هذه اللحظات القصيرة تعني لنا الكثير فهي تعبر عن اهتمامنا بالزبائن.",
+        "en": "While it seems simple—serving a coffee drink in moments—those short moments mean a lot to us, as they express our care for our customers."
+      }
+    ]
   },
   "sections": [
     {
-      "id": "intro",
-      "title": { "ar": "نبذة عنا", "en": "About Us" },
-      "content": [
+      "id": "connecting",
+      "title": {
+        "ar": "التواصل مع ضيوفنا",
+        "en": "Connecting with Customers"
+      },
+      "paragraphs": [
         {
-          "type": "lead",
-          "ar": "تقدم ستاربكس مشروبات القهوة للملايين من زبائنها حول العالم كل أسبوع، ومع ذلك فنحن نقدم لكل زبون مشروبه الخاص بطريقة خاصة.",
-          "en": "Starbucks serves coffee to millions of customers worldwide each week, yet we serve each customer their unique drink in a special way."
-        },
-        {
-          "type": "paragraph",
-          "ar": "ومع أن الأمر يبدو بسيطاً، وهو تقديم مشروب قهوة خلال لحظات للزبون، إلا أن هذه اللحظات القصيرة تعني لنا الكثير فهي تعبر عن اهتمامنا بالزبائن.",
-          "en": "While it seems simple—serving a coffee drink in moments—those short moments mean a lot to us, as they express our care for our customers."
-        },
-        {
-          "type": "heading",
-          "ar": "التواصل مع ضيوفنا",
-          "en": "Connecting with Customers"
-        },
-        {
-          "type": "paragraph",
           "ar": "نحن نهتم بأدق التفاصيل في كل ما نقوم به لتعزيز التواصل مع زبائننا من خلال التزامنا بأعلى معايير جودة القهوة في العالم، وتقديمها لزبائننا والمجتمع بطريقة مميزة ومستدامة. منذ البداية عندما افتتحنا أول مقهى لنا منذ ما يقارب 40 عاماً، كنا ومازلنا نعمل دائماً على تطوير مقاهينا نحو الأفضل في كل بلد نتواجد فيه.",
           "en": "We care about the smallest details in everything we do to enhance the connection with our customers through our commitment to the highest coffee quality standards in the world, serving our customers and community in a unique and sustainable way. From the beginning, when we opened our first cafe nearly 40 years ago, we have always worked to improve our cafes in every country we operate."
         }
@@ -39,12 +37,15 @@
     },
     {
       "id": "history",
-      "title": { "ar": "تاريخنا", "en": "Our History" },
-      "lead": {
-        "ar": "منذ انطلاقتنا الأولى وحتى اليوم، نعمل كل يوم على مبدأين أساسيين هما: مشاركة تجربة قهوة مميزة مع الأصدقاء والمساعدة في جعل هذا العالم مكاناً أفضل.",
-        "en": "From our beginning to today, we work every day on two core principles: sharing a unique coffee experience with friends and helping make this world a better place."
+      "title": {
+        "ar": "تاريخنا",
+        "en": "Our History"
       },
-      "timeline": [
+      "paragraphs": [
+        {
+          "ar": "منذ انطلاقتنا الأولى وحتى اليوم، نعمل كل يوم على مبدأين أساسيين هما: مشاركة تجربة قهوة مميزة مع الأصدقاء والمساعدة في جعل هذا العالم مكاناً أفضل.",
+          "en": "From our beginning to today, we work every day on two core principles: sharing a unique coffee experience with friends and helping make this world a better place."
+        },
         {
           "ar": "ونحن نلتزم بهذه المبادئ الأساسية التي اتخذناها منذ افتتاح أول مقهى ستاربكس عام 1971 لغاية يومنا هذا. في ذلك الوقت، كانت الشركة عبارة عن مقهى واحد صغير يتواجد في سوق Pike Place Market في مدينة سياتل، يقدم أجود أنواع حبوب القهوة الكاملة المحمصة طازجة في العالم، وتم اعتماد اسم \"ستاربكس\" المستوحى من قصة Moby Dick التي تتحدث عن المغامرة في عالم البحار وتعكس التقاليد القديمة لتجارة القهوة عبر البحار.",
           "en": "We have committed to these core principles since the opening of the first Starbucks in 1971. At that time, the company was a single small cafe in Seattle's Pike Place Market, offering the world's finest fresh-roasted whole bean coffees. The name 'Starbucks' was inspired by the story of Moby Dick, reflecting the seafaring tradition of early coffee traders."
@@ -67,13 +68,5 @@
         }
       ]
     }
-  ],
-  "links": {
-    "talabat": "https://www.talabat.com/egypt/restaurant/516792/el-rehab-city?aid=7600",
-    "locations": "https://locations.starbucks.eg/ar/directory"
-  },
-  "buttons": {
-    "order": { "ar": "اطلب الآن", "en": "Order Now" },
-    "discover": { "ar": "جد مواقع مقاهينا", "en": "Find Our Stores" }
-  }
+  ]
 }

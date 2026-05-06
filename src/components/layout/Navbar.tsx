@@ -55,20 +55,15 @@ export function Navbar() {
       document.body.style.overflow = "unset";
     }
 
-    // Cleanup on unmount
     return () => {
       document.body.style.overflow = "unset";
     };
   }, [isMobileMenuOpen]);
 
   // Close mobile menu on route change
-  const prevPathname = useRef(location.pathname);
   useEffect(() => {
-    if (prevPathname.current !== location.pathname && isMobileMenuOpen) {
-      setIsMobileMenuOpen(false);
-    }
-    prevPathname.current = location.pathname;
-  }, [location.pathname, isMobileMenuOpen]);
+    setIsMobileMenuOpen(false);
+  }, [location.pathname]);
 
   // Handle scroll effect
   useEffect(() => {
@@ -92,46 +87,6 @@ export function Navbar() {
     return () => document.removeEventListener("keydown", handleEscape);
   }, [isMobileMenuOpen]);
 
-  // Handle click outside mobile menu
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      const target = event.target as Node;
-
-      console.log("Click outside detected, target:", target);
-      console.log("Mobile menu ref:", mobileMenuRef.current);
-      console.log("Hamburger ref:", hamburgerButtonRef.current);
-
-      // Don't close if clicking inside the mobile menu or on the hamburger button
-      if (
-        mobileMenuRef.current &&
-        !mobileMenuRef.current.contains(target) &&
-        hamburgerButtonRef.current &&
-        !hamburgerButtonRef.current.contains(target)
-      ) {
-        console.log("Closing mobile menu via click outside");
-        setIsMobileMenuOpen(false);
-      }
-    };
-
-    if (isMobileMenuOpen) {
-      console.log("Adding click outside listener");
-      // Add a small delay to prevent immediate closing
-      const timeoutId = setTimeout(() => {
-        document.addEventListener("mousedown", handleClickOutside);
-      }, 100);
-
-      return () => {
-        console.log("Removing click outside listener");
-        clearTimeout(timeoutId);
-        document.removeEventListener("mousedown", handleClickOutside);
-      };
-    }
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [isMobileMenuOpen]);
-
   const toggleLanguage = useCallback(() => {
     const newLang = lang === "ar" ? "en" : "ar";
 
@@ -144,6 +99,7 @@ export function Navbar() {
     const newPath = `/${newLang}${pathWithoutLang ? "/" + pathWithoutLang : ""}`;
 
     i18n.changeLanguage(newLang);
+    setIsMobileMenuOpen(false);
     navigate(newPath);
 
     toast.success(
@@ -177,7 +133,7 @@ export function Navbar() {
     <>
       <nav
         className={`sticky top-0 z-50 w-full border-b transition-all duration-300 ${
-          isScrolled
+          isMobileMenuOpen || isScrolled
             ? "bg-white/95 dark:bg-zinc-900/95 backdrop-blur-md shadow-sm border-gray-100 dark:border-zinc-800"
             : "bg-white/80 dark:bg-black/80 backdrop-blur-xl border-gray-100/50 dark:border-zinc-800/50"
         }`}
@@ -333,15 +289,7 @@ export function Navbar() {
               ref={hamburgerButtonRef}
               variant="ghost"
               size="icon"
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                console.log(
-                  "Hamburger clicked, current state:",
-                  isMobileMenuOpen,
-                );
-                setIsMobileMenuOpen(!isMobileMenuOpen);
-              }}
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className="lg:hidden text-starbucks-dark dark:text-foreground-dark rounded-full h-11 w-11 hover:bg-gray-100 dark:hover:bg-zinc-900 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-starbucks-green"
               aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
               aria-expanded={isMobileMenuOpen}
@@ -368,44 +316,55 @@ export function Navbar() {
         {/* Mobile Menu Overlay */}
         <AnimatePresence>
           {isMobileMenuOpen && (
-            <motion.div
-              ref={mobileMenuRef}
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: "auto", opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ type: "spring", damping: 30, stiffness: 300 }}
-              className="lg:hidden border-t border-gray-100/50 dark:border-zinc-800/50 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-xl overflow-hidden shadow-2xl rounded-b-3xl"
-              role="menu"
-              aria-label="Mobile navigation menu"
-            >
-              <div className="container mx-auto px-8 py-8">
-                {/* Navigation Links Only - Clean and Simple */}
-                {navItems.map((item, i) => (
-                  <motion.div
-                    key={item.href}
-                    initial={{ opacity: 0, x: isRTL ? 50 : -50 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{
-                      delay: i * 0.08,
-                      type: "spring",
-                      damping: 20,
-                    }}
-                  >
-                    <NavLink
-                      to={item.href}
-                      onClick={() => handleNavClick(item.href)}
-                      className={({ isActive }) => `
-                        text-2xl lg:text-3xl font-black font-branding uppercase tracking-widest block py-4 active:scale-95 transition-transform
-                        ${isActive ? "text-starbucks-green" : "text-starbucks-dark dark:text-white"}
-                      `}
-                      role="menuitem"
+            <>
+              {/* Backdrop for premium feel and reliable click-to-close */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="fixed inset-0 top-[80px] lg:top-[96px] z-40 bg-black/40 backdrop-blur-sm lg:hidden"
+              />
+              
+              <motion.div
+                ref={mobileMenuRef}
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: "auto", opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ type: "spring", damping: 30, stiffness: 300 }}
+                className="absolute top-full left-0 right-0 z-50 lg:hidden border-t border-gray-100/50 dark:border-zinc-800/50 bg-white/95 dark:bg-zinc-950/95 backdrop-blur-xl overflow-hidden shadow-2xl rounded-b-3xl"
+                role="menu"
+                aria-label="Mobile navigation menu"
+              >
+                <div className="container mx-auto px-8 py-10">
+                  {/* Navigation Links */}
+                  {navItems.map((item, i) => (
+                    <motion.div
+                      key={item.href}
+                      initial={{ opacity: 0, x: isRTL ? 50 : -50 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{
+                        delay: i * 0.08,
+                        type: "spring",
+                        damping: 20,
+                      }}
                     >
-                      {item.label}
-                    </NavLink>
-                  </motion.div>
-                ))}
-              </div>
-            </motion.div>
+                      <NavLink
+                        to={item.href}
+                        onClick={() => handleNavClick(item.href)}
+                        className={({ isActive }) => `
+                          text-2xl font-black font-branding uppercase tracking-widest block py-5 active:scale-95 transition-transform
+                          ${isActive ? "text-starbucks-green" : "text-starbucks-dark dark:text-white"}
+                        `}
+                        role="menuitem"
+                      >
+                        {item.label}
+                      </NavLink>
+                    </motion.div>
+                  ))}
+                </div>
+              </motion.div>
+            </>
           )}
         </AnimatePresence>
       </nav>

@@ -1,0 +1,73 @@
+{
+  "title": {
+    "ar": "عصر جديد. نفس النجوم.",
+    "en": "New Era. Same Icons."
+  },
+  "layoutType": "sidebar",
+  "sidebarImage": "/home/UAE_1.webp",
+  "intro": {
+    "paragraphs": [
+      {
+        "ar": "احتفل بـ The Devil Wears Prada مع قائمة خاصة مستوحاة من شخصياته الأيقونية.\nسواء كنت تقود المشهد مثل ميرندا، أو تلفت الأنظار عند دخولك مثل آندي، أو تضيف لمستك الجريئة مثل نايجل، طلبك من ستاربكس صار له حضور مختلف.",
+        "en": "Celebrate The Devil Wears Prada with a special menu inspired by its iconic characters.\nWhether you command the room like Miranda, turn heads like Andy, or add your bold touch like Nigel — your Starbucks order just got a whole new presence."
+      },
+      {
+        "ar": "3 مشروبات أيقونية تناسب كل مزاج وكل لحظة، متوفرة في الفروع لفترة محدودة.",
+        "en": "3 iconic drinks for every mood and every moment, available in stores for a limited time."
+      }
+    ]
+  },
+  "sections": [
+    {
+      "id": "miranda",
+      "title": {
+        "ar": "☕ قهوة ميرندا",
+        "en": "☕ Miranda's Coffee"
+      },
+      "subtitle": {
+        "ar": "حضور قوي وتفاصيل محسوبة.",
+        "en": "A commanding presence, every detail calculated."
+      },
+      "paragraphs": [
+        {
+          "ar": "كافيه لاتيه بدون رغوة، بإسبرسو إضافي وحليب ساخن بدرجة أعلى.",
+          "en": "Caffè Latte with no foam, extra espresso and steamed milk at a higher temperature."
+        }
+      ]
+    },
+    {
+      "id": "andy",
+      "title": {
+        "ar": "🌾 كابتشينو آندي بحليب الشوفان",
+        "en": "🌾 Andy's Oatmilk Cappuccino"
+      },
+      "subtitle": {
+        "ar": "ناعم وأنيق، وجاهز يلفت الانتباه.",
+        "en": "Smooth, chic, and ready to turn heads."
+      },
+      "paragraphs": [
+        {
+          "ar": "كابتشينو بحليب الشوفان مع صلصة الكراميل ولمسة رشّة قرفة خفيفة.",
+          "en": "Cappuccino with oat milk, caramel sauce and a light dusting of cinnamon."
+        }
+      ]
+    },
+    {
+      "id": "nigel",
+      "title": {
+        "ar": "🖤 اسبرسو نايجل بالكريمة المخفوقة",
+        "en": "🖤 Nigel's Espresso con Panna"
+      },
+      "subtitle": {
+        "ar": "جريء ولا يمكن تجاهله.",
+        "en": "Bold and impossible to ignore."
+      },
+      "paragraphs": [
+        {
+          "ar": "دبل إسبريسو كون بانا مع صلصة الموكا.",
+          "en": "Double Espresso Con Panna with mocha sauce."
+        }
+      ]
+    }
+  ]
+}

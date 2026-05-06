@@ -1,173 +1,261 @@
-import React from "react";
-import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
-import { SEO, Button, Accordion } from "@/components";
-import { MenuPromoVideo } from "@/components/sections/MenuPromoVideo";
-import { ExternalLink } from "lucide-react";
-import { delivery as data } from "@/data";
+import { motion, AnimatePresence } from "framer-motion";
+import { useState } from "react";
+import { 
+  SEO, 
+} from "@/components";
+import { delivery } from "@/data";
+import { type GenericPageData } from "@/types";
+import { Plus, Minus, ExternalLink } from "lucide-react";
 
-export const DeliveryPage: React.FC = () => {
+export const DeliveryPage = () => {
   const { i18n } = useTranslation();
   const lang = (i18n.language === "ar" ? "ar" : "en") as "ar" | "en";
+  const data = (delivery as unknown as GenericPageData);
+  const isRTL = lang === "ar";
+  const [openSection, setOpenSection] = useState<string | null>("intro");
+
+  const t = (obj: any) => obj?.[lang] || obj;
+
+  const toggleSection = (id: string) => {
+    setOpenSection(openSection === id ? null : id);
+  };
+
+  const sidebarMedia = t(data.sidebarImage);
+  const isVideo = sidebarMedia?.includes("player.cloudinary.com") || sidebarMedia?.includes("embed");
+
+  // Logical alignment classes
+  const textAlignClass = isRTL ? "text-right" : "text-left";
+  const itemsAlignClass = "items-start";
 
   return (
-    <div className="min-h-screen bg-white dark:bg-black">
-      <SEO title={data.title[lang]} />
-
-      {/* Hero Section */}
-      <section className="relative min-h-[600px] lg:min-h-[85vh] flex items-center overflow-hidden">
-        <div className="absolute inset-0 bg-starbucks-dark">
-          <img
-            src="https://www.starbucks.eg/sites/starbucks-eg-pwa/files/styles/c11_banner_full_1600x621/public/2021-01/DeliveryBanner.jpg.webp?h=9e25e982&itok=VzZl-Y6G"
-            alt="Starbucks Delivery"
-            className="w-full h-full object-cover opacity-60"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-        </div>
-
-        <div className="container relative mx-auto max-w-6xl px-6 lg:px-8 py-20">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="max-w-2xl space-y-8 text-center md:text-start"
-          >
-            <h1 className="text-4xl md:text-6xl font-extrabold text-white leading-tight">
-              {data.hero.title[lang]}
-            </h1>
-            <p className="text-xl text-gray-200 leading-relaxed max-w-xl mx-auto md:mx-0">
-              {data.hero.description[lang]}
-            </p>
-            <div className="pt-4 flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
-              <a
-                href={data.urls.talabat}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Button
-                  size="lg"
-                  className="rounded-full bg-starbucks-green hover:bg-starbucks-dark px-10 py-7 text-lg font-extrabold shadow-2xl shadow-starbucks-green/20 border-none w-full sm:w-auto"
-                >
-                  {data.hero.cta[lang]}
-                  <ExternalLink className="ms-2 h-5 w-5" />
-                </Button>
-              </a>
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Partners Section */}
-      <section className="py-24 bg-[#f7f7f7] dark:bg-zinc-950">
-        <div className="container mx-auto max-w-6xl px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-extrabold text-starbucks-dark dark:text-white mb-16">
-            {data.partners.title[lang]}
-          </h2>
-          <div className="bg-white dark:bg-zinc-900 rounded-[2.5rem] p-12 md:p-20 shadow-xl border border-gray-100 dark:border-zinc-800 flex flex-col md:flex-row items-center gap-12 transition-all hover:shadow-2xl">
-            <div className="flex-1 space-y-6">
-              <img
-                src="https://www.talabat.com/assets/images/talabat-logo.svg"
-                alt="Talabat"
-                className="h-12 mx-auto md:mx-0 dark:invert"
-              />
-              <h3 className="text-2xl font-extrabold text-starbucks-dark dark:text-white">
-                {data.partners.status[lang]}
-              </h3>
-              <p className="text-lg text-gray-600 dark:text-gray-400">
-                {data.partners.subStatus[lang]}
-              </p>
-              <div className="pt-4">
-                <a
-                  href={data.urls.talabat}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Button
-                    variant="outline"
-                    className="rounded-full border-2 border-starbucks-green text-starbucks-green hover:bg-starbucks-green hover:text-white font-extrabold px-8"
-                  >
-                    {data.hero.cta[lang]}
-                  </Button>
-                </a>
-              </div>
-            </div>
-            <div className="flex-1 relative">
-              <div className="absolute -inset-4 bg-starbucks-green/10 rounded-full blur-3xl" />
-              <img
-                src="https://www.starbucks.eg/sites/starbucks-eg-pwa/files/styles/c01_vertical_card_1287x1792/public/2021-01/DeliveryImg1.jpg.webp?h=50122822&itok=p_H5y2N0"
-                alt="Order Starbucks"
-                className="relative rounded-3xl shadow-2xl w-full max-w-md mx-auto"
-              />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* FAQ Section */}
-      <section className="py-24 bg-white dark:bg-black">
-        <div className="container mx-auto max-w-4xl px-6 lg:px-8">
-          <div className="text-center mb-16 space-y-4">
-            <h2 className="text-4xl font-extrabold text-starbucks-dark dark:text-white italic">
-              {data.faqs.title[lang]}
-            </h2>
-          </div>
-          <div className="bg-white dark:bg-zinc-900/50 rounded-[2rem] p-4 md:p-8 shadow-sm border border-gray-100 dark:border-zinc-800">
-            <Accordion
-              items={data.faqs.items.map((faq) => ({
-                title: faq.q[lang],
-                content: faq.a[lang],
-              }))}
-              className="w-full"
-            />
-          </div>
-        </div>
-      </section>
-
-      {/* Video Section - خدمة التوصيل لدى ستاربكس */}
-      <section className="py-24 bg-starbucks-dark overflow-hidden">
-        <div className="container mx-auto max-w-6xl px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-12"
-          >
-            <h3 className="text-3xl md:text-4xl font-extrabold text-white">
-              {data.videoSection.title[lang]}
-            </h3>
-          </motion.div>
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="flex justify-center"
-          >
-            <MenuPromoVideo />
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Bottom CTA */}
-      <section className="py-24 bg-[#f7f7f7] dark:bg-zinc-950">
-        <div className="container mx-auto max-w-4xl px-6 lg:px-8 text-center space-y-10">
-          <h2 className="text-4xl md:text-5xl font-extrabold text-starbucks-dark dark:text-white leading-tight italic">
-            {data.hero.title[lang]}
-          </h2>
-          <div className="flex flex-col sm:flex-row gap-6 justify-center">
-            <a
-              href={data.urls.talabat}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block"
+    <div 
+      className="bg-white dark:bg-background-dark min-h-screen"
+      dir={isRTL ? "rtl" : "ltr"}
+    >
+      <SEO title={t(data.title)} />
+      
+      <div className="container mx-auto px-4 py-8 lg:py-12">
+        {/* Main 2-Side Layout */}
+        <div className={`flex flex-col lg:flex-row gap-12 ${isRTL ? "lg:flex-row-reverse" : ""}`}>
+          
+          {/* Side 1: Sticky Sidebar (Image or Video) */}
+          <div className="lg:w-[40%] lg:sticky lg:top-24 lg:h-[calc(100vh-8rem)]">
+            <motion.div 
+              initial={{ opacity: 0, x: isRTL ? 50 : -50 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="h-full rounded-3xl overflow-hidden shadow-2xl bg-black relative"
             >
-              <Button className="rounded-full bg-starbucks-green px-12 py-8 text-xl font-extrabold shadow-2xl shadow-starbucks-green/20 border-none transition-all hover:scale-105 active:scale-95">
-                {data.hero.cta[lang]}
-              </Button>
-            </a>
+              {isVideo ? (
+                <div className="w-full h-full relative pointer-events-none">
+                  {/* Overlay to catch clicks and prevent controls from showing */}
+                  <div className="absolute inset-0 z-10 bg-transparent" />
+                  <iframe
+                    src={sidebarMedia}
+                    className="w-full h-full absolute inset-0 border-0"
+                    allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
+                    allowFullScreen
+                    title="Starbucks Delivery Promo"
+                  />
+                </div>
+              ) : (
+                <img 
+                  src={sidebarMedia} 
+                  alt={t(data.title)}
+                  className="w-full h-full object-cover"
+                />
+              )}
+            </motion.div>
+          </div>
+
+          {/* Side 2: Content Column */}
+          <div className="lg:w-[60%]">
+            <div className="max-w-4xl">
+              {/* Inner Title */}
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className={`mb-8 ${textAlignClass}`}
+              >
+                <h1 className="text-4xl lg:text-5xl font-black text-starbucks-dark dark:text-white">
+                  {t(data.title)}
+                </h1>
+              </motion.div>
+
+              {/* 1. Intro Section (Toggleable) */}
+              <div className="border-b border-gray-100 dark:border-gray-800 pb-12 mb-12">
+                {/* Intro Image */}
+                {data.intro?.image && (
+                  <motion.div 
+                    initial={{ opacity: 0, scale: 0.98 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="mb-8 rounded-3xl overflow-hidden shadow-lg aspect-video lg:aspect-[21/9]"
+                  >
+                    <img 
+                      src={t(data.intro.image)} 
+                      alt={t(data.title)}
+                      className="w-full h-full object-cover"
+                    />
+                  </motion.div>
+                )}
+
+                {/* Intro Toggle Button */}
+                <button
+                  onClick={() => toggleSection("intro")}
+                  className={`w-full flex items-center justify-between group gap-6 ${textAlignClass}`}
+                >
+                  <div className={`flex flex-col ${itemsAlignClass} flex-grow`}>
+                    <span className="text-starbucks-green font-bold text-sm uppercase tracking-widest mb-1 opacity-80">
+                      {lang === "ar" ? "نظرة عامة" : "Overview"}
+                    </span>
+                    <h3 className="text-2xl lg:text-4xl font-black text-starbucks-dark dark:text-white group-hover:text-starbucks-green transition-colors leading-tight">
+                      {lang === "ar" ? "تجربة ستاربكس في منزلك" : "Starbucks Experience At Home"}
+                    </h3>
+                  </div>
+                  <div className="text-starbucks-green bg-gray-50 dark:bg-white/5 p-3 rounded-full flex-shrink-0">
+                    {openSection === "intro" ? <Minus size={24} /> : <Plus size={24} />}
+                  </div>
+                </button>
+
+                <AnimatePresence>
+                  {openSection === "intro" && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      className="overflow-hidden"
+                    >
+                      <div className={`pt-8 space-y-8 text-xl text-gray-600 dark:text-gray-300 leading-relaxed ${textAlignClass}`}>
+                        {data.intro?.paragraphs?.map((p, idx) => (
+                          <p key={idx} className="font-medium">
+                            {t(p)}
+                          </p>
+                        ))}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+
+              {/* 2. Content Sections */}
+              <div className="space-y-16">
+                {data.sections.map((section, index) => (
+                  <div 
+                    key={section.id} 
+                    className={`pb-12 ${index !== data.sections.length - 1 ? "border-b border-gray-100 dark:border-gray-800" : ""}`}
+                  >
+                    {/* Section Image Header */}
+                    {section.image && (
+                      <div className="mb-8 rounded-3xl overflow-hidden shadow-lg aspect-video lg:aspect-[21/9]">
+                        <img 
+                          src={t(section.image)} 
+                          alt={t(section.title)}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                    )}
+
+                    <button
+                      onClick={() => toggleSection(section.id)}
+                      className={`w-full flex items-center justify-between group gap-6 ${textAlignClass}`}
+                    >
+                      <div className={`flex flex-col ${itemsAlignClass} flex-grow`}>
+                        <span className="text-starbucks-green font-bold text-sm uppercase tracking-widest mb-1 opacity-80">
+                          {t(section.subtitle)}
+                        </span>
+                        <h3 className="text-2xl lg:text-4xl font-black text-starbucks-dark dark:text-white group-hover:text-starbucks-green transition-colors leading-tight">
+                          {t(section.title)}
+                        </h3>
+                      </div>
+                      <div className="text-starbucks-green bg-gray-50 dark:bg-white/5 p-3 rounded-full flex-shrink-0">
+                        {openSection === section.id ? <Minus size={24} /> : <Plus size={24} />}
+                      </div>
+                    </button>
+
+                    <AnimatePresence>
+                      {openSection === section.id && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: "auto", opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          className="overflow-hidden"
+                        >
+                          <div className={`pt-8 space-y-8 text-xl text-gray-600 dark:text-gray-300 leading-relaxed ${textAlignClass}`}>
+                            {section.paragraphs?.map((p, pIdx) => (
+                              <p key={pIdx}>{t(p)}</p>
+                            ))}
+                            
+                            {section.list && (
+                              <ul className={`space-y-4 ${isRTL ? "border-r-4 pr-6" : "border-l-4 pl-6"} border-starbucks-green/20 font-medium`}>
+                                {section.list.map((item, lIdx) => (
+                                  <li key={lIdx}>{t(item)}</li>
+                                ))}
+                              </ul>
+                            )}
+
+                            {section.cta && section.ctaLink && (
+                              <div className="pt-4">
+                                <a 
+                                  href={section.ctaLink}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="inline-flex items-center gap-3 bg-starbucks-green text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-starbucks-green-dark transition-all transform hover:scale-105 shadow-lg"
+                                >
+                                  {t(section.cta)}
+                                  <ExternalLink size={20} />
+                                </a>
+                              </div>
+                            )}
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                ))}
+              </div>
+
+              {/* 3. FAQ Accordion Section */}
+              {data.accordion && (
+                <div className="mt-8 pt-16 border-t-4 border-starbucks-green/10">
+                  <h2 className={`text-3xl lg:text-4xl font-black text-starbucks-dark dark:text-white mb-12 ${textAlignClass}`}>
+                    {t(data.accordion.title)}
+                  </h2>
+                  <div className="space-y-6">
+                    {data.accordion.items.map((item, idx) => (
+                      <div key={idx} className="bg-gray-50 dark:bg-white/5 rounded-3xl overflow-hidden">
+                        <button
+                          onClick={() => toggleSection(`faq-${idx}`)}
+                          className={`w-full p-8 flex items-center justify-between text-left group ${isRTL ? "text-right" : ""}`}
+                        >
+                          <span className="text-xl font-bold text-starbucks-dark dark:text-white group-hover:text-starbucks-green transition-colors">
+                            {t(item.title)}
+                          </span>
+                          <div className="text-starbucks-green">
+                            {openSection === `faq-${idx}` ? <Minus size={20} /> : <Plus size={20} />}
+                          </div>
+                        </button>
+                        <AnimatePresence>
+                          {openSection === `faq-${idx}` && (
+                            <motion.div
+                              initial={{ height: 0, opacity: 0 }}
+                              animate={{ height: "auto", opacity: 1 }}
+                              exit={{ height: 0, opacity: 0 }}
+                            >
+                              <div className={`px-8 pb-8 text-lg text-gray-600 dark:text-gray-300 leading-relaxed ${textAlignClass}`}>
+                                {t(item.content)}
+                              </div>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
-      </section>
+      </div>
     </div>
   );
 };

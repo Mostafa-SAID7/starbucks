@@ -91,7 +91,7 @@ export function FeaturedCards() {
                     className="rounded-full border-2 border-starbucks-dark px-4 py-2 text-sm font-bold font-branding text-starbucks-dark hover:bg-starbucks-dark hover:text-white dark:border-foreground-dark dark:text-foreground-dark dark:hover:bg-foreground-dark dark:hover:text-black transition-all"
                     asChild
                   >
-                    <a href={card.ctaLink}>{card.cta}</a>
+                    <a href={card.ctaLink.startsWith("http") ? card.ctaLink : `/${lang}${card.ctaLink}`}>{card.cta}</a>
                   </Button>
 
                   {card.secondaryCta && card.secondaryCtaLink && (
@@ -101,7 +101,7 @@ export function FeaturedCards() {
                       className="rounded-full border-2 border-starbucks-dark px-4 py-2 text-sm font-bold font-branding text-starbucks-dark hover:bg-starbucks-dark hover:text-white dark:border-foreground-dark dark:text-foreground-dark dark:hover:bg-foreground-dark dark:hover:text-black transition-all"
                       asChild
                     >
-                      <a href={card.secondaryCtaLink}>{card.secondaryCta}</a>
+                      <a href={card.secondaryCtaLink.startsWith("http") ? card.secondaryCtaLink : `/${lang}${card.secondaryCtaLink}`}>{card.secondaryCta}</a>
                     </Button>
                   )}
                 </div>

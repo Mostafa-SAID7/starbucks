@@ -1,197 +1,196 @@
-import React from "react";
-import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
-import { SEO, Button, Header } from "@/components";
-import { ExternalLink, Play } from "lucide-react";
-import { sustainability as data } from "@/data";
-import type { SustainabilitySection as Section } from "@/types";
+import { motion, AnimatePresence } from "framer-motion";
+import { useState } from "react";
+import { 
+  SEO, 
+} from "@/components";
+import { sustainability } from "@/data";
+import { type GenericPageData } from "@/types";
+import { Plus, Minus } from "lucide-react";
 
-export const SustainabilityPage: React.FC = () => {
+export const SustainabilityPage = () => {
   const { i18n } = useTranslation();
   const lang = (i18n.language === "ar" ? "ar" : "en") as "ar" | "en";
+  const data = (sustainability as unknown as GenericPageData);
+  const isRTL = lang === "ar";
+  const [openSection, setOpenSection] = useState<string | null>("intro");
+
+  const t = (obj: any) => obj?.[lang] || obj;
+
+  const toggleSection = (id: string) => {
+    setOpenSection(openSection === id ? null : id);
+  };
+
+  // Logical alignment classes
+  const textAlignClass = isRTL ? "text-right" : "text-left";
+  
+  // When dir="rtl", items-start aligns to the right side naturally
+  const itemsAlignClass = "items-start";
 
   return (
-    <div className="min-h-screen bg-white dark:bg-black">
-      <SEO title={data.title[lang]} />
-
-      <Header title={data.title[lang]} variant="dark" />
-
-      {data.sections.map((section: Section, index) => (
-        <section
-          key={section.id}
-          className={`relative py-24 lg:py-32 ${
-            index % 2 === 1
-              ? "bg-gray-50 dark:bg-zinc-900/30"
-              : "bg-white dark:bg-black"
-          }`}
-        >
-          <div className="container mx-auto px-6">
-            <div
-              className={`flex flex-col lg:flex-row items-center gap-16 ${
-                index % 2 === 1 ? "lg:flex-row-reverse" : ""
-              }`}
+    <div 
+      className="bg-white dark:bg-background-dark min-h-screen"
+      dir={isRTL ? "rtl" : "ltr"}
+    >
+      <SEO title={t(data.title)} />
+      
+      <div className="container mx-auto px-4 py-8 lg:py-12">
+        {/* Main 2-Side Layout (Main Page Style) */}
+        <div className={`flex flex-col lg:flex-row gap-12 ${isRTL ? "lg:flex-row-reverse" : ""}`}>
+          
+          {/* Side 1: Sticky Sidebar Image */}
+          <div className="lg:w-[40%] lg:sticky lg:top-24 lg:h-[calc(100vh-8rem)]">
+            <motion.div 
+              initial={{ opacity: 0, x: isRTL ? 50 : -50 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="h-full rounded-3xl overflow-hidden shadow-2xl"
             >
-              {/* Content */}
-              <div className="flex-1 space-y-8">
-                <motion.div
-                  initial={{ opacity: 0, x: index % 2 === 1 ? 50 : -50 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  className="space-y-4"
-                >
-                  <h2 className="text-4xl lg:text-5xl font-extrabold text-starbucks-dark dark:text-white leading-tight">
-                    {section.title[lang]}
-                  </h2>
-                  {section.subtitle && (
-                    <p className="text-xl text-starbucks-green font-bold italic">
-                      {section.subtitle[lang]}
-                    </p>
-                  )}
-                </motion.div>
+              <img 
+                src={t(data.sidebarImage)} 
+                alt={t(data.title)}
+                className="w-full h-full object-cover"
+              />
+            </motion.div>
+          </div>
 
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.2 }}
-                  className="space-y-6 text-lg text-gray-600 dark:text-gray-400 leading-relaxed"
-                >
-                  {Array.isArray(section.content)
-                    ? section.content.map((p, idx) => (
-                        <p key={idx}>{p[lang]}</p>
-                      ))
-                    : section.content && <p>{section.content[lang]}</p>}
+          {/* Side 2: Content Column */}
+          <div className="lg:w-[60%]">
+            <div className="max-w-4xl">
+              {/* Inner Title */}
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className={`mb-8 ${textAlignClass}`}
+              >
+                <h1 className="text-4xl lg:text-5xl font-black text-starbucks-dark dark:text-white">
+                  {t(data.title)}
+                </h1>
+              </motion.div>
 
-                  {section.subHeading && (
-                    <div className="pt-6 space-y-4">
-                      <h3 className="text-2xl font-bold text-starbucks-dark dark:text-white">
-                        {section.subHeading[lang]}
-                      </h3>
-                      {section.subContent && <p>{section.subContent[lang]}</p>}
-                    </div>
-                  )}
-
-                  {section.tipsTitle && (
-                    <div className="pt-6 space-y-4">
-                      <p className="font-bold text-starbucks-dark dark:text-white">
-                        {section.tipsTitle[lang]}
-                      </p>
-                      <ul className="space-y-3 ps-6">
-                        {section.tips?.map((tip, idx) => (
-                          <li key={idx} className="flex items-start gap-3">
-                            <span className="mt-2.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-starbucks-green" />
-                            <span>{tip[lang]}</span>
-                          </li>
-                        ))}
-                      </ul>
-                      {section.note && (
-                        <p className="text-sm italic mt-4 p-4 bg-gray-100 dark:bg-zinc-800 rounded-xl border-s-4 border-starbucks-green">
-                          {section.note[lang]}
-                        </p>
-                      )}
-                    </div>
-                  )}
-                </motion.div>
-
-                {(section.cta || section.link) && (
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    whileInView={{ opacity: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: 0.4 }}
-                    className="pt-4"
+              {/* 1. Intro Section (Toggleable) */}
+              <div className="border-b border-gray-100 dark:border-gray-800 pb-12 mb-12">
+                {/* Intro Image - Using the specific image from JSON, not the sidebar image */}
+                {data.intro?.image && (
+                  <motion.div 
+                    initial={{ opacity: 0, scale: 0.98 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="mb-8 rounded-3xl overflow-hidden shadow-lg aspect-video lg:aspect-[21/9]"
                   >
-                    {section.ctaLink?.includes("youtube") ? (
-                      <Button
-                        variant="outline"
-                        leftIcon={<Play className="w-5 h-5" />}
-                        onClick={() => window.open(section.ctaLink, "_blank")}
-                      >
-                        {section.cta?.[lang]}
-                      </Button>
-                    ) : (
-                      <Button
-                        variant="outline"
-                        leftIcon={<ExternalLink className="w-5 h-5" />}
-                        onClick={() =>
-                          window.open(section.ctaLink || section.link, "_blank")
-                        }
-                      >
-                        {section.cta?.[lang] ||
-                          (lang === "ar" ? "اعرف المزيد" : "Learn More")}
-                      </Button>
-                    )}
+                    <img 
+                      src={t(data.intro.image)} 
+                      alt={t(data.title)}
+                      className="w-full h-full object-cover"
+                    />
                   </motion.div>
                 )}
+
+                {/* Intro Toggle Button */}
+                <button
+                  onClick={() => toggleSection("intro")}
+                  className={`w-full flex items-center justify-between group gap-6 ${textAlignClass}`}
+                >
+                  <div className={`flex flex-col ${itemsAlignClass} flex-grow`}>
+                    <span className="text-starbucks-green font-bold text-sm uppercase tracking-widest mb-1 opacity-80">
+                      {lang === "ar" ? "نظرة عامة" : "Overview"}
+                    </span>
+                    <h3 className="text-2xl lg:text-4xl font-black text-starbucks-dark dark:text-white group-hover:text-starbucks-green transition-colors leading-tight">
+                      {lang === "ar" ? "رحلة الاستدامة لدينا" : "Our Sustainability Journey"}
+                    </h3>
+                  </div>
+                  <div className="text-starbucks-green bg-gray-50 dark:bg-white/5 p-3 rounded-full flex-shrink-0">
+                    {openSection === "intro" ? <Minus size={24} /> : <Plus size={24} />}
+                  </div>
+                </button>
+
+                <AnimatePresence>
+                  {openSection === "intro" && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      className="overflow-hidden"
+                    >
+                      <div className={`pt-8 space-y-8 text-xl text-gray-600 dark:text-gray-300 leading-relaxed ${textAlignClass}`}>
+                        {data.intro?.paragraphs?.map((p, idx) => (
+                          <p key={idx} className="font-medium">
+                            {t(p)}
+                          </p>
+                        ))}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
 
-              {/* Image */}
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                className="flex-1 relative"
-              >
-                <div className="relative aspect-[4/3] rounded-[3rem] overflow-hidden shadow-2xl">
-                  <img
-                    src={section.image}
-                    alt={section.title[lang]}
-                    className="w-full h-full object-cover transition-transform duration-700 hover:scale-110"
-                    onError={(e) => {
-                      if (section.fallbackImage) {
-                        (e.target as HTMLImageElement).src =
-                          section.fallbackImage;
-                      }
-                    }}
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
-                </div>
-                {/* Decorative element */}
-                <div
-                  className={`absolute -z-10 w-64 h-64 bg-starbucks-green/10 rounded-full blur-3xl ${
-                    index % 2 === 1
-                      ? "-top-10 -left-10"
-                      : "-bottom-10 -right-10"
-                  }`}
-                />
-              </motion.div>
+              {/* 2. Campaign Sections */}
+              <div className="space-y-16">
+                {data.sections.map((section) => (
+                  <div key={section.id} className="border-b border-gray-100 dark:border-gray-800 pb-12">
+                    {/* Section Image - Inner Full Width ABOVE Toggle */}
+                    {section.image && (
+                      <div className="mb-8 rounded-3xl overflow-hidden shadow-lg aspect-video lg:aspect-[21/9]">
+                        <img 
+                          src={t(section.image)} 
+                          alt={t(section.title)}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                    )}
+
+                    <button
+                      onClick={() => toggleSection(section.id)}
+                      className={`w-full flex items-center justify-between group gap-6 ${textAlignClass}`}
+                    >
+                      <div className={`flex flex-col ${itemsAlignClass} flex-grow`}>
+                        <span className="text-starbucks-green font-bold text-sm uppercase tracking-widest mb-1 opacity-80">
+                          {t(section.subtitle)}
+                        </span>
+                        <h3 className="text-2xl lg:text-4xl font-black text-starbucks-dark dark:text-white group-hover:text-starbucks-green transition-colors leading-tight">
+                          {t(section.title)}
+                        </h3>
+                      </div>
+                      <div className="text-starbucks-green bg-gray-50 dark:bg-white/5 p-3 rounded-full flex-shrink-0">
+                        {openSection === section.id ? <Minus size={24} /> : <Plus size={24} />}
+                      </div>
+                    </button>
+
+                    <AnimatePresence>
+                      {openSection === section.id && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: "auto", opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          className="overflow-hidden"
+                        >
+                          <div className={`pt-8 space-y-8 text-xl text-gray-600 dark:text-gray-300 leading-relaxed ${textAlignClass}`}>
+                            {section.paragraphs?.map((p, pIdx) => (
+                              <p key={pIdx}>{t(p)}</p>
+                            ))}
+                            
+                            {section.list && (
+                              <ul className={`space-y-4 ${isRTL ? "border-r-4 pr-6" : "border-l-4 pl-6"} border-starbucks-green/20 font-medium`}>
+                                {section.list.map((item, lIdx) => (
+                                  <li key={lIdx}>{t(item)}</li>
+                                ))}
+                              </ul>
+                            )}
+
+                            {section.note && (
+                              <div className="p-8 bg-gray-50 dark:bg-white/5 rounded-3xl border border-gray-100 dark:border-gray-800 italic text-lg shadow-inner">
+                                {t(section.note)}
+                              </div>
+                            )}
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
-        </section>
-      ))}
-
-      {/* Sustainability Footer Section */}
-      <section className="py-24 bg-starbucks-dark text-white overflow-hidden relative">
-        <div className="container mx-auto px-6 text-center relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="max-w-3xl mx-auto space-y-8"
-          >
-            <h2 className="text-4xl lg:text-5xl font-extrabold italic">
-              {lang === "ar"
-                ? "نصنع الفرق معاً"
-                : "Making a difference together"}
-            </h2>
-            <p className="text-xl text-gray-400">
-              {lang === "ar"
-                ? "انضم إلينا في رحلتنا لنكون شركة إيجابية الموارد ونقدم للبيئة أكثر مما نأخذ."
-                : "Join us on our journey to be a resource-positive company and give back more to the environment than we take."}
-            </p>
-            <Button
-              variant="outline"
-              size="lg"
-              className="px-12"
-              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-            >
-              {lang === "ar" ? "اكتشف المزيد" : "Discover More"}
-            </Button>
-          </motion.div>
         </div>
-        <div className="absolute top-1/2 left-0 -translate-y-1/2 w-96 h-96 bg-starbucks-green/20 rounded-full blur-[120px]" />
-        <div className="absolute top-1/2 right-0 -translate-y-1/2 w-96 h-96 bg-starbucks-green/10 rounded-full blur-[120px]" />
-      </section>
+      </div>
     </div>
   );
 };

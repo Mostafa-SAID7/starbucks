@@ -1,6 +1,6 @@
 export function MenuPromoVideo() {
   return (
-    <div className="relative mx-auto aspect-square w-full max-w-lg overflow-hidden rounded-2xl bg-black">
+    <div className="relative w-full h-full overflow-hidden rounded-2xl bg-black">
       <iframe
         src="https://player.cloudinary.com/embed/?cloud_name=djegmn3hm&public_id=AQNaBmByVoeyiVtDYW6GSi8TwoefyWGBL74GM1MgSU9D-uUeUzL5XiUWZb30bFA46D8D_BE3DryETXgEWZ8aT8Bf31zNCQn6a5Y_ztqmex&fluid=true&autoplay=true&loop=true&controls=false&muted=true"
         allow="autoplay; fullscreen; encrypted-media; picture-in-picture"

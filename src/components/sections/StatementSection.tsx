@@ -40,7 +40,7 @@ const StatementSection = () => {
               </p>
             ))}
           </div>
-          <Link to={localizedData.ctaLink}>
+          <Link to={`/${lang}${localizedData.ctaLink}`}>
             <Button variant="outline" size="lg">
               {localizedData.ctaText}
             </Button>

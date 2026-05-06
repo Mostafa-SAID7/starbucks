@@ -30,21 +30,20 @@ export const Banner = React.forwardRef<HTMLDivElement, BannerProps>(
       imageAlt = "",
       secondaryImageUrl,
       secondaryImageAlt,
-      variant = "default",
       className,
-      isRTL = false,
+      isRTL: isRTLProp,
     },
     ref,
   ) => {
     const { lang } = useParams<{ lang: string }>();
     const currentLang = lang || "ar";
+    const isRTL = isRTLProp ?? currentLang === "ar";
+    
     const internalRef = React.useRef<HTMLElement>(null);
-    const isInView = useInView(internalRef, { once: true, amount: 0 });
+    const isInView = useInView(internalRef, { once: true, amount: 0.1 });
 
-    // Use a combined ref approach
     React.useImperativeHandle(ref, () => internalRef.current as HTMLDivElement);
 
-    // Add language prefix to internal links
     const finalCtaLink =
       ctaLink && !ctaLink.startsWith("http")
         ? `/${currentLang}${ctaLink}`
@@ -54,13 +53,13 @@ export const Banner = React.forwardRef<HTMLDivElement, BannerProps>(
       <section
         ref={internalRef}
         className={cn(
-          "relative overflow-hidden min-h-[600px] lg:min-h-[80vh] flex items-start w-full",
+          "relative overflow-hidden min-h-[650px] lg:min-h-[85vh] flex items-start w-full",
           className,
         )}
         style={
           imageUrl
             ? {
-                backgroundImage: `linear-gradient(to bottom, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.2) 60%, transparent 100%), url(${imageUrl})`,
+                backgroundImage: `linear-gradient(to bottom, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.2) 60%, transparent 100%), url(${imageUrl})`,
                 backgroundSize: "cover",
                 backgroundPosition: "center",
                 backgroundRepeat: "no-repeat",
@@ -68,170 +67,135 @@ export const Banner = React.forwardRef<HTMLDivElement, BannerProps>(
             : {}
         }
         aria-label={imageAlt || title}
-        role={variant === "default" ? "banner" : "section"}
       >
-        {/* Secondary Animated Image Layer (e.g., Woman entering) */}
+        {/* Secondary Animated Image Layer */}
         {secondaryImageUrl && (
-          <div className="absolute inset-0 pointer-events-none overflow-hidden z-[10]">
+          <div className="absolute inset-0 pointer-events-none overflow-hidden z-[10] select-none">
             <motion.div
-              initial={{ opacity: 0, x: currentLang === "ar" ? -500 : 500 }}
-              animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: currentLang === "ar" ? -500 : 500 }}
+              initial={{ opacity: 0, x: currentLang === "ar" ? -500 : 500, scale: 1.05 }}
+              animate={isInView ? { opacity: 1, x: 0, scale: 1 } : { opacity: 0, x: currentLang === "ar" ? -500 : 500, scale: 1.05 }}
               transition={{ 
-                duration: 2.5, 
-                ease: [0.16, 1, 0.3, 1],
-                delay: 0.2
+                duration: 2.2, 
+                ease: [0.19, 1, 0.22, 1],
+                delay: 0.1
               }}
               className={cn(
-                "absolute bottom-0 h-[100%] lg:h-[115%] w-auto max-w-none flex items-end",
+                "absolute bottom-0 h-full lg:h-[110%] w-auto max-w-none flex items-end will-change-transform translate-z-0",
                 currentLang === "ar" ? "left-0" : "right-0"
               )}
             >
               <img 
                 src={secondaryImageUrl} 
                 alt={secondaryImageAlt || ""} 
-                className="h-full w-auto object-contain object-bottom select-none"
+                className="h-full w-auto object-contain object-bottom"
+                loading="eager"
               />
             </motion.div>
           </div>
         )}
 
-        {/* Fallback gradient if no image */}
         {!imageUrl && (
-          <div className="absolute inset-0 bg-gradient-to-br from-starbucks-green/10 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-br from-starbucks-green/20 via-black to-black" />
         )}
 
-        {/* Remove any blur transition from inside hero - it should be completely outside */}
-
-        <div className="container mx-auto px-4 sm:px-6 pt-28 pb-20 lg:pt-44 lg:pb-32 relative z-10 w-full max-w-7xl">
+        <div className="container mx-auto px-6 pt-32 pb-20 lg:pt-44 lg:pb-32 relative z-20 w-full max-w-7xl">
           <div
             className={cn(
-              "flex flex-col max-w-full lg:max-w-2xl w-full lg:w-3/5",
+              "flex flex-col w-full lg:w-[85%] xl:w-[75%] transition-all duration-1000",
               isRTL ? "items-end ml-auto text-right" : "items-start mr-auto text-left",
+              isInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
             )}
           >
-            {/* Optimized Content Container */}
-            <motion.div
-              initial={{ opacity: 0, y: 20, x: isRTL ? 30 : -30 }}
-              animate={isInView ? { opacity: 1, y: 0, x: 0 } : { opacity: 0, y: 20, x: isRTL ? 30 : -30 }}
-              transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-              className="space-y-4 md:space-y-6 w-full"
-            >
+            <div className="space-y-6 md:space-y-8 w-full">
               {subtitle && (
-                <p className="text-starbucks-gold font-bold tracking-[0.3em] text-xs sm:text-sm uppercase drop-shadow-sm">
+                <motion.p 
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
+                  transition={{ delay: 0.3 }}
+                  className={cn(
+                    "text-starbucks-gold font-bold text-[10px] sm:text-xs uppercase drop-shadow-md",
+                    isRTL ? "tracking-normal" : "tracking-[0.4em]"
+                  )}
+                >
                   {subtitle}
-                </p>
+                </motion.p>
               )}
-              <h1
+              
+              <motion.h1
+                initial={{ opacity: 0, y: 20 }}
+                animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+                transition={{ delay: 0.4, duration: 0.8 }}
                 className={cn(
-                  "text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-black tracking-tight leading-[1.05]",
-                  isRTL ? "font-heading" : "font-branding",
-                  "text-white drop-shadow-[0_4px_12px_rgba(0,0,0,0.4)]",
+                  "text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black tracking-tight leading-[1.1] text-white drop-shadow-2xl",
+                  isRTL ? "font-heading" : "font-branding"
                 )}
               >
                 {title}
-              </h1>
+              </motion.h1>
+
               {description && (
-                <p
-                  className={cn(
-                    "text-lg sm:text-xl lg:text-2xl text-white/90 max-w-xl font-medium leading-relaxed drop-shadow-md",
-                    isRTL ? "font-sans" : "font-sans",
-                  )}
+                <motion.p
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+                  transition={{ delay: 0.5, duration: 0.8 }}
+                  className="text-lg sm:text-xl lg:text-2xl text-white/90 max-w-3xl font-medium leading-relaxed drop-shadow-lg"
                 >
                   {description}
-                </p>
+                </motion.p>
               )}
+
               {ctaText && finalCtaLink && (
                 <motion.div
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.95 }}
-                  transition={{ delay: 0.4, duration: 0.8 }}
-                  className="pt-4 sm:pt-6"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+                  transition={{ delay: 0.6, duration: 0.8 }}
+                  className="pt-4 sm:pt-8"
                 >
                   {finalCtaLink.startsWith("http") ? (
                     <a
                       href={finalCtaLink}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-block rounded-full bg-starbucks-green px-8 py-4 text-base sm:text-lg font-bold text-white shadow-xl shadow-starbucks-green/30 hover:bg-starbucks-dark hover:scale-105 active:scale-95 transition-all duration-300 backdrop-blur-sm"
+                      className="inline-flex items-center justify-center rounded-full bg-starbucks-green hover:bg-starbucks-dark text-white px-10 py-4 sm:px-12 sm:py-5 text-base sm:text-lg font-black uppercase tracking-widest transition-all duration-500 hover:scale-105 active:scale-95 shadow-[0_20px_50px_rgba(0,112,74,0.3)] hover:shadow-[0_20px_60px_rgba(0,112,74,0.5)]"
                     >
                       {ctaText}
                     </a>
                   ) : (
                     <Link
                       to={finalCtaLink}
-                      className="inline-block rounded-full bg-starbucks-green px-8 py-4 text-base sm:text-lg font-bold text-white shadow-xl shadow-starbucks-green/30 hover:bg-starbucks-dark hover:scale-105 active:scale-95 transition-all duration-300 backdrop-blur-sm"
+                      className="inline-flex items-center justify-center rounded-full bg-starbucks-green hover:bg-starbucks-dark text-white px-10 py-4 sm:px-12 sm:py-5 text-base sm:text-lg font-black uppercase tracking-widest transition-all duration-500 hover:scale-105 active:scale-95 shadow-[0_20px_50px_rgba(0,112,74,0.3)] hover:shadow-[0_20px_60px_rgba(0,112,74,0.5)]"
                     >
                       {ctaText}
                     </Link>
                   )}
                 </motion.div>
               )}
-            </motion.div>
+            </div>
           </div>
         </div>
 
-        {/* Cinematic Branding & Scroll Overlay - Optimized Responsiveness */}
-        <div className="absolute bottom-8 sm:bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center z-[5] pointer-events-none w-full px-4">
+        {/* Branding Overlay */}
+        <div className="absolute bottom-10 left-0 right-0 flex flex-col items-center z-[5] pointer-events-none px-6">
           <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.9 }}
-            transition={{ delay: 1, duration: 1.5 }}
-            className="relative flex items-center justify-center w-full max-w-4xl"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.95 }}
+            transition={{ delay: 0.8, duration: 1.5 }}
+            className="relative flex items-center justify-center w-full"
           >
-            {/* The Track */}
-            <div className="absolute w-[1px] h-20 sm:h-32 bg-transparent overflow-visible">
-              <div className="absolute inset-[-10px] sm:inset-[-20px] blur-[20px] bg-starbucks-green/5 rounded-full" />
-              
-              <motion.div
-                animate={{
-                  top: ["-10%", "110%"],
-                  opacity: [0, 1, 1, 0],
-                }}
-                transition={{
-                  duration: 2.8,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-                className="absolute left-0 w-full h-1/4 bg-gradient-to-b from-transparent via-starbucks-green to-transparent"
-                style={{
-                  boxShadow: "0 0 15px 2px rgba(0, 98, 65, 0.8), 0 0 30px 4px rgba(0, 98, 65, 0.4)",
-                }}
-              />
-            </div>
-
-            {/* Massive Branding Text - Fluid & Responsive */}
             <h2 className={cn(
-              "relative text-3xl sm:text-6xl md:text-8xl lg:text-[130px] font-black tracking-[0.15em] sm:tracking-[0.2em] text-white/[0.08] uppercase select-none text-center whitespace-nowrap leading-none transition-all duration-700",
-              lang === 'ar' ? "font-heading" : "font-branding"
+              "text-4xl sm:text-7xl md:text-9xl lg:text-[180px] font-black font-branding select-none text-center whitespace-nowrap transition-all duration-1000",
+              isRTL ? "tracking-normal text-white/20 leading-normal" : "tracking-[0.2em] text-white/25 leading-none uppercase",
             )}>
-              {lang === 'ar' ? 'ستاربكس' : 'STARBUCKS'}
+              {currentLang === 'ar' ? 'ستاربكس' : 'STARBUCKS'}
             </h2>
-          </motion.div>
-
-          {/* Subtle Label */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={isInView ? { opacity: [0.15, 0.4, 0.15] } : { opacity: 0 }}
-            transition={{ 
-              duration: 4, 
-              repeat: Infinity,
-              delay: 2.5,
-              ease: "easeInOut"
-            }}
-            className="mt-3 sm:mt-4"
-          >
-            <span className="text-[9px] sm:text-[11px] font-branding uppercase tracking-[0.3em] sm:tracking-[0.5em] text-white/20 whitespace-nowrap">
-              {lang === 'ar' ? 'اسحب للأسفل' : 'Scroll'}
-            </span>
           </motion.div>
         </div>
 
-        {/* Decorative elements - only show if no background image */}
         {!imageUrl && (
-          <>
-            <div className="absolute top-0 right-0 w-96 h-96 bg-starbucks-green/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-            <div className="absolute bottom-0 left-0 w-96 h-96 bg-starbucks-green/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
-          </>
+          <div className="absolute inset-0 z-0 pointer-events-none">
+            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-starbucks-green/5 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2" />
+            <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-starbucks-green/5 rounded-full blur-[120px] translate-y-1/2 -translate-x-1/2" />
+          </div>
         )}
       </section>
     );

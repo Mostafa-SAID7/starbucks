@@ -6,9 +6,11 @@ interface StaticSectionProps {
   title?: { ar: string; en: string }
   children: React.ReactNode
   id?: string
+  hideTitle?: boolean
+  hideSideBorder?: boolean
 }
 
-export const StaticSection: React.FC<StaticSectionProps> = ({ title, children, id }) => {
+export const StaticSection: React.FC<StaticSectionProps> = ({ title, children, id, hideTitle = false, hideSideBorder = false }) => {
   const { i18n } = useTranslation()
   const lang = (i18n.language === 'ar' ? 'ar' : 'en') as 'ar' | 'en'
 
@@ -20,8 +22,8 @@ export const StaticSection: React.FC<StaticSectionProps> = ({ title, children, i
       viewport={{ once: true }}
       className="space-y-6"
     >
-      {title && (
-        <h2 className="text-2xl font-extrabold text-starbucks-dark dark:text-white border-s-4 border-starbucks-green ps-4">
+      {title && !hideTitle && (
+        <h2 className={`text-2xl font-extrabold text-starbucks-dark dark:text-white ps-4 ${!hideSideBorder ? 'border-s-4 border-starbucks-green' : ''}`}>
           {title[lang]}
         </h2>
       )}
