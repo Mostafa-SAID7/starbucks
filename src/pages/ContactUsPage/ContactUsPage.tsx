@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { motion } from 'framer-motion'
-import { Link } from 'react-router-dom'
 import { Mail, Phone, Send, CheckCircle } from 'lucide-react'
 import { SEO, Button, Input, Select, Textarea } from '@/components'
 import { contactUs as data } from '@/data'
@@ -29,207 +28,201 @@ export const ContactUsPage: React.FC = () => {
     }, 1200)
   }
 
+  const textAlignClass = isRTL ? 'text-right' : 'text-left'
+
   return (
     <div className="min-h-screen bg-white dark:bg-black">
       <SEO title={data.hero.title[lang]} />
 
-      {/* ─── Hero Split Section ─── */}
-      <section className="flex flex-col min-h-[450px] border-b border-gray-100 dark:border-zinc-800 lg:flex-row">
-        {/* Info Side */}
-        <div className="flex flex-1 flex-col justify-center bg-[#f7f7f7] dark:bg-zinc-950 px-10 py-16 lg:px-20 text-start">
-          <motion.h1
-            initial={{ opacity: 0, x: isRTL ? 20 : -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="mb-8 text-4xl font-black text-starbucks-dark dark:text-white lg:text-5xl"
-          >
-            {data.hero.title[lang]}
-          </motion.h1>
-
-          <div className="space-y-6 text-gray-600 dark:text-gray-400 text-lg">
-            <p className="font-extrabold text-starbucks-dark dark:text-white">
-              {data.info.inquiry[lang]}
-            </p>
-            
-            <div className="flex flex-col gap-4 items-start">
-              <p className="opacity-70">{data.info.emailLabel[lang]}</p>
-              <a
-                href={`mailto:${data.info.email}`}
-                className="flex items-center gap-3 text-starbucks-green font-black text-2xl hover:underline underline-offset-8 transition-all flex-row"
-              >
-                <Mail className="h-6 w-6" />
-                {data.info.email}
-              </a>
-            </div>
-
-            <div className="flex flex-col gap-4 pt-4 items-start">
-              <p className="font-extrabold text-starbucks-dark dark:text-white">
-                {data.info.phoneLabel[lang]}
-              </p>
-              <a
-                href={`tel:${data.info.phoneTel}`}
-                className="flex items-center gap-3 text-starbucks-green font-black text-3xl hover:underline underline-offset-8 transition-all flex-row"
-                dir="ltr"
-              >
-                <Phone className="h-7 w-7" />
-                {data.info.phone}
-              </a>
-            </div>
-          </div>
-        </div>
-
-        {/* Image Side */}
-        <div className="relative flex-1 min-h-[350px] overflow-hidden lg:max-w-[45%]">
-          <img
-            src={data.hero.image}
-            alt={data.hero.imageAlt[lang]}
-            className="absolute inset-0 h-full w-full object-cover transition-transform duration-1000 hover:scale-105"
-            onError={(e) => {
-              if (data.hero.fallbackImage) (e.target as HTMLImageElement).src = data.hero.fallbackImage
-            }}
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-starbucks-dark/80 via-transparent to-transparent" />
-          <div className="absolute bottom-10 px-10 w-full text-start inset-inline-start-0">
-            <p className="mb-4 text-3xl font-black text-white drop-shadow-2xl">
-              {data.hero.imageAlt[lang]}
-            </p>
-            <Link
-              to={`/${lang}/about-us`}
-              className="inline-block rounded-full bg-starbucks-green px-10 py-4 text-base font-black text-white hover:bg-white hover:text-starbucks-dark transition-all shadow-2xl transform hover:-translate-y-1"
+      <div className="container mx-auto px-4 py-8 lg:py-16">
+        <div className={`flex flex-col lg:flex-row gap-12 ${isRTL ? "lg:flex-row-reverse" : ""}`}>
+          
+          {/* Side 1: Sticky Sidebar Image */}
+          <div className="lg:w-[40%] lg:sticky lg:top-24 lg:h-[calc(100vh-8rem)] group">
+            <motion.div 
+              initial={{ opacity: 0, x: isRTL ? 50 : -50 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="h-full rounded-3xl overflow-hidden shadow-2xl relative"
             >
-              {isRTL ? 'اكتشف المزيد' : 'Discover More'}
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* ─── Contact Form ─── */}
-      <section className="py-20 lg:py-32 bg-white dark:bg-black">
-        <div className="container mx-auto max-w-4xl px-6">
-          <div className="mb-16 text-start">
-            <h2 className="text-4xl font-black text-starbucks-dark dark:text-white mb-4">
-              {data.form.title[lang]}
-            </h2>
-            <p className="text-xl text-gray-500 dark:text-gray-400 max-w-2xl">
-              {data.form.subtitle[lang]}
-            </p>
-          </div>
-
-          {submitted ? (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              className="rounded-3xl bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 p-12 text-center"
-            >
-              <CheckCircle className="mx-auto mb-4 h-14 w-14 text-starbucks-green" />
-              <h3 className="text-xl font-extrabold text-starbucks-dark dark:text-white mb-2">
-                {data.form.success.title[lang]}
-              </h3>
-              <p className="text-gray-500 dark:text-gray-400">
-                {data.form.success.message[lang]}
-              </p>
+              <img
+                src="/contact-us.webp"
+                alt={data.hero.title[lang]}
+                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60" />
             </motion.div>
-          ) : (
-            <motion.form
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              onSubmit={handleSubmit}
-              className="space-y-8"
-              dir={isRTL ? 'rtl' : 'ltr'}
-            >
-              <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
-                <div className="space-y-3">
-                  <label className="block text-lg font-black text-starbucks-dark dark:text-white px-2">
-                    {data.form.fields.name.label[lang]}
-                  </label>
-                  <Input
-                    required
-                    name="name"
-                    value={form.name}
-                    onChange={handleChange}
-                    placeholder={data.form.fields.name.placeholder[lang]}
-                  />
-                </div>
-                <div className="space-y-3">
-                  <label className="block text-lg font-black text-starbucks-dark dark:text-white px-2">
-                    {data.form.fields.email.label[lang]}
-                  </label>
-                  <Input
-                    required
-                    type="email"
-                    name="email"
-                    value={form.email}
-                    onChange={handleChange}
-                    placeholder={data.form.fields.email.placeholder[lang]}
-                    dir="ltr"
-                  />
-                </div>
-              </div>
+          </div>
 
-              <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
-                <div className="space-y-3">
-                  <label className="block text-lg font-black text-starbucks-dark dark:text-white px-2">
-                    {data.form.fields.phone.label[lang]}
-                  </label>
-                  <Input
-                    type="tel"
-                    name="phone"
-                    value={form.phone}
-                    onChange={handleChange}
-                    placeholder={data.form.fields.phone.placeholder[lang]}
-                    dir="ltr"
-                  />
-                </div>
-                <div className="space-y-3">
-                  <label className="block text-lg font-black text-starbucks-dark dark:text-white px-2">
-                    {data.form.fields.subject.label[lang]}
-                  </label>
-                  <Select
-                    isRTL={isRTL}
-                    options={(data.form.subjects as SubjectOption[]).map(s => ({ id: s.id, label: s[lang] }))}
-                    value={form.subject}
-                    onChange={(val) => setForm(prev => ({ ...prev, subject: val }))}
-                    placeholder={data.form.fields.subject.placeholder[lang]}
-                  />
-                </div>
-              </div>
+          {/* Side 2: Content Column */}
+          <div className="lg:w-[60%]">
+            <div className="max-w-4xl">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className={`mb-12 ${textAlignClass}`}
+              >
+                <h1 className="text-4xl lg:text-6xl font-black text-starbucks-dark dark:text-white mb-6">
+                  {data.hero.title[lang]}
+                </h1>
+                
+                <div className="space-y-8 mt-12">
+                  <div className="flex flex-col gap-4">
+                    <p className="text-lg font-black text-starbucks-dark dark:text-white">
+                      {data.info.inquiry[lang]}
+                    </p>
+                    <a
+                      href={`mailto:${data.info.email}`}
+                      className="flex items-center gap-3 text-starbucks-green font-black text-2xl hover:underline underline-offset-8 transition-all w-fit"
+                    >
+                      <Mail className="h-6 w-6" />
+                      {data.info.email}
+                    </a>
+                  </div>
 
-              <div className="space-y-3">
-                <label className="block text-lg font-black text-starbucks-dark dark:text-white px-2">
-                  {data.form.fields.message.label[lang]}
-                </label>
-                <Textarea
-                  required
-                  name="message"
-                  value={form.message}
-                  onChange={handleChange}
-                  rows={6}
-                  placeholder={data.form.fields.message.placeholder[lang]}
-                />
-              </div>
+                  <div className="flex flex-col gap-4 pt-4">
+                    <p className="text-lg font-black text-starbucks-dark dark:text-white">
+                      {data.info.phoneLabel[lang]}
+                    </p>
+                    <a
+                      href={`tel:${data.info.phoneTel}`}
+                      className="flex items-center gap-3 text-starbucks-green font-black text-3xl hover:underline underline-offset-8 transition-all w-fit"
+                      dir="ltr"
+                    >
+                      <Phone className="h-7 w-7" />
+                      {data.info.phone}
+                    </a>
+                  </div>
+                </div>
+              </motion.div>
 
-              <div className="flex items-center justify-start">
-                <Button
-                  type="submit"
-                  loading={loading}
-                  className="h-16 px-16 text-lg rounded-full shadow-2xl hover:shadow-starbucks-green/40 transform hover:-translate-y-1 transition-all"
-                >
-                  {loading ? (
-                    <div className="flex items-center gap-2">
-                      <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
-                      <span>{data.form.fields.submit[lang]}</span>
+              {/* Form Section */}
+              <div className="bg-gray-50 dark:bg-zinc-900/50 rounded-[2.5rem] p-8 lg:p-12 shadow-sm border border-gray-100 dark:border-zinc-800">
+                <div className={`mb-10 ${textAlignClass}`}>
+                  <h2 className="text-3xl font-black text-starbucks-dark dark:text-white mb-3">
+                    {data.form.title[lang]}
+                  </h2>
+                  <p className="text-lg text-gray-500 dark:text-gray-400 leading-relaxed">
+                    {data.form.subtitle[lang]}
+                  </p>
+                </div>
+
+                {submitted ? (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="rounded-3xl bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 p-12 text-center"
+                  >
+                    <CheckCircle className="mx-auto mb-4 h-14 w-14 text-starbucks-green" />
+                    <h3 className="text-xl font-extrabold text-starbucks-dark dark:text-white mb-2">
+                      {data.form.success.title[lang]}
+                    </h3>
+                    <p className="text-gray-500 dark:text-gray-400">
+                      {data.form.success.message[lang]}
+                    </p>
+                  </motion.div>
+                ) : (
+                  <form onSubmit={handleSubmit} className="space-y-8">
+                    <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
+                      <div className="space-y-3">
+                        <label className={`block text-lg font-black text-starbucks-dark dark:text-white px-2 ${textAlignClass}`}>
+                          {data.form.fields.name.label[lang]}
+                        </label>
+                        <Input
+                          required
+                          name="name"
+                          value={form.name}
+                          onChange={handleChange}
+                          placeholder={data.form.fields.name.placeholder[lang]}
+                          className="h-14 rounded-2xl border-gray-200 dark:border-zinc-700 bg-white dark:bg-zinc-800"
+                        />
+                      </div>
+                      <div className="space-y-3">
+                        <label className={`block text-lg font-black text-starbucks-dark dark:text-white px-2 ${textAlignClass}`}>
+                          {data.form.fields.email.label[lang]}
+                        </label>
+                        <Input
+                          required
+                          type="email"
+                          name="email"
+                          value={form.email}
+                          onChange={handleChange}
+                          placeholder={data.form.fields.email.placeholder[lang]}
+                          dir="ltr"
+                          className="h-14 rounded-2xl border-gray-200 dark:border-zinc-700 bg-white dark:bg-zinc-800"
+                        />
+                      </div>
                     </div>
-                  ) : (
-                    <>
-                      <Send className="h-6 w-6 rtl:-rotate-180" />
-                      <span className="ml-2">{data.form.fields.submit[lang]}</span>
-                    </>
-                  )}
-                </Button>
+
+                    <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
+                      <div className="space-y-3">
+                        <label className={`block text-lg font-black text-starbucks-dark dark:text-white px-2 ${textAlignClass}`}>
+                          {data.form.fields.phone.label[lang]}
+                        </label>
+                        <Input
+                          type="tel"
+                          name="phone"
+                          value={form.phone}
+                          onChange={handleChange}
+                          placeholder={data.form.fields.phone.placeholder[lang]}
+                          dir="ltr"
+                          className="h-14 rounded-2xl border-gray-200 dark:border-zinc-700 bg-white dark:bg-zinc-800"
+                        />
+                      </div>
+                      <div className="space-y-3">
+                        <label className={`block text-lg font-black text-starbucks-dark dark:text-white px-2 ${textAlignClass}`}>
+                          {data.form.fields.subject.label[lang]}
+                        </label>
+                        <Select
+                          isRTL={isRTL}
+                          options={(data.form.subjects as SubjectOption[]).map(s => ({ id: s.id, label: s[lang] }))}
+                          value={form.subject}
+                          onChange={(val) => setForm(prev => ({ ...prev, subject: val }))}
+                          placeholder={data.form.fields.subject.placeholder[lang]}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="space-y-3">
+                      <label className={`block text-lg font-black text-starbucks-dark dark:text-white px-2 ${textAlignClass}`}>
+                        {data.form.fields.message.label[lang]}
+                      </label>
+                      <Textarea
+                        required
+                        name="message"
+                        value={form.message}
+                        onChange={handleChange}
+                        rows={6}
+                        placeholder={data.form.fields.message.placeholder[lang]}
+                        className="rounded-2xl border-gray-200 dark:border-zinc-700 bg-white dark:bg-zinc-800"
+                      />
+                    </div>
+
+                    <div className={`flex items-center ${isRTL ? 'justify-start' : 'justify-start'}`}>
+                      <Button
+                        type="submit"
+                        loading={loading}
+                        className="h-16 px-16 text-lg font-black rounded-full bg-starbucks-green hover:bg-starbucks-dark text-white shadow-xl hover:shadow-2xl transition-all transform hover:-translate-y-1"
+                      >
+                        {loading ? (
+                          <div className="flex items-center gap-2">
+                            <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+                            <span>{data.form.fields.submit[lang]}</span>
+                          </div>
+                        ) : (
+                          <div className="flex items-center gap-3">
+                            <Send className={`h-6 w-6 ${isRTL ? '-rotate-180' : ''}`} />
+                            <span>{data.form.fields.submit[lang]}</span>
+                          </div>
+                        )}
+                      </Button>
+                    </div>
+                  </form>
+                )}
               </div>
-            </motion.form>
-          )}
+            </div>
+          </div>
         </div>
-      </section>
+      </div>
     </div>
   )
 }

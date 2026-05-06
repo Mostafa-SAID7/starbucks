@@ -5,7 +5,7 @@ import {
   SEO, 
 } from "@/components";
 import { delivery } from "@/data";
-import { type GenericPageData } from "@/types";
+import { type GenericPageData, type LocalizedText } from "@/types";
 import { Plus, Minus, ExternalLink } from "lucide-react";
 
 export const DeliveryPage = () => {
@@ -15,7 +15,11 @@ export const DeliveryPage = () => {
   const isRTL = lang === "ar";
   const [openSection, setOpenSection] = useState<string | null>("intro");
 
-  const t = (obj: any) => obj?.[lang] || obj;
+  const t = (obj: LocalizedText | string | null | undefined) => {
+    if (!obj) return "";
+    if (typeof obj === "string") return obj;
+    return (obj as LocalizedText)[lang] || "";
+  };
 
   const toggleSection = (id: string) => {
     setOpenSection(openSection === id ? null : id);

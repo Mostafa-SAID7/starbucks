@@ -27,6 +27,7 @@ export const GenericPage: React.FC<GenericPageProps> = ({
       return (
         <div className="space-y-4">
           <Accordion
+            defaultIndex={0}
             items={data.sections.map((section) => ({
               title: section.title?.[lang] ?? "",
               content: (

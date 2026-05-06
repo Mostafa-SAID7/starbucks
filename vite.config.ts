@@ -11,9 +11,9 @@ export default defineConfig({
       registerType: "autoUpdate",
       includeAssets: ["favicon.png", "favicon.svg", "logo.png", "robots.txt"],
       manifest: {
-        name: "Starbucks Egypt",
+        name: "Starbucks Egypt | ستاربكس مصر",
         short_name: "Starbucks EG",
-        description: "Starbucks Egypt - Official Clone",
+        description: "Official Starbucks Egypt Portal - Experience the world's best coffee",
         theme_color: "#006241",
         background_color: "#ffffff",
         display: "standalone",
@@ -36,21 +36,34 @@ export default defineConfig({
             type: "image/png",
           },
         ],
-        categories: ["food", "drink", "coffee"],
-        lang: "en",
-        dir: "ltr",
+        shortcuts: [
+          {
+            name: "Menu | قائمة الطعام",
+            short_name: "Menu",
+            url: "/ar/menu",
+            icons: [{ src: "/favicon.png", sizes: "192x192" }],
+          },
+          {
+            name: "Locations | مواقعنا",
+            short_name: "Locations",
+            url: "/ar/locations",
+            icons: [{ src: "/favicon.png", sizes: "192x192" }],
+          },
+        ],
+        categories: ["food", "drink", "lifestyle"],
+        lang: "ar",
+        dir: "rtl",
         start_url: "/",
         scope: "/",
       },
       workbox: {
-        globPatterns: ["**/*.{js,css,html,ico,png,svg,woff2,woff,ttf,eot}"],
+        globPatterns: ["**/*.{js,css,html,ico,png,svg,webp,woff2}"],
         runtimeCaching: [
           {
-            urlPattern:
-              /^https:\/\/www\.starbucks\.eg\/.*\.(?:jpg|jpeg|png|webp|svg)$/i,
+            urlPattern: /^https:\/\/www\.starbucks\.eg\/.*\.(?:jpg|jpeg|png|webp|svg|avif)$/i,
             handler: "CacheFirst",
             options: {
-              cacheName: "starbucks-images",
+              cacheName: "external-starbucks-assets",
               expiration: {
                 maxEntries: 100,
                 maxAgeSeconds: 60 * 60 * 24 * 30, // 30 days
@@ -61,31 +74,30 @@ export default defineConfig({
             },
           },
           {
-            urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
-            handler: "CacheFirst",
+            urlPattern: /\.(?:png|jpg|jpeg|svg|webp)$/,
+            handler: "StaleWhileRevalidate",
             options: {
-              cacheName: "google-fonts-stylesheets",
+              cacheName: "local-images",
               expiration: {
-                maxEntries: 10,
-                maxAgeSeconds: 60 * 60 * 24 * 365, // 1 year
+                maxEntries: 50,
               },
             },
           },
           {
-            urlPattern: /^https:\/\/fonts\.gstatic\.com\/.*/i,
+            urlPattern: /^https:\/\/fonts\.(?:googleapis|gstatic)\.com\/.*/i,
             handler: "CacheFirst",
             options: {
-              cacheName: "google-fonts-webfonts",
+              cacheName: "google-fonts",
               expiration: {
-                maxEntries: 20,
-                maxAgeSeconds: 60 * 60 * 24 * 365, // 1 year
+                maxEntries: 30,
+                maxAgeSeconds: 60 * 60 * 24 * 365,
               },
             },
           },
         ],
       },
       devOptions: {
-        enabled: false, // Set to true to test PWA in dev mode
+        enabled: true,
       },
     }),
   ],

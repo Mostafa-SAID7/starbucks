@@ -11,11 +11,12 @@ export interface AccordionProps {
   items: AccordionItem[]
   className?: string
   variant?: 'default' | 'minimal' | 'sidebar'
+  defaultIndex?: number | null
 }
 
 export const Accordion = React.forwardRef<HTMLDivElement, AccordionProps>(
-  ({ items, className, variant = 'default' }, ref) => {
-    const [openIndex, setOpenIndex] = React.useState<number | null>(null)
+  ({ items, className, variant = 'default', defaultIndex = null }, ref) => {
+    const [openIndex, setOpenIndex] = React.useState<number | null>(defaultIndex)
 
     const toggleItem = (index: number) => {
       setOpenIndex(openIndex === index ? null : index)

@@ -61,9 +61,20 @@ export function Navbar() {
   }, [isMobileMenuOpen]);
 
   // Close mobile menu on route change
+  const prevPathname = useRef(location.pathname);
   useEffect(() => {
-    setIsMobileMenuOpen(false);
-  }, [location.pathname]);
+    if (prevPathname.current !== location.pathname) {
+      if (isMobileMenuOpen) {
+        // Use timeout to satisfy lint rule and avoid cascading renders
+        const timer = setTimeout(() => {
+          setIsMobileMenuOpen(false);
+        }, 0);
+        prevPathname.current = location.pathname;
+        return () => clearTimeout(timer);
+      }
+      prevPathname.current = location.pathname;
+    }
+  }, [location.pathname, isMobileMenuOpen]);
 
   // Handle scroll effect
   useEffect(() => {
@@ -132,7 +143,7 @@ export function Navbar() {
   return (
     <>
       <nav
-        className={`sticky top-0 z-50 w-full border-b transition-all duration-300 ${
+        className={`sticky top-0 z-[100] w-full border-b transition-all duration-300 ${
           isMobileMenuOpen || isScrolled
             ? "bg-white/95 dark:bg-zinc-900/95 backdrop-blur-md shadow-sm border-gray-100 dark:border-zinc-800"
             : "bg-white/80 dark:bg-black/80 backdrop-blur-xl border-gray-100/50 dark:border-zinc-800/50"
@@ -145,6 +156,7 @@ export function Navbar() {
           <div className="flex items-center gap-8 lg:gap-12">
             <Link
               to={`/${lang}`}
+              onClick={() => setIsMobileMenuOpen(false)}
               className="flex-shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-starbucks-green focus-visible:rounded-lg"
               aria-label="Starbucks Home"
             >
@@ -211,7 +223,10 @@ export function Navbar() {
               <Button
                 variant="ghost"
                 size="icon"
-                onClick={() => setIsSearchOpen(true)}
+                onClick={() => {
+                  setIsSearchOpen(true);
+                  setIsMobileMenuOpen(false);
+                }}
                 className="rounded-full h-11 w-11 hover:bg-gray-100 dark:hover:bg-zinc-900 hover:scale-110 active:scale-95 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-starbucks-green"
                 aria-label="Search"
               >
@@ -276,7 +291,10 @@ export function Navbar() {
               <Button
                 variant="ghost"
                 size="icon"
-                onClick={() => setIsAuthOpen(true)}
+                onClick={() => {
+                  setIsAuthOpen(true);
+                  setIsMobileMenuOpen(false);
+                }}
                 className="text-starbucks-dark dark:text-foreground-dark hover:bg-gray-100 dark:hover:bg-zinc-900 rounded-full h-11 w-11 transition-all hover:scale-110 active:scale-95 border-2 border-transparent hover:border-starbucks-green/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-starbucks-green"
                 aria-label="Account"
               >
@@ -316,55 +334,58 @@ export function Navbar() {
         {/* Mobile Menu Overlay */}
         <AnimatePresence>
           {isMobileMenuOpen && (
-            <>
-              {/* Backdrop for premium feel and reliable click-to-close */}
+            <div className="fixed inset-0 top-20 lg:top-24 z-[90] lg:hidden">
+              {/* Backdrop */}
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="fixed inset-0 top-[80px] lg:top-[96px] z-40 bg-black/40 backdrop-blur-sm lg:hidden"
+                className="absolute inset-0 bg-black/40 backdrop-blur-sm"
               />
               
+              {/* Menu Content */}
               <motion.div
                 ref={mobileMenuRef}
-                initial={{ height: 0, opacity: 0 }}
-                animate={{ height: "auto", opacity: 1 }}
-                exit={{ height: 0, opacity: 0 }}
+                initial={{ y: "-100%" }}
+                animate={{ y: 0 }}
+                exit={{ y: "-100%" }}
                 transition={{ type: "spring", damping: 30, stiffness: 300 }}
-                className="absolute top-full left-0 right-0 z-50 lg:hidden border-t border-gray-100/50 dark:border-zinc-800/50 bg-white/95 dark:bg-zinc-950/95 backdrop-blur-xl overflow-hidden shadow-2xl rounded-b-3xl"
+                className="absolute top-0 left-0 right-0 z-50 border-t border-gray-100/50 dark:border-zinc-800/50 bg-white/95 dark:bg-zinc-950/95 backdrop-blur-xl overflow-hidden shadow-2xl rounded-b-[2rem]"
                 role="menu"
                 aria-label="Mobile navigation menu"
               >
-                <div className="container mx-auto px-8 py-10">
+                <div className="py-8 px-8">
                   {/* Navigation Links */}
-                  {navItems.map((item, i) => (
-                    <motion.div
-                      key={item.href}
-                      initial={{ opacity: 0, x: isRTL ? 50 : -50 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{
-                        delay: i * 0.08,
-                        type: "spring",
-                        damping: 20,
-                      }}
-                    >
-                      <NavLink
-                        to={item.href}
-                        onClick={() => handleNavClick(item.href)}
-                        className={({ isActive }) => `
-                          text-2xl font-black font-branding uppercase tracking-widest block py-5 active:scale-95 transition-transform
-                          ${isActive ? "text-starbucks-green" : "text-starbucks-dark dark:text-white"}
-                        `}
-                        role="menuitem"
+                  <div className="flex flex-col gap-2">
+                    {navItems.map((item, i) => (
+                      <motion.div
+                        key={item.href}
+                        initial={{ opacity: 0, x: isRTL ? 20 : -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{
+                          delay: i * 0.05,
+                          type: "spring",
+                          damping: 20,
+                        }}
                       >
-                        {item.label}
-                      </NavLink>
-                    </motion.div>
-                  ))}
+                        <NavLink
+                          to={item.href}
+                          onClick={() => handleNavClick(item.href)}
+                          className={({ isActive }) => `
+                            text-2xl font-black font-branding uppercase tracking-widest block py-4 px-4 rounded-2xl transition-all
+                            ${isActive ? "text-starbucks-green bg-starbucks-green/5" : "text-starbucks-dark dark:text-white hover:bg-gray-50 dark:hover:bg-white/5"}
+                          `}
+                          role="menuitem"
+                        >
+                          {item.label}
+                        </NavLink>
+                      </motion.div>
+                    ))}
+                  </div>
                 </div>
               </motion.div>
-            </>
+            </div>
           )}
         </AnimatePresence>
       </nav>

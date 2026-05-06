@@ -5,14 +5,18 @@ import {
 } from "@/components";
 import { SectionRenderer } from "@/components/sections/generic/SectionRenderer";
 import { communityImpact } from "@/data";
-import { type GenericPageData } from "@/types";
+import { type GenericPageData, type LocalizedText } from "@/types";
 
 export const CommunityImpactPage = () => {
   const { i18n } = useTranslation();
   const lang = (i18n.language === "ar" ? "ar" : "en") as "ar" | "en";
   const data = (communityImpact as unknown as GenericPageData);
 
-  const t = (obj: any) => obj?.[lang] || obj;
+  const t = (obj: LocalizedText | string | null | undefined) => {
+    if (!obj) return "";
+    if (typeof obj === "string") return obj;
+    return (obj as LocalizedText)[lang] || "";
+  };
 
   return (
     <>
