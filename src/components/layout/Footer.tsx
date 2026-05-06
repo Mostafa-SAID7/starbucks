@@ -78,7 +78,7 @@ export function Footer() {
   };
 
   return (
-    <footer className="bg-starbucks-dark pt-16 pb-12 md:pb-12 text-white mb-20 md:mb-0">
+    <footer className="bg-starbucks-dark pt-8 md:pt-16 pb-28 md:pb-12 text-white">
       <div className="container mx-auto max-w-7xl px-6">
         {/* Desktop: Regular grid, Mobile: 2x2 grid with collapsible sections */}
         <div className="border-b border-white/10 pb-16">
@@ -288,15 +288,31 @@ export function Footer() {
           <div className="flex flex-col gap-6 justify-between">
             {/* Legal Links */}
             <div className="flex flex-wrap items-center gap-x-10 gap-y-4">
-              {footerData.legal.map((link: FooterLink) => (
-                <Link
-                  key={link.label}
-                  to={`/${lang}${link.href}`}
-                  className="text-base font-bold text-gray-300 hover:text-white transition-colors"
-                >
-                  {link.label}
-                </Link>
-              ))}
+              {footerData.legal.map((link: FooterLink) => {
+                const isCookieSettings = link.label === "إشعار الكوكيز" || link.label === "Cookie Notice" || link.label === "Cookie Preferences";
+                
+                if (isCookieSettings) {
+                  return (
+                    <button
+                      key={link.label}
+                      onClick={() => window.dispatchEvent(new Event('openCookieSettings'))}
+                      className="text-base font-bold text-gray-300 hover:text-white transition-colors text-start cursor-pointer"
+                    >
+                      {link.label}
+                    </button>
+                  );
+                }
+
+                return (
+                  <Link
+                    key={link.label}
+                    to={`/${lang}${link.href}`}
+                    className="text-base font-bold text-gray-300 hover:text-white transition-colors"
+                  >
+                    {link.label}
+                  </Link>
+                );
+              })}
             </div>
 
             {/* Starbucks Brief Description */}
@@ -384,13 +400,13 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="pt-8 text-start text-[13px] text-gray-500 border-t border-white/10">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+        <div className="pt-8 pb-4 text-center text-[13px] text-gray-500 border-t border-white/10 px-4 md:px-24">
+          <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-8">
             <p>
               © {new Date().getFullYear()} Starbucks Coffee Company.{" "}
               {footerData.allRightsReserved}
             </p>
-            <p className="flex items-center gap-2">
+            <p className="flex items-center justify-center gap-2">
               <span>{lang === "ar" ? "تصميم" : "Designed by"}</span>
               <a
                 href="https://m-said-portfolio.netlify.app"

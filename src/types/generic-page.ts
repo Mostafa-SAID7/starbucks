@@ -69,6 +69,7 @@ export interface GenericPageData {
   intro?: {
     title?: LocalizedText;
     paragraphs?: LocalizedText[];
+    image?: string | LocalizedText;
   };
   sections: GenericSection[];
   accordion?: {

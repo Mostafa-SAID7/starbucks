@@ -4,7 +4,7 @@
     "en": "About Us"
   },
   "layoutType": "sidebar",
-  "sidebarImage": "https://www.starbucks.eg/assets/image-cache/about-us-hero.jpg",
+  "sidebarImage": "/about-us.webp",
   "intro": {
     "title": {
       "ar": "نبذة عنا",

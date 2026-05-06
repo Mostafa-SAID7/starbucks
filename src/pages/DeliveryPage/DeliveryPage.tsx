@@ -221,7 +221,7 @@ export const DeliveryPage = () => {
                     {t(data.accordion.title)}
                   </h2>
                   <div className="space-y-6">
-                    {data.accordion.items.map((item, idx) => (
+                    {data.accordion.items?.map((item, idx) => (
                       <div key={idx} className="bg-gray-50 dark:bg-white/5 rounded-3xl overflow-hidden">
                         <button
                           onClick={() => toggleSection(`faq-${idx}`)}

@@ -8,3 +8,4 @@ export * from "./NotFound";
 export * from "./GenericPage";
 export * from "./SustainabilityPage/SustainabilityPage";
 export * from "./DeliveryPage/DeliveryPage";
+export * from "./MiddleEastPage/MiddleEastPage";

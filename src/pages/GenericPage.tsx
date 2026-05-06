@@ -28,7 +28,7 @@ export const GenericPage: React.FC<GenericPageProps> = ({
         <div className="space-y-4">
           <Accordion
             items={data.sections.map((section) => ({
-              title: section.title[lang],
+              title: section.title?.[lang] ?? "",
               content: (
                 <div className="pt-4">
                   <SectionRenderer
@@ -158,75 +158,76 @@ export const GenericPage: React.FC<GenericPageProps> = ({
 
       {/* Main Page Layout Wrapper */}
       {data.layoutType === "sidebar" && data.sidebarImage ? (
-        <div className="container mx-auto max-w-7xl px-6 py-16 lg:py-24 overflow-visible">
-          <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 w-full">
-            {/* Content Column */}
-            <div className="flex-1 min-w-0 lg:w-1/2">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="mb-12"
-              >
-                {!data.hideMainTitle && (
-                  <h1 className="text-4xl lg:text-5xl font-black text-starbucks-dark dark:text-white mb-4">
-                    {data.title[lang]}
-                  </h1>
-                )}
-                {data.lastUpdated && (
-                  <p className="text-sm text-gray-400">
-                    {data.lastUpdated[lang]}
-                  </p>
-                )}
-              </motion.div>
-
-              {/* Intro */}
-              {data.intro && (
-                <div className="space-y-4 mb-12 text-lg text-gray-600 dark:text-gray-400 leading-relaxed">
-                  {data.intro.title && (
-                    <h2 className="text-2xl font-bold text-starbucks-dark dark:text-white">
-                      {data.intro.title[lang]}
-                    </h2>
-                  )}
-                  {data.intro.paragraphs?.map((p, i) => (
-                    <p key={i}>{p[lang]}</p>
-                  ))}
-                </div>
-              )}
-
-              {renderSections()}
-
-              {/* Data-level Accordion (e.g. for Delivery FAQ) */}
-              {data.accordion && (
-                <div className="mt-20 space-y-8">
-                  {data.accordion.title && (
-                    <h2 className="text-3xl font-extrabold text-starbucks-dark dark:text-white italic">
-                      {data.accordion.title[lang]}
-                    </h2>
-                  )}
-                  <Accordion
-                    items={data.accordion.items?.map((item) => ({
-                      title: typeof item.title === 'string' ? item.title : item.title?.[lang] || '',
-                      content: (
-                        <div className="pt-4 text-gray-600 dark:text-gray-400 leading-relaxed">
-                          {typeof item.content === 'string' ? item.content : item.content?.[lang] || ''}
-                        </div>
-                      ),
-                    })) || []}
-                  />
-                </div>
-              )}
+        <div className="container mx-auto px-4 pt-8 pb-0 lg:py-12">
+          <div className={`flex flex-col lg:flex-row gap-12 ${isRTL ? "lg:flex-row-reverse" : ""}`}>
+            
+            {/* Side 1: Sticky Sidebar Image */}
+            <div className="lg:w-[40%] lg:sticky lg:top-24 lg:h-[calc(100vh-8rem)] group">
+              <div className="h-full rounded-3xl overflow-hidden shadow-2xl relative">
+                <img
+                  src={typeof data.sidebarImage === 'string' ? data.sidebarImage : data.sidebarImage?.[lang]}
+                  alt={data.title[lang]}
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                />
+              </div>
             </div>
 
-            {/* Sidebar Column */}
-            <div className="hidden lg:block lg:w-1/2">
-              <div className="sticky top-32 h-[calc(100vh-12rem)]">
-                <div className="w-full h-full rounded-[2.5rem] shadow-2xl overflow-hidden bg-gray-100 dark:bg-zinc-800">
-                  <img
-                    src={typeof data.sidebarImage === 'string' ? data.sidebarImage : data.sidebarImage?.[lang]}
-                    alt={data.title[lang]}
-                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-1000"
-                  />
-                </div>
+            {/* Side 2: Content Column */}
+            <div className="lg:w-[60%]">
+              <div className="max-w-4xl">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="mb-12"
+                >
+                  {!data.hideMainTitle && (
+                    <h1 className="text-4xl lg:text-5xl font-black text-starbucks-dark dark:text-white mb-6">
+                      {data.title[lang]}
+                    </h1>
+                  )}
+                  {data.lastUpdated && (
+                    <span className="inline-block mb-4 px-3 py-1 bg-gray-100 dark:bg-white/5 text-gray-500 dark:text-gray-400 text-xs font-bold rounded-full uppercase tracking-widest">
+                      {data.lastUpdated[lang]}
+                    </span>
+                  )}
+                </motion.div>
+
+                {/* Intro */}
+                {data.intro && (
+                  <div className="space-y-6 mb-12 text-xl text-gray-600 dark:text-gray-400 leading-relaxed">
+                    {data.intro.title && (
+                      <h2 className="text-2xl lg:text-3xl font-black text-starbucks-dark dark:text-white mb-6">
+                        {data.intro.title[lang]}
+                      </h2>
+                    )}
+                    {data.intro.paragraphs?.map((p, i) => (
+                      <p key={i} className="font-medium">{p[lang]}</p>
+                    ))}
+                  </div>
+                )}
+
+                {renderSections()}
+
+                {/* Data-level Accordion (e.g. for Delivery FAQ) */}
+                {data.accordion && (
+                  <div className="mt-16 space-y-8">
+                    {data.accordion.title && (
+                      <h2 className="text-3xl font-black text-starbucks-dark dark:text-white mb-8">
+                        {data.accordion.title[lang]}
+                      </h2>
+                    )}
+                    <Accordion
+                      items={data.accordion.items?.map((item) => ({
+                        title: typeof item.title === 'string' ? item.title : item.title?.[lang] || '',
+                        content: (
+                          <div className="pt-4 text-lg text-gray-600 dark:text-gray-400 leading-relaxed font-medium whitespace-pre-line">
+                            {typeof item.content === 'string' ? item.content : item.content?.[lang] || ''}
+                          </div>
+                        ),
+                      })) || []}
+                    />
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -326,7 +327,7 @@ export const GenericPage: React.FC<GenericPageProps> = ({
                     .map((idx) => data.sections[idx])
                     .filter(Boolean)
                     .map((section) => ({
-                      title: section.title[lang],
+                      title: section.title?.[lang] ?? "",
                       content: (
                         <div className="pt-4">
                           <SectionRenderer

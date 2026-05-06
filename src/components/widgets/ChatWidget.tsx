@@ -56,7 +56,7 @@ export const ChatWidget = () => {
   };
 
   return (
-    <div className="fixed bottom-6 right-6 z-[100]" dir={isRTL ? "rtl" : "ltr"}>
+    <div className="fixed bottom-24 md:bottom-6 right-6 z-[100]" dir={isRTL ? "rtl" : "ltr"}>
       <AnimatePresence mode="wait">
         {isOpen ? (
           <motion.div

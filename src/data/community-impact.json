@@ -3,6 +3,7 @@
     "ar": "التأثير المجتمعي",
     "en": "Community Impact"
   },
+  "layoutType": "sidebar",
   "sidebarImage": "/statics/Gaza.webp",
   "intro": {
     "title": {

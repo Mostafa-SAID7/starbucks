@@ -66,7 +66,7 @@
     "legal": [
       { "label": "Privacy Policy", "href": "/privacy-statement" },
       { "label": "Terms of Use", "href": "/terms-of-use" },
-      { "label": "Cookie Policy", "href": "/cookie-notice" }
+      { "label": "Cookie Notice", "href": "/cookie-notice" }
     ],
     "allRightsReserved": "All Rights Reserved.",
     "app": {

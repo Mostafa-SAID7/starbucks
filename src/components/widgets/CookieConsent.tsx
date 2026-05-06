@@ -35,6 +35,15 @@ const CookieConsent: React.FC = () => {
   const [showPrefs, setShowPrefs] = useState(false)
   const [prefs, setPrefs] = useState<Prefs>({ functional: true, advertising: false })
 
+  React.useEffect(() => {
+    const handleOpen = () => {
+      setVisible(true)
+      setShowPrefs(true)
+    }
+    window.addEventListener('openCookieSettings', handleOpen)
+    return () => window.removeEventListener('openCookieSettings', handleOpen)
+  }, [])
+
   const save = (value: string) => {
     localStorage.setItem(COOKIE_KEY, value)
     setVisible(false)
@@ -61,7 +70,7 @@ const CookieConsent: React.FC = () => {
                 initial={{ height: 0, opacity: 0 }}
                 animate={{ height: 'auto', opacity: 1 }}
                 exit={{ height: 0, opacity: 0 }}
-                className="overflow-y-auto max-h-[60vh] md:max-h-[70vh] border-b border-gray-200 dark:border-zinc-700"
+                className="overflow-y-auto scrollbar-thin max-h-[60vh] md:max-h-[70vh] border-b border-gray-200 dark:border-zinc-700"
               >
                 <div className="container mx-auto max-w-3xl px-6 py-8 space-y-6">
                   <div className="flex items-center gap-3 mb-2">

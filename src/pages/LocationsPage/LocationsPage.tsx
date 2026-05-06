@@ -24,7 +24,7 @@ export const LocationsPage: React.FC = () => {
           {/* Bg image overlay */}
           <div className="absolute inset-0 z-0">
             <img
-              src="https://www.starbucks.eg/assets/image-cache/store-locator-hero.jpg"
+              src="/Starbucks-directory.webp"
               alt=""
               className="h-full w-full object-cover opacity-30"
               onError={(e) => { e.currentTarget.style.display = 'none' }}
@@ -32,7 +32,7 @@ export const LocationsPage: React.FC = () => {
             <div className="absolute inset-0 bg-starbucks-dark/70" />
           </div>
 
-          <div className="relative z-10 text-center w-full max-w-sm">
+          <div className="relative z-10 text-center w-full max-w-lg">
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -49,15 +49,17 @@ export const LocationsPage: React.FC = () => {
             </p>
 
             {/* Search bar */}
-            <div className="relative mb-4">
+            <div className="relative mb-6 w-full max-w-md mx-auto">
               <input
                 type="text"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder={isRTL ? 'ابحث عن فرع...' : 'Find a store'}
-                className="w-full rounded-full bg-white/15 backdrop-blur-sm py-3.5 pe-12 ps-4 text-white placeholder-white/60 outline-none ring-1 ring-white/20 focus:ring-white transition-all"
+                className={`w-full rounded-full bg-white/10 hover:bg-white/15 backdrop-blur-md py-4 ${isRTL ? 'pr-6 pl-14 text-right' : 'pl-6 pr-14'} text-white placeholder-white/50 outline-none ring-2 ring-white/10 focus:ring-starbucks-green focus:bg-white/20 transition-all shadow-xl`}
               />
-              <Search className="absolute top-1/2 inset-inline-end-4 h-5 w-5 -translate-y-1/2 text-white/60" />
+              <div className={`absolute top-1/2 -translate-y-1/2 ${isRTL ? 'left-2' : 'right-2'} p-2.5 bg-starbucks-green rounded-full`}>
+                <Search className="h-5 w-5 text-white" />
+              </div>
             </div>
 
             {/* Use my location */}

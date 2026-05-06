@@ -53,6 +53,9 @@ const DeliveryPage = lazy(() =>
 const SustainabilityPage = lazy(() =>
   import("@/pages").then((module) => ({ default: module.SustainabilityPage })),
 );
+const MiddleEastPage = lazy(() =>
+  import("@/pages").then((module) => ({ default: module.MiddleEastPage })),
+);
 const GenericPage = lazy(() =>
   import("@/pages").then((module) => ({ default: module.GenericPage })),
 );
@@ -67,9 +70,8 @@ import {
   aboutUs,
   newEra,
   termsOfUse,
-  cookieNotice,
-  sustainability,
-  middleEast
+  ourCoffees,
+  cookies,
 } from "@/data";
 import { type GenericPageData } from "@/types";
 
@@ -195,19 +197,24 @@ const AnimatedRoutes = () => {
             }
           />
 
-          {/* Redirects to prevent 404s on generic sections */}
+          {/* Generic Pages */}
           <Route
             path="our-coffees"
-            element={<Navigate to="menu/drinks" replace />}
+            element={
+              <PageWrapper skeleton={<StaticPageSkeleton />}>
+                <GenericPage 
+                  data={ourCoffees as GenericPageData} 
+                  seoTitle="Our Coffees - Starbucks Egypt" 
+                  useAccordionLayout={true}
+                />
+              </PageWrapper>
+            }
           />
           <Route
             path="starbucks-middle-east"
             element={
               <PageWrapper skeleton={<StaticPageSkeleton />}>
-                <GenericPage 
-                  data={middleEast as GenericPageData} 
-                  seoTitle="Middle East Statement - Starbucks Egypt" 
-                />
+                <MiddleEastPage />
               </PageWrapper>
             }
           />
@@ -252,6 +259,7 @@ const AnimatedRoutes = () => {
                 <GenericPage 
                   data={aboutUs as GenericPageData} 
                   seoTitle="About Us - Starbucks Egypt" 
+                  useAccordionLayout={true}
                 />
               </PageWrapper>
             }
@@ -307,8 +315,9 @@ const AnimatedRoutes = () => {
             element={
               <PageWrapper skeleton={<StaticPageSkeleton />}>
                 <GenericPage 
-                  data={cookieNotice as GenericPageData} 
+                  data={cookies.pageData as GenericPageData} 
                   seoTitle="Cookie Notice - Starbucks Egypt" 
+                  useAccordionLayout={true}
                 />
               </PageWrapper>
             }

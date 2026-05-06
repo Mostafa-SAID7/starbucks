@@ -3,6 +3,7 @@
     "ar": "بيان من شركة ستاربكس",
     "en": "Starbucks Official Statement"
   },
+  "sidebarImage": "/starbucks-middle-east.webp",
   "lastUpdated": {
     "ar": "تحديث أكتوبر 2023",
     "en": "Updated October 2023"
@@ -74,7 +75,7 @@
     }
   ],
   "updateNote": {
-    "ar": "صدر هذا البيان في عام 2010، وتمّ تحديثه في أكتوبر 2023.",
-    "en": "This statement was issued in 2010 and updated in October 2023."
+    "ar": "يُحدِّث هذا البيان نصًّا نُشر أصلًا على موقع ستاربكس نيوزروم عام 2010، وقد تمّ تحديثه في أكتوبر 2023.",
+    "en": "This updates a statement originally posted to the Starbucks Newsroom in 2010, updated October 2023."
   }
 }
