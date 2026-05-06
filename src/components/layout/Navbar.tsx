@@ -65,12 +65,7 @@ export function Navbar() {
   useEffect(() => {
     if (prevPathname.current !== location.pathname) {
       if (isMobileMenuOpen) {
-        // Use timeout to satisfy lint rule and avoid cascading renders
-        const timer = setTimeout(() => {
-          setIsMobileMenuOpen(false);
-        }, 0);
-        prevPathname.current = location.pathname;
-        return () => clearTimeout(timer);
+        setTimeout(() => setIsMobileMenuOpen(false), 0);
       }
       prevPathname.current = location.pathname;
     }
