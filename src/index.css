@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   --font-sans: "Noto Sans Arabic", "Mada", "system-ui", "sans-serif";
   --font-heading: "Noto Kufi Arabic", "Cairo", "serif";
@@ -8,6 +10,11 @@
   --color-starbucks-green: #006241;
   --color-starbucks-dark: #1e3932;
   --color-starbucks-gold: #cba258;
+  
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-border: var(--border);
   
   --color-background-light: #ffffff;
   --color-background-dark: #0f1419;
@@ -66,6 +73,26 @@
   }
 }
 
+:root {
+  --background: #ffffff;
+  --foreground: #1a1a1a;
+  --card: #ffffff;
+  --border: #e5e7eb;
+  --sb-thumb: #006241;
+  --sb-track: rgba(0, 98, 65, 0.08);
+  --sb-thumb-hover: #004d33;
+}
+
+.dark {
+  --background: #0f1419;
+  --foreground: #e7e9ea;
+  --card: #16181c;
+  --border: #2f3336;
+  --sb-thumb: #00754a;
+  --sb-track: rgba(255, 255, 255, 0.08);
+  --sb-thumb-hover: #008b5a;
+}
+
 @layer base {
   /* ============================================
      RESET + RESPONSIVE BASES
@@ -104,7 +131,7 @@
 
   /* Body: No scrollbar, let HTML handle it */
   body {
-    @apply font-sans bg-background-light dark:bg-background-dark text-foreground-light dark:text-foreground-dark transition-colors duration-300;
+    @apply font-sans bg-background text-foreground transition-colors duration-300;
     font-feature-settings:
       "rlig" 1,
       "calt" 1;
@@ -144,24 +171,7 @@
 
   /* Base border styling */
   * {
-    @apply border-border-light dark:border-border-dark;
-  }
-
-  /* ============================================
-     SCROLLBAR STYLING
-     ============================================ */
-
-  /* Scrollbar color variables */
-  :root {
-    --sb-thumb: #006241;
-    --sb-track: rgba(0, 98, 65, 0.08);
-    --sb-thumb-hover: #004d33;
-  }
-
-  .dark {
-    --sb-thumb: #00754a;
-    --sb-track: rgba(255, 255, 255, 0.08);
-    --sb-thumb-hover: #008b5a;
+    @apply border-border;
   }
 
   /* Webkit scrollbar (Chrome, Safari, Edge) */

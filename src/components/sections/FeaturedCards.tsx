@@ -22,7 +22,7 @@ export function FeaturedCards() {
   const localizedData = featuredCards[lang] || featuredCards.en;
 
   return (
-    <section className="py-12 relative overflow-hidden bg-white dark:bg-black transition-colors">
+    <section className="py-12 relative overflow-hidden bg-background transition-colors">
       {/* Animated Gradient Background */}
       <div className="absolute inset-0 bg-gradient-to-br from-starbucks-green/5 via-transparent to-starbucks-green/10 dark:from-starbucks-green/10 dark:via-transparent dark:to-starbucks-green/5 animate-gradient-shift"></div>
 

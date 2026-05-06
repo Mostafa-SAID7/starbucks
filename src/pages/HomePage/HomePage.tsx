@@ -60,7 +60,7 @@ export const HomePage = () => {
         />
         
         {/* The Color Bridge: Multi-stop gradient for a seamless color transition */}
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/40 to-white dark:via-background-dark/40 dark:to-background-dark" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/40 to-background" />
       </div>
 
       <StatementSection />

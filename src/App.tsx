@@ -91,7 +91,7 @@ const PageWrapper = ({
   >
     <Suspense
       fallback={
-        skeleton || <div className="min-h-screen bg-white dark:bg-black" />
+        skeleton || <div className="min-h-screen bg-background" />
       }
     >
       {children}

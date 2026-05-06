@@ -18,7 +18,7 @@ const StatementSection = () => {
   const localizedData = (data[lang] || data.en) as StatementData
 
   return (
-    <section className="bg-background-light dark:bg-background-dark py-16 transition-colors">
+    <section className="bg-background py-16 transition-colors">
       <div className="container mx-auto max-w-4xl px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

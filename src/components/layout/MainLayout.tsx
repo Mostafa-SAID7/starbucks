@@ -10,7 +10,7 @@ import { ErrorBoundary } from "@/components";
 export const MainLayout = () => {
   return (
     <ErrorBoundary>
-      <div className="flex min-h-screen flex-col bg-background-light text-foreground-light transition-colors duration-300 dark:bg-background-dark dark:text-foreground-dark">
+      <div className="flex min-h-screen flex-col bg-background text-foreground transition-colors duration-300">
         <Navbar />
         <main className="flex-1 overflow-visible">
           <Outlet />
