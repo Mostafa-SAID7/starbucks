@@ -206,7 +206,7 @@ export function Navbar() {
                   to={item.href}
                   onClick={() => handleNavClick(item.href)}
                   className={({ isActive }) => `
-                    relative flex h-full items-center text-[13px] font-black uppercase tracking-[0.2em] transition-all py-1 group focus:outline-none focus-visible:ring-2 focus-visible:ring-starbucks-green focus-visible:rounded
+                    relative flex h-full items-center text-[13px] font-black font-branding uppercase tracking-[0.2em] transition-all py-1 group focus:outline-none focus-visible:ring-2 focus-visible:ring-starbucks-green focus-visible:rounded
                     ${
                       isActive
                         ? "text-starbucks-green"
@@ -215,7 +215,7 @@ export function Navbar() {
                   `}
                   role="menuitem"
                 >
-                  <span className="relative z-10">{item.label}</span>
+                  <span className="relative z-10 font-branding">{item.label}</span>
                   {location.pathname === item.href ? (
                     <motion.div
                       layoutId="nav-underline"
@@ -395,7 +395,7 @@ export function Navbar() {
                       to={item.href}
                       onClick={() => handleNavClick(item.href)}
                       className={({ isActive }) => `
-                        text-2xl lg:text-3xl font-black uppercase tracking-widest block py-4 active:scale-95 transition-transform
+                        text-2xl lg:text-3xl font-black font-branding uppercase tracking-widest block py-4 active:scale-95 transition-transform
                         ${isActive ? "text-starbucks-green" : "text-starbucks-dark dark:text-white"}
                       `}
                       role="menuitem"

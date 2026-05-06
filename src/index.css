@@ -40,7 +40,7 @@
 
   /* Body: No scrollbar, let HTML handle it */
   body {
-    @apply bg-background-light dark:bg-background-dark text-foreground-light dark:text-foreground-dark transition-colors duration-300;
+    @apply font-sans bg-background-light dark:bg-background-dark text-foreground-light dark:text-foreground-dark transition-colors duration-300;
     font-feature-settings:
       "rlig" 1,
       "calt" 1;
@@ -48,6 +48,10 @@
     overflow-y: visible;
     width: 100%;
     min-height: 100vh;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: theme("fontFamily.heading");
   }
 
   /* Root: No scrollbar, let HTML handle it */

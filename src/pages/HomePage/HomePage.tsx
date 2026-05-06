@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { Banner, StatementSection, FeaturedCards, SEO } from "@/components";
-import { pages, hero } from "@/data";
-import { motion } from "framer-motion";
+import pages from "@/data/pages.json";
+import hero from "@/data/hero.json";
 
 interface LocalizedContent {
   title: string;
@@ -42,26 +42,25 @@ export const HomePage = () => {
         description={heroData.description}
         ctaText={heroData.ctaText}
         ctaLink={heroData.ctaLink}
-        imageUrl="/Hero-Banner.webp"
+        imageUrl="/home/banner/backgrouund.webp"
+        secondaryImageUrl={lang === "ar" ? "/home/banner/woman-Photoroom.webp" : "/home/banner/woman-Photoroom-en.png"}
         imageAlt={heroData.imageAlt}
         isRTL={lang === "ar"}
       />
 
-      {/* Elegant Blur Transition - Best Quality */}
-      <div className="relative -mt-16 h-32 overflow-hidden">
-        {/* Main blur layer */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4, duration: 1.5, ease: [0.25, 0.1, 0.25, 1] }}
-          className="absolute inset-0 bg-gradient-to-b from-transparent via-white/40 dark:via-zinc-950/40 to-white dark:to-zinc-950 backdrop-blur-lg"
+      {/* High-End Section Transition - Integrated Fading Dissolve */}
+      <div className="relative z-20 -mt-16 h-32 pointer-events-none">
+        {/* The Blur Layer: Fades in gradually using mask-image to avoid sharp lines */}
+        <div 
+          className="absolute inset-0 backdrop-blur-[10px]" 
+          style={{
+            maskImage: "linear-gradient(to bottom, transparent, black 40%, black)",
+            WebkitMaskImage: "linear-gradient(to bottom, transparent, black 40%, black)"
+          }}
         />
-
-        {/* Subtle overlay for depth */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/8 via-black/3 to-transparent"></div>
-
-        {/* Edge softening */}
-        <div className="absolute top-0 left-0 right-0 h-8 bg-gradient-to-b from-transparent to-white/20 dark:to-zinc-950/20"></div>
+        
+        {/* The Color Bridge: Multi-stop gradient for a seamless color transition */}
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/40 to-white dark:via-background-dark/40 dark:to-background-dark" />
       </div>
 
       <StatementSection />

@@ -88,7 +88,7 @@ export function FeaturedCards() {
                   <Button
                     variant="outline"
                     size="sm"
-                    className="rounded-full border-2 border-starbucks-dark px-4 py-2 text-sm font-bold text-starbucks-dark hover:bg-starbucks-dark hover:text-white dark:border-foreground-dark dark:text-foreground-dark dark:hover:bg-foreground-dark dark:hover:text-black transition-all"
+                    className="rounded-full border-2 border-starbucks-dark px-4 py-2 text-sm font-bold font-branding text-starbucks-dark hover:bg-starbucks-dark hover:text-white dark:border-foreground-dark dark:text-foreground-dark dark:hover:bg-foreground-dark dark:hover:text-black transition-all"
                     asChild
                   >
                     <a href={card.ctaLink}>{card.cta}</a>
@@ -98,7 +98,7 @@ export function FeaturedCards() {
                     <Button
                       variant="outline"
                       size="sm"
-                      className="rounded-full border-2 border-starbucks-dark px-4 py-2 text-sm font-bold text-starbucks-dark hover:bg-starbucks-dark hover:text-white dark:border-foreground-dark dark:text-foreground-dark dark:hover:bg-foreground-dark dark:hover:text-black transition-all"
+                      className="rounded-full border-2 border-starbucks-dark px-4 py-2 text-sm font-bold font-branding text-starbucks-dark hover:bg-starbucks-dark hover:text-white dark:border-foreground-dark dark:text-foreground-dark dark:hover:bg-foreground-dark dark:hover:text-black transition-all"
                       asChild
                     >
                       <a href={card.secondaryCtaLink}>{card.secondaryCta}</a>

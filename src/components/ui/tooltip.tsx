@@ -48,7 +48,7 @@ export const Tooltip = React.forwardRef<HTMLDivElement, TooltipProps>(
     return (
       <div
         ref={containerRef}
-        className="relative inline-block"
+        className="relative flex items-center justify-center w-fit"
         onMouseEnter={() => setIsVisible(true)}
         onMouseLeave={() => setIsVisible(false)}
         onFocus={() => setIsVisible(true)}
@@ -61,21 +61,27 @@ export const Tooltip = React.forwardRef<HTMLDivElement, TooltipProps>(
               initial={{
                 opacity: 0,
                 scale: 0.8,
+                x: (side === "bottom" || side === "top") ? "-50%" : 0,
                 y: side === "bottom" ? -10 : side === "top" ? 10 : 0,
               }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
+              animate={{ 
+                opacity: 1, 
+                scale: 1, 
+                x: (side === "bottom" || side === "top") ? "-50%" : 0,
+                y: 0 
+              }}
               exit={{
                 opacity: 0,
                 scale: 0.8,
+                x: (side === "bottom" || side === "top") ? "-50%" : 0,
                 y: side === "bottom" ? -10 : side === "top" ? 10 : 0,
               }}
               transition={{ duration: 0.15 }}
               className={cn(
                 "absolute z-[100] px-3 py-2.5 text-xs font-semibold text-white bg-gray-900 dark:bg-zinc-800 rounded-lg shadow-xl whitespace-nowrap pointer-events-none",
                 getPositionClasses(),
-                // Perfect centering for top/bottom tooltips
-                (side === "bottom" || side === "top") &&
-                  "left-1/2 -translate-x-1/2",
+                // Centering handled by Framer Motion 'x' prop
+                (side === "bottom" || side === "top") && "left-1/2",
                 className,
               )}
               role="tooltip"

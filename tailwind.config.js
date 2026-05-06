@@ -15,7 +15,9 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ["Cairo", "system-ui", "sans-serif"],
+        sans: ["Noto Sans Arabic", "Mada", "system-ui", "sans-serif"],
+        heading: ["Noto Kufi Arabic", "Cairo", "serif"],
+        branding: ["Cairo", "sans-serif"],
       },
       colors: {
         starbucks: {

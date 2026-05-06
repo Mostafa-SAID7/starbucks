@@ -4,6 +4,7 @@ import { privacyStatement } from "@/data";
 
 export const PrivacyStatementPage: React.FC = () => {
   // Remove the sidebar object since GenericPage expects a React component
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { sidebar, ...dataWithoutSidebar } = privacyStatement;
 
   return (
