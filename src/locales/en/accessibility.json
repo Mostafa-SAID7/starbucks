@@ -1,0 +1,8 @@
+{
+  "loading": "Loading...",
+  "error": "An error occurred. Please try again.",
+  "success": "Success",
+  "retry_button": "Retry loading content",
+  "error_details": "Show error details",
+  "close_details": "Hide error details"
+}

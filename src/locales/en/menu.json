@@ -1,0 +1,59 @@
+{
+  "title": "Menu",
+  "description": "Starbucks offers you delicious handcrafted beverages and great tasting snacks made from high quality ingredients. The art of coffee preparation is our first passion, and everything we do to ensure you enjoy a pleasant tasting experience at Starbucks wherever you are.\n\nWhether you want a distinctive coffee drink or enjoy a light meal, Starbucks is your favorite destination to start your day perfectly every day.",
+  "categories": {
+    "drinks": {
+      "title": "Explore Beverages",
+      "description": "Enjoy the wonderful world of signature Starbucks drinks, refreshing hot or cold beverages with a rich flavor.",
+      "sidebar_title": "Beverages"
+    },
+    "food": {
+      "title": "Explore Food",
+      "description": "Starbucks offers you a wide selection of sandwiches, salads or desserts to suit all tastes.",
+      "sidebar_title": "Food"
+    }
+  },
+  "subcategories": {
+    "espresso": "Espresso Beverages",
+    "frappuccino": "Frappuccino - With Coffee",
+    "cold_brew": "Cold Brew",
+    "tea": "Tea",
+    "sandwiches": "Sandwiches",
+    "pastries": "Pastries",
+    "salads": "Salads"
+  },
+  "items": {
+    "caffe-latte": {
+      "title": "Caffe Latte",
+      "description": "Our dark, rich espresso balanced with steamed milk and a light layer of foam."
+    },
+    "cappuccino": {
+      "title": "Cappuccino",
+      "description": "Strong espresso with steamed milk and thick foam."
+    },
+    "americano": {
+      "title": "Americano",
+      "description": "Espresso diluted with hot water for a strong, clean coffee."
+    },
+    "caramel-frappuccino": {
+      "title": "Caramel Frappuccino",
+      "description": "Refreshing cold drink with sweet caramel flavor."
+    },
+    "turkey-sandwich": {
+      "title": "Turkey Sandwich",
+      "description": "Fresh sandwich with turkey slices and vegetables."
+    }
+  },
+  "allergy_info": {
+    "title": "Allergens",
+    "description": "Please be advised that we cannot confirm that our food or drinks are completely free of allergenic ingredients due to the use of shared tools and equipment in our cafes.",
+    "link_label": "More information on allergens"
+  },
+  "sidebar": {
+    "title": "Menu",
+    "actions": {
+      "order_now": "Order Now",
+      "find_stores": "Find our Stores"
+    }
+  }
+}

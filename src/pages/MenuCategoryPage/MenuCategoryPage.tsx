@@ -8,20 +8,70 @@ import {
   VerticalCard,
   Button,
 } from "@/components";
-import menuData from "@/data/menu.json";
+import { MenuSkeleton } from "@/components/skeletons";
 import { NotFound } from "@/pages";
-import type { MenuData } from "@/types";
+import { useMenuData, useMenuCategory } from "@/hooks/queries";
 
 export const MenuCategoryPage = () => {
   const { categoryId } = useParams<{ categoryId: string }>();
   const { i18n } = useTranslation();
   const currentLang = (i18n.language === "ar" ? "ar" : "en") as "ar" | "en";
-  const data = (menuData as unknown as Record<string, MenuData>)[currentLang];
 
-  const category = data.categories.find((c) => c.id === categoryId);
+  // Fetch menu data for sidebar and allergy info
+  const { data: menuData, isLoading: isMenuLoading } = useMenuData();
 
+  // Fetch specific category data
+  const {
+    data: category,
+    isLoading: isCategoryLoading,
+    error,
+    refetch,
+  } = useMenuCategory(categoryId || "");
+
+  // Combined loading state
+  const isLoading = isMenuLoading || isCategoryLoading;
+
+  // Loading state
+  if (isLoading) {
+    return <MenuSkeleton />;
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-white dark:bg-background-dark">
+        <div className="text-center px-4">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+            {currentLang === "ar"
+              ? "حدث خطأ في تحميل الفئة"
+              : "Error loading category"}
+          </h2>
+          <p className="text-gray-600 dark:text-gray-400 mb-6">
+            {currentLang === "ar"
+              ? "عذراً، حدث خطأ أثناء تحميل الفئة. يرجى المحاولة مرة أخرى."
+              : "Sorry, there was an error loading the category. Please try again."}
+          </p>
+          <button
+            onClick={() => refetch()}
+            className="px-6 py-3 bg-starbucks-green text-white font-bold rounded-full hover:bg-starbucks-green/90 transition-colors"
+          >
+            {currentLang === "ar" ? "إعادة المحاولة" : "Retry"}
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // Category not found
   if (!category) {
     return <NotFound />;
+  }
+
+  const data = menuData?.[currentLang];
+
+  // Safety check for data
+  if (!data) {
+    return <MenuSkeleton />;
   }
 
   return (
@@ -80,7 +130,7 @@ export const MenuCategoryPage = () => {
                 asChild
                 className="rounded-2xl bg-starbucks-green font-bold text-white shadow-sm hover:bg-starbucks-dark dark:bg-starbucks-light dark:text-black dark:hover:bg-white"
               >
-              <Link to={`/${currentLang}/locations`}>
+                <Link to={`/${currentLang}/locations`}>
                   {currentLang === "ar"
                     ? "مواقع محلاتنا"
                     : "Our Store Locations"}

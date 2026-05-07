@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Globe, ChevronDown } from "lucide-react";
-import { footer as data } from "@/data";
+import { useFooter } from "@/hooks/queries";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface FooterLink {
@@ -25,14 +25,32 @@ export function Footer() {
         ? "ar"
         : "en"
   ) as "ar" | "en";
-  const footerData = data[lang];
+
+  // Fetch footer data using TanStack Query
+  const { data: footerDataRaw } = useFooter();
+  const data = footerDataRaw || { countries: [], socials: [] };
+  const footerData = footerDataRaw?.[lang] || {
+    sections: [],
+    legal: [],
+    locationSelector: lang === "ar" ? "اختر المنطقة" : "Select Region",
+    selectRegion: lang === "ar" ? "اختر المنطقة" : "Select Region",
+    allRightsReserved:
+      lang === "ar" ? "جميع الحقوق محفوظة" : "All rights reserved",
+    app: {
+      title: lang === "ar" ? "حمل التطبيق" : "Download the App",
+      description:
+        lang === "ar" ? "احصل على تطبيق ستاربكس" : "Get the Starbucks App",
+      appStore: lang === "ar" ? "متجر التطبيقات" : "App Store",
+      googlePlay: lang === "ar" ? "جوجل بلاي" : "Google Play",
+    },
+  };
+
   // Single unified state: only ONE accordion can ever be open at a time
   const [activeAccordion, setActiveAccordion] = useState<string | null>(null);
 
   const toggleAccordion = (id: string) => {
     setActiveAccordion((prev) => (prev === id ? null : id));
   };
-
 
   const socialIcons: Record<string, React.ReactNode> = {
     spotify: (
@@ -150,9 +168,9 @@ export function Footer() {
             <div className="border border-white/10 rounded-lg overflow-hidden self-start">
               <button
                 type="button"
-                onClick={() => toggleAccordion('location')}
+                onClick={() => toggleAccordion("location")}
                 className="flex w-full items-center justify-between p-4 text-left hover:bg-white/5 transition-colors"
-                aria-expanded={activeAccordion === 'location'}
+                aria-expanded={activeAccordion === "location"}
               >
                 <div className="flex items-center gap-2">
                   <Globe className="h-4 w-4 text-starbucks-green" />
@@ -161,14 +179,14 @@ export function Footer() {
                   </span>
                 </div>
                 <motion.div
-                  animate={{ rotate: activeAccordion === 'location' ? 180 : 0 }}
+                  animate={{ rotate: activeAccordion === "location" ? 180 : 0 }}
                   transition={{ duration: 0.2 }}
                 >
                   <ChevronDown className="h-4 w-4 text-gray-400" />
                 </motion.div>
               </button>
               <AnimatePresence initial={false}>
-                {activeAccordion === 'location' && (
+                {activeAccordion === "location" && (
                   <motion.div
                     key="content-location"
                     initial="collapsed"
@@ -289,13 +307,18 @@ export function Footer() {
             {/* Legal Links */}
             <div className="flex flex-wrap items-center gap-x-10 gap-y-4">
               {footerData.legal.map((link: FooterLink) => {
-                const isCookieSettings = link.label === "إشعار الكوكيز" || link.label === "Cookie Notice" || link.label === "Cookie Preferences";
-                
+                const isCookieSettings =
+                  link.label === "إشعار الكوكيز" ||
+                  link.label === "Cookie Notice" ||
+                  link.label === "Cookie Preferences";
+
                 if (isCookieSettings) {
                   return (
                     <button
                       key={link.label}
-                      onClick={() => window.dispatchEvent(new Event('openCookieSettings'))}
+                      onClick={() =>
+                        window.dispatchEvent(new Event("openCookieSettings"))
+                      }
                       className="text-base font-bold text-gray-300 hover:text-white transition-colors text-start cursor-pointer"
                     >
                       {link.label}

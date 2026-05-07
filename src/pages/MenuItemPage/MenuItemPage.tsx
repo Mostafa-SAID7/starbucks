@@ -8,9 +8,9 @@ import {
   VerticalCard,
   Button,
 } from "@/components";
-import menuData from "@/data/menu.json";
+import { MenuSkeleton } from "@/components/skeletons";
 import { NotFound } from "@/pages";
-import type { MenuData } from "@/types";
+import { useMenuData, useMenuItem } from "@/hooks/queries";
 
 export const MenuItemPage = () => {
   const { categoryId, itemId: subcategoryId } = useParams<{
@@ -19,15 +19,63 @@ export const MenuItemPage = () => {
   }>();
   const { i18n } = useTranslation();
   const currentLang = (i18n.language === "ar" ? "ar" : "en") as "ar" | "en";
-  const data = (menuData as unknown as Record<string, MenuData>)[currentLang];
 
-  const category = data.categories.find((c) => c.id === categoryId);
-  const subcategory = category?.subcategories?.find(
-    (s) => s.id === subcategoryId,
-  );
+  // Fetch menu data for sidebar and allergy info
+  const { data: menuData, isLoading: isMenuLoading } = useMenuData();
 
-  if (!category || !subcategory) {
+  // Fetch specific menu item data
+  const {
+    data: itemData,
+    isLoading: isItemLoading,
+    error,
+    refetch,
+  } = useMenuItem(categoryId || "", subcategoryId || "");
+
+  // Combined loading state
+  const isLoading = isMenuLoading || isItemLoading;
+
+  // Loading state
+  if (isLoading) {
+    return <MenuSkeleton />;
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-white dark:bg-background-dark">
+        <div className="text-center px-4">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+            {currentLang === "ar"
+              ? "حدث خطأ في تحميل العنصر"
+              : "Error loading item"}
+          </h2>
+          <p className="text-gray-600 dark:text-gray-400 mb-6">
+            {currentLang === "ar"
+              ? "عذراً، حدث خطأ أثناء تحميل العنصر. يرجى المحاولة مرة أخرى."
+              : "Sorry, there was an error loading the item. Please try again."}
+          </p>
+          <button
+            onClick={() => refetch()}
+            className="px-6 py-3 bg-starbucks-green text-white font-bold rounded-full hover:bg-starbucks-green/90 transition-colors"
+          >
+            {currentLang === "ar" ? "إعادة المحاولة" : "Retry"}
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // Item not found
+  if (!itemData) {
     return <NotFound />;
+  }
+
+  const { category, subcategory } = itemData;
+  const data = menuData?.[currentLang];
+
+  // Safety check for data
+  if (!data) {
+    return <MenuSkeleton />;
   }
 
   return (
@@ -90,7 +138,7 @@ export const MenuItemPage = () => {
                 asChild
                 className="rounded-2xl bg-starbucks-green font-bold text-white shadow-sm hover:bg-starbucks-dark dark:bg-starbucks-light dark:text-black dark:hover:bg-white"
               >
-              <Link to={`/${currentLang}/locations`}>
+                <Link to={`/${currentLang}/locations`}>
                   {currentLang === "ar"
                     ? "مواقع محلاتنا"
                     : "Our Store Locations"}

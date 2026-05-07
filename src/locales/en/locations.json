@@ -1,0 +1,22 @@
+{
+  "title": "Store Locations",
+  "search_placeholder": "Search for cities or stores...",
+  "no_results": "No locations found",
+  "cities": {
+    "cairo": "Cairo",
+    "alexandria": "Alexandria",
+    "giza": "Giza"
+  },
+  "regions": {
+    "greater_cairo": "Greater Cairo",
+    "alexandria": "Alexandria",
+    "upper_egypt": "Upper Egypt"
+  },
+  "governorates": {
+    "cairo": "Cairo",
+    "alexandria": "Alexandria",
+    "giza": "Giza",
+    "luxor": "Luxor",
+    "aswan": "Aswan"
+  }
+}

@@ -1,47 +1,48 @@
 // ─── Shared Menu Types ────────────────────────────────────────────────────────
 export interface MenuItem {
-  id: string
-  title: string
-  description: string
-  image: string
-  href: string
+  id: string;
+  title: string;
+  description: string;
+  image: string;
+  href: string;
 }
 
 export interface MenuSubcategory {
-  id: string
-  title: string
-  image?: string
-  href: string
+  id: string;
+  title: string;
+  image?: string;
+  href: string;
   /** Present on item-level pages */
-  items?: MenuItem[]
+  items?: MenuItem[];
 }
 
 export interface MenuCategory {
-  id: string
-  title: string
-  description?: string
-  sidebarTitle?: string
-  image?: string
-  subcategories?: MenuSubcategory[]
+  id: string;
+  title: string;
+  description?: string;
+  sidebarTitle?: string;
+  image?: string;
+  href?: string;
+  subcategories?: MenuSubcategory[];
 }
 
 export interface MenuData {
-  title: string
-  description: string
-  categories: MenuCategory[]
+  title: string;
+  description: string;
+  categories: MenuCategory[];
   allergyInfo: {
-    title: string
-    description: string
-    link: string
-    linkLabel: string
-  }
+    title: string;
+    description: string;
+    link: string;
+    linkLabel: string;
+  };
   sidebar: {
-    title: string
-    image: string
+    title: string;
+    image: string;
     actions: {
-      label: string
-      href: string
-      primary: boolean
-    }[]
-  }
+      label: string;
+      href: string;
+      primary: boolean;
+    }[];
+  };
 }

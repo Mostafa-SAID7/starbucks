@@ -7,7 +7,11 @@ import {
   useParams,
 } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { useQueryClient } from "@tanstack/react-query";
 import { useTheme } from "@/hooks";
+import { useNavbar } from "@/hooks/queries";
+import { queryKeys } from "@/lib/queryKeys";
+import { pageFetchers } from "@/lib/fetchers";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   MapPin,
@@ -22,7 +26,6 @@ import { toast } from "sonner";
 import { Logo, Button, Tooltip } from "@/components/ui";
 import { SearchModal } from "@/components";
 import { AuthModal } from "@/components";
-import { navbar } from "@/data";
 
 export function Navbar() {
   const { i18n } = useTranslation();
@@ -30,6 +33,7 @@ export function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
   const { lang: urlLang } = useParams<{ lang: string }>();
+  const queryClient = useQueryClient();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isAuthOpen, setIsAuthOpen] = useState(false);
@@ -45,7 +49,27 @@ export function Navbar() {
         : "en"
   ) as "ar" | "en";
   const isRTL = lang === "ar";
-  const navData = navbar[lang];
+
+  // Fetch navbar data using TanStack Query
+  const { data: navbarData } = useNavbar();
+  const navData = navbarData?.[lang] || {
+    menu: lang === "ar" ? "القائمة" : "Menu",
+    delivery: lang === "ar" ? "التوصيل" : "Delivery",
+    sustainability: lang === "ar" ? "الاستدامة" : "Sustainability",
+    middle_east: lang === "ar" ? "الشرق الأوسط" : "Middle East",
+  };
+
+  // Prefetch function for generic pages
+  const prefetchPage = useCallback(
+    (slug: string) => {
+      queryClient.prefetchQuery({
+        queryKey: queryKeys.pages.bySlug(slug),
+        queryFn: () => pageFetchers.fetchPageBySlug(slug),
+        staleTime: 24 * 60 * 60 * 1000, // 24 hours
+      });
+    },
+    [queryClient],
+  );
 
   // Handle scroll lock when mobile menu is open
   useEffect(() => {
@@ -116,13 +140,18 @@ export function Navbar() {
   }, [i18n, lang, location.pathname, navigate]);
 
   const navItems = [
-    { label: navData.menu, href: `/${lang}/menu` },
-    { label: navData.delivery, href: `/${lang}/delivery` },
+    { label: navData.menu, href: `/${lang}/menu`, slug: null }, // Menu doesn't use slug-based fetching
+    { label: navData.delivery, href: `/${lang}/delivery`, slug: "delivery" },
     {
       label: navData.sustainability,
       href: `/${lang}/social-impact-sustainability`,
+      slug: "sustainability",
     },
-    { label: navData.middle_east, href: `/${lang}/starbucks-middle-east` },
+    {
+      label: navData.middle_east,
+      href: `/${lang}/starbucks-middle-east`,
+      slug: "middle-east",
+    },
   ];
 
   const handleNavClick = useCallback((href: string) => {
@@ -137,7 +166,8 @@ export function Navbar() {
 
   return (
     <>
-      <div className="h-20 lg:h-24" /> {/* Spacer to prevent content jump with fixed nav */}
+      <div className="h-20 lg:h-24" />{" "}
+      {/* Spacer to prevent content jump with fixed nav */}
       <nav
         className={`fixed top-0 left-0 right-0 w-full border-b transition-all duration-300 ${
           isMobileMenuOpen ? "z-[130]" : "z-[100]"
@@ -171,6 +201,12 @@ export function Navbar() {
                   key={item.href}
                   to={item.href}
                   onClick={() => handleNavClick(item.href)}
+                  onMouseEnter={() => {
+                    // Prefetch page data on hover for instant navigation
+                    if (item.slug) {
+                      prefetchPage(item.slug);
+                    }
+                  }}
                   className={({ isActive }) => `
                     relative flex h-full items-center text-[13px] font-black font-branding uppercase tracking-[0.2em] transition-all py-1 group focus:outline-none focus-visible:ring-2 focus-visible:ring-starbucks-green focus-visible:rounded
                     ${
@@ -181,7 +217,9 @@ export function Navbar() {
                   `}
                   role="menuitem"
                 >
-                  <span className="relative z-10 font-branding">{item.label}</span>
+                  <span className="relative z-10 font-branding">
+                    {item.label}
+                  </span>
                   {location.pathname === item.href ? (
                     <motion.div
                       layoutId="nav-underline"
@@ -203,7 +241,7 @@ export function Navbar() {
           {/* Right Side: Utilities */}
           <div className="flex items-center gap-1 sm:gap-2 lg:gap-3">
             {/* Location */}
-            <Tooltip 
+            <Tooltip
               content={lang === "ar" ? "الفروع" : "Find a store"}
               className="w-11 h-11"
             >
@@ -220,7 +258,7 @@ export function Navbar() {
             </Tooltip>
 
             {/* Search Button */}
-            <Tooltip 
+            <Tooltip
               content={lang === "ar" ? "بحث" : "Search"}
               className="w-11 h-11"
             >
@@ -293,7 +331,7 @@ export function Navbar() {
             </Tooltip>
 
             {/* Account Button */}
-            <Tooltip 
+            <Tooltip
               content={lang === "ar" ? "الحساب" : "Account"}
               className="w-11 h-11"
             >
@@ -339,9 +377,7 @@ export function Navbar() {
             </Button>
           </div>
         </div>
-
       </nav>
-      
       {/* Mobile Menu Overlay - Outside nav to prevent backdrop-blur containment issues */}
       <AnimatePresence>
         {isMobileMenuOpen && (
@@ -354,7 +390,7 @@ export function Navbar() {
               onClick={() => setIsMobileMenuOpen(false)}
               className="absolute inset-0 bg-black/40 backdrop-blur-sm"
             />
-            
+
             {/* Menu Content */}
             <motion.div
               ref={mobileMenuRef}
@@ -399,7 +435,6 @@ export function Navbar() {
           </div>
         )}
       </AnimatePresence>
-
       <SearchModal
         isOpen={isSearchOpen}
         onClose={() => setIsSearchOpen(false)}

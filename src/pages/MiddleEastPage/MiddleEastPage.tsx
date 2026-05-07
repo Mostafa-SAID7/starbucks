@@ -2,16 +2,55 @@ import { useTranslation } from "react-i18next";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import { SEO } from "@/components";
-import { middleEast } from "@/data";
+import { StaticPageSkeleton } from "@/components/skeletons";
+import { usePageData } from "@/hooks/queries";
 import { type GenericPageData, type LocalizedText } from "@/types";
 import { Plus, Minus } from "lucide-react";
 
 export const MiddleEastPage = () => {
   const { i18n } = useTranslation();
   const lang = (i18n.language === "ar" ? "ar" : "en") as "ar" | "en";
-  const data = (middleEast as unknown as GenericPageData);
   const isRTL = lang === "ar";
   const [openSection, setOpenSection] = useState<string | null>("intro");
+
+  // Fetch middle east page data using TanStack Query
+  const {
+    data: pageData,
+    isLoading,
+    error,
+    refetch,
+  } = usePageData("middle-east");
+
+  // Loading state
+  if (isLoading) {
+    return <StaticPageSkeleton />;
+  }
+
+  // Error state
+  if (error || !pageData) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-white dark:bg-background-dark">
+        <div className="text-center px-4">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+            {lang === "ar" ? "حدث خطأ في تحميل الصفحة" : "Error loading page"}
+          </h2>
+          <p className="text-gray-600 dark:text-gray-400 mb-6">
+            {lang === "ar"
+              ? "عذراً، حدث خطأ أثناء تحميل الصفحة. يرجى المحاولة مرة أخرى."
+              : "Sorry, there was an error loading the page. Please try again."}
+          </p>
+          <button
+            onClick={() => refetch()}
+            className="px-6 py-3 bg-starbucks-green text-white font-bold rounded-full hover:bg-starbucks-green/90 transition-colors"
+          >
+            {lang === "ar" ? "إعادة المحاولة" : "Retry"}
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  const data = pageData as GenericPageData;
 
   const t = (obj: LocalizedText | string | null | undefined) => {
     if (!obj) return "";
@@ -35,8 +74,9 @@ export const MiddleEastPage = () => {
 
       <div className="container mx-auto px-4 py-8 lg:py-12">
         {/* Main 2-Side Layout */}
-        <div className={`flex flex-col lg:flex-row gap-12 ${isRTL ? "lg:flex-row-reverse" : ""}`}>
-
+        <div
+          className={`flex flex-col lg:flex-row gap-12 ${isRTL ? "lg:flex-row-reverse" : ""}`}
+        >
           {/* Side 1: Sticky Sidebar Image */}
           <div className="lg:w-[40%] lg:sticky lg:top-24 lg:h-[calc(100vh-8rem)] group">
             <motion.div
@@ -55,7 +95,6 @@ export const MiddleEastPage = () => {
           {/* Side 2: Content Column */}
           <div className="lg:w-[60%]">
             <div className="max-w-4xl">
-
               {/* Last Updated Badge + Title */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -87,7 +126,11 @@ export const MiddleEastPage = () => {
                     </h3>
                   </div>
                   <div className="text-starbucks-green bg-gray-50 dark:bg-white/5 p-3 rounded-full flex-shrink-0">
-                    {openSection === "intro" ? <Minus size={24} /> : <Plus size={24} />}
+                    {openSection === "intro" ? (
+                      <Minus size={24} />
+                    ) : (
+                      <Plus size={24} />
+                    )}
                   </div>
                 </button>
 
@@ -99,9 +142,13 @@ export const MiddleEastPage = () => {
                       exit={{ height: 0, opacity: 0 }}
                       className="overflow-hidden"
                     >
-                      <div className={`pt-8 space-y-6 text-xl text-gray-600 dark:text-gray-300 leading-relaxed ${textAlignClass}`}>
+                      <div
+                        className={`pt-8 space-y-6 text-xl text-gray-600 dark:text-gray-300 leading-relaxed ${textAlignClass}`}
+                      >
                         {data.intro?.paragraphs?.map((p, idx) => (
-                          <p key={idx} className="font-medium">{t(p)}</p>
+                          <p key={idx} className="font-medium">
+                            {t(p)}
+                          </p>
                         ))}
                       </div>
                     </motion.div>
@@ -120,13 +167,19 @@ export const MiddleEastPage = () => {
                       onClick={() => toggleSection(section.id)}
                       className={`w-full flex items-center justify-between group gap-6 ${textAlignClass}`}
                     >
-                      <div className={`flex flex-col ${itemsAlignClass} flex-grow`}>
+                      <div
+                        className={`flex flex-col ${itemsAlignClass} flex-grow`}
+                      >
                         <h3 className="text-2xl lg:text-4xl font-black text-starbucks-dark dark:text-white group-hover:text-starbucks-green transition-colors leading-tight">
                           {t(section.title)}
                         </h3>
                       </div>
                       <div className="text-starbucks-green bg-gray-50 dark:bg-white/5 p-3 rounded-full flex-shrink-0">
-                        {openSection === section.id ? <Minus size={24} /> : <Plus size={24} />}
+                        {openSection === section.id ? (
+                          <Minus size={24} />
+                        ) : (
+                          <Plus size={24} />
+                        )}
                       </div>
                     </button>
 
@@ -138,9 +191,13 @@ export const MiddleEastPage = () => {
                           exit={{ height: 0, opacity: 0 }}
                           className="overflow-hidden"
                         >
-                          <div className={`pt-8 space-y-6 text-xl text-gray-600 dark:text-gray-300 leading-relaxed ${textAlignClass}`}>
+                          <div
+                            className={`pt-8 space-y-6 text-xl text-gray-600 dark:text-gray-300 leading-relaxed ${textAlignClass}`}
+                          >
                             {section.paragraphs?.map((p, pIdx) => (
-                              <p key={pIdx} className="font-medium">{t(p)}</p>
+                              <p key={pIdx} className="font-medium">
+                                {t(p)}
+                              </p>
                             ))}
                           </div>
                         </motion.div>
@@ -152,13 +209,14 @@ export const MiddleEastPage = () => {
 
               {/* Update Note */}
               {data.updateNote && (
-                <div className={`mt-12 p-6 rounded-2xl border border-starbucks-green/30 bg-starbucks-green/5 dark:bg-starbucks-green/10 ${textAlignClass}`}>
+                <div
+                  className={`mt-12 p-6 rounded-2xl border border-starbucks-green/30 bg-starbucks-green/5 dark:bg-starbucks-green/10 ${textAlignClass}`}
+                >
                   <p className="text-sm text-gray-600 dark:text-gray-400 italic leading-relaxed">
                     {t(data.updateNote)}
                   </p>
                 </div>
               )}
-
             </div>
           </div>
         </div>

@@ -2,8 +2,7 @@ import { Link, useLocation, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Home, MapPin, ShoppingBag, User } from "lucide-react";
 import { motion } from "framer-motion";
-
-import { navbar } from "@/data";
+import { useNavbar } from "@/hooks/queries";
 
 export function MobileTabBar() {
   const location = useLocation();
@@ -16,7 +15,15 @@ export function MobileTabBar() {
         ? "ar"
         : "en"
   ) as "ar" | "en";
-  const navData = navbar[lang].tabs;
+
+  // Fetch navbar data using TanStack Query
+  const { data: navbarData } = useNavbar();
+  const navData = navbarData?.[lang]?.tabs || {
+    home: lang === "ar" ? "الرئيسية" : "Home",
+    menu: lang === "ar" ? "القائمة" : "Menu",
+    locations: lang === "ar" ? "الفروع" : "Locations",
+    account: lang === "ar" ? "الحساب" : "Account",
+  };
 
   const tabs = [
     { id: "home", icon: Home, label: navData.home, path: `/${lang}` },

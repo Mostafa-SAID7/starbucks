@@ -1,0 +1,22 @@
+{
+  "title": "مواقع المتاجر",
+  "search_placeholder": "البحث عن المدن أو المتاجر...",
+  "no_results": "لم يتم العثور على مواقع",
+  "cities": {
+    "cairo": "القاهرة",
+    "alexandria": "الإسكندرية",
+    "giza": "الجيزة"
+  },
+  "regions": {
+    "greater_cairo": "القاهرة الكبرى",
+    "alexandria": "الإسكندرية",
+    "upper_egypt": "صعيد مصر"
+  },
+  "governorates": {
+    "cairo": "القاهرة",
+    "alexandria": "الإسكندرية",
+    "giza": "الجيزة",
+    "luxor": "الأقصر",
+    "aswan": "أسوان"
+  }
+}

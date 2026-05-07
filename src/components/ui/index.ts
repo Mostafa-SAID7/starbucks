@@ -8,6 +8,7 @@ export * from "./input";
 export * from "./loader";
 export * from "./logo";
 export * from "./modal";
+export * from "./OfflineIndicator";
 export * from "./select";
 export * from "./skeleton";
 export * from "./spinner";
@@ -15,3 +16,9 @@ export * from "./textarea";
 export * from "./toaster";
 export * from "./tooltip";
 export * from "./vertical-card";
+
+// Re-export hooks for convenience
+export {
+  useOnlineStatus,
+  useStaleDataDetection,
+} from "../../hooks/useOnlineStatus";

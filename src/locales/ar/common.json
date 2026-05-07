@@ -1,0 +1,23 @@
+{
+  "welcome": "مرحباً بكم في ستاربكس",
+  "language": "English",
+  "menu": "القائمة",
+  "locations": "المقاهي",
+  "rewards": "المكافآت",
+  "account": "الحساب",
+  "sign_in": "تسجيل دخول",
+  "join_now": "انضم الآن",
+  "sign_out": "تسجيل خروج",
+  "back": "رجوع",
+  "home": "الرئيسية",
+  "close": "إغلاق",
+  "search": "بحث",
+  "loading": "جاري التحميل...",
+  "language_changed": "تم تغيير اللغة إلى العربية",
+  "retry": "إعادة المحاولة",
+  "error": "خطأ",
+  "success": "نجح",
+  "egypt": "مصر",
+  "select_region": "حدد المنطقة",
+  "all_rights_reserved": "جميع الحقوق محفوظة."
+}

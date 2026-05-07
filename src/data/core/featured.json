@@ -1,0 +1,45 @@
+{
+  "hero": {
+    "image": "/home/banner/woman-Photoroom.webp",
+    "backgroundImage": "/home/banner/backgrouund.webp",
+    "cta": {
+      "href": "/new-era"
+    }
+  },
+  "statement": {
+    "image": "/home/UAE_1.webp",
+    "cta": {
+      "href": "/middle-east"
+    }
+  },
+  "cards": [
+    {
+      "id": "summer_menu",
+      "image": "/home/Summer.webp",
+      "cta": {
+        "href": "/menu"
+      }
+    },
+    {
+      "id": "delivery",
+      "image": "/home/deliver.webp",
+      "cta": {
+        "href": "/delivery"
+      }
+    },
+    {
+      "id": "sustainability",
+      "image": "/home/record.webp",
+      "cta": {
+        "href": "/social-impact-sustainability"
+      }
+    },
+    {
+      "id": "generic_card",
+      "image": "/home/Generic.webp",
+      "cta": {
+        "href": "/about-us"
+      }
+    }
+  ]
+}

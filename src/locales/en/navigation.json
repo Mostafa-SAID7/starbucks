@@ -1,0 +1,66 @@
+{
+  "navbar": {
+    "menu": "Menu",
+    "delivery": "Delivery",
+    "sustainability": "Sustainability",
+    "middle_east": "Starbucks Middle East",
+    "locations": "Locations",
+    "search": {
+      "title": "Search",
+      "placeholder": "Search products & stores...",
+      "trending": "Trending Now"
+    },
+    "tabs": {
+      "home": "Home",
+      "menu": "Menu",
+      "locations": "Locations",
+      "account": "Account"
+    },
+    "auth": {
+      "login": {
+        "title": "Login",
+        "email": "Email",
+        "password": "Password",
+        "submit": "Login",
+        "forgot": "Forgot Password?",
+        "remember": "Remember Me",
+        "no_account": "Don't have an account?",
+        "register": "Register"
+      },
+      "register": {
+        "title": "Sign Up",
+        "first_name": "First Name",
+        "last_name": "Last Name",
+        "email": "Email",
+        "password": "Password",
+        "submit": "Create Account",
+        "have_account": "Already have an account?",
+        "login": "Login",
+        "terms": "I agree to Terms & Conditions"
+      }
+    }
+  },
+  "footer": {
+    "sections": {
+      "about": "About Us",
+      "contact": "Contact Us",
+      "social_impact": "Social Impact"
+    },
+    "links": {
+      "about_us": "About Us",
+      "our_coffees": "Our Coffees",
+      "contact_us": "Contact Us",
+      "store_locator": "Store Locator",
+      "sustainability": "Sustainability",
+      "privacy_policy": "Privacy Policy",
+      "terms_conditions": "Terms of Use",
+      "cookie_notice": "Cookie Notice"
+    },
+    "app": {
+      "title": "Start ordering ahead with the Starbucks® app",
+      "description": "Order and pay — then breeze in to pick up your drink at your selected store.",
+      "app_store": "Download on the App Store",
+      "google_play": "GET IT ON Google Play"
+    }
+  }
+}

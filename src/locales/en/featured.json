@@ -1,0 +1,34 @@
+{
+  "hero": {
+    "title": "A New Era. Same Icons.",
+    "subtitle": "Discover our latest collections and timeless classics.",
+    "cta": "Learn More"
+  },
+  "statement": {
+    "title": "Starbucks Middle East",
+    "subtitle": "Bringing the Starbucks experience to the heart of the Middle East.",
+    "cta": "Discover More"
+  },
+  "cards": {
+    "summer_menu": {
+      "title": "New Season, New Flavors",
+      "description": "Discover our latest seasonal drinks and treats.",
+      "cta": "See the Menu"
+    },
+    "delivery": {
+      "title": "Delivery Available",
+      "description": "Order your favorite Starbucks drinks and food for delivery.",
+      "cta": "Order Now"
+    },
+    "sustainability": {
+      "title": "Our Commitment",
+      "description": "Learn about our sustainability efforts and social impact.",
+      "cta": "Learn More"
+    },
+    "generic_card": {
+      "title": "Find Us Nearby",
+      "description": "Locate your nearest Starbucks and order ahead.",
+      "cta": "Find a Store"
+    }
+  }
+}

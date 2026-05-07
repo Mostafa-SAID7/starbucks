@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useParams, useNavigate } from "react-router-dom";
-import { navbar, menu } from "@/data";
+import { useNavbar, useMenuData } from "@/hooks/queries";
 import { Modal, Input } from "@/components/ui";
 
 interface SearchMenuItem {
@@ -60,8 +60,13 @@ const SearchModal: React.FC<SearchModalProps> = ({ isOpen, onClose }) => {
         ? "ar"
         : "en"
   ) as "ar" | "en";
-  const searchData = navbar[lang].search;
-  const menuData = menu[lang];
+
+  // Fetch navigation and menu data using TanStack Query hooks
+  const { data: navbarData } = useNavbar();
+  const { data: menuDataFull } = useMenuData();
+
+  const searchData = navbarData?.[lang]?.search;
+  const menuData = menuDataFull?.[lang];
 
   useEffect(() => {
     if (isOpen) {
@@ -123,6 +128,11 @@ const SearchModal: React.FC<SearchModalProps> = ({ isOpen, onClose }) => {
     }
     onClose();
   };
+
+  // Don't render if data is not loaded yet
+  if (!searchData || !menuData) {
+    return null;
+  }
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title={searchData.title}>
@@ -229,9 +239,7 @@ const SearchModal: React.FC<SearchModalProps> = ({ isOpen, onClose }) => {
                     <p className="text-sm text-gray-500 dark:text-gray-400 line-clamp-1">
                       {item.description}
                     </p>
-                    <div
-                      className="flex items-center gap-2 mt-1 text-xs text-gray-400"
-                    >
+                    <div className="flex items-center gap-2 mt-1 text-xs text-gray-400">
                       <span>{item.categoryTitle}</span>
                       <span>•</span>
                       <span>{item.subcategoryTitle}</span>

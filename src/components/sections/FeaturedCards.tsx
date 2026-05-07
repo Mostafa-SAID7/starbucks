@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui";
-import { featuredCards } from "@/data";
+import { useFeaturedCards } from "@/hooks/queries";
 
 interface CardData {
   id: string;
@@ -18,8 +18,22 @@ interface CardData {
 
 export function FeaturedCards() {
   const { i18n } = useTranslation();
-  const lang = i18n.language as keyof typeof featuredCards;
-  const localizedData = featuredCards[lang] || featuredCards.en;
+  const lang = i18n.language as "ar" | "en";
+
+  // Fetch featured cards data using TanStack Query
+  const { data: featuredCardsData, isLoading, error } = useFeaturedCards();
+
+  // Show skeleton while loading
+  if (isLoading) {
+    return <FeaturedCardsSkeleton />;
+  }
+
+  // Show error state (fallback to skeleton to avoid breaking the page)
+  if (error || !featuredCardsData) {
+    return <FeaturedCardsSkeleton />;
+  }
+
+  const localizedData = featuredCardsData[lang] || featuredCardsData.en;
 
   return (
     <section className="py-12 relative overflow-hidden bg-background transition-colors">
@@ -91,7 +105,15 @@ export function FeaturedCards() {
                     className="rounded-full border-2 border-starbucks-dark px-4 py-2 text-sm font-bold font-branding text-starbucks-dark hover:bg-starbucks-dark hover:text-white dark:border-foreground-dark dark:text-foreground-dark dark:hover:bg-foreground-dark dark:hover:text-black transition-all"
                     asChild
                   >
-                    <a href={card.ctaLink.startsWith("http") ? card.ctaLink : `/${lang}${card.ctaLink}`}>{card.cta}</a>
+                    <a
+                      href={
+                        card.ctaLink.startsWith("http")
+                          ? card.ctaLink
+                          : `/${lang}${card.ctaLink}`
+                      }
+                    >
+                      {card.cta}
+                    </a>
                   </Button>
 
                   {card.secondaryCta && card.secondaryCtaLink && (
@@ -101,7 +123,15 @@ export function FeaturedCards() {
                       className="rounded-full border-2 border-starbucks-dark px-4 py-2 text-sm font-bold font-branding text-starbucks-dark hover:bg-starbucks-dark hover:text-white dark:border-foreground-dark dark:text-foreground-dark dark:hover:bg-foreground-dark dark:hover:text-black transition-all"
                       asChild
                     >
-                      <a href={card.secondaryCtaLink.startsWith("http") ? card.secondaryCtaLink : `/${lang}${card.secondaryCtaLink}`}>{card.secondaryCta}</a>
+                      <a
+                        href={
+                          card.secondaryCtaLink.startsWith("http")
+                            ? card.secondaryCtaLink
+                            : `/${lang}${card.secondaryCtaLink}`
+                        }
+                      >
+                        {card.secondaryCta}
+                      </a>
                     </Button>
                   )}
                 </div>

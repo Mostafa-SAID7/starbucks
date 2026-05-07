@@ -1,45 +1,91 @@
-import React, { useState } from 'react'
-import { useTranslation } from 'react-i18next'
-import { motion } from 'framer-motion'
-import { Mail, Phone, Send, CheckCircle } from 'lucide-react'
-import { SEO, Button, Input, Select, Textarea } from '@/components'
-import { contactUs as data } from '@/data'
-import type { ContactSubjectOption as SubjectOption } from '@/types'
+import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
+import { motion } from "framer-motion";
+import { Mail, Phone, Send, CheckCircle } from "lucide-react";
+import { SEO, Button, Input, Select, Textarea } from "@/components";
+import { useContactInfo } from "@/hooks/queries";
+import type { ContactSubjectOption as SubjectOption } from "@/types";
 
 export const ContactUsPage: React.FC = () => {
-  const { i18n } = useTranslation()
-  const lang = (i18n.language === 'ar' ? 'ar' : 'en') as 'ar' | 'en'
-  const isRTL = i18n.language === 'ar'
+  const { i18n } = useTranslation();
+  const lang = (i18n.language === "ar" ? "ar" : "en") as "ar" | "en";
+  const isRTL = i18n.language === "ar";
 
-  const [form, setForm] = useState({ name: '', email: '', phone: '', subject: '', message: '' })
-  const [submitted, setSubmitted] = useState(false)
-  const [loading, setLoading] = useState(false)
+  // Fetch contact data using TanStack Query
+  const { data: contactData, isLoading, error } = useContactInfo();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    setForm(prev => ({ ...prev, [e.target.name]: e.target.value }))
-  }
+  // Type assertion for the data (proper types should be added to fetchers.ts)
+  const data = contactData as any;
+
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    subject: "",
+    message: "",
+  });
+  const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const handleChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >,
+  ) => {
+    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    setLoading(true)
+    e.preventDefault();
+    setLoading(true);
     setTimeout(() => {
-      setLoading(false)
-      setSubmitted(true)
-    }, 1200)
+      setLoading(false);
+      setSubmitted(true);
+    }, 1200);
+  };
+
+  const textAlignClass = isRTL ? "text-right" : "text-left";
+
+  // Loading state
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-white dark:bg-black flex items-center justify-center">
+        <div className="text-center">
+          <div className="h-12 w-12 animate-spin rounded-full border-4 border-starbucks-green border-t-transparent mx-auto mb-4" />
+          <p className="text-gray-500 dark:text-gray-400">
+            {lang === "ar" ? "جاري التحميل..." : "Loading..."}
+          </p>
+        </div>
+      </div>
+    );
   }
 
-  const textAlignClass = isRTL ? 'text-right' : 'text-left'
+  // Error state
+  if (error || !data) {
+    return (
+      <div className="min-h-screen bg-white dark:bg-black flex items-center justify-center">
+        <div className="text-center max-w-md px-4">
+          <p className="text-red-500 dark:text-red-400 mb-4">
+            {lang === "ar"
+              ? "حدث خطأ أثناء تحميل البيانات"
+              : "Error loading data"}
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-white dark:bg-black">
       <SEO title={data.hero.title[lang]} />
 
       <div className="container mx-auto px-4 py-8 lg:py-16">
-        <div className={`flex flex-col lg:flex-row gap-12 ${isRTL ? "lg:flex-row-reverse" : ""}`}>
-          
+        <div
+          className={`flex flex-col lg:flex-row gap-12 ${isRTL ? "lg:flex-row-reverse" : ""}`}
+        >
           {/* Side 1: Sticky Sidebar Image */}
           <div className="lg:w-[40%] lg:sticky lg:top-24 lg:h-[calc(100vh-8rem)] group">
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, x: isRTL ? 50 : -50 }}
               animate={{ opacity: 1, x: 0 }}
               className="h-full rounded-3xl overflow-hidden shadow-2xl relative"
@@ -64,7 +110,7 @@ export const ContactUsPage: React.FC = () => {
                 <h1 className="text-4xl lg:text-6xl font-black text-starbucks-dark dark:text-white mb-6">
                   {data.hero.title[lang]}
                 </h1>
-                
+
                 <div className="space-y-8 mt-12">
                   <div className="flex flex-col gap-4">
                     <p className="text-lg font-black text-starbucks-dark dark:text-white">
@@ -124,7 +170,9 @@ export const ContactUsPage: React.FC = () => {
                   <form onSubmit={handleSubmit} className="space-y-8">
                     <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
                       <div className="space-y-3">
-                        <label className={`block text-lg font-black text-starbucks-dark dark:text-white px-2 ${textAlignClass}`}>
+                        <label
+                          className={`block text-lg font-black text-starbucks-dark dark:text-white px-2 ${textAlignClass}`}
+                        >
                           {data.form.fields.name.label[lang]}
                         </label>
                         <Input
@@ -137,7 +185,9 @@ export const ContactUsPage: React.FC = () => {
                         />
                       </div>
                       <div className="space-y-3">
-                        <label className={`block text-lg font-black text-starbucks-dark dark:text-white px-2 ${textAlignClass}`}>
+                        <label
+                          className={`block text-lg font-black text-starbucks-dark dark:text-white px-2 ${textAlignClass}`}
+                        >
                           {data.form.fields.email.label[lang]}
                         </label>
                         <Input
@@ -155,7 +205,9 @@ export const ContactUsPage: React.FC = () => {
 
                     <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
                       <div className="space-y-3">
-                        <label className={`block text-lg font-black text-starbucks-dark dark:text-white px-2 ${textAlignClass}`}>
+                        <label
+                          className={`block text-lg font-black text-starbucks-dark dark:text-white px-2 ${textAlignClass}`}
+                        >
                           {data.form.fields.phone.label[lang]}
                         </label>
                         <Input
@@ -169,21 +221,31 @@ export const ContactUsPage: React.FC = () => {
                         />
                       </div>
                       <div className="space-y-3">
-                        <label className={`block text-lg font-black text-starbucks-dark dark:text-white px-2 ${textAlignClass}`}>
+                        <label
+                          className={`block text-lg font-black text-starbucks-dark dark:text-white px-2 ${textAlignClass}`}
+                        >
                           {data.form.fields.subject.label[lang]}
                         </label>
                         <Select
                           isRTL={isRTL}
-                          options={(data.form.subjects as SubjectOption[]).map(s => ({ id: s.id, label: s[lang] }))}
+                          options={(data.form.subjects as SubjectOption[]).map(
+                            (s) => ({ id: s.id, label: s[lang] }),
+                          )}
                           value={form.subject}
-                          onChange={(val) => setForm(prev => ({ ...prev, subject: val }))}
-                          placeholder={data.form.fields.subject.placeholder[lang]}
+                          onChange={(val) =>
+                            setForm((prev) => ({ ...prev, subject: val }))
+                          }
+                          placeholder={
+                            data.form.fields.subject.placeholder[lang]
+                          }
                         />
                       </div>
                     </div>
 
                     <div className="space-y-3">
-                      <label className={`block text-lg font-black text-starbucks-dark dark:text-white px-2 ${textAlignClass}`}>
+                      <label
+                        className={`block text-lg font-black text-starbucks-dark dark:text-white px-2 ${textAlignClass}`}
+                      >
                         {data.form.fields.message.label[lang]}
                       </label>
                       <Textarea
@@ -197,7 +259,9 @@ export const ContactUsPage: React.FC = () => {
                       />
                     </div>
 
-                    <div className={`flex items-center ${isRTL ? 'justify-start' : 'justify-start'}`}>
+                    <div
+                      className={`flex items-center ${isRTL ? "justify-start" : "justify-start"}`}
+                    >
                       <Button
                         type="submit"
                         loading={loading}
@@ -210,7 +274,9 @@ export const ContactUsPage: React.FC = () => {
                           </div>
                         ) : (
                           <div className="flex items-center gap-3">
-                            <Send className={`h-6 w-6 ${isRTL ? '-rotate-180' : ''}`} />
+                            <Send
+                              className={`h-6 w-6 ${isRTL ? "-rotate-180" : ""}`}
+                            />
                             <span>{data.form.fields.submit[lang]}</span>
                           </div>
                         )}
@@ -224,7 +290,7 @@ export const ContactUsPage: React.FC = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default ContactUsPage
+export default ContactUsPage;

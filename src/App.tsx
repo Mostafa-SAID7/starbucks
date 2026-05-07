@@ -9,9 +9,13 @@ import {
 } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { motion, AnimatePresence } from "framer-motion";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { queryClient } from "@/lib/queryClient";
 
 // Layout & Components
 import { MainLayout, SkipNav } from "@/components";
+import { OfflineIndicator } from "@/components/ui/OfflineIndicator";
 
 import {
   HomeSkeleton,
@@ -56,24 +60,14 @@ const SustainabilityPage = lazy(() =>
 const MiddleEastPage = lazy(() =>
   import("@/pages").then((module) => ({ default: module.MiddleEastPage })),
 );
-const GenericPage = lazy(() =>
-  import("@/pages").then((module) => ({ default: module.GenericPage })),
+const GenericPageWrapper = lazy(() =>
+  import("@/pages").then((module) => ({ default: module.GenericPageWrapper })),
 );
 const NotFound = lazy(() =>
   import("@/pages").then((module) => ({ default: module.NotFound })),
 );
 
-// Data Imports for Generic Pages
-import { 
-  communityImpact, 
-  privacyStatement,
-  aboutUs,
-  newEra,
-  termsOfUse,
-  ourCoffees,
-  cookies,
-} from "@/data";
-import { type GenericPageData } from "@/types";
+// Data Imports for Generic Pages - REMOVED: Now using TanStack Query via GenericPageWrapper
 
 // Page Wrapper for transitions using centralized constants and specific skeletons
 const PageWrapper = ({
@@ -90,9 +84,7 @@ const PageWrapper = ({
     transition={{ duration: 0.5, ease: "easeInOut" }}
   >
     <Suspense
-      fallback={
-        skeleton || <div className="min-h-screen bg-background" />
-      }
+      fallback={skeleton || <div className="min-h-screen bg-background" />}
     >
       {children}
     </Suspense>
@@ -121,8 +113,12 @@ const LanguageDirectionHandler = () => {
 
 // Helper component to handle non-prefixed menu redirects with parameters
 const MenuRedirect = () => {
-  const { categoryId, itemId } = useParams<{ categoryId?: string; itemId?: string }>();
-  if (itemId) return <Navigate to={`/ar/menu/${categoryId}/${itemId}`} replace />;
+  const { categoryId, itemId } = useParams<{
+    categoryId?: string;
+    itemId?: string;
+  }>();
+  if (itemId)
+    return <Navigate to={`/ar/menu/${categoryId}/${itemId}`} replace />;
   if (categoryId) return <Navigate to={`/ar/menu/${categoryId}`} replace />;
   return <Navigate to="/ar/menu" replace />;
 };
@@ -137,25 +133,66 @@ const AnimatedRoutes = () => {
         <Route path="/" element={<Navigate to="/ar" replace />} />
 
         {/* Top-level redirects to handle non-prefixed URLs */}
-        <Route path="/about-us" element={<Navigate to="/ar/about-us" replace />} />
-        <Route path="/delivery" element={<Navigate to="/ar/delivery" replace />} />
-        <Route path="/social-impact-sustainability" element={<Navigate to="/ar/social-impact-sustainability" replace />} />
-        <Route path="/locations" element={<Navigate to="/ar/locations" replace />} />
-        <Route path="/contact-us" element={<Navigate to="/ar/contact-us" replace />} />
-        <Route path="/terms-of-use" element={<Navigate to="/ar/terms-of-use" replace />} />
-        <Route path="/privacy-statement" element={<Navigate to="/ar/privacy-statement" replace />} />
-        <Route path="/cookie-notice" element={<Navigate to="/ar/cookie-notice" replace />} />
-        <Route path="/starbucks-middle-east" element={<Navigate to="/ar/starbucks-middle-east" replace />} />
-        <Route path="/community-impact-starbucks" element={<Navigate to="/ar/community-impact-starbucks" replace />} />
-        <Route path="/new-era-same-icons" element={<Navigate to="/ar/new-era-same-icons" replace />} />
-        
+        <Route
+          path="/about-us"
+          element={<Navigate to="/ar/about-us" replace />}
+        />
+        <Route
+          path="/delivery"
+          element={<Navigate to="/ar/delivery" replace />}
+        />
+        <Route
+          path="/social-impact-sustainability"
+          element={<Navigate to="/ar/social-impact-sustainability" replace />}
+        />
+        <Route
+          path="/locations"
+          element={<Navigate to="/ar/locations" replace />}
+        />
+        <Route
+          path="/contact-us"
+          element={<Navigate to="/ar/contact-us" replace />}
+        />
+        <Route
+          path="/terms-of-use"
+          element={<Navigate to="/ar/terms-of-use" replace />}
+        />
+        <Route
+          path="/privacy-statement"
+          element={<Navigate to="/ar/privacy-statement" replace />}
+        />
+        <Route
+          path="/cookie-notice"
+          element={<Navigate to="/ar/cookie-notice" replace />}
+        />
+        <Route
+          path="/starbucks-middle-east"
+          element={<Navigate to="/ar/starbucks-middle-east" replace />}
+        />
+        <Route
+          path="/community-impact-starbucks"
+          element={<Navigate to="/ar/community-impact-starbucks" replace />}
+        />
+        <Route
+          path="/new-era-same-icons"
+          element={<Navigate to="/ar/new-era-same-icons" replace />}
+        />
+
         {/* Menu Redirects */}
         <Route path="/menu" element={<MenuRedirect />} />
         <Route path="/menu/:categoryId" element={<MenuRedirect />} />
         <Route path="/menu/:categoryId/:itemId" element={<MenuRedirect />} />
 
         {/* Language-prefixed routes */}
-        <Route path="/:lang" element={<><LanguageDirectionHandler /><MainLayout /></>}>
+        <Route
+          path="/:lang"
+          element={
+            <>
+              <LanguageDirectionHandler />
+              <MainLayout />
+            </>
+          }
+        >
           <Route
             index
             element={
@@ -202,9 +239,9 @@ const AnimatedRoutes = () => {
             path="our-coffees"
             element={
               <PageWrapper skeleton={<StaticPageSkeleton />}>
-                <GenericPage 
-                  data={ourCoffees as GenericPageData} 
-                  seoTitle="Our Coffees - Starbucks Egypt" 
+                <GenericPageWrapper
+                  slug="our-coffees"
+                  seoTitle="Our Coffees - Starbucks Egypt"
                   useAccordionLayout={true}
                 />
               </PageWrapper>
@@ -222,9 +259,9 @@ const AnimatedRoutes = () => {
             path="community-impact-starbucks"
             element={
               <PageWrapper skeleton={<StaticPageSkeleton />}>
-                <GenericPage 
-                  data={communityImpact as GenericPageData} 
-                  seoTitle="Community Impact - Starbucks Egypt" 
+                <GenericPageWrapper
+                  slug="community-impact"
+                  seoTitle="Community Impact - Starbucks Egypt"
                   useAccordionLayout={true}
                 />
               </PageWrapper>
@@ -234,9 +271,9 @@ const AnimatedRoutes = () => {
             path="new-era-same-icons"
             element={
               <PageWrapper skeleton={<StaticPageSkeleton />}>
-                <GenericPage 
-                  data={newEra as GenericPageData} 
-                  seoTitle="New Era. Same Icons. - Starbucks Egypt" 
+                <GenericPageWrapper
+                  slug="new-era"
+                  seoTitle="New Era. Same Icons. - Starbucks Egypt"
                 />
               </PageWrapper>
             }
@@ -256,9 +293,9 @@ const AnimatedRoutes = () => {
             path="about-us"
             element={
               <PageWrapper skeleton={<StaticPageSkeleton />}>
-                <GenericPage 
-                  data={aboutUs as GenericPageData} 
-                  seoTitle="About Us - Starbucks Egypt" 
+                <GenericPageWrapper
+                  slug="about-us"
+                  seoTitle="About Us - Starbucks Egypt"
                   useAccordionLayout={true}
                 />
               </PageWrapper>
@@ -276,8 +313,8 @@ const AnimatedRoutes = () => {
             path="privacy-statement"
             element={
               <PageWrapper skeleton={<StaticPageSkeleton />}>
-                <GenericPage
-                  data={privacyStatement as unknown as GenericPageData}
+                <GenericPageWrapper
+                  slug="privacy-statement"
                   seoTitle="Privacy Statement - Starbucks Egypt"
                   showAccordion={true}
                   accordionSectionIndices={[1, 2, 3, 4]}
@@ -289,14 +326,14 @@ const AnimatedRoutes = () => {
             path="terms-of-use"
             element={
               <PageWrapper skeleton={<StaticPageSkeleton />}>
-                <GenericPage 
-                  data={termsOfUse as GenericPageData} 
-                  seoTitle="Terms of Use - Starbucks Egypt" 
+                <GenericPageWrapper
+                  slug="terms-of-use"
+                  seoTitle="Terms of Use - Starbucks Egypt"
                   showAccordion={true}
                   accordionSectionIndices={[1, 2, 3, 4, 5]}
                   accordionTitle={{
                     ar: "شروط إضافية",
-                    en: "Additional Terms"
+                    en: "Additional Terms",
                   }}
                 />
               </PageWrapper>
@@ -314,9 +351,9 @@ const AnimatedRoutes = () => {
             path="cookie-notice"
             element={
               <PageWrapper skeleton={<StaticPageSkeleton />}>
-                <GenericPage 
-                  data={cookies.pageData as GenericPageData} 
-                  seoTitle="Cookie Notice - Starbucks Egypt" 
+                <GenericPageWrapper
+                  slug="cookies"
+                  seoTitle="Cookie Notice - Starbucks Egypt"
                   useAccordionLayout={true}
                 />
               </PageWrapper>
@@ -339,11 +376,23 @@ const AnimatedRoutes = () => {
 
 function App() {
   return (
-    <Router>
-      <SkipNav />
-      <div id="main-content" />
-      <AnimatedRoutes />
-    </Router>
+    <QueryClientProvider client={queryClient}>
+      <Router>
+        <SkipNav />
+        <div id="main-content" />
+        <AnimatedRoutes />
+        <OfflineIndicator />
+      </Router>
+
+      {/* Devtools - only in development */}
+      {import.meta.env.DEV && (
+        <ReactQueryDevtools
+          initialIsOpen={false}
+          position="bottom"
+          buttonPosition="bottom-right"
+        />
+      )}
+    </QueryClientProvider>
   );
 }
 

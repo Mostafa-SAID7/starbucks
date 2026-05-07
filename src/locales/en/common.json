@@ -1,0 +1,23 @@
+{
+  "welcome": "Welcome to Starbucks",
+  "language": "العربية",
+  "menu": "Menu",
+  "locations": "Locations",
+  "rewards": "Rewards",
+  "account": "Account",
+  "sign_in": "Sign In",
+  "join_now": "Join Now",
+  "sign_out": "Sign Out",
+  "back": "Back",
+  "home": "Home",
+  "close": "Close",
+  "search": "Search",
+  "loading": "Loading...",
+  "language_changed": "Language changed to English",
+  "retry": "Try Again",
+  "error": "Error",
+  "success": "Success",
+  "egypt": "Egypt",
+  "select_region": "Select Region",
+  "all_rights_reserved": "All Rights Reserved."
+}
