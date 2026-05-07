@@ -1,7 +1,7 @@
 {
   "navbar": {
     "menu": "القائمة",
-    "delivery": "قائمة التوصيل",
+    "delivery": "خدمة التوصيل",
     "sustainability": "الاستدامة",
     "middle_east": "ستاربكس الشرق الأوسط",
     "locations": "مواقعنا",
@@ -15,6 +15,14 @@
       "menu": "القائمة",
       "locations": "مواقعنا",
       "account": "حسابي"
+    },
+    "tooltips": {
+      "locations": "الفروع",
+      "search": "بحث",
+      "language": "تغيير اللغة",
+      "light_mode": "الوضع الفاتح",
+      "dark_mode": "الوضع الداكن",
+      "account": "الحساب"
     },
     "auth": {
       "login": {
@@ -41,16 +49,31 @@
     }
   },
   "footer": {
-    "about_us": "نبذة عنا",
-    "our_coffees": "قهوتنا",
-    "contact_us": "اتصل بنا",
-    "social_impact": "التأثير الاجتماعي",
-    "sustainability": "الاستدامة",
-    "privacy_policy": "سياسة الخصوصية",
-    "terms_conditions": "الشروط والأحكام",
-    "cookie_policy": "سياسة ملفات تعريف الارتباط",
-    "store_locator": "المقاهي",
-    "location_selector": "حدد موقعك",
-    "copyright": "© 2024 Starbucks Coffee Company. جميع الحقوق محفوظة."
+    "sections": {
+      "about": "عن ستاربكس",
+      "contact": "تواصل معنا",
+      "social_impact": "الأثر المجتمعي"
+    },
+    "links": {
+      "about_us": "عن ستاربكس",
+      "our_coffees": "قهوتنا",
+      "contact_us": "تواصل معنا",
+      "store_locator": "ابحث عن مقهى",
+      "sustainability": "الاستدامة",
+      "privacy_policy": "سياسة الخصوصية",
+      "terms_conditions": "الشروط والأحكام",
+      "cookie_notice": "إشعار الكوكيز"
+    },
+    "location_selector": "مصر",
+    "select_region": "اختر المنطقة",
+    "all_rights_reserved": "جميع الحقوق محفوظة.",
+    "description": "ستاربكس هي أكبر سلسلة مقاهي في العالم، تقدم أجود أنواع القهوة والمشروبات الساخنة والباردة. نلتزم بتقديم تجربة استثنائية لعملائنا في كل زيارة.",
+    "designed_by": "تصميم",
+    "app": {
+      "title": "ابدأ الطلب مسبقاً مع تطبيق ستاربكس®",
+      "description": "اطلب وادفع - ثم تفضل للاستلام من المقهى الذي اخترته.",
+      "app_store": "تحميل من App Store",
+      "google_play": "تحميل من Google Play"
+    }
   }
 }

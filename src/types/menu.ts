@@ -26,23 +26,29 @@ export interface MenuCategory {
   subcategories?: MenuSubcategory[];
 }
 
+export interface AllergyInfoType {
+  title: string;
+  description: string;
+  link: string;
+  linkLabel: string;
+}
+
+export interface SidebarAction {
+  label: string;
+  href: string;
+  primary: boolean;
+}
+
+export interface SidebarData {
+  title: string;
+  image: string;
+  actions: SidebarAction[];
+}
+
 export interface MenuData {
   title: string;
   description: string;
   categories: MenuCategory[];
-  allergyInfo: {
-    title: string;
-    description: string;
-    link: string;
-    linkLabel: string;
-  };
-  sidebar: {
-    title: string;
-    image: string;
-    actions: {
-      label: string;
-      href: string;
-      primary: boolean;
-    }[];
-  };
+  allergyInfo: AllergyInfoType;
+  sidebar: SidebarData;
 }

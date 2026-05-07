@@ -1,13 +1,9 @@
 import React from "react";
 
-interface ImageGrid {
-  images: string[];
-  columns?: 2 | 3 | 4;
-  aspectRatio?: "square" | "video" | "portrait";
-}
+import type { GenericImageGrid } from "@/types/generic-page";
 
 interface SectionImageGridProps {
-  imageGrid: ImageGrid;
+  imageGrid: GenericImageGrid;
   pageTitle: string;
 }
 

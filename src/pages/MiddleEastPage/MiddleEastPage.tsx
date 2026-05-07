@@ -8,7 +8,7 @@ import { type GenericPageData, type LocalizedText } from "@/types";
 import { Plus, Minus } from "lucide-react";
 
 export const MiddleEastPage = () => {
-  const { i18n } = useTranslation();
+  const { t: i18nextT, i18n } = useTranslation();
   const lang = (i18n.language === "ar" ? "ar" : "en") as "ar" | "en";
   const isRTL = lang === "ar";
   const [openSection, setOpenSection] = useState<string | null>("intro");
@@ -32,18 +32,16 @@ export const MiddleEastPage = () => {
       <div className="min-h-screen flex items-center justify-center bg-white dark:bg-background-dark">
         <div className="text-center px-4">
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-            {lang === "ar" ? "حدث خطأ في تحميل الصفحة" : "Error loading page"}
+            {i18nextT("common:error_loading_page")}
           </h2>
           <p className="text-gray-600 dark:text-gray-400 mb-6">
-            {lang === "ar"
-              ? "عذراً، حدث خطأ أثناء تحميل الصفحة. يرجى المحاولة مرة أخرى."
-              : "Sorry, there was an error loading the page. Please try again."}
+            {i18nextT("common:error_loading_page_desc")}
           </p>
           <button
             onClick={() => refetch()}
             className="px-6 py-3 bg-starbucks-green text-white font-bold rounded-full hover:bg-starbucks-green/90 transition-colors"
           >
-            {lang === "ar" ? "إعادة المحاولة" : "Retry"}
+            {i18nextT("common:retry")}
           </button>
         </div>
       </div>
@@ -54,7 +52,7 @@ export const MiddleEastPage = () => {
 
   const t = (obj: LocalizedText | string | null | undefined) => {
     if (!obj) return "";
-    if (typeof obj === "string") return obj;
+    if (typeof obj === "string") return i18nextT(obj);
     return (obj as LocalizedText)[lang] || "";
   };
 
@@ -119,7 +117,7 @@ export const MiddleEastPage = () => {
                 >
                   <div className={`flex flex-col ${itemsAlignClass} flex-grow`}>
                     <span className="text-starbucks-green font-bold text-sm uppercase tracking-widest mb-1 opacity-80">
-                      {lang === "ar" ? "نظرة عامة" : "Overview"}
+                      {t("common:overview")}
                     </span>
                     <h3 className="text-2xl lg:text-4xl font-black text-starbucks-dark dark:text-white group-hover:text-starbucks-green transition-colors leading-tight">
                       {t(data.intro?.title)}

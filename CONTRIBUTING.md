@@ -73,19 +73,28 @@ npm run build
 
 ### Styling
 
-- Use Tailwind CSS utility classes
-- Follow mobile-first approach
-- Maintain consistent spacing
+- Use Tailwind CSS v4 utility classes
+- Manage global theme and variables in `src/index.css`
+- Follow mobile-first and RTL-aware (logical properties) approach
+
+### Data & State
+
+- Place structural page data in `src/data/*.json`
+- Use i18next locales in `src/locales/` for UI strings and labels
+- Use TanStack Query hooks in `src/hooks/queries/` for all data fetching
+- Avoid hardcoding strings in components; use the `useTranslation` hook
 
 ### File Structure
 
 ```
 src/
-├── components/
-│   ├── ui/           # Reusable UI components
-│   └── [Feature].tsx # Feature components
-├── lib/              # Utility functions
-└── types/            # TypeScript types
+├── components/       # UI and feature-specific components
+├── data/             # Centralized structural data (JSON + index.ts)
+├── hooks/            # Custom hooks and TanStack Query definitions
+├── lib/              # Fetchers, Query Client, and shared utilities
+├── locales/          # i18next translation files (ar/en)
+├── types/            # Shared TypeScript interfaces
+└── pages/            # Route-level page components
 ```
 
 ## Commit Messages

@@ -1,49 +1,37 @@
-// Centralized data exports - using core structure where available
-// This eliminates duplications and provides a single source of truth
+// Centralized data exports — single source of truth
+// Translations live in src/locales/ (i18next)
+// Structural data (URLs, images, content) lives here
 
-// Core data imports (preferred structure)
-import coreMenu from "./core/menu.json";
-import corePages from "./core/pages.json";
-import coreNavigation from "./core/navigation.json";
-import coreFeatured from "./core/featured.json";
-import coreContact from "./core/contact.json";
-import coreLocations from "./core/locations.json";
-
-// Individual imports (for backward compatibility)
-import individualMenu from "./menu.json";
-import individualNavbar from "./navbar.json";
-import individualFooter from "./footer.json";
-import individualHero from "./hero.json";
-import individualStatement from "./statement.json";
-import individualFeaturedCards from "./featured-cards.json";
-import individualPages from "./pages.json";
-import cookies from "./cookies.json";
+import menu from "./menu.json";
+import navigation from "./navigation.json";
+import hero from "./hero.json";
+import statement from "./statement.json";
+import featuredCards from "./featured-cards.json";
 import aboutUs from "./about-us.json";
 import sustainability from "./sustainability.json";
 import middleEast from "./middle-east.json";
 import termsOfUse from "./terms-of-use.json";
 import privacyStatement from "./privacy-statement.json";
 import delivery from "./delivery.json";
+import cookies from "./cookies.json";
 import communityImpact from "./community-impact.json";
 import newEra from "./new-era.json";
 import ourCoffees from "./our-coffees.json";
+import contactUs from "./contact-us.json";
 
-// Use individual files for now (they have the complete structure with translations)
-// TODO: Migrate to core structure gradually
 export {
-  // Main exports (using individual files for backward compatibility)
-  individualMenu as menu,
-  individualNavbar as navbar,
-  individualFooter as footer,
-  individualHero as hero,
-  individualStatement as statement,
-  individualFeaturedCards as featuredCards,
-  individualPages as pages,
+  // Navigation — structural data (URLs, socials, countries)
+  navigation,
 
-  // Contact uses core (already updated)
-  coreContact as contactUs,
+  // Menu — categories with items, images, hrefs (bilingual labels inside)
+  menu,
 
-  // Individual page exports
+  // Home page sections
+  hero,
+  statement,
+  featuredCards,
+
+  // Generic pages — bilingual structured content by slug
   aboutUs,
   sustainability,
   middleEast,
@@ -55,11 +43,6 @@ export {
   newEra,
   ourCoffees,
 
-  // Core exports (for future use)
-  coreMenu,
-  corePages,
-  coreNavigation,
-  coreFeatured,
-  coreContact,
-  coreLocations,
+  // Contact — contact form data and info
+  contactUs,
 };

@@ -89,7 +89,7 @@ Enhanced to support language-prefixed internal links using React Router Link com
 
 Created comprehensive documentation:
 
-- **`src/pages/GenericPage/README.md`**: Full API reference (300+ lines)
+- **`src/pages/GenericPage.tsx`**: Documented with inline comments
 - **`docs/GENERIC_PAGE_GUIDE.md`**: Updated with sticky sidebar section
 - **`docs/STICKY_SIDEBAR_IMPLEMENTATION.md`**: This file
 
@@ -237,7 +237,6 @@ Potential improvements for future iterations:
 - `src/pages/CommunityImpactPage/CommunityImpactPage.tsx`
 - `src/pages/CommunityImpactPage/index.ts`
 - `src/data/community-impact.json`
-- `src/pages/GenericPage/README.md`
 - `docs/STICKY_SIDEBAR_IMPLEMENTATION.md`
 
 ### Updated Files

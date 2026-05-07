@@ -12,7 +12,7 @@ Starbucks Egypt React is a full-featured, bilingual (Arabic/English) SPA built w
 main.tsx
 └── App.tsx  (QueryClientProvider + BrowserRouter + HelmetProvider + I18nProvider)
     ├── MainLayout
-    │   ├── Navbar (useNavbar hook)
+    │   ├── Navbar (useNavigation hook)
     │   │   ├── Logo
     │   │   ├── Desktop Nav Links (i18n)
     │   │   ├── Search Modal
@@ -22,7 +22,7 @@ main.tsx
     │   ├── MobileTabBar  (bottom nav on mobile)
     │   ├── ChatWidget
     │   ├── CookieConsent
-    │   ├── Footer (useFooter hook)
+    │   ├── Footer (useNavigation hook)
     │   │   ├── Multi-column link groups
     │   │   ├── Accordion (mobile)
     │   │   └── Country Selector
@@ -78,10 +78,10 @@ src/
 │   ├── StatementSection.tsx
 │   └── index.ts        # Barrel exports
 ├── data/               # JSON content files (bilingual ar/en)
-│   ├── cookie-notice.json
-│   ├── footer.json
+│   ├── cookies.json
+│   ├── navigation.json
 │   ├── hero.json
-│   ├── navbar.json
+│   ├── menu.json
 │   ├── pages.json
 │   └── index.ts        # Re-exports all data
 ├── hooks/              # Custom React hooks
@@ -134,22 +134,23 @@ src/
 
 Uses **React Router v7** with a single `MainLayout` shell and page-specific `<Outlet />` rendering.
 
-| Path                 | Component              |
-| -------------------- | ---------------------- |
-| `/`                  | `HomePage`             |
-| `/menu`              | `MenuCategoryPage`     |
-| `/menu/:id`          | `MenuItemPage`         |
-| `/rewards`           | `RewardsPage`          |
-| `/gift-cards`        | `GiftCardsPage`        |
-| `/delivery`          | `DeliveryPage`         |
-| `/locations`         | `LocationsPage`        |
-| `/about-us`          | `AboutUsPage`          |
-| `/contact-us`        | `ContactUsPage`        |
-| `/sustainability`    | `SustainabilityPage`   |
-| `/privacy-statement` | `PrivacyStatementPage` |
-| `/terms-of-use`      | `TermsOfUsePage`       |
-| `/cookie-notice`     | `CookieNoticePage`     |
-| `*`                  | `NotFound`             |
+| Path                          | Component              | Features                               |
+| ----------------------------- | ---------------------- | -------------------------------------- |
+| `/:lang/`                     | `HomePage`             | Hero banner, Statement, Featured Cards |
+| `/:lang/menu`                 | `MenuPage`             | Global menu category overview          |
+| `/:lang/menu/:categoryId`     | `MenuCategoryPage`     | Category-specific product grid         |
+| `/:lang/menu/:cat/:itemId`    | `MenuItemPage`         | Detailed product information & pricing |
+| `/:lang/locations`            | `LocationsPage`        | Store finder with city filtering       |
+| `/:lang/delivery`             | `DeliveryPage`         | Multi-column delivery zone information |
+| `/:lang/contact-us`           | `ContactUsPage`        | Contact form with validation & support |
+| `/:lang/social-impact-...`    | `SustainabilityPage`   | Interactive social impact content      |
+| `/:lang/starbucks-middle-east`| `MiddleEastPage`       | Policy statement & FAQ accordion       |
+| `/:lang/our-coffees`          | `GenericPageWrapper`   | Coffee heritage content                |
+| `/:lang/about-us`             | `GenericPageWrapper`   | Brand history & mission                |
+| `/:lang/terms-of-use`         | `GenericPageWrapper`   | Legal terms with section accordions    |
+| `/:lang/privacy-statement`    | `GenericPageWrapper`   | GDPR compliance documentation          |
+| `/:lang/cookie-notice`        | `GenericPageWrapper`   | Cookie usage policy                    |
+| `*`                           | `NotFound`             | 404 Error page                         |
 
 ---
 

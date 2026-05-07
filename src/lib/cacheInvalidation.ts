@@ -126,16 +126,10 @@ export class CacheInvalidationManager {
    * Usually triggered by admin updates
    */
   async invalidateNavigation() {
-    await Promise.all([
-      this.queryClient.invalidateQueries({
-        queryKey: queryKeys.navigation.navbar(),
-        exact: true,
-      }),
-      this.queryClient.invalidateQueries({
-        queryKey: queryKeys.navigation.footer(),
-        exact: true,
-      }),
-    ]);
+    await this.queryClient.invalidateQueries({
+      queryKey: queryKeys.navigation.config(),
+      exact: true,
+    });
   }
 
   /**

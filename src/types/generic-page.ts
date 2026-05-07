@@ -1,41 +1,58 @@
 import { LocalizedText } from "./index";
 
+export interface GenericSubsection {
+  title?: LocalizedText;
+  paragraphs?: LocalizedText[];
+  list?: LocalizedText[];
+}
+
+export interface GenericTypeItem {
+  id: string;
+  label: LocalizedText;
+  text: LocalizedText;
+}
+
+export interface GenericContactInfo {
+  email: string;
+  phone: string;
+  phoneTel: string;
+  address?: LocalizedText;
+}
+
+export interface GenericDefinition {
+  term: LocalizedText;
+  definition: LocalizedText;
+}
+
+export interface GenericGroup {
+  title: LocalizedText;
+  paragraphs: LocalizedText[];
+}
+
+export interface GenericImageGrid {
+  images: string[];
+  columns?: 2 | 3 | 4;
+  aspectRatio?: "square" | "video" | "portrait";
+}
+
+export interface GenericAccordionItem {
+  title: LocalizedText | string;
+  content: LocalizedText | string;
+}
+
 export interface GenericSection {
   id: string;
   title?: LocalizedText;
   subtitle?: LocalizedText;
   paragraphs?: LocalizedText[];
   list?: (LocalizedText & { link?: string })[];
-  subsections?: {
-    title?: LocalizedText;
-    paragraphs?: LocalizedText[];
-    list?: LocalizedText[];
-  }[];
-  types?: {
-    id: string;
-    label: LocalizedText;
-    text: LocalizedText;
-  }[];
-  contactInfo?: {
-    email: string;
-    phone: string;
-    phoneTel: string;
-    address?: LocalizedText;
-  };
+  subsections?: GenericSubsection[];
+  types?: GenericTypeItem[];
+  contactInfo?: GenericContactInfo;
   contactNote?: LocalizedText;
-  definitions?: {
-    term: LocalizedText;
-    definition: LocalizedText;
-  }[];
-  groups?: {
-    title: LocalizedText;
-    paragraphs: LocalizedText[];
-  }[];
-  imageGrid?: {
-    images: string[];
-    columns?: 2 | 3 | 4;
-    aspectRatio?: "square" | "video" | "portrait";
-  };
+  definitions?: GenericDefinition[];
+  groups?: GenericGroup[];
+  imageGrid?: GenericImageGrid;
   // New layout options
   layout?: "standard" | "split" | "centered";
   image?: string | LocalizedText;
@@ -47,10 +64,7 @@ export interface GenericSection {
   hideSideBorder?: boolean;
   accordion?: {
     title?: LocalizedText;
-    items?: {
-      title: LocalizedText | string;
-      content: LocalizedText | string;
-    }[];
+    items?: GenericAccordionItem[];
   };
 }
 
@@ -89,6 +103,15 @@ export interface GenericPageProps {
   seoTitle?: string;
   showAccordion?: boolean;
   accordionTitle?: LocalizedText;
+  accordionSectionIndices?: number[];
+  useAccordionLayout?: boolean;
+}
+
+export interface GenericPageWrapperProps {
+  slug: string;
+  seoTitle?: string;
+  showAccordion?: boolean;
+  accordionTitle?: { ar: string; en: string };
   accordionSectionIndices?: number[];
   useAccordionLayout?: boolean;
 }

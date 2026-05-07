@@ -11,6 +11,9 @@ Welcome to the Starbucks Egypt React Clone documentation!
 | **Project Summary** | Complete overview of the project, features, and implementation details | [PROJECT_SUMMARY.md](PROJECT_SUMMARY.md) |
 | **Quick Start** | Get started in 3 simple steps | [QUICK_START.md](QUICK_START.md) |
 | **Architecture** | Technical architecture, design patterns, and component hierarchy | [ARCHITECTURE.md](ARCHITECTURE.md) |
+| **TanStack Query Guide** | Deep dive into data fetching, caching, and state management | [TANSTACK_QUERY_GUIDE.md](TANSTACK_QUERY_GUIDE.md) |
+| **Migration Guide** | Comprehensive guide for the Tailwind v4 and TanStack Query migration | [MIGRATION_GUIDE.md](MIGRATION_GUIDE.md) |
+| **Generic Page Guide** | Instructions for creating and managing flexible content pages | [GENERIC_PAGE_GUIDE.md](GENERIC_PAGE_GUIDE.md) |
 | **Deployment** | Complete deployment guide for various platforms | [DEPLOYMENT.md](DEPLOYMENT.md) |
 
 ---
@@ -25,14 +28,17 @@ Welcome to the Starbucks Egypt React Clone documentation!
 ### Development
 - [Project Structure](ARCHITECTURE.md#project-structure)
 - [Component Hierarchy](ARCHITECTURE.md#component-hierarchy)
-- [Styling Guide](ARCHITECTURE.md#styling-architecture)
-- [State Management](ARCHITECTURE.md#state-management)
+- [Data Fetching Strategy](TANSTACK_QUERY_GUIDE.md)
+- [Styling Architecture](ARCHITECTURE.md#styling-architecture)
+
+### Guides
+- [Centralized Data Pattern](MIGRATION_GUIDE.md#centralized-data-layer)
+- [Managing Generic Pages](GENERIC_PAGE_GUIDE.md)
+- [Sidebar Implementation](STICKY_SIDEBAR_IMPLEMENTATION.md)
 
 ### Deployment
 - [Deploy to Vercel](DEPLOYMENT.md#deploy-to-vercel)
-- [Deploy to Netlify](DEPLOYMENT.md#deploy-to-netlify)
 - [Docker Deployment](DEPLOYMENT.md#deploy-with-docker)
-- [AWS Deployment](DEPLOYMENT.md#deploy-to-aws)
 
 ### Contributing
 - [Contributing Guidelines](../CONTRIBUTING.md)

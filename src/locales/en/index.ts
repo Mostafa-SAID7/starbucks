@@ -3,11 +3,8 @@ import navigation from "./navigation.json";
 import errors from "./errors.json";
 import loading from "./loading.json";
 import accessibility from "./accessibility.json";
-import menu from "./menu.json";
-import featured from "./featured.json";
 import contact from "./contact.json";
-import locations from "./locations.json";
-import pages from "./pages.json";
+import cookieConsent from "./cookieConsent.json";
 
 export default {
   common,
@@ -15,9 +12,6 @@ export default {
   errors,
   loading,
   accessibility,
-  menu,
-  featured,
   contact,
-  locations,
-  pages,
+  cookieConsent,
 };

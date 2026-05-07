@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 
 /**
  * Hook to check online status
@@ -27,23 +27,16 @@ export function useOnlineStatus() {
  */
 export function useStaleDataDetection() {
   const isOnline = useOnlineStatus();
-  const [wasOffline, setWasOffline] = useState(false);
-
-  const handleOfflineState = useCallback(() => {
-    setWasOffline(true);
-  }, []);
-
-  const handleOnlineState = useCallback(() => {
-    setTimeout(() => setWasOffline(false), 1000);
-  }, []);
+  const [wasOffline, setWasOffline] = useState(!isOnline);
 
   useEffect(() => {
     if (!isOnline) {
-      handleOfflineState();
-    } else if (wasOffline && isOnline) {
-      handleOnlineState();
+      setWasOffline(true);
+    } else if (wasOffline) {
+      const timer = setTimeout(() => setWasOffline(false), 1000);
+      return () => clearTimeout(timer);
     }
-  }, [isOnline, wasOffline, handleOfflineState, handleOnlineState]);
+  }, [isOnline, wasOffline]);
 
   return {
     isOnline,

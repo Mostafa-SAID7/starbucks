@@ -1,6 +1,6 @@
 # 📊 Project Summary
 
-**Status:** ✅ Production Ready · **Version:** 2.0.0
+**Status:** ✅ Production Ready · **Version:** 2.1.0
 
 > A bilingual (Arabic/English), RTL-aware, PWA-enabled clone of the Starbucks Egypt website.
 > For architecture details see [ARCHITECTURE.md](ARCHITECTURE.md) · For deployment see [DEPLOYMENT.md](DEPLOYMENT.md)
@@ -9,11 +9,10 @@
 
 ## Tech Stack
 
-| Layer | Technology | Version |
-|-------|------------|---------|
 | UI | React + TypeScript | 19 / 6 |
 | Build | Vite | 8 |
-| Styling | Tailwind CSS + shadcn/ui | 3.4 |
+| Styling | Tailwind CSS + shadcn/ui | 4.0 |
+| Data Layer | TanStack Query 5 | — |
 | Animation | Framer Motion | 12 |
 | Routing | React Router | 7 |
 | i18n | i18next + react-i18next | 26 / 17 |
@@ -26,10 +25,12 @@
 
 ### Core
 - ✅ React 19 + TypeScript 6 + Vite 8
-- ✅ Tailwind CSS v3 with custom Starbucks theme
+- ✅ Tailwind CSS v4 with custom Starbucks theme
+- ✅ TanStack Query v5 centralized data management
 - ✅ Framer Motion animations (scroll, hover, entrance)
 - ✅ shadcn/ui component system
 - ✅ PWA — installable, offline-ready
+- ✅ Centralized data layer in `src/data/`
 
 ### Internationalisation
 - ✅ Arabic (RTL) + English (LTR)

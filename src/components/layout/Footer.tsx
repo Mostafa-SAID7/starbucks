@@ -2,21 +2,13 @@ import React, { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Globe, ChevronDown } from "lucide-react";
-import { useFooter } from "@/hooks/queries";
+import { useNavigation } from "@/hooks/queries";
 import { motion, AnimatePresence } from "framer-motion";
 
-interface FooterLink {
-  label: string;
-  href: string;
-}
-
-interface FooterSection {
-  title: string;
-  links: FooterLink[];
-}
+import { FooterLink, FooterSection, Country, Social } from "@/types/navigation";
 
 export function Footer() {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { lang: urlLang } = useParams<{ lang: string }>();
   const lang = (
     urlLang && (urlLang === "ar" || urlLang === "en")
@@ -26,23 +18,15 @@ export function Footer() {
         : "en"
   ) as "ar" | "en";
 
-  // Fetch footer data using TanStack Query
-  const { data: footerDataRaw } = useFooter();
-  const data = footerDataRaw || { countries: [], socials: [] };
-  const footerData = footerDataRaw?.[lang] || {
+  // Fetch footer structural data
+  const { data: footerDataRaw } = useNavigation();
+  // Extract footer specific config:
+  const footerData = footerDataRaw?.footer || {
     sections: [],
     legal: [],
-    locationSelector: lang === "ar" ? "اختر المنطقة" : "Select Region",
-    selectRegion: lang === "ar" ? "اختر المنطقة" : "Select Region",
-    allRightsReserved:
-      lang === "ar" ? "جميع الحقوق محفوظة" : "All rights reserved",
-    app: {
-      title: lang === "ar" ? "حمل التطبيق" : "Download the App",
-      description:
-        lang === "ar" ? "احصل على تطبيق ستاربكس" : "Get the Starbucks App",
-      appStore: lang === "ar" ? "متجر التطبيقات" : "App Store",
-      googlePlay: lang === "ar" ? "جوجل بلاي" : "Google Play",
-    },
+    app: { appStore: "", googlePlay: "" },
+    socials: [],
+    countries: [],
   };
 
   // Single unified state: only ONE accordion can ever be open at a time
@@ -119,7 +103,7 @@ export function Footer() {
                       aria-expanded={isOpen}
                     >
                       <span className="text-sm font-extrabold uppercase tracking-wider text-white">
-                        {section.title}
+                        {t(`navigation:footer.sections.${section.id}`)}
                       </span>
                       <motion.div
                         animate={{ rotate: isOpen ? 180 : 0 }}
@@ -146,12 +130,12 @@ export function Footer() {
                         >
                           <ul className="px-4 pb-4 space-y-3">
                             {section.links.map((link: FooterLink) => (
-                              <li key={link.label}>
+                              <li key={link.id}>
                                 <Link
                                   to={`/${lang}${link.href}`}
                                   className="text-sm text-gray-400 hover:text-white transition-colors block"
                                 >
-                                  {link.label}
+                                  {t(`navigation:footer.links.${link.id}`)}
                                 </Link>
                               </li>
                             ))}
@@ -175,7 +159,7 @@ export function Footer() {
                 <div className="flex items-center gap-2">
                   <Globe className="h-4 w-4 text-starbucks-green" />
                   <span className="text-sm font-extrabold uppercase tracking-wider text-white">
-                    {footerData.locationSelector}
+                    {t("navigation:footer.location_selector")}
                   </span>
                 </div>
                 <motion.div
@@ -203,10 +187,10 @@ export function Footer() {
                   >
                     <div className="px-4 pb-4">
                       <div className="mb-3 text-xs font-bold uppercase tracking-widest text-gray-400">
-                        {footerData.selectRegion}
+                        {t("navigation:footer.select_region")}
                       </div>
                       <div className="max-h-[200px] overflow-y-auto scrollbar-thin space-y-1">
-                        {data.countries.map((country) => (
+                        {footerData.countries.map((country: Country) => (
                           <a
                             key={country.name}
                             href={country.href}
@@ -228,18 +212,18 @@ export function Footer() {
           {/* Desktop: Regular 4-column grid */}
           <div className="hidden lg:grid lg:grid-cols-4 gap-12">
             {footerData.sections.map((section: FooterSection) => (
-              <div key={section.title}>
+              <div key={section.id}>
                 <h3 className="mb-6 text-lg font-extrabold uppercase tracking-widest text-white">
-                  {section.title}
+                  {t(`navigation:footer.sections.${section.id}`)}
                 </h3>
                 <ul className="space-y-4">
                   {section.links.map((link: FooterLink) => (
-                    <li key={link.label}>
+                    <li key={link.id}>
                       <Link
                         to={`/${lang}${link.href}`}
                         className="text-base text-gray-400 hover:text-white transition-colors"
                       >
-                        {link.label}
+                        {t(`navigation:footer.links.${link.id}`)}
                       </Link>
                     </li>
                   ))}
@@ -250,13 +234,13 @@ export function Footer() {
             {/* Location Selector - Desktop Only */}
             <div>
               <h3 className="mb-6 text-lg font-extrabold uppercase tracking-widest text-white">
-                {footerData.locationSelector}
+                {t("navigation:footer.location_selector")}
               </h3>
               <div className="group relative inline-block">
                 <button className="flex items-center gap-3 text-base text-gray-400 hover:text-white transition-colors cursor-pointer py-2">
                   <Globe className="h-5 w-5 text-starbucks-green" />
                   <span className="font-bold underline decoration-white/20 underline-offset-8 group-hover:decoration-starbucks-green transition-all">
-                    {footerData.locationSelector}
+                    {t("navigation:footer.location_selector")}
                   </span>
                   <svg
                     className="h-4 w-4 transition-transform group-hover:rotate-180"
@@ -277,10 +261,10 @@ export function Footer() {
                   <div className="h-[300px] overflow-y-auto scrollbar-thin rtl">
                     <div className="p-5 px-6">
                       <div className="mb-4 text-xs font-bold uppercase tracking-widest text-gray-400">
-                        {footerData.selectRegion}
+                        {t("navigation:footer.select_region")}
                       </div>
                       <ul className="space-y-1">
-                        {data.countries.map((country) => (
+                        {footerData.countries.map((country: Country) => (
                           <li key={country.name}>
                             <a
                               href={country.href}
@@ -307,32 +291,30 @@ export function Footer() {
             {/* Legal Links */}
             <div className="flex flex-wrap items-center gap-x-10 gap-y-4">
               {footerData.legal.map((link: FooterLink) => {
-                const isCookieSettings =
-                  link.label === "إشعار الكوكيز" ||
-                  link.label === "Cookie Notice" ||
-                  link.label === "Cookie Preferences";
+                const linkText = t(`navigation:footer.links.${link.id}`);
+                const isCookieSettings = link.id === "cookie_notice";
 
                 if (isCookieSettings) {
                   return (
                     <button
-                      key={link.label}
+                      key={link.id}
                       onClick={() =>
                         window.dispatchEvent(new Event("openCookieSettings"))
                       }
                       className="text-base font-bold text-gray-300 hover:text-white transition-colors text-start cursor-pointer"
                     >
-                      {link.label}
+                      {linkText}
                     </button>
                   );
                 }
 
                 return (
                   <Link
-                    key={link.label}
+                    key={link.id}
                     to={`/${lang}${link.href}`}
                     className="text-base font-bold text-gray-300 hover:text-white transition-colors"
                   >
-                    {link.label}
+                    {linkText}
                   </Link>
                 );
               })}
@@ -340,16 +322,12 @@ export function Footer() {
 
             {/* Starbucks Brief Description */}
             <div className="text-gray-400 text-sm leading-relaxed">
-              <p>
-                {lang === "ar"
-                  ? "ستاربكس هي أكبر سلسلة مقاهي في العالم، تقدم أجود أنواع القهوة والمشروبات الساخنة والباردة. نلتزم بتقديم تجربة استثنائية لعملائنا في كل زيارة."
-                  : "Starbucks is the world's largest coffeehouse chain, offering the finest coffee and hot and cold beverages. We are committed to providing an exceptional experience for our customers with every visit."}
-              </p>
+              <p>{t("navigation:footer.description")}</p>
             </div>
 
             {/* Social Links */}
             <div className="flex items-center gap-6">
-              {data.socials.map((social) => (
+              {footerData.socials.map((social: Social) => (
                 <a
                   key={social.name}
                   href={social.href}
@@ -368,10 +346,10 @@ export function Footer() {
             <div className="w-full max-w-md rounded-xl border border-white/10 bg-white/5 p-8 transition-colors hover:bg-white/10 h-full flex flex-col justify-between">
               <div>
                 <h4 className="mb-3 text-xl font-extrabold text-white">
-                  {footerData.app.title}
+                  {t("navigation:footer.app.title")}
                 </h4>
                 <p className="mb-8 text-base text-gray-400">
-                  {footerData.app.description}
+                  {t("navigation:footer.app.description")}
                 </p>
               </div>
               <div className="flex flex-wrap gap-4">
@@ -388,10 +366,10 @@ export function Footer() {
                   </svg>
                   <div className="text-start">
                     <div className="text-[10px] uppercase leading-none text-gray-400">
-                      {footerData.app.appStore.split(" ")[0]}
+                      {t("navigation:footer.app.app_store").split(" ")[0]}
                     </div>
                     <div className="text-sm font-bold leading-tight">
-                      {footerData.app.appStore.split(" ").slice(1).join(" ")}
+                      {t("navigation:footer.app.app_store").split(" ").slice(1).join(" ")}
                     </div>
                   </div>
                 </a>
@@ -408,13 +386,13 @@ export function Footer() {
                   </svg>
                   <div className="text-start">
                     <div className="text-[10px] uppercase leading-none text-gray-400">
-                      {footerData.app.googlePlay
+                      {t("navigation:footer.app.google_play")
                         .split(" ")
                         .slice(0, 2)
                         .join(" ")}
                     </div>
                     <div className="text-sm font-bold leading-tight">
-                      {footerData.app.googlePlay.split(" ").slice(2).join(" ")}
+                      {t("navigation:footer.app.google_play").split(" ").slice(2).join(" ")}
                     </div>
                   </div>
                 </a>
@@ -427,10 +405,10 @@ export function Footer() {
           <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-8">
             <p>
               © {new Date().getFullYear()} Starbucks Coffee Company.{" "}
-              {footerData.allRightsReserved}
+              {t("navigation:footer.all_rights_reserved")}
             </p>
             <p className="flex items-center justify-center gap-2">
-              <span>{lang === "ar" ? "تصميم" : "Designed by"}</span>
+              <span>{t("navigation:footer.designed_by")}</span>
               <a
                 href="https://m-said-portfolio.netlify.app"
                 target="_blank"

@@ -47,12 +47,12 @@ docker-compose up -d
 ## Customisation
 
 ### Brand Colours
-Edit `tailwind.config.js`:
-```js
-starbucks: {
-  green: '#006241',  // primary
-  dark:  '#1e3932',  // hover
-  gold:  '#cba258',  // accent
+Edit `src/index.css`:
+```css
+@theme {
+  --color-starbucks-green: #006241;
+  --color-starbucks-dark: #1e3932;
+  --color-starbucks-gold: #cba258;
 }
 ```
 

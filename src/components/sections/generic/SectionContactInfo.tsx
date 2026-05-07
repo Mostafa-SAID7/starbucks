@@ -1,15 +1,9 @@
 import React from "react";
 import type { LocalizedText } from "@/types";
-
-interface ContactInfo {
-  email: string;
-  phone: string;
-  phoneTel: string;
-  address?: LocalizedText;
-}
+import type { GenericContactInfo } from "@/types/generic-page";
 
 interface SectionContactInfoProps {
-  contactInfo: ContactInfo;
+  contactInfo: GenericContactInfo;
   contactNote?: LocalizedText;
   lang: "ar" | "en";
 }

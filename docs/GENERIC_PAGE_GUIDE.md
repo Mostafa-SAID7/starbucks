@@ -316,7 +316,7 @@ export const TermsOfUsePage = () => (
 
 ## 📚 Full Documentation
 
-See `src/pages/GenericPage/README.md` for complete API reference and advanced usage.
+The component logic is documented extensively via inline comments within `src/pages/GenericPage.tsx` and its type definitions.
 
 ---
 

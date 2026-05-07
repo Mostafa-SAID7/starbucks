@@ -35,27 +35,35 @@ export interface FeaturedCardsData {
   cards: FeaturedCard[]
 }
 
-// Footer Types
-export interface FooterLink {
-  label: string
-  href: string
-}
-
-export interface FooterSection {
-  title: string
-  links: FooterLink[]
-}
-
-export interface FooterData {
-  sections: {
-    [key: string]: FooterSection
-  }
-  countries: string[]
-  copyright: string
-  locationSelector: string
-}
-
 // Search Types
+export interface SearchMenuItem {
+  id: string;
+  title: string;
+  description?: string;
+  image?: string;
+  href: string;
+  categoryTitle?: string;
+  subcategoryTitle?: string;
+}
+
+export interface SearchSubcategory {
+  id: string;
+  title: string;
+  image?: string;
+  href?: string;
+  items?: SearchMenuItem[];
+}
+
+export interface SearchCategory {
+  id: string;
+  title: string;
+  description?: string;
+  image?: string;
+  href?: string;
+  sidebarTitle?: string;
+  subcategories?: SearchSubcategory[];
+}
+
 export interface SearchResult {
   id: string
   title: string
@@ -75,4 +83,10 @@ export interface Product {
   image: string
   category: string
   allergens?: string[]
+}
+
+export interface VerticalCardAction {
+  label: string;
+  href: string;
+  primary?: boolean;
 }

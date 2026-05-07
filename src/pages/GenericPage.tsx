@@ -18,7 +18,7 @@ export const GenericPage: React.FC<GenericPageProps> = ({
   accordionSectionIndices = [1, 2, 3, 4],
   useAccordionLayout = false,
 }) => {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const lang = (i18n.language === "ar" ? "ar" : "en") as "ar" | "en";
   const isRTL = i18n.language === "ar";
 
@@ -317,9 +317,7 @@ export const GenericPage: React.FC<GenericPageProps> = ({
                 <h2 className="text-3xl font-extrabold text-starbucks-dark dark:text-white italic">
                   {accordionTitle
                     ? accordionTitle[lang]
-                    : lang === "ar"
-                      ? "مزيد من المعلومات"
-                      : "More Information"}
+                    : t("common:more_information", { defaultValue: "More Information" })}
                 </h2>
               </div>
               <div className="bg-white dark:bg-zinc-900/50 rounded-[2rem] p-4 md:p-8 shadow-sm border border-gray-100 dark:border-zinc-800">

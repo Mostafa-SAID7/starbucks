@@ -170,7 +170,7 @@ class PerformanceMonitor {
     ttfb?: number;
   }> {
     return new Promise((resolve) => {
-      const vitals: any = {};
+      const vitals: Record<string, number> = {};
 
       // First Contentful Paint
       const fcpEntry = performance.getEntriesByName(
@@ -243,7 +243,7 @@ class PerformanceMonitor {
     overallCacheHitRate: number;
     averagePageLoad: number;
     averageQueryTime: number;
-    webVitals?: any;
+    webVitals?: Record<string, number>;
   } {
     return {
       metrics: this.getMetrics(),
@@ -311,7 +311,7 @@ export function measureExecution(name: string) {
   ) {
     const originalMethod = descriptor.value;
 
-    descriptor.value = async function (...args: any[]) {
+    descriptor.value = async function (...args: unknown[]) {
       performanceMonitor.startMeasure(`${name}-${propertyKey}`);
       try {
         const result = await originalMethod.apply(this, args);

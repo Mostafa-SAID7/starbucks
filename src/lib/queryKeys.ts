@@ -95,11 +95,8 @@ export const queryKeys = {
    * Navigation-related query keys
    */
   navigation: {
-    /** Navbar data */
-    navbar: () => ["navigation", "navbar"] as const,
-
-    /** Footer data */
-    footer: () => ["navigation", "footer"] as const,
+    /** Navigation config data */
+    config: () => ["navigation", "config"] as const,
   },
 } as const;
 

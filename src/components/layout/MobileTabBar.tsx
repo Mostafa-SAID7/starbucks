@@ -2,11 +2,11 @@ import { Link, useLocation, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Home, MapPin, ShoppingBag, User } from "lucide-react";
 import { motion } from "framer-motion";
-import { useNavbar } from "@/hooks/queries";
+
 
 export function MobileTabBar() {
   const location = useLocation();
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { lang: urlLang } = useParams<{ lang: string }>();
   const lang = (
     urlLang && (urlLang === "ar" || urlLang === "en")
@@ -16,36 +16,29 @@ export function MobileTabBar() {
         : "en"
   ) as "ar" | "en";
 
-  // Fetch navbar data using TanStack Query
-  const { data: navbarData } = useNavbar();
-  const navData = navbarData?.[lang]?.tabs || {
-    home: lang === "ar" ? "الرئيسية" : "Home",
-    menu: lang === "ar" ? "القائمة" : "Menu",
-    locations: lang === "ar" ? "الفروع" : "Locations",
-    account: lang === "ar" ? "الحساب" : "Account",
-  };
-
   const tabs = [
-    { id: "home", icon: Home, label: navData.home, path: `/${lang}` },
+    { id: "home", icon: Home, label: t("common:home"), path: `/${lang}` },
     {
       id: "menu",
       icon: ShoppingBag,
-      label: navData.menu,
+      label: t("common:menu"),
       path: `/${lang}/menu`,
     },
     {
       id: "locations",
       icon: MapPin,
-      label: navData.locations,
+      label: t("common:locations"),
       path: `/${lang}/locations`,
     },
     {
       id: "account",
       icon: User,
-      label: navData.account,
+      label: t("common:account"),
       path: `/${lang}/account`,
     },
   ];
+
+
 
   return (
     <div className="fixed bottom-0 left-0 right-0 z-40 flex h-20 w-full items-center justify-around border-t bg-white/80 dark:bg-zinc-950/80 backdrop-blur-lg pb-safe shadow-[0_-1px_10px_rgba(0,0,0,0.05)] transition-all dark:border-zinc-900 md:hidden">

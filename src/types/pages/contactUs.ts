@@ -1,5 +1,10 @@
-export interface ContactSubjectOption {
-  id: string
-  ar: string
-  en: string
+export interface ContactUsData {
+  info: {
+    email: string;
+    phone: string;
+    phoneTel: string;
+  };
+  form: {
+    subjects: string[];
+  };
 }

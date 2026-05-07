@@ -7,23 +7,10 @@ import { MenuSkeleton } from "@/components/skeletons";
 import { useMenuData } from "@/hooks/queries";
 import { queryKeys } from "@/lib/queryKeys";
 import { menuFetchers } from "@/lib/fetchers";
-import type { MenuCategory } from "@/types";
-
-interface AllergyInfoType {
-  title: string;
-  description: string;
-  link: string;
-  linkLabel: string;
-}
-
-interface SidebarAction {
-  label: string;
-  href: string;
-  primary: boolean;
-}
+import type { MenuCategory, AllergyInfoType, SidebarAction } from "@/types";
 
 export const MenuPage = () => {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const lang = (i18n.language === "ar" ? "ar" : "en") as "ar" | "en";
   const isRTL = lang === "ar";
   const textAlignClass = isRTL ? "text-right" : "text-left";
@@ -52,18 +39,16 @@ export const MenuPage = () => {
       <div className="min-h-screen flex items-center justify-center bg-white dark:bg-background-dark">
         <div className="text-center px-4">
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-            {lang === "ar" ? "حدث خطأ في تحميل القائمة" : "Error loading menu"}
+            {t("common:error_loading_menu")}
           </h2>
           <p className="text-gray-600 dark:text-gray-400 mb-6">
-            {lang === "ar"
-              ? "عذراً، حدث خطأ أثناء تحميل القائمة. يرجى المحاولة مرة أخرى."
-              : "Sorry, there was an error loading the menu. Please try again."}
+            {t("common:error_loading_page_desc")}
           </p>
           <button
             onClick={() => refetch()}
             className="px-6 py-3 bg-starbucks-green text-white font-bold rounded-full hover:bg-starbucks-green/90 transition-colors"
           >
-            {lang === "ar" ? "إعادة المحاولة" : "Retry"}
+            {t("common:retry")}
           </button>
         </div>
       </div>
@@ -185,8 +170,7 @@ export const MenuPage = () => {
                         {category.description}
                       </p>
                       <span className="inline-flex items-center justify-center px-6 py-2 border-2 border-starbucks-green text-starbucks-green font-bold rounded-full group-hover:bg-starbucks-green/5 transition-colors">
-                        {category.sidebarTitle ||
-                          (lang === "ar" ? "اكتشف" : "Explore")}
+                        {category.sidebarTitle || t("common:explore")}
                       </span>
                     </div>
                   </Link>

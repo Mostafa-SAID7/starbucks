@@ -16,6 +16,14 @@
       "locations": "Locations",
       "account": "Account"
     },
+    "tooltips": {
+      "locations": "Find a store",
+      "search": "Search",
+      "language": "Change Language",
+      "light_mode": "Light Mode",
+      "dark_mode": "Dark Mode",
+      "account": "Account"
+    },
     "auth": {
       "login": {
         "title": "Login",
@@ -56,6 +64,11 @@
       "terms_conditions": "Terms of Use",
       "cookie_notice": "Cookie Notice"
     },
+    "location_selector": "Egypt",
+    "select_region": "Select Region",
+    "all_rights_reserved": "All Rights Reserved.",
+    "description": "Starbucks is the world's largest coffeehouse chain, offering the finest coffee and hot and cold beverages. We are committed to providing an exceptional experience for our customers with every visit.",
+    "designed_by": "Designed by",
     "app": {
       "title": "Start ordering ahead with the Starbucks® app",
       "description": "Order and pay — then breeze in to pick up your drink at your selected store.",

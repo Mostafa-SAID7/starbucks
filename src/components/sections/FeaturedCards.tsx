@@ -3,18 +3,7 @@ import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui";
 import { useFeaturedCards } from "@/hooks/queries";
 
-interface CardData {
-  id: string;
-  title: string;
-  description: string;
-  cta: string;
-  ctaLink: string;
-  image: string;
-  imageAlt: string;
-  theme: string;
-  secondaryCta?: string;
-  secondaryCtaLink?: string;
-}
+import { FeaturedCard } from "@/types/components";
 
 export function FeaturedCards() {
   const { i18n } = useTranslation();
@@ -56,7 +45,7 @@ export function FeaturedCards() {
 
       <div className="container mx-auto max-w-7xl px-4 relative z-10">
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-6">
-          {localizedData.cards.map((card: CardData, index: number) => (
+          {localizedData.cards.map((card: FeaturedCard, index: number) => (
             <motion.div
               key={card.id}
               initial={{ opacity: 0, y: 20 }}

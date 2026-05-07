@@ -10,7 +10,7 @@
 [![CodeQL](https://github.com/Mostafa-SAID7/starbucks/actions/workflows/codeql.yml/badge.svg)](https://github.com/Mostafa-SAID7/starbucks/actions/workflows/codeql.yml)
 [![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=white)](https://react.dev)
 [![TypeScript](https://img.shields.io/badge/TypeScript-6-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind-3-38B2AC?logo=tailwind-css&logoColor=white)](https://tailwindcss.com)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-4-38B2AC?logo=tailwind-css&logoColor=white)](https://tailwindcss.com)
 [![License: MIT](https://img.shields.io/badge/License-MIT-006241)](LICENSE)
 
 **[🌐 Live Demo](https://starbucks-eg-react.vercel.app)** &nbsp;•&nbsp;
@@ -45,8 +45,9 @@
 | 🌍 **Bilingual** | Full Arabic (RTL) + English (LTR) with i18next |
 | 🌑 **Dark Mode** | System-aware dark theme across all pages |
 | 📱 **PWA** | Installable, offline-ready progressive web app |
-| 🎭 **Animated** | Framer Motion scroll & hover animations throughout |
-| 🔒 **Secure** | CodeQL + npm audit CI checks on every push |
+| 🧹 **Clean Data** | Centralized, type-safe data layer in `src/data/` |
+| ⚡ **Optimized** | TanStack Query v5 for efficient data fetching |
+| 🛡️ **Secure** | CodeQL + npm audit CI checks on every push |
 | 🐳 **Dockerised** | Multi-stage Nginx Docker image included |
 
 ---
@@ -102,7 +103,8 @@ open http://localhost:3000
 |-------|------------|
 | **UI** | React 19 + TypeScript 6 |
 | **Build** | Vite 8 |
-| **Styling** | Tailwind CSS 3 + shadcn/ui |
+| **Styling** | Tailwind CSS 4 + shadcn/ui |
+| **Data Fetching** | TanStack Query 5 |
 | **Animation** | Framer Motion 12 |
 | **Routing** | React Router 7 |
 | **i18n** | i18next + react-i18next |
@@ -164,7 +166,8 @@ Every push and PR automatically runs:
 | Document | Purpose |
 |----------|---------|
 | [⚡ Quick Start](docs/QUICK_START.md) | Get running in 3 steps |
-| [🏗️ Architecture](docs/ARCHITECTURE.md) | Component tree, routing, data flow |
+| [🏗️ Architecture](docs/ARCHITECTURE.md) | Data layer, hooks, and component patterns |
+| [🚀 Query Guide](docs/TANSTACK_QUERY_GUIDE.md) | In-depth guide to the data-fetching layer |
 | [🚢 Deployment](docs/DEPLOYMENT.md) | Vercel, Docker, Nginx guides |
 | [📊 Project Summary](docs/PROJECT_SUMMARY.md) | Feature checklist & tech overview |
 | [📝 Changelog](CHANGELOG.md) | Version history |

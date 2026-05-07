@@ -3,16 +3,7 @@ import { GenericPage } from "./GenericPage";
 import { StaticPageSkeleton } from "@/components/skeletons";
 import { usePageData } from "@/hooks/queries";
 import { useTranslation } from "react-i18next";
-import type { GenericPageData } from "@/types";
-
-interface GenericPageWrapperProps {
-  slug: string;
-  seoTitle?: string;
-  showAccordion?: boolean;
-  accordionTitle?: { ar: string; en: string };
-  accordionSectionIndices?: number[];
-  useAccordionLayout?: boolean;
-}
+import type { GenericPageData, GenericPageWrapperProps } from "@/types";
 
 /**
  * Wrapper component that fetches generic page data using TanStack Query

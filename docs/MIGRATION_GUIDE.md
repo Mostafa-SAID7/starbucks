@@ -24,8 +24,8 @@ export const newDataFetchers = {
     await simulateDelay();
 
     try {
-      // Import your static data or make API call
-      const { newData } = await import("@/data/newData");
+      // Import from centralized data layer
+      const { newData } = await import("@/data");
       return newData;
     } catch (error) {
       throw new FetchError(
@@ -39,7 +39,7 @@ export const newDataFetchers = {
     await simulateDelay();
 
     try {
-      const { newData } = await import("@/data/newData");
+      const { newData } = await import("@/data");
       const item = newData.items.find((item: NewDataItem) => item.id === id);
 
       if (!item) {
@@ -494,7 +494,7 @@ export const reviewFetchers = {
     await simulateDelay();
 
     try {
-      const { reviews } = await import("@/data/reviews");
+      const { reviews } = await import("@/data");
       const productReviews = reviews.filter((r) => r.productId === productId);
 
       return {
@@ -516,7 +516,7 @@ export const reviewFetchers = {
     await simulateDelay();
 
     try {
-      const { reviews } = await import("@/data/reviews");
+      const { reviews } = await import("@/data");
       const review = reviews.find((r) => r.id === reviewId);
 
       if (!review) {

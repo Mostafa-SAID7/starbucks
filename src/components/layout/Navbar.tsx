@@ -9,9 +9,9 @@ import {
 import { useTranslation } from "react-i18next";
 import { useQueryClient } from "@tanstack/react-query";
 import { useTheme } from "@/hooks";
-import { useNavbar } from "@/hooks/queries";
 import { queryKeys } from "@/lib/queryKeys";
 import { pageFetchers } from "@/lib/fetchers";
+import { useNavigation } from "@/hooks/queries";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   MapPin,
@@ -27,8 +27,10 @@ import { Logo, Button, Tooltip } from "@/components/ui";
 import { SearchModal } from "@/components";
 import { AuthModal } from "@/components";
 
+import { NavItem } from "@/types/navigation";
+
 export function Navbar() {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
   const location = useLocation();
@@ -41,6 +43,8 @@ export function Navbar() {
   const mobileMenuRef = useRef<HTMLDivElement>(null);
   const hamburgerButtonRef = useRef<HTMLButtonElement>(null);
 
+  const { data } = useNavigation();
+
   const lang = (
     urlLang && (urlLang === "ar" || urlLang === "en")
       ? urlLang
@@ -49,15 +53,6 @@ export function Navbar() {
         : "en"
   ) as "ar" | "en";
   const isRTL = lang === "ar";
-
-  // Fetch navbar data using TanStack Query
-  const { data: navbarData } = useNavbar();
-  const navData = navbarData?.[lang] || {
-    menu: lang === "ar" ? "القائمة" : "Menu",
-    delivery: lang === "ar" ? "التوصيل" : "Delivery",
-    sustainability: lang === "ar" ? "الاستدامة" : "Sustainability",
-    middle_east: lang === "ar" ? "الشرق الأوسط" : "Middle East",
-  };
 
   // Prefetch function for generic pages
   const prefetchPage = useCallback(
@@ -120,12 +115,8 @@ export function Navbar() {
   const toggleLanguage = useCallback(() => {
     const newLang = lang === "ar" ? "en" : "ar";
 
-    // Extract the path after the language prefix
-    // Split by '/' and remove the first two elements (empty string and language)
     const pathParts = location.pathname.split("/");
     const pathWithoutLang = pathParts.slice(2).join("/");
-
-    // Build the new path with the new language
     const newPath = `/${newLang}${pathWithoutLang ? "/" + pathWithoutLang : ""}`;
 
     i18n.changeLanguage(newLang);
@@ -139,26 +130,13 @@ export function Navbar() {
     );
   }, [i18n, lang, location.pathname, navigate]);
 
-  const navItems = [
-    { label: navData.menu, href: `/${lang}/menu`, slug: null }, // Menu doesn't use slug-based fetching
-    { label: navData.delivery, href: `/${lang}/delivery`, slug: "delivery" },
-    {
-      label: navData.sustainability,
-      href: `/${lang}/social-impact-sustainability`,
-      slug: "sustainability",
-    },
-    {
-      label: navData.middle_east,
-      href: `/${lang}/starbucks-middle-east`,
-      slug: "middle-east",
-    },
-  ];
+  // Nav items from centralized data
+  const navItems = data?.navbar?.links || [];
 
   const handleNavClick = useCallback((href: string) => {
     if (href.startsWith("/")) {
       // Internal navigation handled by React Router
     } else {
-      // External link
       window.open(href, "_blank", "noopener,noreferrer");
     }
     setIsMobileMenuOpen(false);
@@ -196,13 +174,12 @@ export function Navbar() {
               className="hidden items-center gap-8 lg:flex h-full"
               role="menubar"
             >
-              {navItems.map((item) => (
+              {navItems.map((item: NavItem) => (
                 <NavLink
-                  key={item.href}
-                  to={item.href}
-                  onClick={() => handleNavClick(item.href)}
+                  key={item.id}
+                  to={`/${lang}${item.href}`}
+                  onClick={() => handleNavClick(`/${lang}${item.href}`)}
                   onMouseEnter={() => {
-                    // Prefetch page data on hover for instant navigation
                     if (item.slug) {
                       prefetchPage(item.slug);
                     }
@@ -218,9 +195,9 @@ export function Navbar() {
                   role="menuitem"
                 >
                   <span className="relative z-10 font-branding">
-                    {item.label}
+                    {t(`navigation:navbar.${item.id}`)}
                   </span>
-                  {location.pathname === item.href ? (
+                  {location.pathname === `/${lang}${item.href}` ? (
                     <motion.div
                       layoutId="nav-underline"
                       className="absolute -bottom-6 left-0 right-0 h-1 bg-starbucks-green rounded-t-full"
@@ -242,7 +219,7 @@ export function Navbar() {
           <div className="flex items-center gap-1 sm:gap-2 lg:gap-3">
             {/* Location */}
             <Tooltip
-              content={lang === "ar" ? "الفروع" : "Find a store"}
+              content={t("navigation:navbar.tooltips.locations")}
               className="w-11 h-11"
             >
               <NavLink
@@ -259,7 +236,7 @@ export function Navbar() {
 
             {/* Search Button */}
             <Tooltip
-              content={lang === "ar" ? "بحث" : "Search"}
+              content={t("navigation:navbar.tooltips.search")}
               className="w-11 h-11"
             >
               <Button
@@ -270,7 +247,7 @@ export function Navbar() {
                   setIsMobileMenuOpen(false);
                 }}
                 className="rounded-full h-11 w-11 hover:bg-gray-100 dark:hover:bg-zinc-900 hover:scale-110 active:scale-95 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-starbucks-green"
-                aria-label="Search"
+                aria-label={t("navigation:navbar.tooltips.search")}
               >
                 <Search className="h-5 w-5" />
               </Button>
@@ -278,7 +255,7 @@ export function Navbar() {
 
             {/* Language Toggle */}
             <Tooltip
-              content={lang === "ar" ? "تغيير اللغة" : "Change Language"}
+              content={t("navigation:navbar.tooltips.language")}
               className="w-11 h-11"
             >
               <Button
@@ -297,12 +274,8 @@ export function Navbar() {
             <Tooltip
               content={
                 theme === "dark"
-                  ? lang === "ar"
-                    ? "الوضع الفاتح"
-                    : "Light Mode"
-                  : lang === "ar"
-                    ? "الوضع الداكن"
-                    : "Dark Mode"
+                  ? t("navigation:navbar.tooltips.light_mode")
+                  : t("navigation:navbar.tooltips.dark_mode")
               }
               className="w-11 h-11"
             >
@@ -313,8 +286,8 @@ export function Navbar() {
                 className="text-starbucks-dark dark:text-foreground-dark hover:bg-gray-100 dark:hover:bg-zinc-900 rounded-full h-11 w-11 transition-all hover:scale-110 active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-starbucks-green"
                 aria-label={
                   theme === "dark"
-                    ? "Switch to light mode"
-                    : "Switch to dark mode"
+                    ? t("navigation:navbar.tooltips.light_mode")
+                    : t("navigation:navbar.tooltips.dark_mode")
                 }
               >
                 <motion.div
@@ -332,7 +305,7 @@ export function Navbar() {
 
             {/* Account Button */}
             <Tooltip
-              content={lang === "ar" ? "الحساب" : "Account"}
+              content={t("navigation:navbar.tooltips.account")}
               className="w-11 h-11"
             >
               <Button
@@ -343,7 +316,7 @@ export function Navbar() {
                   setIsMobileMenuOpen(false);
                 }}
                 className="text-starbucks-dark dark:text-foreground-dark hover:bg-gray-100 dark:hover:bg-zinc-900 rounded-full h-11 w-11 transition-all hover:scale-110 active:scale-95 border-2 border-transparent hover:border-starbucks-green/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-starbucks-green"
-                aria-label="Account"
+                aria-label={t("navigation:navbar.tooltips.account")}
               >
                 <User className="h-5 w-5" />
               </Button>
@@ -405,9 +378,9 @@ export function Navbar() {
               <div className="py-8 px-8">
                 {/* Navigation Links */}
                 <div className="flex flex-col gap-2">
-                  {navItems.map((item, i) => (
+                  {navItems.map((item: NavItem, i: number) => (
                     <motion.div
-                      key={item.href}
+                      key={item.id}
                       initial={{ opacity: 0, x: isRTL ? 20 : -20 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{
@@ -417,15 +390,15 @@ export function Navbar() {
                       }}
                     >
                       <NavLink
-                        to={item.href}
-                        onClick={() => handleNavClick(item.href)}
+                        to={`/${lang}${item.href}`}
+                        onClick={() => handleNavClick(`/${lang}${item.href}`)}
                         className={({ isActive }) => `
                           text-2xl font-black font-branding uppercase tracking-widest block py-4 px-4 rounded-2xl transition-all
                           ${isActive ? "text-starbucks-green bg-starbucks-green/5" : "text-starbucks-dark dark:text-white hover:bg-gray-50 dark:hover:bg-white/5"}
                         `}
                         role="menuitem"
                       >
-                        {item.label}
+                        {t(`navigation:navbar.${item.id}`)}
                       </NavLink>
                     </motion.div>
                   ))}

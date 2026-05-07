@@ -2,11 +2,7 @@ import React, { forwardRef } from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui";
 
-interface Action {
-  label: string;
-  href: string;
-  primary?: boolean;
-}
+import { VerticalCardAction as Action } from "@/types/components";
 
 interface VerticalCardProps extends React.HTMLAttributes<HTMLDivElement> {
   title: string;

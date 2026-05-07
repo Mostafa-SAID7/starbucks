@@ -4,18 +4,18 @@ import { motion } from "framer-motion";
 import { Mail, Phone, Send, CheckCircle } from "lucide-react";
 import { SEO, Button, Input, Select, Textarea } from "@/components";
 import { useContactInfo } from "@/hooks/queries";
-import type { ContactSubjectOption as SubjectOption } from "@/types";
+
+import { ContactUsData as ContactData } from "@/types/pages";
 
 export const ContactUsPage: React.FC = () => {
-  const { i18n } = useTranslation();
-  const lang = (i18n.language === "ar" ? "ar" : "en") as "ar" | "en";
+  const { t, i18n } = useTranslation();
   const isRTL = i18n.language === "ar";
 
   // Fetch contact data using TanStack Query
   const { data: contactData, isLoading, error } = useContactInfo();
 
   // Type assertion for the data (proper types should be added to fetchers.ts)
-  const data = contactData as any;
+  const data = contactData as ContactData;
 
   const [form, setForm] = useState({
     name: "",
@@ -53,7 +53,7 @@ export const ContactUsPage: React.FC = () => {
         <div className="text-center">
           <div className="h-12 w-12 animate-spin rounded-full border-4 border-starbucks-green border-t-transparent mx-auto mb-4" />
           <p className="text-gray-500 dark:text-gray-400">
-            {lang === "ar" ? "جاري التحميل..." : "Loading..."}
+            {t("common:status.loading", { defaultValue: "Loading..." })}
           </p>
         </div>
       </div>
@@ -66,9 +66,7 @@ export const ContactUsPage: React.FC = () => {
       <div className="min-h-screen bg-white dark:bg-black flex items-center justify-center">
         <div className="text-center max-w-md px-4">
           <p className="text-red-500 dark:text-red-400 mb-4">
-            {lang === "ar"
-              ? "حدث خطأ أثناء تحميل البيانات"
-              : "Error loading data"}
+            {t("common:status.error", { defaultValue: "Error loading data" })}
           </p>
         </div>
       </div>
@@ -77,7 +75,7 @@ export const ContactUsPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-white dark:bg-black">
-      <SEO title={data.hero.title[lang]} />
+      <SEO title={t("contact:hero.title")} />
 
       <div className="container mx-auto px-4 py-8 lg:py-16">
         <div
@@ -92,7 +90,7 @@ export const ContactUsPage: React.FC = () => {
             >
               <img
                 src="/contact-us.webp"
-                alt={data.hero.title[lang]}
+                alt={t("contact:hero.image_alt")}
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60" />
@@ -108,13 +106,13 @@ export const ContactUsPage: React.FC = () => {
                 className={`mb-12 ${textAlignClass}`}
               >
                 <h1 className="text-4xl lg:text-6xl font-black text-starbucks-dark dark:text-white mb-6">
-                  {data.hero.title[lang]}
+                  {t("contact:hero.title")}
                 </h1>
 
                 <div className="space-y-8 mt-12">
                   <div className="flex flex-col gap-4">
                     <p className="text-lg font-black text-starbucks-dark dark:text-white">
-                      {data.info.inquiry[lang]}
+                      {t("contact:info.inquiry")}
                     </p>
                     <a
                       href={`mailto:${data.info.email}`}
@@ -127,7 +125,7 @@ export const ContactUsPage: React.FC = () => {
 
                   <div className="flex flex-col gap-4 pt-4">
                     <p className="text-lg font-black text-starbucks-dark dark:text-white">
-                      {data.info.phoneLabel[lang]}
+                      {t("contact:info.phone_label")}
                     </p>
                     <a
                       href={`tel:${data.info.phoneTel}`}
@@ -145,10 +143,10 @@ export const ContactUsPage: React.FC = () => {
               <div className="bg-gray-50 dark:bg-zinc-900/50 rounded-[2.5rem] p-8 lg:p-12 shadow-sm border border-gray-100 dark:border-zinc-800">
                 <div className={`mb-10 ${textAlignClass}`}>
                   <h2 className="text-3xl font-black text-starbucks-dark dark:text-white mb-3">
-                    {data.form.title[lang]}
+                    {t("contact:form.title")}
                   </h2>
                   <p className="text-lg text-gray-500 dark:text-gray-400 leading-relaxed">
-                    {data.form.subtitle[lang]}
+                    {t("contact:form.subtitle")}
                   </p>
                 </div>
 
@@ -160,10 +158,10 @@ export const ContactUsPage: React.FC = () => {
                   >
                     <CheckCircle className="mx-auto mb-4 h-14 w-14 text-starbucks-green" />
                     <h3 className="text-xl font-extrabold text-starbucks-dark dark:text-white mb-2">
-                      {data.form.success.title[lang]}
+                      {t("contact:form.success.title")}
                     </h3>
                     <p className="text-gray-500 dark:text-gray-400">
-                      {data.form.success.message[lang]}
+                      {t("contact:form.success.message")}
                     </p>
                   </motion.div>
                 ) : (
@@ -173,14 +171,14 @@ export const ContactUsPage: React.FC = () => {
                         <label
                           className={`block text-lg font-black text-starbucks-dark dark:text-white px-2 ${textAlignClass}`}
                         >
-                          {data.form.fields.name.label[lang]}
+                          {t("contact:form.fields.name.label")}
                         </label>
                         <Input
                           required
                           name="name"
                           value={form.name}
                           onChange={handleChange}
-                          placeholder={data.form.fields.name.placeholder[lang]}
+                          placeholder={t("contact:form.fields.name.placeholder")}
                           className="h-14 rounded-2xl border-gray-200 dark:border-zinc-700 bg-white dark:bg-zinc-800"
                         />
                       </div>
@@ -188,7 +186,7 @@ export const ContactUsPage: React.FC = () => {
                         <label
                           className={`block text-lg font-black text-starbucks-dark dark:text-white px-2 ${textAlignClass}`}
                         >
-                          {data.form.fields.email.label[lang]}
+                          {t("contact:form.fields.email.label")}
                         </label>
                         <Input
                           required
@@ -196,7 +194,7 @@ export const ContactUsPage: React.FC = () => {
                           name="email"
                           value={form.email}
                           onChange={handleChange}
-                          placeholder={data.form.fields.email.placeholder[lang]}
+                          placeholder={t("contact:form.fields.email.placeholder")}
                           dir="ltr"
                           className="h-14 rounded-2xl border-gray-200 dark:border-zinc-700 bg-white dark:bg-zinc-800"
                         />
@@ -208,14 +206,14 @@ export const ContactUsPage: React.FC = () => {
                         <label
                           className={`block text-lg font-black text-starbucks-dark dark:text-white px-2 ${textAlignClass}`}
                         >
-                          {data.form.fields.phone.label[lang]}
+                          {t("contact:form.fields.phone.label")}
                         </label>
                         <Input
                           type="tel"
                           name="phone"
                           value={form.phone}
                           onChange={handleChange}
-                          placeholder={data.form.fields.phone.placeholder[lang]}
+                          placeholder={t("contact:form.fields.phone.placeholder")}
                           dir="ltr"
                           className="h-14 rounded-2xl border-gray-200 dark:border-zinc-700 bg-white dark:bg-zinc-800"
                         />
@@ -224,20 +222,18 @@ export const ContactUsPage: React.FC = () => {
                         <label
                           className={`block text-lg font-black text-starbucks-dark dark:text-white px-2 ${textAlignClass}`}
                         >
-                          {data.form.fields.subject.label[lang]}
+                          {t("contact:form.fields.subject.label")}
                         </label>
                         <Select
                           isRTL={isRTL}
-                          options={(data.form.subjects as SubjectOption[]).map(
-                            (s) => ({ id: s.id, label: s[lang] }),
+                          options={(data.form.subjects as string[]).map(
+                            (sId) => ({ id: sId, label: t(`contact:form.subjects.${sId}`) }),
                           )}
                           value={form.subject}
                           onChange={(val) =>
                             setForm((prev) => ({ ...prev, subject: val }))
                           }
-                          placeholder={
-                            data.form.fields.subject.placeholder[lang]
-                          }
+                          placeholder={t("contact:form.fields.subject.placeholder")}
                         />
                       </div>
                     </div>
@@ -246,7 +242,7 @@ export const ContactUsPage: React.FC = () => {
                       <label
                         className={`block text-lg font-black text-starbucks-dark dark:text-white px-2 ${textAlignClass}`}
                       >
-                        {data.form.fields.message.label[lang]}
+                        {t("contact:form.fields.message.label")}
                       </label>
                       <Textarea
                         required
@@ -254,7 +250,7 @@ export const ContactUsPage: React.FC = () => {
                         value={form.message}
                         onChange={handleChange}
                         rows={6}
-                        placeholder={data.form.fields.message.placeholder[lang]}
+                        placeholder={t("contact:form.fields.message.placeholder")}
                         className="rounded-2xl border-gray-200 dark:border-zinc-700 bg-white dark:bg-zinc-800"
                       />
                     </div>
@@ -270,14 +266,14 @@ export const ContactUsPage: React.FC = () => {
                         {loading ? (
                           <div className="flex items-center gap-2">
                             <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
-                            <span>{data.form.fields.submit[lang]}</span>
+                            <span>{t("contact:form.fields.submit")}</span>
                           </div>
                         ) : (
                           <div className="flex items-center gap-3">
                             <Send
                               className={`h-6 w-6 ${isRTL ? "-rotate-180" : ""}`}
                             />
-                            <span>{data.form.fields.submit[lang]}</span>
+                            <span>{t("contact:form.fields.submit")}</span>
                           </div>
                         )}
                       </Button>

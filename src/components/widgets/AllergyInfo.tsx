@@ -1,9 +1,4 @@
-interface AllergyInfoProps {
-  title: string
-  description: string
-  link: string
-  linkLabel: string
-}
+import { AllergyInfoType as AllergyInfoProps } from "@/types";
 
 export function AllergyInfo({ title, description, link, linkLabel }: AllergyInfoProps) {
   return (

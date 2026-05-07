@@ -1,14 +1,8 @@
 import React from "react";
-import type { LocalizedText } from "@/types";
-
-interface TypeItem {
-  id: string;
-  label: LocalizedText;
-  text: LocalizedText;
-}
+import type { GenericTypeItem } from "@/types/generic-page";
 
 interface SectionTypesProps {
-  types: TypeItem[];
+  types: GenericTypeItem[];
   lang: "ar" | "en";
 }
 

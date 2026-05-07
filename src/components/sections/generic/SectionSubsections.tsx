@@ -1,14 +1,10 @@
 import React from "react";
-import type { LocalizedText } from "@/types";
 
-interface Subsection {
-  title?: LocalizedText;
-  paragraphs?: LocalizedText[];
-  list?: LocalizedText[];
-}
+
+import type { GenericSubsection } from "@/types/generic-page";
 
 interface SectionSubsectionsProps {
-  subsections: Subsection[];
+  subsections: GenericSubsection[];
   lang: "ar" | "en";
   isRTL: boolean;
 }

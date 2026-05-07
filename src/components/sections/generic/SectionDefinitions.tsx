@@ -1,13 +1,8 @@
 import React from "react";
-import type { LocalizedText } from "@/types";
-
-interface Definition {
-  term: LocalizedText;
-  definition: LocalizedText;
-}
+import type { GenericDefinition } from "@/types/generic-page";
 
 interface SectionDefinitionsProps {
-  definitions: Definition[];
+  definitions: GenericDefinition[];
   lang: "ar" | "en";
 }
 

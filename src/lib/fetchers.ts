@@ -1,4 +1,4 @@
-import type { MenuData, GenericPageData } from "@/types";
+import type { MenuData, GenericPageData, NavigationConfig } from "@/types";
 
 /**
  * Type for the menu data structure that includes both languages
@@ -40,7 +40,6 @@ export const menuFetchers = {
   async fetchMenuData(): Promise<MenuDataWithLanguages> {
     await simulateDelay();
 
-    // Import static data (will be replaced with API call)
     const { menu } = await import("@/data");
     return menu as MenuDataWithLanguages;
   },
@@ -56,7 +55,6 @@ export const menuFetchers = {
     const { menu } = await import("@/data");
     const menuData = menu as MenuDataWithLanguages;
 
-    // Access the language-specific data
     const lang = document.documentElement.getAttribute("lang") || "ar";
     const langData = menuData[lang as keyof MenuDataWithLanguages];
 
@@ -81,7 +79,6 @@ export const menuFetchers = {
 
     const category = await this.fetchMenuCategory(categoryId);
 
-    // Find item in subcategories
     for (const subcategory of category.subcategories || []) {
       const item = subcategory.items?.find((i) => i.id === itemId);
       if (item) {
@@ -103,7 +100,6 @@ export const pageFetchers = {
   async fetchPageBySlug(slug: string): Promise<GenericPageData> {
     await simulateDelay();
 
-    // Map slugs to data imports
     const pageMap: Record<string, () => Promise<unknown>> = {
       "about-us": () => import("@/data").then((m) => m.aboutUs),
       sustainability: () => import("@/data").then((m) => m.sustainability),
@@ -113,7 +109,7 @@ export const pageFetchers = {
       "terms-of-use": () => import("@/data").then((m) => m.termsOfUse),
       "privacy-statement": () =>
         import("@/data").then((m) => m.privacyStatement),
-      cookies: () => import("@/data").then((m) => m.cookies.pageData),
+      cookies: () => import("@/data").then((m) => m.cookies),
       delivery: () => import("@/data").then((m) => m.delivery),
       "middle-east": () => import("@/data").then((m) => m.middleEast),
     };
@@ -138,7 +134,6 @@ export const locationFetchers = {
   async fetchLocations() {
     await simulateDelay();
 
-    // Import cities data from LocationsPage constants
     const cities = [
       {
         name: "Alexandria",
@@ -175,9 +170,10 @@ export const locationFetchers = {
  */
 export const contactFetchers = {
   /**
-   * Fetch contact information
+   * Fetch contact information (structural data: email, phone, social URLs)
+   * UI labels come from i18next locales/contact.json
    */
-  async fetchContactInfo(): Promise<unknown> {
+  async fetchContactInfo() {
     await simulateDelay();
 
     const { contactUs } = await import("@/data");
@@ -190,7 +186,7 @@ export const contactFetchers = {
  */
 export const featuredFetchers = {
   /**
-   * Fetch featured cards
+   * Fetch featured cards (bilingual content + image URLs)
    */
   async fetchFeaturedCards() {
     await simulateDelay();
@@ -222,25 +218,17 @@ export const featuredFetchers = {
 
 /**
  * Navigation Data Fetchers
+ * Structural data only (hrefs, socials, countries).
+ * All labels come from i18next: t('navigation.navbar.*'), t('navigation.footer.*')
  */
 export const navigationFetchers = {
   /**
-   * Fetch navbar data
+   * Fetch navigation structural data (link hrefs, socials, countries)
    */
-  async fetchNavbar() {
+  async fetchNavigation(): Promise<NavigationConfig> {
     await simulateDelay();
 
-    const { navbar } = await import("@/data");
-    return navbar;
-  },
-
-  /**
-   * Fetch footer data
-   */
-  async fetchFooter() {
-    await simulateDelay();
-
-    const { footer } = await import("@/data");
-    return footer;
+    const { navigation } = await import("@/data");
+    return navigation as NavigationConfig;
   },
 };

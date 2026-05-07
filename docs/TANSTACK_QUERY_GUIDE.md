@@ -135,8 +135,7 @@ export const queryKeys = {
 
   // Navigation queries
   navigation: {
-    navbar: () => ["navigation", "navbar"] as const,
-    footer: () => ["navigation", "footer"] as const,
+    config: () => ["navigation", "config"] as const,
   },
 } as const;
 ```
@@ -263,16 +262,16 @@ const { data, isLoading, error } = useFeaturedCards();
 
 ### Navigation Hooks (`src/hooks/queries/useNavigationData.ts`)
 
-#### `useNavbar()`
+#### `useNavigation()`
 
-Fetches navigation bar data.
+Fetches navigation and footer configuration data.
 
 ```typescript
-const { data, isLoading, error } = useNavbar();
+const { data, isLoading, error } = useNavigation();
 
-// Returns: NavbarData | undefined
+// Returns: NavigationData | undefined
 // Stale Time: 24 hours
-// Use Case: Header navigation
+// Use Case: Header and Footer navigation
 ```
 
 ## Cache Configuration

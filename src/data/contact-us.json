@@ -1,0 +1,17 @@
+{
+  "info": {
+    "email": "starbucks.mena@alshaya.com",
+    "phone": "02-24803822",
+    "phoneTel": "0224803822"
+  },
+  "form": {
+    "subjects": [
+      "general",
+      "complaint",
+      "feedback",
+      "delivery",
+      "rewards",
+      "other"
+    ]
+  }
+}

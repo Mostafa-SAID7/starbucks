@@ -1,0 +1,33 @@
+{
+  "title": "Your Choices Regarding Cookies on this Site",
+  "body": "Cookies are important to the proper functioning of a site. To improve your experience, we use cookies to remember log-in details and provide secure log-in, collect statistics to optimize site functionality, and deliver content tailored to your interests.",
+  "prefsDesc": "Please choose whether this site may use Functional and/or Advertising cookies, as described below:",
+  "requiredTitle": "Required Cookies",
+  "requiredDesc": "These cookies are required to enable core site functionality.",
+  "functionalTitle": "Functional Cookies",
+  "functionalDesc": "These cookies allow us to analyze site usage so we can measure and improve performance.",
+  "advertisingTitle": "Advertising Cookies",
+  "advertisingDesc": "These cookies are used by advertising companies to serve ads that are relevant to your interests.",
+  "alwaysOn": "Always On",
+  "functionalityAllowed": "Functionality Allowed",
+  "items": [
+    "Provide secure log-in",
+    "Remember how far you are through an order",
+    "Remember your log-in details",
+    "Remember what is in your shopping cart",
+    "Make sure the website looks consistent",
+    "Allow you to share pages with social networks",
+    "Allow you to post comments",
+    "Serve ads relevant to your interests"
+  ],
+  "cancel": "Cancel",
+  "submitPrefs": "Submit Preferences",
+  "decline": "Decline All",
+  "agree": "Agree and Proceed",
+  "more": "More Information",
+  "poweredBy": "Powered by:",
+  "privacyPolicy": "Privacy Policy",
+  "termsOfUse": "Terms of Use",
+  "cookieNotice": "Cookie Notice",
+  "cookiePolicy": "Cookie Policy"
+}

@@ -9,36 +9,9 @@ import {
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useParams, useNavigate } from "react-router-dom";
-import { useNavbar, useMenuData } from "@/hooks/queries";
+import { useMenuData } from "@/hooks/queries";
 import { Modal, Input } from "@/components/ui";
-
-interface SearchMenuItem {
-  id: string;
-  title: string;
-  description?: string;
-  image?: string;
-  href: string;
-  categoryTitle?: string;
-  subcategoryTitle?: string;
-}
-
-interface SearchSubcategory {
-  id: string;
-  title: string;
-  image?: string;
-  href?: string;
-  items?: SearchMenuItem[];
-}
-
-interface SearchCategory {
-  id: string;
-  title: string;
-  description?: string;
-  image?: string;
-  href?: string;
-  sidebarTitle?: string;
-  subcategories?: SearchSubcategory[];
-}
+import { SearchMenuItem, SearchSubcategory, SearchCategory } from "@/types/components";
 
 interface SearchModalProps {
   isOpen: boolean;
@@ -46,7 +19,7 @@ interface SearchModalProps {
 }
 
 const SearchModal: React.FC<SearchModalProps> = ({ isOpen, onClose }) => {
-  const { i18n } = useTranslation();
+  const { t,i18n } = useTranslation();
   const { lang: urlLang } = useParams<{ lang: string }>();
   const navigate = useNavigate();
   const inputRef = useRef<HTMLInputElement>(null);
@@ -61,11 +34,9 @@ const SearchModal: React.FC<SearchModalProps> = ({ isOpen, onClose }) => {
         : "en"
   ) as "ar" | "en";
 
-  // Fetch navigation and menu data using TanStack Query hooks
-  const { data: navbarData } = useNavbar();
+  // Fetch menu data using TanStack Query hook
   const { data: menuDataFull } = useMenuData();
 
-  const searchData = navbarData?.[lang]?.search;
   const menuData = menuDataFull?.[lang];
 
   useEffect(() => {
@@ -130,12 +101,12 @@ const SearchModal: React.FC<SearchModalProps> = ({ isOpen, onClose }) => {
   };
 
   // Don't render if data is not loaded yet
-  if (!searchData || !menuData) {
+  if (!menuData) {
     return null;
   }
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title={searchData.title}>
+    <Modal isOpen={isOpen} onClose={onClose} title={t("common:search")}>
       <div className="relative group flex items-center">
         <motion.div
           initial={{ opacity: 0, scale: 0.5 }}
@@ -150,7 +121,7 @@ const SearchModal: React.FC<SearchModalProps> = ({ isOpen, onClose }) => {
           type="text"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          placeholder={searchData.placeholder}
+          placeholder={t("common:search_placeholder")}
           dir={isRTL ? "rtl" : "ltr"}
           className={`w-full py-8 text-2xl ${isRTL ? "pr-20 pl-8" : "pl-20 pr-8"}`}
         />
@@ -170,7 +141,7 @@ const SearchModal: React.FC<SearchModalProps> = ({ isOpen, onClose }) => {
               <p
                 className={`text-xs font-black uppercase tracking-[0.3em] text-gray-400 mb-6 ${isRTL ? "text-right" : "text-left"}`}
               >
-                {searchData.trending}
+                {t("common:search_trending")}
               </p>
               <div
                 className={`flex flex-wrap gap-3 ${isRTL ? "justify-end" : "justify-start"}`}
@@ -202,12 +173,8 @@ const SearchModal: React.FC<SearchModalProps> = ({ isOpen, onClose }) => {
                 className={`text-xs font-black uppercase tracking-[0.2em] text-gray-400 mb-4 ${isRTL ? "text-right" : "text-left"}`}
               >
                 {searchResults.length > 0
-                  ? lang === "ar"
-                    ? `النتائج (${searchResults.length})`
-                    : `Results (${searchResults.length})`
-                  : lang === "ar"
-                    ? "لا توجد نتائج"
-                    : "No results found"}
+                  ? t("common:search_results", { count: searchResults.length })
+                  : t("common:search_no_results")}
               </p>
 
               {searchResults.map((item, index) => (

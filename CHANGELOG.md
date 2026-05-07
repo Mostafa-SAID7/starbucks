@@ -6,6 +6,24 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) · Versioning: 
 
 ---
 
+## [2.1.0] — 2026-05-08
+
+### Added
+- 🧹 **Unified Data Architecture** — Consolidated all structural data sources into a single, type-safe `src/data/` directory.
+- 🧭 **Unified Navigation Hook** — Created `useNavigation()` to merge redundant navbar and footer fetching logic.
+- 📋 **Centralized Query Factory** — Optimized `src/lib/queryKeys.ts` with consolidated navigation configuration keys.
+
+### Changed
+- 🚀 **Tailwind CSS v4** — Re-migrated the entire project to Tailwind CSS v4 for modern features and performance.
+- 📋 **Global Documentation Audit** — Comprehensive refresh of all `docs/*.md` and `README.md` to reflect the latest architectural standards.
+- 🧹 **Clean Code Implementation** — Removed legacy fetcher aliases and redundant JSON file imports across components.
+
+### Fixed
+- 🌍 **Localization Consistency** — Eliminated remaining hardcoded strings in `HomePage.tsx` with proper `i18next` translations.
+- 🔗 **Broken Documentation Links** — Removed stale references to non-existent README files in `docs/`.
+
+---
+
 ## [2.0.0] — 2026-05-03
 
 ### Added
@@ -66,11 +84,13 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) · Versioning: 
 
 | Version | Date | Notes |
 |---------|------|-------|
+| **2.1.0** | 2026-05-08 | Tailwind v4, Data Centralization, Documentation Audit |
 | **2.0.0** | 2026-05-03 | Full SPA, i18n, dark mode, PWA, 14 pages |
 | **1.0.0** | 2026-05-02 | Initial release |
 
 ---
 
+[2.1.0]: https://github.com/Mostafa-SAID7/starbucks/compare/v2.0.0...v2.1.0
 [2.0.0]: https://github.com/Mostafa-SAID7/starbucks/compare/v1.0.0...v2.0.0
 [1.0.0]: https://github.com/Mostafa-SAID7/starbucks/releases/tag/v1.0.0
-[Unreleased]: https://github.com/Mostafa-SAID7/starbucks/compare/v2.0.0...HEAD
+[Unreleased]: https://github.com/Mostafa-SAID7/starbucks/compare/v2.1.0...HEAD

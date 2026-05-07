@@ -4,13 +4,7 @@ import { Button } from "@/components/ui";
 import { Link } from "react-router-dom";
 import { useStatement } from "@/hooks/queries";
 
-interface StatementData {
-  title: string;
-  subtitle: string;
-  paragraphs: string[];
-  ctaText: string;
-  ctaLink: string;
-}
+import { StatementData } from "@/types/components";
 
 const StatementSection = () => {
   const { i18n } = useTranslation();

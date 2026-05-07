@@ -1,13 +1,8 @@
 import React from "react";
-import type { LocalizedText } from "@/types";
-
-interface Group {
-  title: LocalizedText;
-  paragraphs: LocalizedText[];
-}
+import type { GenericGroup } from "@/types/generic-page";
 
 interface SectionGroupsProps {
-  groups: Group[];
+  groups: GenericGroup[];
   lang: "ar" | "en";
 }
 
