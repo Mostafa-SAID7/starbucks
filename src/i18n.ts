@@ -1,35 +1,36 @@
-import i18n from 'i18next'
-import { initReactI18next } from 'react-i18next'
+import i18n from "i18next";
+import { initReactI18next } from "react-i18next";
 
-import en from './locales/en.json'
-import ar from './locales/ar.json'
+import en from "./locales/en";
+import ar from "./locales/ar";
 
 // Detect language from URL immediately (before React renders)
-const urlLangMatch = window.location.pathname.match(/^\/(ar|en)(\/|$)/)
-const initialLang = urlLangMatch ? urlLangMatch[1] : 'ar'
+const urlLangMatch = window.location.pathname.match(/^\/(ar|en)(\/|$)/);
+const initialLang = urlLangMatch ? urlLangMatch[1] : "ar";
 
 // Apply direction synchronously so first React render is already correct
-document.documentElement.setAttribute('dir', initialLang === 'ar' ? 'rtl' : 'ltr')
-document.documentElement.setAttribute('lang', initialLang)
+document.documentElement.setAttribute(
+  "dir",
+  initialLang === "ar" ? "rtl" : "ltr",
+);
+document.documentElement.setAttribute("lang", initialLang);
 
 const resources = {
   ar: {
-    translation: ar
+    translation: ar,
   },
   en: {
-    translation: en
-  }
-}
+    translation: en,
+  },
+};
 
-i18n
-  .use(initReactI18next)
-  .init({
-    resources,
-    lng: initialLang,
-    fallbackLng: 'en',
-    interpolation: {
-      escapeValue: false
-    }
-  })
+i18n.use(initReactI18next).init({
+  resources,
+  lng: initialLang,
+  fallbackLng: "en",
+  interpolation: {
+    escapeValue: false,
+  },
+});
 
-export default i18n
+export default i18n;
