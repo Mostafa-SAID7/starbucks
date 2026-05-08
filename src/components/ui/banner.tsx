@@ -183,8 +183,8 @@ export const Banner = React.forwardRef<HTMLDivElement, BannerProps>(
             className="relative flex items-center justify-center w-full"
           >
             <h2 className={cn(
-              "text-4xl sm:text-7xl md:text-9xl lg:text-[180px] font-black font-branding select-none text-center whitespace-nowrap transition-all duration-1000",
-              isRTL ? "tracking-normal text-white/20 leading-normal" : "tracking-[0.2em] text-white/25 leading-none uppercase",
+              "text-4xl sm:text-7xl md:text-9xl lg:text-[180px] font-black select-none text-center whitespace-nowrap transition-all duration-1000",
+              isRTL ? "font-heading tracking-normal text-white/20 leading-normal" : "font-branding tracking-[0.2em] text-white/25 leading-none uppercase",
             )}>
               {currentLang === 'ar' ? 'ستاربكس' : 'STARBUCKS'}
             </h2>

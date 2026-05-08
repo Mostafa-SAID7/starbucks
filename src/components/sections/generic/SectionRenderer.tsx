@@ -75,7 +75,7 @@ export const SectionRenderer: React.FC<SectionRendererProps> = ({
   const content = (
     <div className="flex-1 space-y-6">
       {localizedSubtitle && (
-        <p className="text-xl text-starbucks-green font-bold italic">
+        <p className="text-xl font-black text-starbucks-green uppercase tracking-[0.2em] mb-4">
           {localizedSubtitle}
         </p>
       )}
@@ -148,36 +148,39 @@ export const SectionRenderer: React.FC<SectionRendererProps> = ({
     </div>
   );
 
-  if (section.layout === "split" || section.image) {
+  if (section.layout === "split" && section.image) {
     const isImageRight = section.imagePosition === "right";
+    const imageUrl = typeof section.image === 'string' ? section.image : section.image[lang];
+    const isLogo = imageUrl.toLowerCase().includes('.png') || imageUrl.toLowerCase().includes('logo');
+    
     return (
       <StaticSection id={section.id} title={{ ar: localizedTitle, en: localizedTitle }} hideTitle={hideTitle || !localizedTitle} hideSideBorder={section.hideSideBorder}>
         <div className={`flex flex-col lg:flex-row items-center gap-12 lg:gap-16 ${isImageRight ? "" : "lg:flex-row-reverse"}`}>
           {content}
-          {section.image && (() => {
-            const imageUrl = typeof section.image === 'string' ? section.image : section.image[lang];
-            const isLogo = imageUrl.toLowerCase().includes('.png') || imageUrl.toLowerCase().includes('logo');
-            
-            return (
-              <div className="flex-1 w-full">
-                <div className={`relative aspect-[4/3] rounded-[2.5rem] overflow-hidden shadow-2xl ${isLogo ? 'bg-gray-50 dark:bg-zinc-800/30' : ''}`}>
-                  <img
-                    src={imageUrl}
-                    alt={localizedTitle || pageTitle}
-                    className={`w-full h-full transition-transform duration-700 hover:scale-105 ${isLogo ? 'object-contain p-8 lg:p-12' : 'object-cover'}`}
-                  />
-                  {!isLogo && <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent" />}
-                </div>
-              </div>
-            );
-          })()}
+          <div className="flex-1 w-full">
+            <div className={`relative aspect-[4/3] rounded-[2rem] overflow-hidden shadow-2xl ${isLogo ? 'bg-gray-50 dark:bg-zinc-800/30' : ''}`}>
+              <img
+                src={imageUrl}
+                alt={localizedTitle || pageTitle}
+                className={`w-full h-full transition-transform duration-700 hover:scale-105 ${isLogo ? 'object-contain p-8 lg:p-12' : 'object-cover'}`}
+              />
+              {!isLogo && <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent" />}
+            </div>
+          </div>
         </div>
       </StaticSection>
     );
   }
 
   return (
-    <StaticSection key={section.id} id={section.id} title={{ ar: localizedTitle, en: localizedTitle }} hideTitle={hideTitle || !localizedTitle} hideSideBorder={section.hideSideBorder}>
+    <StaticSection 
+      key={section.id} 
+      id={section.id} 
+      title={{ ar: localizedTitle, en: localizedTitle }} 
+      hideTitle={hideTitle || !localizedTitle} 
+      hideSideBorder={section.hideSideBorder}
+      image={section.image}
+    >
       {content}
     </StaticSection>
   );

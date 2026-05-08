@@ -55,68 +55,72 @@ export function Select({
   };
 
   return (
-    <div className={cn("relative", className)} ref={dropdownRef}>
+    <div className={cn("relative w-full", className)} ref={dropdownRef}>
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
         className={cn(
-          "flex h-11 w-full items-center justify-between rounded-full border border-gray-200 bg-white px-4 py-3 text-sm text-gray-900 transition-all duration-300",
-          "hover:border-starbucks-green focus:border-starbucks-green focus:outline-none focus:ring-2 focus:ring-starbucks-green/20",
+          "flex h-16 w-full items-center justify-between rounded-2xl border border-gray-200 bg-white px-6 py-4 text-lg text-gray-900 transition-all duration-300",
+          "hover:border-starbucks-green focus:border-starbucks-green focus:outline-none focus:ring-4 focus:ring-starbucks-green/10",
           "dark:border-zinc-700 dark:bg-zinc-900 dark:text-white dark:hover:border-starbucks-light",
-          isRTL && "flex-row-reverse",
+          isOpen && "border-starbucks-green ring-4 ring-starbucks-green/10"
         )}
         aria-haspopup="listbox"
         aria-expanded={isOpen}
       >
-        <span className={cn(!selectedOption && "text-gray-400")}>
+        <span className={cn("truncate", !selectedOption && "text-gray-400 opacity-60")}>
           {selectedOption?.label || placeholder}
         </span>
-        <ChevronDown
-          className={cn(
-            "h-4 w-4 text-gray-400 transition-transform duration-200",
-            isOpen && "rotate-180",
-            isRTL && "rotate-180",
-          )}
-        />
+        <motion.div
+          animate={{ 
+            rotate: isOpen ? 180 : 0,
+            scale: isOpen ? 1.1 : 1
+          }}
+          transition={{ duration: 0.3, ease: "anticipate" }}
+          className="text-starbucks-green"
+        >
+          <ChevronDown className={cn("h-6 w-6 transition-transform", isRTL && "scale-x-[-1]")} />
+        </motion.div>
       </button>
 
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            {...ANIMATION_CONFIG.VARIANTS.FADE_IN}
-            transition={ANIMATION_CONFIG.TRANSITIONS.QUICK}
+            initial={{ opacity: 0, y: 10, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 10, scale: 0.95 }}
+            transition={{ duration: 0.2, ease: "easeOut" }}
             className={cn(
-              "absolute z-50 mt-1 w-full overflow-hidden rounded-xl border border-gray-100 bg-white shadow-lg dark:border-zinc-700 dark:bg-zinc-900",
-              isRTL && "right-0",
+              "absolute z-50 mt-3 w-full overflow-hidden rounded-[2rem] border border-gray-100 bg-white/95 backdrop-blur-xl shadow-2xl dark:border-white/10 dark:bg-zinc-900/95",
+              isRTL ? "right-0" : "left-0"
             )}
             role="listbox"
           >
-            {options.map((option) => (
-              <button
-                key={option.id}
-                type="button"
-                onClick={() => handleSelect(option)}
-                className={cn(
-                  "flex w-full items-center gap-2 px-4 py-3 text-sm text-gray-900 transition-colors hover:bg-gray-50 dark:text-white dark:hover:bg-zinc-800",
-                  selectedOption?.id === option.id &&
-                    "bg-starbucks-green/10 text-starbucks-green dark:bg-starbucks-light/10",
-                  isRTL && "flex-row-reverse",
-                )}
-                role="option"
-                aria-selected={selectedOption?.id === option.id}
-              >
-                <Check
+            <div className="p-2 space-y-1">
+              {options.map((option) => (
+                <button
+                  key={option.id}
+                  type="button"
+                  onClick={() => handleSelect(option)}
                   className={cn(
-                    "h-4 w-4",
-                    selectedOption?.id !== option.id && "invisible",
+                    "flex w-full items-center justify-between px-6 py-4 text-lg text-gray-900 transition-all rounded-2xl hover:bg-starbucks-green/5 dark:text-white dark:hover:bg-white/5",
+                    selectedOption?.id === option.id &&
+                      "bg-starbucks-green/10 text-starbucks-green font-bold dark:bg-starbucks-light/10"
                   )}
-                />
-                {option.label}
-              </button>
-            ))}
+                  role="option"
+                  aria-selected={selectedOption?.id === option.id}
+                >
+                  <span className="truncate">{option.label}</span>
+                  {selectedOption?.id === option.id && (
+                    <Check className="h-5 w-5 flex-shrink-0" />
+                  )}
+                </button>
+              ))}
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
     </div>
   );
 }
+

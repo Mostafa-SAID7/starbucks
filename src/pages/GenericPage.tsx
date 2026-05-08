@@ -12,6 +12,7 @@ import { SectionRenderer, SectionImageGrid } from "@/components/sections/generic
 
 export const GenericPage: React.FC<GenericPageProps> = ({
   data,
+  slug: propSlug,
   seoTitle,
   showAccordion = false,
   accordionTitle,
@@ -21,7 +22,7 @@ export const GenericPage: React.FC<GenericPageProps> = ({
   const { t, i18n } = useTranslation(["pages", "common"]);
   const lang = (i18n.language === "ar" ? "ar" : "en") as "ar" | "en";
   const isRTL = i18n.language === "ar";
-  const slug = data.slug;
+  const slug = propSlug || data.slug;
 
   // Use translations if slug is available
   const localizedTitle = slug 
@@ -152,7 +153,7 @@ export const GenericPage: React.FC<GenericPageProps> = ({
   };
 
   const content = (
-    <div className="min-h-screen bg-white dark:bg-black pb-24">
+    <div className="min-h-screen bg-white dark:bg-zinc-950">
       <SEO title={seoTitle || localizedTitle} />
 
       {/* Hero Section */}
@@ -206,12 +207,12 @@ export const GenericPage: React.FC<GenericPageProps> = ({
 
       {/* Main Page Layout Wrapper */}
       {data.layoutType === "sidebar" && data.sidebarImage ? (
-        <div className="container mx-auto px-4 pt-8 pb-0 lg:py-12">
-          <div className={`flex flex-col lg:flex-row gap-12 ${isRTL ? "lg:flex-row-reverse" : ""}`}>
+        <div className="container mx-auto px-4 py-8 lg:py-16">
+          <div dir={isRTL ? "rtl" : "ltr"} className="flex flex-col lg:flex-row gap-12 lg:gap-16 items-start">
             
             {/* Side 1: Sticky Sidebar Image or Video */}
-            <div className="lg:w-[40%] lg:sticky lg:top-24 lg:h-[calc(100vh-8rem)] group">
-              <div className="h-full rounded-3xl overflow-hidden shadow-2xl relative bg-black">
+            <div className="lg:w-[40%] lg:sticky lg:top-24 group">
+              <div className="rounded-3xl overflow-hidden shadow-2xl relative bg-black aspect-[3/4] lg:aspect-auto lg:h-[calc(100vh-8rem)]">
                 {(() => {
                   const mediaUrl = typeof data.sidebarImage === 'string' ? data.sidebarImage : data.sidebarImage?.[lang];
                   const isVideo = mediaUrl?.includes("player.cloudinary.com") || mediaUrl?.includes("embed");
@@ -243,7 +244,7 @@ export const GenericPage: React.FC<GenericPageProps> = ({
             </div>
 
             {/* Side 2: Content Column */}
-            <div className="lg:w-[60%]">
+            <div className="lg:w-[60%] space-y-16">
               <div className="max-w-4xl">
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
@@ -251,7 +252,7 @@ export const GenericPage: React.FC<GenericPageProps> = ({
                   className="mb-12"
                 >
                   {!data.hideMainTitle && (
-                    <h1 className="text-4xl lg:text-5xl font-black text-starbucks-dark dark:text-white mb-6">
+                    <h1 className="text-4xl lg:text-6xl font-black text-gray-900 dark:text-white leading-tight mb-6">
                       {localizedTitle}
                     </h1>
                   )}

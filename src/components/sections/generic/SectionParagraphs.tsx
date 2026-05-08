@@ -11,9 +11,11 @@ export const SectionParagraphs: React.FC<SectionParagraphsProps> = ({
   lang,
 }) => {
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       {paragraphs.map((p, idx) => (
-        <p key={idx}>{typeof p === 'string' ? p : p[lang]}</p>
+        <p key={idx} className="text-xl text-gray-600 dark:text-gray-300 leading-relaxed font-medium">
+          {typeof p === 'string' ? p : p[lang]}
+        </p>
       ))}
     </div>
   );

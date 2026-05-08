@@ -152,13 +152,18 @@ export const MenuPage = () => {
 
           {/* Side 2: Content Column */}
           <div className="lg:w-[60%]">
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className={`text-lg md:text-xl font-bold text-gray-900 dark:text-white mb-12 leading-relaxed whitespace-pre-line ${textAlignClass}`}
-            >
-              {t("pages:menu.description")}
-            </motion.p>
+            <div className={`mb-12 ${textAlignClass}`}>
+              <h1 className="text-4xl lg:text-6xl font-black text-gray-900 dark:text-white mb-6">
+                {t("pages:menu.title") || "Menu"}
+              </h1>
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="text-lg md:text-xl font-bold text-gray-600 dark:text-gray-400 leading-relaxed whitespace-pre-line"
+              >
+                {t("pages:menu.description")}
+              </motion.p>
+            </div>
 
             {/* Categories Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full mb-16">

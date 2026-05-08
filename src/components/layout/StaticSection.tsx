@@ -8,11 +8,13 @@ interface StaticSectionProps {
   id?: string
   hideTitle?: boolean
   hideSideBorder?: boolean
+  image?: string | { ar: string; en: string }
 }
 
-export const StaticSection: React.FC<StaticSectionProps> = ({ title, children, id, hideTitle = false, hideSideBorder = false }) => {
+export const StaticSection: React.FC<StaticSectionProps> = ({ title, children, id, hideTitle = false, hideSideBorder = false, image }) => {
   const { i18n } = useTranslation()
   const lang = (i18n.language === 'ar' ? 'ar' : 'en') as 'ar' | 'en'
+  const imageUrl = image ? (typeof image === 'string' ? image : image[lang]) : null
 
   return (
     <motion.section
@@ -22,8 +24,17 @@ export const StaticSection: React.FC<StaticSectionProps> = ({ title, children, i
       viewport={{ once: true }}
       className="space-y-6"
     >
+      {imageUrl && (
+        <div className="mb-8 rounded-[2rem] overflow-hidden shadow-lg aspect-video lg:aspect-[21/9]">
+          <img
+            src={imageUrl}
+            alt={typeof title === 'object' ? title[lang] : ""}
+            className="w-full h-full object-cover"
+          />
+        </div>
+      )}
       {title && !hideTitle && (
-        <h2 className={`text-2xl font-extrabold text-starbucks-dark dark:text-white ps-4 ${!hideSideBorder ? 'border-s-4 border-starbucks-green' : ''}`}>
+        <h2 className={`text-2xl lg:text-4xl font-black text-starbucks-dark dark:text-white ps-4 ${!hideSideBorder ? 'border-s-4 border-starbucks-green' : ''}`}>
           {title[lang]}
         </h2>
       )}

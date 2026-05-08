@@ -20,9 +20,9 @@ export const SectionList: React.FC<SectionListProps> = ({
         const link = isString ? undefined : item.link;
 
         return (
-          <li key={idx} className="flex items-start gap-3">
-            <span className="mt-2.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-starbucks-green" />
-            <span>
+          <li key={idx} className="flex items-start gap-4">
+            <span className="mt-3 h-2 w-2 flex-shrink-0 rounded-full bg-starbucks-green" />
+            <span className="text-xl text-gray-600 dark:text-gray-300 leading-relaxed font-medium">
               {text}
               {link && (
                 <a

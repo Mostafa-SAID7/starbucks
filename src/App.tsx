@@ -52,6 +52,11 @@ const ContactUsPage = lazy(() =>
     default: module.ContactUsPage,
   })),
 );
+const SustainabilityPage = lazy(() =>
+  import("@/pages").then((module) => ({
+    default: module.SustainabilityPage,
+  })),
+);
 const GenericPageWrapper = lazy(() =>
   import("@/pages").then((module) => ({ default: module.GenericPageWrapper })),
 );
@@ -267,11 +272,7 @@ const AnimatedRoutes = () => {
             path="social-impact-sustainability"
             element={
               <PageWrapper skeleton={<StaticPageSkeleton />}>
-                <GenericPageWrapper
-                  slug="sustainability"
-                  seoTitle={t("pages:sustainability.seoTitle", { defaultValue: "Sustainability - Starbucks Egypt" })}
-                  useAccordionLayout={true}
-                />
+                <SustainabilityPage />
               </PageWrapper>
             }
           />

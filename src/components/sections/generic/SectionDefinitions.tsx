@@ -13,11 +13,13 @@ export const SectionDefinitions: React.FC<SectionDefinitionsProps> = ({
   return (
     <div className="mt-4 space-y-4">
       {definitions.map((def, i) => (
-        <div key={i}>
-          <strong className="block text-starbucks-dark dark:text-white font-bold">
+        <div key={i} className="space-y-1">
+          <strong className="block text-xl font-black text-starbucks-dark dark:text-white uppercase tracking-wide">
             {def.term[lang]}
           </strong>
-          <p>{def.definition[lang]}</p>
+          <p className="text-lg text-gray-600 dark:text-gray-400 leading-relaxed font-medium">
+            {def.definition[lang]}
+          </p>
         </div>
       ))}
     </div>

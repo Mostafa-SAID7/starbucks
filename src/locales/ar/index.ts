@@ -14,6 +14,8 @@ import cookieConsent from "./common/cookieConsent.json";
 // Page-specific translations are loaded dynamically by the pages themselves
 // to optimize initial bundle size and first-load performance.
 
+import pages from "./pages";
+
 const common = {
   ...general,
   auth,
@@ -34,4 +36,5 @@ const navigation = {
 export default {
   common,
   navigation,
+  pages,
 };

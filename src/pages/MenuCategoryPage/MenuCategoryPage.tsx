@@ -5,8 +5,6 @@ import {
   SEO,
   AllergyInfo,
   MenuPromoVideo,
-  VerticalCard,
-  Button,
 } from "@/components";
 import { MenuSkeleton } from "@/components/skeletons";
 import { NotFound } from "@/pages";
@@ -16,6 +14,7 @@ export const MenuCategoryPage = () => {
   const { categoryId } = useParams<{ categoryId: string }>();
   const { t, i18n } = useTranslation(["pages", "common"]);
   const isRTL = i18n.language === "ar";
+  const textAlignClass = isRTL ? "text-right" : "text-left";
 
   // Fetch structural menu data for global elements (allergy link, sidebar defaults)
   const { data: menuData, isLoading: isMenuLoading } = useMenuData();
@@ -67,106 +66,120 @@ export const MenuCategoryPage = () => {
   const categorySidebarTitle = t(`${categoryKey}.sidebarTitle`) || t("pages:menu.sidebar.title");
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-7xl" dir={isRTL ? "rtl" : "ltr"}>
+    <div
+      className="bg-white dark:bg-background-dark min-h-screen"
+      dir={isRTL ? "rtl" : "ltr"}
+    >
       <SEO title={`${categoryTitle} - ${t("pages:menu.title")}`} />
 
-      <div className="flex flex-col lg:flex-row gap-12">
-        {/* Side 1: Sidebar */}
-        <div className="w-full lg:w-[350px] flex-shrink-0">
-          <div className="sticky top-28">
-            <VerticalCard
-              title={categorySidebarTitle}
-              image={category.image || menuData.sidebar?.image || ""}
-              actions={[
-                {
-                  id: "order",
-                  label: t("pages:menu.sidebar.actions.order"),
-                  href: t("pages:menu.order_url"),
-                  variant: "primary"
-                },
-                {
-                  id: "stores",
-                  label: t("pages:menu.sidebar.actions.stores"),
-                  href: `/${i18n.language}/locations`,
-                  variant: "secondary"
-                }
-              ]}
-            />
-          </div>
-        </div>
+      <div className="container mx-auto px-4 py-8 lg:py-12">
+        {/* Main 2-Side Layout */}
+        <div className="flex flex-col lg:flex-row gap-12">
+          
+          {/* Side 1: Sticky Sidebar Image - Matches MenuPage Design */}
+          <div className="lg:w-[40%] lg:sticky lg:top-24 lg:h-[calc(100vh-8rem)] group">
+            <motion.div
+              initial={{ opacity: 0, x: isRTL ? 50 : -50 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="h-full rounded-3xl overflow-hidden shadow-2xl relative"
+            >
+              <img
+                src={category.image || menuData.sidebar?.image || ""}
+                alt={categorySidebarTitle}
+                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
 
-        {/* Side 2: Main Content Area */}
-        <div className="flex-1 space-y-8">
-          <div className="text-center md:text-start">
-            <h1 className="mb-4 text-3xl font-bold text-foreground-light dark:text-foreground-dark">
-              {categoryTitle}
-            </h1>
-            <p className="whitespace-pre-wrap text-sm text-gray-600 dark:text-gray-400">
-              {categoryDesc}
-            </p>
+              <div className="absolute inset-0 flex flex-col items-center justify-end pb-12 px-6 text-center text-white">
+                <h1 className="text-4xl md:text-5xl font-black mb-8 drop-shadow-lg leading-tight">
+                  {categorySidebarTitle}
+                </h1>
+
+                <div className="flex flex-col gap-4 w-full max-w-sm">
+                  <Link
+                    to={t("pages:menu.order_url")}
+                    className="w-full py-3 px-6 rounded-full font-bold text-lg transition-all shadow-lg bg-white text-gray-900 hover:bg-gray-100"
+                  >
+                    {t("pages:menu.sidebar.actions.order")}
+                  </Link>
+                  <Link
+                    to={`/${i18n.language}/locations`}
+                    className="w-full py-3 px-6 rounded-full font-bold text-lg transition-all shadow-lg border-2 border-white/80 text-white hover:bg-white/10 backdrop-blur-sm"
+                  >
+                    {t("pages:menu.sidebar.actions.stores")}
+                  </Link>
+                </div>
+              </div>
+            </motion.div>
           </div>
 
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {category.subcategories?.map((sub, index: number) => {
-              const subTitle = t(`${categoryKey}.subcategories.${sub.id}.title`) || sub.id;
-              
-              return (
-                <motion.div
-                  key={sub.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                  className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition-all hover:shadow-md dark:border-zinc-800 dark:bg-zinc-900"
-                >
-                  <div className="aspect-[4/3] w-full overflow-hidden bg-starbucks-dark">
-                    <img
-                      src={sub.image}
-                      alt={subTitle}
-                      className="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
-                      loading="lazy"
-                    />
-                  </div>
-                  <div className="flex flex-col items-center p-6 text-center">
-                    <h3 className="mb-4 text-lg font-bold text-starbucks-dark dark:text-white">
-                      {subTitle}
-                    </h3>
+          {/* Side 2: Content Column */}
+          <div className="lg:w-[60%]">
+            <div className={`mb-12 ${textAlignClass}`}>
+              <h1 className="text-4xl lg:text-6xl font-black text-gray-900 dark:text-white mb-6">
+                {categoryTitle}
+              </h1>
+              <p className="text-lg md:text-xl font-bold text-gray-600 dark:text-gray-400 leading-relaxed whitespace-pre-wrap">
+                {categoryDesc}
+              </p>
+            </div>
+
+            {/* Subcategories Grid - Matches MenuPage Grid Style */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full mb-16">
+              {category.subcategories?.map((sub, index: number) => {
+                const subTitle = t(`${categoryKey}.subcategories.${sub.id}.title`) || sub.id;
+                const subDesc = t(`${categoryKey}.subcategories.${sub.id}.description`, { defaultValue: "" });
+                
+                return (
+                  <motion.div
+                    key={sub.id}
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.1 }}
+                    className="flex flex-col h-full bg-white dark:bg-zinc-900 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all border border-gray-100 dark:border-zinc-800 group"
+                  >
                     <Link
                       to={`/${i18n.language}${sub.href}`}
-                      className="inline-block rounded-2xl bg-starbucks-green px-6 py-2 text-sm font-bold text-white shadow-sm transition-colors hover:bg-starbucks-dark dark:bg-starbucks-light dark:text-black dark:hover:bg-white"
+                      className="flex flex-col h-full"
                     >
-                      {t("common:discover_more")}
+                      <div className="relative h-48 overflow-hidden bg-starbucks-dark/5">
+                        <img
+                          src={sub.image}
+                          alt={subTitle}
+                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                        />
+                      </div>
+                      <div className="p-6 flex flex-col flex-1 items-center text-center">
+                        <h2 className="text-xl md:text-2xl font-black text-gray-900 dark:text-white mb-3">
+                          {subTitle}
+                        </h2>
+                        <p className="text-sm text-gray-600 dark:text-gray-400 mb-6 flex-1">
+                          {subDesc}
+                        </p>
+                        <span className="mt-auto inline-flex items-center justify-center px-6 py-2 border-2 border-starbucks-green text-starbucks-green font-bold rounded-full group-hover:bg-starbucks-green/5 transition-colors">
+                          {t("common:discover_more")}
+                        </span>
+                      </div>
                     </Link>
-                  </div>
-                </motion.div>
-              );
-            })}
-          </div>
-
-          {/* Bottom Video & Links */}
-          <div className="mt-12 space-y-8 text-center">
-            <MenuPromoVideo />
-
-            <div>
-              <Button
-                asChild
-                className="rounded-2xl bg-starbucks-green font-bold text-white shadow-sm hover:bg-starbucks-dark dark:bg-starbucks-light dark:text-black dark:hover:bg-white"
-              >
-                <Link to={`/${i18n.language}/locations`}>
-                  {t("pages:menu.sidebar.actions.stores")}
-                </Link>
-              </Button>
+                  </motion.div>
+                );
+              })}
             </div>
 
-            <div className="mt-8 text-start">
-              {menuData.allergyInfo && (
-                <AllergyInfo
-                  title={t("pages:menu.allergyInfo.title")}
-                  description={t("pages:menu.allergyInfo.description")}
-                  link={menuData.allergyInfo.link}
-                  linkLabel={t("pages:menu.allergyInfo.linkLabel")}
-                />
-              )}
+            {/* Promo Video */}
+            <div className="mb-16">
+              <MenuPromoVideo />
             </div>
+
+            {/* Allergy Info */}
+            {menuData.allergyInfo && (
+              <AllergyInfo
+                title={t("pages:menu.allergyInfo.title")}
+                description={t("pages:menu.allergyInfo.description")}
+                link={menuData.allergyInfo.link}
+                linkLabel={t("pages:menu.allergyInfo.linkLabel")}
+              />
+            )}
           </div>
         </div>
       </div>
@@ -175,3 +188,4 @@ export const MenuCategoryPage = () => {
 };
 
 export default MenuCategoryPage;
+
