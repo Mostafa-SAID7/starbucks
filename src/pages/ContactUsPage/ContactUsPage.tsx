@@ -2,19 +2,14 @@ import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { motion, AnimatePresence } from "framer-motion";
 import { Mail, Phone, Send, CheckCircle } from "lucide-react";
-import { SEO, Button, Input, Select, Textarea } from "@/components";
+import { SEO, Button, Input, Select, Textarea, QueryErrorBoundary } from "@/components";
 import { useContactInfo } from "@/hooks/queries";
 import { ContactUsData as ContactData } from "@/types/pages";
+import { cn } from "@/lib/utils";
 
-export const ContactUsPage: React.FC = () => {
+const ContactUsPageContent: React.FC<{ data: ContactData }> = ({ data }) => {
   const { t, i18n } = useTranslation(["pages", "common"]);
   const isRTL = i18n.language === "ar";
-  
-  // Fetch contact data using TanStack Query
-  const { data: contactData, isLoading, error } = useContactInfo();
-  
-  // Type assertion for the data
-  const data = contactData as ContactData;
 
   const [form, setForm] = useState({
     name: "",
@@ -46,33 +41,6 @@ export const ContactUsPage: React.FC = () => {
   const textAlignClass = isRTL ? "text-right" : "text-left";
   const itemsAlignClass = isRTL ? "items-end" : "items-start";
 
-  // Loading state
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-white dark:bg-black flex items-center justify-center">
-        <div className="text-center">
-          <div className="h-12 w-12 animate-spin rounded-full border-4 border-starbucks-green border-t-transparent mx-auto mb-4" />
-          <p className="text-gray-500 dark:text-gray-400">
-            {t("common:status.loading", { defaultValue: "Loading..." })}
-          </p>
-        </div>
-      </div>
-    );
-  }
-
-  // Error state
-  if (error || !data) {
-    return (
-      <div className="min-h-screen bg-white dark:bg-black flex items-center justify-center">
-        <div className="text-center max-w-md px-4">
-          <p className="text-red-500 dark:text-red-400 mb-4">
-            {t("common:status.error", { defaultValue: "Error loading data" })}
-          </p>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div 
       className="min-h-screen bg-white dark:bg-black transition-colors duration-300"
@@ -81,9 +49,8 @@ export const ContactUsPage: React.FC = () => {
       <SEO title={t("pages:contact.hero.title")} />
 
       <div className="container mx-auto px-4 py-8 lg:py-16">
-        <div className="flex flex-col lg:flex-row gap-16 relative">
-          
-          {/* Side 1: Sticky Sidebar Image - Matches Sustainability Design */}
+        <div className={cn("flex flex-col lg:flex-row gap-16 relative", isRTL && "lg:flex-row-reverse")}>
+          {/* Side 1: Sticky Sidebar Image */}
           <div className="lg:w-[40%] lg:sticky lg:top-32 lg:h-[calc(100vh-10rem)] group">
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
@@ -180,9 +147,7 @@ export const ContactUsPage: React.FC = () => {
                     <form onSubmit={handleSubmit} className="space-y-10">
                       <div className="grid grid-cols-1 gap-10 sm:grid-cols-2">
                         <div className="space-y-4">
-                          <label
-                            className={`block text-lg font-black text-starbucks-dark dark:text-white px-2 ${textAlignClass}`}
-                          >
+                          <label className={`block text-lg font-black text-starbucks-dark dark:text-white px-2 ${textAlignClass}`}>
                             {t("pages:contact.form.fields.name.label")}
                           </label>
                           <Input
@@ -195,9 +160,7 @@ export const ContactUsPage: React.FC = () => {
                           />
                         </div>
                         <div className="space-y-4">
-                          <label
-                            className={`block text-lg font-black text-starbucks-dark dark:text-white px-2 ${textAlignClass}`}
-                          >
+                          <label className={`block text-lg font-black text-starbucks-dark dark:text-white px-2 ${textAlignClass}`}>
                             {t("pages:contact.form.fields.email.label")}
                           </label>
                           <Input
@@ -215,9 +178,7 @@ export const ContactUsPage: React.FC = () => {
 
                       <div className="grid grid-cols-1 gap-10 sm:grid-cols-2">
                         <div className="space-y-4">
-                          <label
-                            className={`block text-lg font-black text-starbucks-dark dark:text-white px-2 ${textAlignClass}`}
-                          >
+                          <label className={`block text-lg font-black text-starbucks-dark dark:text-white px-2 ${textAlignClass}`}>
                             {t("pages:contact.form.fields.phone.label")}
                           </label>
                           <Input
@@ -231,9 +192,7 @@ export const ContactUsPage: React.FC = () => {
                           />
                         </div>
                         <div className="space-y-4">
-                          <label
-                            className={`block text-lg font-black text-starbucks-dark dark:text-white px-2 ${textAlignClass}`}
-                          >
+                          <label className={`block text-lg font-black text-starbucks-dark dark:text-white px-2 ${textAlignClass}`}>
                             {t("pages:contact.form.fields.subject.label")}
                           </label>
                           <Select
@@ -251,9 +210,7 @@ export const ContactUsPage: React.FC = () => {
                       </div>
 
                       <div className="space-y-4">
-                        <label
-                          className={`block text-lg font-black text-starbucks-dark dark:text-white px-2 ${textAlignClass}`}
-                        >
+                        <label className={`block text-lg font-black text-starbucks-dark dark:text-white px-2 ${textAlignClass}`}>
                           {t("pages:contact.form.fields.message.label")}
                         </label>
                         <Textarea
@@ -280,9 +237,7 @@ export const ContactUsPage: React.FC = () => {
                             </div>
                           ) : (
                             <div className="flex items-center gap-3">
-                              <Send
-                                  className={`h-6 w-6 ${isRTL ? "rotate-180" : ""}`}
-                              />
+                              <Send className={`h-6 w-6 ${isRTL ? "rotate-180" : ""}`} />
                               <span>{t("pages:contact.form.fields.submit")}</span>
                             </div>
                           )}
@@ -297,6 +252,26 @@ export const ContactUsPage: React.FC = () => {
         </div>
       </div>
     </div>
+  );
+};
+
+export const ContactUsPage: React.FC = () => {
+  const { data: contactData, isLoading } = useContactInfo();
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-white dark:bg-black flex items-center justify-center">
+        <div className="text-center">
+          <div className="h-12 w-12 animate-spin rounded-full border-4 border-starbucks-green border-t-transparent mx-auto mb-4" />
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <QueryErrorBoundary>
+      {contactData && <ContactUsPageContent data={contactData as ContactData} />}
+    </QueryErrorBoundary>
   );
 };
 

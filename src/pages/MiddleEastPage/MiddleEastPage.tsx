@@ -1,54 +1,17 @@
 import { useTranslation } from "react-i18next";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
-import { SEO } from "@/components";
+import { SEO, QueryErrorBoundary } from "@/components";
 import { StaticPageSkeleton } from "@/components/skeletons";
 import { usePageData } from "@/hooks/queries";
 import { type GenericPageData, type LocalizedText } from "@/types";
 import { Plus, Minus } from "lucide-react";
 
-export const MiddleEastPage = () => {
+const MiddleEastPageContent: React.FC<{ data: GenericPageData }> = ({ data }) => {
   const { t: i18nextT, i18n } = useTranslation();
   const lang = (i18n.language === "ar" ? "ar" : "en") as "ar" | "en";
   const isRTL = lang === "ar";
   const [openSection, setOpenSection] = useState<string | null>("intro");
-
-  // Fetch middle east page data using TanStack Query
-  const {
-    data: pageData,
-    isLoading,
-    error,
-    refetch,
-  } = usePageData("middle-east");
-
-  // Loading state
-  if (isLoading) {
-    return <StaticPageSkeleton />;
-  }
-
-  // Error state
-  if (error || !pageData) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-white dark:bg-background-dark">
-        <div className="text-center px-4">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-            {i18nextT("common:error_loading_page")}
-          </h2>
-          <p className="text-gray-600 dark:text-gray-400 mb-6">
-            {i18nextT("common:error_loading_page_desc")}
-          </p>
-          <button
-            onClick={() => refetch()}
-            className="px-6 py-3 bg-starbucks-green text-white font-bold rounded-full hover:bg-starbucks-green/90 transition-colors"
-          >
-            {i18nextT("common:retry")}
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  const data = pageData as GenericPageData;
   const slug = "middle-east";
 
   const t = (path: string, defaultValue: unknown = "") => {
@@ -66,25 +29,26 @@ export const MiddleEastPage = () => {
   const localizedTitle = t("title", data.title);
   const localizedLastUpdated = t("lastUpdated", data.lastUpdated);
   const localizedIntroTitle = t("intro.title", data.intro?.title);
-  const localizedIntroParagraphs = i18nextT(`pages:${slug}.intro.paragraphs`, { returnObjects: true, defaultValue: data.intro?.paragraphs }) as (string | LocalizedText)[];
+  const localizedIntroParagraphs = i18nextT(`pages:${slug}.intro.paragraphs`, { 
+    returnObjects: true, 
+    defaultValue: data.intro?.paragraphs 
+  }) as (string | LocalizedText)[];
   const localizedUpdateNote = t("updateNote", data.updateNote);
 
   const textAlignClass = isRTL ? "text-right" : "text-left";
   const itemsAlignClass = "items-start";
- 
+
   return (
     <div
       className="bg-white dark:bg-background-dark min-h-screen"
       dir={isRTL ? "rtl" : "ltr"}
     >
       <SEO title={localizedTitle} />
- 
+
       <div className="container mx-auto px-4 py-8 lg:py-12">
-        {/* Main 2-Side Layout */}
         <div
           className={`flex flex-col lg:flex-row gap-12 ${isRTL ? "lg:flex-row-reverse" : ""}`}
         >
-          {/* Side 1: Sticky Sidebar Image */}
           <div className="lg:w-[40%] lg:sticky lg:top-24 lg:h-[calc(100vh-8rem)] group">
             <motion.div
               initial={{ opacity: 0, x: isRTL ? 50 : -50 }}
@@ -98,11 +62,9 @@ export const MiddleEastPage = () => {
               />
             </motion.div>
           </div>
- 
-          {/* Side 2: Content Column */}
+
           <div className="lg:w-[60%]">
             <div className="max-w-4xl">
-              {/* Last Updated Badge + Title */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -117,8 +79,7 @@ export const MiddleEastPage = () => {
                   {localizedTitle}
                 </h1>
               </motion.div>
- 
-              {/* 1. Intro Section (Toggleable) */}
+
               <div className="border-b border-gray-100 dark:border-gray-800 pb-12 mb-12">
                 <button
                   onClick={() => toggleSection("intro")}
@@ -140,7 +101,7 @@ export const MiddleEastPage = () => {
                     )}
                   </div>
                 </button>
- 
+
                 <AnimatePresence>
                   {openSection === "intro" && (
                     <motion.div
@@ -162,8 +123,7 @@ export const MiddleEastPage = () => {
                   )}
                 </AnimatePresence>
               </div>
- 
-              {/* 2. Content Sections */}
+
               <div className="space-y-16">
                 {data.sections.map((section, index) => {
                   const sectionTitle = i18nextT(`pages:${slug}.sections.${section.id}.title`, { 
@@ -198,7 +158,7 @@ export const MiddleEastPage = () => {
                           )}
                         </div>
                       </button>
- 
+
                       <AnimatePresence>
                         {openSection === section.id && (
                           <motion.div
@@ -223,8 +183,7 @@ export const MiddleEastPage = () => {
                   );
                 })}
               </div>
- 
-              {/* Update Note */}
+
               {localizedUpdateNote && (
                 <div
                   className={`mt-12 p-6 rounded-2xl border border-starbucks-green/30 bg-starbucks-green/5 dark:bg-starbucks-green/10 ${textAlignClass}`}
@@ -239,6 +198,20 @@ export const MiddleEastPage = () => {
         </div>
       </div>
     </div>
+  );
+};
+
+export const MiddleEastPage = () => {
+  const { data: pageData, isLoading } = usePageData("middle-east");
+
+  if (isLoading) {
+    return <StaticPageSkeleton />;
+  }
+
+  return (
+    <QueryErrorBoundary>
+      {pageData && <MiddleEastPageContent data={pageData as GenericPageData} />}
+    </QueryErrorBoundary>
   );
 };
 

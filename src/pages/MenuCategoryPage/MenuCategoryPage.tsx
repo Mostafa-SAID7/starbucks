@@ -1,6 +1,7 @@
 import { useParams, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
+import { cn } from "@/lib/utils";
 import {
   SEO,
   AllergyInfo,
@@ -10,49 +11,24 @@ import { MenuSkeleton } from "@/components/skeletons";
 import { NotFound } from "@/pages";
 import { useMenuData, useMenuCategory } from "@/hooks/queries";
 
-export const MenuCategoryPage = () => {
+import { QueryErrorBoundary } from "@/components";
+
+const MenuCategoryContent = () => {
   const { categoryId } = useParams<{ categoryId: string }>();
   const { t, i18n } = useTranslation(["pages", "common"]);
   const isRTL = i18n.language === "ar";
   const textAlignClass = isRTL ? "text-right" : "text-left";
 
-  // Fetch structural menu data for global elements (allergy link, sidebar defaults)
   const { data: menuData, isLoading: isMenuLoading } = useMenuData();
-
-  // Fetch specific category structural data
   const {
     data: category,
     isLoading: isCategoryLoading,
-    error,
-    refetch,
   } = useMenuCategory(categoryId || "");
 
-  // Combined loading state
   const isLoading = isMenuLoading || isCategoryLoading;
 
   if (isLoading) {
     return <MenuSkeleton />;
-  }
-
-  if (error) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-white dark:bg-background-dark">
-        <div className="text-center px-4">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-            {t("common:errors.loading_menu")}
-          </h2>
-          <p className="text-gray-600 dark:text-gray-400 mb-6">
-            {t("common:errors.loading_page_desc")}
-          </p>
-          <button
-            onClick={() => refetch()}
-            className="px-6 py-3 bg-starbucks-green text-white font-bold rounded-full hover:bg-starbucks-green/90 transition-colors"
-          >
-            {t("common:retry")}
-          </button>
-        </div>
-      </div>
-    );
   }
 
   if (!category || !menuData) {
@@ -74,7 +50,7 @@ export const MenuCategoryPage = () => {
 
       <div className="container mx-auto px-4 py-8 lg:py-12">
         {/* Main 2-Side Layout */}
-        <div className="flex flex-col lg:flex-row gap-12">
+        <div className={cn("flex flex-col lg:flex-row gap-12", isRTL && "lg:flex-row-reverse")}>
           
           {/* Side 1: Sticky Sidebar Image - Matches MenuPage Design */}
           <div className="lg:w-[40%] lg:sticky lg:top-24 lg:h-[calc(100vh-8rem)] group">
@@ -184,6 +160,14 @@ export const MenuCategoryPage = () => {
         </div>
       </div>
     </div>
+  );
+};
+
+export const MenuCategoryPage = () => {
+  return (
+    <QueryErrorBoundary>
+      <MenuCategoryContent />
+    </QueryErrorBoundary>
   );
 };
 

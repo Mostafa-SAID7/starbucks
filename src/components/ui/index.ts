@@ -14,6 +14,7 @@ export * from "./spinner";
 export * from "./textarea";
 export * from "./toaster";
 export * from "./tooltip";
+export * from "./SectionBackground";
 export * from "./vertical-card";
 
 // Re-export hooks for convenience

@@ -1,67 +1,13 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Banner, StatementSection, FeaturedCards, SEO } from "@/components";
+import { Banner, StatementSection, FeaturedCards, SEO, QueryErrorBoundary } from "@/components";
+import { LoadingAnnouncement } from "@/components/accessibility";
 import { HomeSkeleton } from "@/components/skeletons";
 import { useHero } from "@/hooks/queries";
 
-export const HomePage = () => {
+const HomePageContent: React.FC<{ heroData: any }> = ({ heroData }) => {
   const { t, i18n } = useTranslation(["common", "errors", "pages"]);
   const lang = (i18n.language === "ar" ? "ar" : "en") as "ar" | "en";
-  const [isTranslationLoaded, setIsTranslationLoaded] = useState(false);
-
-  // Lazy load home translations
-  useEffect(() => {
-    let isMounted = true;
-
-    const loadTranslations = async () => {
-      setIsTranslationLoaded(false);
-      try {
-        const translations = await import(`../../locales/${lang}/pages/home.json`);
-        if (isMounted) {
-          i18n.addResourceBundle(lang, "pages", { home: translations.default }, true, true);
-          setIsTranslationLoaded(true);
-        }
-      } catch (err) {
-        console.error("Failed to load home translations:", err);
-        if (isMounted) setIsTranslationLoaded(true);
-      }
-    };
-
-    loadTranslations();
-    return () => { isMounted = false; };
-  }, [lang, i18n]);
-
-  // Fetch hero data using TanStack Query
-  const { data: heroData, isLoading, error, refetch } = useHero();
-
-  // Loading state
-  if (isLoading || !isTranslationLoaded) {
-    return <HomeSkeleton />;
-  }
-
-  // Error state
-  if (error || !heroData) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-white dark:bg-background-dark">
-        <div className="text-center px-4">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-            {t("error_loading_page", { ns: "common" })}
-          </h2>
-          <p className="text-gray-600 dark:text-gray-400 mb-6">
-            {t("error_loading_page_desc", { ns: "common" })}
-          </p>
-          <button
-            onClick={() => refetch()}
-            className="px-6 py-3 bg-starbucks-green text-white font-bold rounded-full hover:bg-starbucks-green/90 transition-colors"
-          >
-            {t("retry", { ns: "common" })}
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  // Page title
   const pageTitle = lang === "ar" ? "ستاربكس مصر" : "Starbucks Egypt";
 
   return (
@@ -78,9 +24,7 @@ export const HomePage = () => {
         isRTL={lang === "ar"}
       />
 
-      {/* High-End Section Transition - Integrated Fading Dissolve */}
       <div className="relative z-20 -mt-16 h-32 pointer-events-none">
-        {/* The Blur Layer: Fades in gradually using mask-image to avoid sharp lines */}
         <div
           className="absolute inset-0 backdrop-blur-[10px]"
           style={{
@@ -90,14 +34,53 @@ export const HomePage = () => {
               "linear-gradient(to bottom, transparent, black 40%, black)",
           }}
         />
-
-        {/* The Color Bridge: Multi-stop gradient for a seamless color transition */}
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/40 to-background" />
       </div>
 
       <StatementSection />
       <FeaturedCards />
     </div>
+  );
+};
+
+export const HomePage = () => {
+  const { i18n } = useTranslation();
+  const lang = (i18n.language === "ar" ? "ar" : "en") as "ar" | "en";
+  const [isTranslationLoaded, setIsTranslationLoaded] = useState(false);
+
+  useEffect(() => {
+    let isMounted = true;
+    const loadTranslations = async () => {
+      setIsTranslationLoaded(false);
+      try {
+        const translations = await import(`../../locales/${lang}/pages/home.json`);
+        if (isMounted) {
+          i18n.addResourceBundle(lang, "pages", { home: translations.default }, true, true);
+          setIsTranslationLoaded(true);
+        }
+      } catch (err) {
+        if (isMounted) setIsTranslationLoaded(true);
+      }
+    };
+    loadTranslations();
+    return () => { isMounted = false; };
+  }, [lang, i18n]);
+
+  const { data: heroData, isLoading } = useHero();
+
+  if (isLoading || !isTranslationLoaded) {
+    return (
+      <>
+        <LoadingAnnouncement isLoading={true} />
+        <HomeSkeleton />
+      </>
+    );
+  }
+
+  return (
+    <QueryErrorBoundary>
+      {heroData && <HomePageContent heroData={heroData} />}
+    </QueryErrorBoundary>
   );
 };
 

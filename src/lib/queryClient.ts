@@ -23,11 +23,11 @@ export const queryClient = new QueryClient({
       refetchOnMount: false, // Don't refetch on component mount if data is fresh
 
       // Error Handling
-      throwOnError: false, // Don't throw errors, handle them in components
+      throwOnError: true, // Throw errors to be caught by ErrorBoundaries
     },
     mutations: {
       retry: 1, // Retry mutations once
-      throwOnError: false,
+      throwOnError: true,
     },
   },
 });

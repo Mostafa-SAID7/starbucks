@@ -62,7 +62,7 @@ export function Select({
         className={cn(
           "flex h-16 w-full items-center justify-between rounded-2xl border border-gray-200 bg-white px-6 py-4 text-lg text-gray-900 transition-all duration-300",
           "hover:border-starbucks-green focus:border-starbucks-green focus:outline-none focus:ring-4 focus:ring-starbucks-green/10",
-          "dark:border-zinc-700 dark:bg-zinc-900 dark:text-white dark:hover:border-starbucks-light",
+          "dark:border-white/10 dark:bg-white/5 dark:text-white dark:hover:border-starbucks-light",
           isOpen && "border-starbucks-green ring-4 ring-starbucks-green/10"
         )}
         aria-haspopup="listbox"
@@ -73,13 +73,12 @@ export function Select({
         </span>
         <motion.div
           animate={{ 
-            rotate: isOpen ? 180 : 0,
-            scale: isOpen ? 1.1 : 1
+            rotate: isOpen ? 180 : 0
           }}
-          transition={{ duration: 0.3, ease: "anticipate" }}
+          transition={{ duration: 0.3, ease: "easeInOut" }}
           className="text-starbucks-green"
         >
-          <ChevronDown className={cn("h-6 w-6 transition-transform", isRTL && "scale-x-[-1]")} />
+          <ChevronDown className="h-6 w-6" />
         </motion.div>
       </button>
 

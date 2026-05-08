@@ -1,51 +1,17 @@
 import { useTranslation } from "react-i18next";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
-import { SEO } from "@/components";
+import { SEO, QueryErrorBoundary } from "@/components";
 import { StaticPageSkeleton } from "@/components/skeletons";
 import { usePageData } from "@/hooks/queries";
 import { type GenericPageData, type LocalizedText } from "@/types";
 import { Plus, Minus, ExternalLink } from "lucide-react";
 
-export const DeliveryPage = () => {
+const DeliveryPageContent: React.FC<{ data: GenericPageData }> = ({ data }) => {
   const { i18n } = useTranslation();
   const lang = (i18n.language === "ar" ? "ar" : "en") as "ar" | "en";
   const isRTL = lang === "ar";
   const [openSection, setOpenSection] = useState<string | null>("intro");
-
-  // Fetch delivery page data using TanStack Query
-  const { data: pageData, isLoading, error, refetch } = usePageData("delivery");
-
-  // Loading state
-  if (isLoading) {
-    return <StaticPageSkeleton />;
-  }
-
-  // Error state
-  if (error || !pageData) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-white dark:bg-background-dark">
-        <div className="text-center px-4">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-            {lang === "ar" ? "حدث خطأ في تحميل الصفحة" : "Error loading page"}
-          </h2>
-          <p className="text-gray-600 dark:text-gray-400 mb-6">
-            {lang === "ar"
-              ? "عذراً، حدث خطأ أثناء تحميل الصفحة. يرجى المحاولة مرة أخرى."
-              : "Sorry, there was an error loading the page. Please try again."}
-          </p>
-          <button
-            onClick={() => refetch()}
-            className="px-6 py-3 bg-starbucks-green text-white font-bold rounded-full hover:bg-starbucks-green/90 transition-colors"
-          >
-            {lang === "ar" ? "إعادة المحاولة" : "Retry"}
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  const data = pageData as GenericPageData;
 
   const t = (obj: LocalizedText | string | null | undefined) => {
     if (!obj) return "";
@@ -62,7 +28,6 @@ export const DeliveryPage = () => {
     sidebarMedia?.includes("player.cloudinary.com") ||
     sidebarMedia?.includes("embed");
 
-  // Logical alignment classes
   const textAlignClass = isRTL ? "text-right" : "text-left";
   const itemsAlignClass = "items-start";
 
@@ -74,11 +39,9 @@ export const DeliveryPage = () => {
       <SEO title={t(data.title)} />
 
       <div className="container mx-auto px-4 py-8 lg:py-12">
-        {/* Main 2-Side Layout */}
         <div
           className={`flex flex-col lg:flex-row gap-12 ${isRTL ? "lg:flex-row-reverse" : ""}`}
         >
-          {/* Side 1: Sticky Sidebar (Image or Video) */}
           <div className="lg:w-[40%] lg:sticky lg:top-24 lg:h-[calc(100vh-8rem)]">
             <motion.div
               initial={{ opacity: 0, x: isRTL ? 50 : -50 }}
@@ -87,7 +50,6 @@ export const DeliveryPage = () => {
             >
               {isVideo ? (
                 <div className="w-full h-full relative pointer-events-none">
-                  {/* Overlay to catch clicks and prevent controls from showing */}
                   <div className="absolute inset-0 z-10 bg-transparent" />
                   <iframe
                     src={sidebarMedia}
@@ -107,10 +69,8 @@ export const DeliveryPage = () => {
             </motion.div>
           </div>
 
-          {/* Side 2: Content Column */}
           <div className="lg:w-[60%]">
             <div className="max-w-4xl">
-              {/* Inner Title */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -121,9 +81,7 @@ export const DeliveryPage = () => {
                 </h1>
               </motion.div>
 
-              {/* 1. Intro Section (Toggleable) */}
               <div className="border-b border-gray-100 dark:border-gray-800 pb-12 mb-12">
-                {/* Intro Image */}
                 {data.intro?.image && (
                   <motion.div
                     initial={{ opacity: 0, scale: 0.98 }}
@@ -138,7 +96,6 @@ export const DeliveryPage = () => {
                   </motion.div>
                 )}
 
-                {/* Intro Toggle Button */}
                 <button
                   onClick={() => toggleSection("intro")}
                   className={`w-full flex items-center justify-between group gap-6 ${textAlignClass}`}
@@ -184,14 +141,12 @@ export const DeliveryPage = () => {
                 </AnimatePresence>
               </div>
 
-              {/* 2. Content Sections */}
               <div className="space-y-16">
                 {data.sections.map((section, index) => (
                   <div
                     key={section.id}
                     className={`pb-12 ${index !== data.sections.length - 1 ? "border-b border-gray-100 dark:border-gray-800" : ""}`}
                   >
-                    {/* Section Image Header */}
                     {section.image && (
                       <div className="mb-8 rounded-3xl overflow-hidden shadow-lg aspect-video lg:aspect-[21/9]">
                         <img
@@ -271,7 +226,6 @@ export const DeliveryPage = () => {
                 ))}
               </div>
 
-              {/* 3. FAQ Accordion Section */}
               {data.accordion && (
                 <div className="mt-8 pt-16 border-t-4 border-starbucks-green/10">
                   <h2
@@ -325,6 +279,20 @@ export const DeliveryPage = () => {
         </div>
       </div>
     </div>
+  );
+};
+
+export const DeliveryPage = () => {
+  const { data: pageData, isLoading } = usePageData("delivery");
+
+  if (isLoading) {
+    return <StaticPageSkeleton />;
+  }
+
+  return (
+    <QueryErrorBoundary>
+      {pageData && <DeliveryPageContent data={pageData as GenericPageData} />}
+    </QueryErrorBoundary>
   );
 };
 

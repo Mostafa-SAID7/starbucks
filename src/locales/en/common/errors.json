@@ -1,5 +1,44 @@
 {
-  "loading_page": "Error loading page",
-  "loading_page_desc": "Sorry, there was an error loading the page. Please try again.",
-  "loading_menu": "Error loading menu"
+  "loading_page": "Error Loading Page",
+  "loading_page_desc": "Sorry, an error occurred while loading the page. Please try again.",
+  "loading_menu": "Error Loading Menu",
+  "network": {
+    "title": "Connection Issue",
+    "message": "It seems you are offline. Please check your internet connection and try again.",
+    "help": "Make sure your Wi-Fi or mobile data is turned on."
+  },
+  "timeout": {
+    "title": "Request Timed Out",
+    "message": "The request took too long. The server might be busy or your connection is slow.",
+    "help": "Please try again in a few moments."
+  },
+  "server": {
+    "title": "Server Error",
+    "message": "We're experiencing some technical difficulties on our end.",
+    "help": "Our team is working on it. Thank you for your patience."
+  },
+  "not_found": {
+    "title": "Page Not Found",
+    "message": "Sorry, we couldn't find the page you're looking for.",
+    "retry": "Go Home",
+    "help": "The link might be broken or the page has been moved."
+  },
+  "unauthorized": {
+    "title": "Session Expired",
+    "message": "Please sign in to access this content.",
+    "help": "Sessions expire automatically for security reasons."
+  },
+  "general": {
+    "title": "Something Went Wrong",
+    "message": "An unexpected error occurred. We're brewing up a fix!",
+    "help": "Please refresh the page or try again later."
+  },
+  "menu": {
+    "category_not_found": "Sorry, this category is currently unavailable.",
+    "load_failed": "Failed to load menu. Please try again."
+  },
+  "locations": {
+    "no_results": "No stores found in this location.",
+    "load_failed": "Failed to load store list."
+  }
 }

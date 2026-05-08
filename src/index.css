@@ -11,6 +11,11 @@
   --color-starbucks-dark: #1e3932;
   --color-starbucks-gold: #cba258;
   
+  --color-starbucks-card-green-light: #d4e9e2;
+  --color-starbucks-card-green-dark: #1e3932;
+  --color-starbucks-card-neutral-light: #f2f0eb;
+  --color-starbucks-card-neutral-dark: #2d2926;
+  
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -39,6 +44,9 @@
   --animate-float-dot: float-dot 8s ease-in-out infinite;
   --animate-twinkle: twinkle 4s ease-in-out infinite;
   --animate-twinkle-delayed: twinkle 5s ease-in-out infinite;
+  --animate-star-twinkle: star-twinkle 6s ease-in-out infinite;
+  --animate-float-organic: float-organic 12s ease-in-out infinite;
+  --animate-shooting-star: shooting-star 10s linear infinite;
 
   @keyframes gradient-shift {
     0%, 100% { background-position: 0% 50% }
@@ -70,6 +78,22 @@
   @keyframes twinkle {
     0%, 100% { opacity: 0.2; transform: scale(0.8) }
     50% { opacity: 1; transform: scale(1.2) }
+  }
+  @keyframes star-twinkle {
+    0%, 100% { opacity: 0.3; transform: scale(0.8) rotate(0deg); filter: blur(0px); }
+    50% { opacity: 1; transform: scale(1.3) rotate(180deg); filter: blur(1px); }
+  }
+  @keyframes float-organic {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    25% { transform: translate(15px, -15px) rotate(5deg); }
+    50% { transform: translate(-10px, -25px) rotate(-5deg); }
+    75% { transform: translate(-20px, -10px) rotate(3deg); }
+  }
+  @keyframes shooting-star {
+    0% { transform: translateX(0) translateY(0) scaleX(1); opacity: 0; width: 0; }
+    5% { opacity: 1; width: 100px; }
+    15% { transform: translateX(400px) translateY(-400px) scaleX(0); opacity: 0; width: 0; }
+    100% { transform: translateX(400px) translateY(-400px) scaleX(0); opacity: 0; width: 0; }
   }
 }
 
@@ -250,5 +274,18 @@
     -webkit-line-clamp: 3;
     line-clamp: 3;
     overflow: hidden;
+  }
+
+  /* Screen reader only utility */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
   }
 }

@@ -1,6 +1,7 @@
 import { useParams, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
+import { cn } from "@/lib/utils";
 import {
   SEO,
   AllergyInfo,
@@ -11,7 +12,9 @@ import { NotFound } from "@/pages";
 import { useMenuData, useMenuItem } from "@/hooks/queries";
 import { MenuItem } from "@/types";
 
-export const MenuItemPage = () => {
+import { QueryErrorBoundary } from "@/components";
+
+const MenuItemContent = () => {
   const { categoryId, itemId: subcategoryId } = useParams<{
     categoryId: string;
     itemId: string;
@@ -19,43 +22,16 @@ export const MenuItemPage = () => {
   const { t, i18n } = useTranslation(["pages", "common"]);
   const isRTL = i18n.language === "ar";
 
-  // Fetch menu structural data
   const { data: menuData, isLoading: isMenuLoading } = useMenuData();
-
-  // Fetch specific menu item structural data
   const {
     data: itemData,
     isLoading: isItemLoading,
-    error,
-    refetch,
   } = useMenuItem(categoryId || "", subcategoryId || "");
 
-  // Combined loading state
   const isLoading = isMenuLoading || isItemLoading;
 
   if (isLoading) {
     return <MenuSkeleton />;
-  }
-
-  if (error) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-white dark:bg-background-dark">
-        <div className="text-center px-4">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-            {t("common:errors.loading_menu")}
-          </h2>
-          <p className="text-gray-600 dark:text-gray-400 mb-6">
-            {t("common:errors.loading_page_desc")}
-          </p>
-          <button
-            onClick={() => refetch()}
-            className="px-6 py-3 bg-starbucks-green text-white font-bold rounded-full hover:bg-starbucks-green/90 transition-colors"
-          >
-            {t("common:retry")}
-          </button>
-        </div>
-      </div>
-    );
   }
 
   if (!itemData || !menuData) {
@@ -82,7 +58,7 @@ export const MenuItemPage = () => {
 
       <div className="container mx-auto px-4 py-8 lg:py-12">
         {/* Main 2-Side Layout */}
-        <div className="flex flex-col lg:flex-row gap-12">
+        <div className={cn("flex flex-col lg:flex-row gap-12", isRTL && "lg:flex-row-reverse")}>
           
           {/* Side 1: Sticky Sidebar Image - Matches MenuPage Design */}
           <div className="lg:w-[40%] lg:sticky lg:top-24 lg:h-[calc(100vh-8rem)] group">
@@ -190,6 +166,14 @@ export const MenuItemPage = () => {
         </div>
       </div>
     </div>
+  );
+};
+
+export const MenuItemPage = () => {
+  return (
+    <QueryErrorBoundary>
+      <MenuItemContent />
+    </QueryErrorBoundary>
   );
 };
 

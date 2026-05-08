@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Search, Navigation, RefreshCw } from "lucide-react";
-import { SEO } from "@/components";
+import { Search, Navigation } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { SEO, QueryErrorBoundary } from "@/components";
 import { useLocations } from "@/hooks/queries";
 import { TALABAT_URL } from "./constants";
 
@@ -12,6 +13,44 @@ export const LocationsPage: React.FC = () => {
   const isRTL = i18n.language === "ar";
   const currentLang = (i18n.language === "ar" ? "ar" : "en") as "ar" | "en";
   const [search, setSearch] = useState("");
+  const [geoStatus, setGeoStatus] = useState<"idle" | "loading" | "error">("idle");
+
+  const handleUseMyLocation = useCallback(() => {
+    if (!navigator.geolocation) {
+      setGeoStatus("error");
+      return;
+    }
+    setGeoStatus("loading");
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        try {
+          const { latitude, longitude } = position.coords;
+          // Reverse geocode with free Nominatim API
+          const res = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`,
+            { headers: { "Accept-Language": currentLang } }
+          );
+          const data = await res.json();
+          // Try city, then town, then suburb
+          const city =
+            data?.address?.city ||
+            data?.address?.town ||
+            data?.address?.suburb ||
+            "";
+          if (city) {
+            setSearch(city);
+          }
+          setGeoStatus("idle");
+        } catch {
+          setGeoStatus("error");
+        }
+      },
+      () => {
+        setGeoStatus("error");
+      },
+      { timeout: 8000 }
+    );
+  }, [currentLang]);
 
   // Fetch locations using TanStack Query
   const { data: cities, isLoading, error, refetch } = useLocations();
@@ -36,7 +75,7 @@ export const LocationsPage: React.FC = () => {
       />
 
       <div className="container mx-auto px-4 py-8 lg:py-16">
-        <div className="flex flex-col lg:flex-row gap-12 lg:gap-16">
+        <div className={cn("flex flex-col lg:flex-row gap-12 lg:gap-16", isRTL && "lg:flex-row-reverse")}>
           
           {/* Side 1: Sticky Hero / Search (40%) */}
           <div className="lg:w-[40%] lg:sticky lg:top-24 lg:h-[calc(100vh-8rem)] group">
@@ -97,9 +136,17 @@ export const LocationsPage: React.FC = () => {
                 </div>
 
                 {/* Use my location */}
-                <button className="flex items-center gap-2 mx-auto text-sm font-bold text-white/80 hover:text-white transition-colors underline underline-offset-4">
-                  <Navigation className="h-4 w-4" />
-                  {isRTL ? "استخدم موقعي ▼" : "Use my location ▼"}
+                <button
+                  onClick={handleUseMyLocation}
+                  disabled={geoStatus === "loading"}
+                  className="flex items-center gap-2 mx-auto text-sm font-bold text-white/80 hover:text-white transition-colors underline underline-offset-4 disabled:opacity-50 disabled:cursor-wait"
+                >
+                  <Navigation className={`h-4 w-4 ${geoStatus === "loading" ? "animate-spin" : ""}`} />
+                  {geoStatus === "loading"
+                    ? (isRTL ? "جارٍ تحديد الموقع..." : "Locating...")
+                    : geoStatus === "error"
+                    ? (isRTL ? "تعذّر تحديد الموقع" : "Location unavailable")
+                    : (isRTL ? "استخدم موقعي" : "Use my location")}
                 </button>
               </div>
             </div>
@@ -178,30 +225,7 @@ export const LocationsPage: React.FC = () => {
                   {isRTL ? "جميع المدن" : "All Cities"}
                 </h3>
                 
-                {/* Loading/Error States inside the content column */}
-                {isLoading && (
-                  <div className="flex flex-col items-center justify-center py-12 gap-4">
-                    <div className="h-12 w-12 animate-spin rounded-full border-4 border-starbucks-green border-t-transparent" />
-                    <p className="text-gray-500 dark:text-gray-400 font-bold">{isRTL ? "جاري تحميل المواقع..." : "Loading locations..."}</p>
-                  </div>
-                )}
-
-                {error && (
-                  <div className="bg-red-50 dark:bg-red-900/10 rounded-2xl p-8 text-center border border-red-100 dark:border-red-900/20">
-                    <p className="text-red-600 dark:text-red-400 font-bold mb-4">
-                      {isRTL ? "حدث خطأ أثناء تحميل المواقع" : "Error loading locations"}
-                    </p>
-                    <button
-                      onClick={() => refetch()}
-                      className="inline-flex items-center gap-2 rounded-full bg-red-600 px-6 py-2 text-sm font-bold text-white hover:bg-red-700 transition-colors"
-                    >
-                      <RefreshCw className="h-4 w-4" />
-                      {isRTL ? "إعادة المحاولة" : "Retry"}
-                    </button>
-                  </div>
-                )}
-
-                {!isLoading && !error && (
+                <QueryErrorBoundary variant="compact">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {filteredCities.length === 0 ? (
                       <p className="col-span-full py-8 text-gray-400 font-bold text-center italic">
@@ -232,7 +256,7 @@ export const LocationsPage: React.FC = () => {
                       ))
                     )}
                   </div>
-                )}
+                </QueryErrorBoundary>
               </div>
             </div>
           </div>

@@ -15,7 +15,7 @@ import { queryClient } from "@/lib/queryClient";
 import { ANIMATION_CONFIG } from "@/lib/constants";
 
 // Layout & Components
-import { MainLayout, SkipNav } from "@/components";
+import { MainLayout, SkipNav, ErrorBoundary } from "@/components";
 import { OfflineIndicator } from "@/components/ui/OfflineIndicator";
 
 import {
@@ -24,6 +24,8 @@ import {
   StaticPageSkeleton,
   ContactSkeleton,
 } from "@/components/skeletons";
+import MiddleEastPage from "./pages/MiddleEastPage/MiddleEastPage";
+import { DeliveryPage } from "./pages/DeliveryPage/DeliveryPage";
 
 // Lazy loaded Pages for performance
 const HomePage = lazy(() =>
@@ -211,11 +213,7 @@ const AnimatedRoutes = () => {
             path="starbucks-middle-east"
             element={
               <PageWrapper skeleton={<StaticPageSkeleton />}>
-                <GenericPageWrapper
-                  slug="middle-east"
-                  seoTitle={t("pages:middle-east.seoTitle", { defaultValue: "Starbucks Middle East - Starbucks Egypt" })}
-                  useAccordionLayout={true}
-                />
+                <MiddleEastPage />
               </PageWrapper>
             }
           />
@@ -249,10 +247,7 @@ const AnimatedRoutes = () => {
             path="delivery"
             element={
               <PageWrapper skeleton={<StaticPageSkeleton />}>
-                <GenericPageWrapper
-                  slug="delivery"
-                  seoTitle={t("pages:delivery.seoTitle", { defaultValue: "Delivery - Starbucks Egypt" })}
-                />
+                <DeliveryPage />
               </PageWrapper>
             }
           />
@@ -344,12 +339,14 @@ const AnimatedRoutes = () => {
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <Router>
-        <SkipNav />
-        <div id="main-content" />
-        <AnimatedRoutes />
-        <OfflineIndicator />
-      </Router>
+      <ErrorBoundary>
+        <Router>
+          <SkipNav />
+          <div id="main-content" />
+          <AnimatedRoutes />
+          <OfflineIndicator />
+        </Router>
+      </ErrorBoundary>
 
       {/* Devtools - only in development */}
       {import.meta.env.DEV && (
