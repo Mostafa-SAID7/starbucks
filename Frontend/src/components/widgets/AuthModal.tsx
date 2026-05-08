@@ -57,7 +57,7 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
             email: formData.email,
             password: formData.password,
           });
-          toast.success(t("auth:login_success"));
+          toast.success(t("common:auth.login_success"));
         } else {
           await register({
             email: formData.email,
@@ -65,15 +65,15 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
             firstName: formData.firstName,
             lastName: formData.lastName,
           });
-          toast.success(t("auth:register_success"));
+          toast.success(t("common:auth.register_success"));
         }
         onClose();
       } catch (error) {
         // Error is handled by the auth store and displayed via error state
         toast.error(
           mode === "login" 
-            ? t("auth:login_error") 
-            : t("auth:register_error")
+            ? t("common:auth.login_error") 
+            : t("common:auth.register_error")
         );
       }
     },
@@ -291,195 +291,6 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
             </button>
           </div>
         </form>
-      </div>
-    </Modal>
-  );
-}
-
-        <AnimatePresence mode="wait">
-          {mode === "login" ? (
-            <motion.form
-              key="login"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              onSubmit={handleSubmit}
-              className="space-y-6"
-            >
-              <div className="space-y-4">
-                <Input
-                  type="email"
-                  placeholder={t("common:auth.login_email")}
-                  value={formData.email}
-                  onChange={(e) => handleInputChange("email", e.target.value)}
-                  required
-                  className="h-14 rounded-2xl border-gray-100 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-950 focus:bg-white transition-all px-6"
-                />
-                <Input
-                  type="password"
-                  placeholder={t("common:auth.login_password")}
-                  value={formData.password}
-                  onChange={(e) =>
-                    handleInputChange("password", e.target.value)
-                  }
-                  required
-                  className="h-14 rounded-2xl border-gray-100 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-950 focus:bg-white transition-all px-6"
-                />
-              </div>
-
-              <div className="flex items-center justify-between px-2">
-                <label className="flex items-center gap-3 cursor-pointer group">
-                  <input
-                    type="checkbox"
-                    className="hidden peer"
-                    checked={formData.remember}
-                    onChange={(e) =>
-                      handleInputChange("remember", e.target.checked)
-                    }
-                  />
-                  <div className="h-5 w-5 rounded border-2 border-gray-200 peer-checked:border-starbucks-green peer-checked:bg-starbucks-green flex items-center justify-center transition-all">
-                    <svg
-                      className="h-3 w-3 text-white opacity-0 peer-checked:opacity-100 transition-opacity"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      strokeWidth="4"
-                    >
-                      <path d="M5 13l4 4L19 7" />
-                    </svg>
-                  </div>
-                  <span className="text-sm font-medium text-gray-600 dark:text-gray-400 group-hover:text-starbucks-dark dark:group-hover:text-white transition-colors">
-                    {t("common:auth.login_remember")}
-                  </span>
-                </label>
-                <button
-                  type="button"
-                  className="text-sm font-bold text-starbucks-green hover:underline decoration-2 underline-offset-4"
-                >
-                  {t("common:auth.login_forgot")}
-                </button>
-              </div>
-
-              <Button
-                type="submit"
-                className="w-full h-14 rounded-full text-lg font-black uppercase tracking-widest shadow-xl shadow-starbucks-green/20 hover:scale-[1.02] transition-all"
-                loading={loading}
-              >
-                {t("common:auth.login_submit")}
-              </Button>
-
-              <p className="text-center text-sm text-gray-500 dark:text-gray-400">
-                {t("common:auth.login_no_account")}{" "}
-                <button
-                  type="button"
-                  onClick={toggleMode}
-                  className="font-black text-starbucks-green hover:underline decoration-2 underline-offset-4"
-                >
-                  {t("common:auth.login_register")}
-                </button>
-              </p>
-            </motion.form>
-          ) : (
-            <motion.form
-              key="register"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              onSubmit={handleSubmit}
-              className="space-y-6"
-            >
-              <div className="grid grid-cols-2 gap-4">
-                <Input
-                  placeholder={t("common:auth.register_first_name")}
-                  value={formData.firstName}
-                  onChange={(e) =>
-                    handleInputChange("firstName", e.target.value)
-                  }
-                  required
-                  className="h-14 rounded-2xl border-gray-100 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-950 focus:bg-white transition-all px-6"
-                />
-                <Input
-                  placeholder={t("common:auth.register_last_name")}
-                  value={formData.lastName}
-                  onChange={(e) =>
-                    handleInputChange("lastName", e.target.value)
-                  }
-                  required
-                  className="h-14 rounded-2xl border-gray-100 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-950 focus:bg-white transition-all px-6"
-                />
-              </div>
-              <div className="relative">
-                <Input
-                  type="email"
-                  placeholder={t("common:auth.register_email")}
-                  value={formData.email}
-                  onChange={(e) => handleInputChange("email", e.target.value)}
-                  required
-                  className="h-14 rounded-2xl border-gray-100 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-950 focus:bg-white transition-all px-6"
-                />
-              </div>
-              <div className="relative">
-                <Input
-                  type="password"
-                  placeholder={t("common:auth.register_password")}
-                  value={formData.password}
-                  onChange={(e) =>
-                    handleInputChange("password", e.target.value)
-                  }
-                  required
-                  className="h-14 rounded-2xl border-gray-100 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-950 focus:bg-white transition-all px-6"
-                />
-              </div>
-
-              <div className="px-2">
-                <label className="flex items-start gap-3 cursor-pointer group">
-                  <input
-                    type="checkbox"
-                    className="hidden peer"
-                    checked={formData.terms}
-                    onChange={(e) =>
-                      handleInputChange("terms", e.target.checked)
-                    }
-                    required
-                  />
-                  <div className="mt-0.5 h-5 w-5 rounded border-2 border-gray-200 peer-checked:border-starbucks-green peer-checked:bg-starbucks-green flex items-center justify-center transition-all flex-shrink-0">
-                    <svg
-                      className="h-3 w-3 text-white opacity-0 peer-checked:opacity-100 transition-opacity"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      strokeWidth="4"
-                    >
-                      <path d="M5 13l4 4L19 7" />
-                    </svg>
-                  </div>
-                  <span className="text-sm font-medium text-gray-600 dark:text-gray-400 group-hover:text-starbucks-dark dark:group-hover:text-white transition-colors leading-relaxed">
-                    {t("common:auth.register_terms")}
-                  </span>
-                </label>
-              </div>
-
-              <Button
-                type="submit"
-                className="w-full h-14 rounded-full text-lg font-black uppercase tracking-widest shadow-xl shadow-starbucks-green/20 hover:scale-[1.02] transition-all"
-                loading={loading}
-              >
-                {t("common:auth.register_submit")}
-              </Button>
-
-              <p className="text-center text-sm text-gray-500 dark:text-gray-400">
-                {t("common:auth.register_have_account")}{" "}
-                <button
-                  type="button"
-                  onClick={toggleMode}
-                  className="font-black text-starbucks-green hover:underline decoration-2 underline-offset-4"
-                >
-                  {t("common:auth.register_login")}
-                </button>
-              </p>
-            </motion.form>
-          )}
-        </AnimatePresence>
       </div>
     </Modal>
   );
