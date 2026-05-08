@@ -1,0 +1,75 @@
+version: '3.8'
+
+services:
+  # SQL Server Database
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: starbucks-sqlserver
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=StarbucksEgypt123!
+      - MSSQL_PID=Express
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserver_data:/var/opt/mssql
+    networks:
+      - starbucks-network
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: starbucks-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+    networks:
+      - starbucks-network
+
+  # Starbucks API
+  api:
+    build:
+      context: .
+      dockerfile: src/StarbucksEgypt.API/Dockerfile
+    container_name: starbucks-api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=StarbucksEgyptDb;User Id=sa;Password=StarbucksEgypt123!;TrustServerCertificate=true;Encrypt=false
+      - ConnectionStrings__Redis=redis:6379
+      - Jwt__Secret=YourSuperSecretKeyThatIsAtLeast32CharactersLongForDevelopment!
+      - Jwt__Issuer=StarbucksEgyptAPI
+      - Jwt__Audience=StarbucksEgyptClient
+    ports:
+      - "5000:80"
+    depends_on:
+      - sqlserver
+      - redis
+    volumes:
+      - ./logs:/app/logs
+    networks:
+      - starbucks-network
+
+  # Nginx Reverse Proxy (Optional)
+  nginx:
+    image: nginx:alpine
+    container_name: starbucks-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - api
+    networks:
+      - starbucks-network
+
+volumes:
+  sqlserver_data:
+  redis_data:
+
+networks:
+  starbucks-network:
+    driver: bridge

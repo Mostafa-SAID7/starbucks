@@ -1,0 +1,6 @@
+@StarbucksEgypt.API_HostAddress = http://localhost:5134
+
+GET {{StarbucksEgypt.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

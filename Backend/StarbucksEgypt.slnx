@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/StarbucksEgypt.API/StarbucksEgypt.API.csproj" />
+    <Project Path="src/StarbucksEgypt.Application/StarbucksEgypt.Application.csproj" />
+    <Project Path="src/StarbucksEgypt.Domain/StarbucksEgypt.Domain.csproj" />
+    <Project Path="src/StarbucksEgypt.Infrastructure/StarbucksEgypt.Infrastructure.csproj" />
+  </Folder>
+</Solution>
