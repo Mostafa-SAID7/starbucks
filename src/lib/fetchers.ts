@@ -62,17 +62,17 @@ export const pageFetchers = {
   async fetchPageBySlug(slug: string): Promise<GenericPageData> {
     await simulateDelay();
 
-    const pageMap: Record<string, () => Promise<any>> = {
-      "about-us": () => import("@/data/pages/about-us.json"),
-      sustainability: () => import("@/data/pages/sustainability.json"),
-      "community-impact": () => import("@/data/pages/community-impact.json"),
-      "new-era": () => import("@/data/pages/new-era.json"),
-      "our-coffees": () => import("@/data/pages/our-coffees.json"),
-      "terms-of-use": () => import("@/data/pages/terms-of-use.json"),
-      "privacy-statement": () => import("@/data/pages/privacy-statement.json"),
-      cookies: () => import("@/data/pages/cookies.json"),
-      delivery: () => import("@/data/pages/delivery.json"),
-      "middle-east": () => import("@/data/pages/middle-east.json"),
+    const pageMap: Record<string, () => Promise<{ default: GenericPageData }>> = {
+      "about-us": () => import("@/data/pages/about-us.json") as unknown as Promise<{ default: GenericPageData }>,
+      sustainability: () => import("@/data/pages/sustainability.json") as unknown as Promise<{ default: GenericPageData }>,
+      "community-impact": () => import("@/data/pages/community-impact.json") as unknown as Promise<{ default: GenericPageData }>,
+      "new-era": () => import("@/data/pages/new-era.json") as unknown as Promise<{ default: GenericPageData }>,
+      "our-coffees": () => import("@/data/pages/our-coffees.json") as unknown as Promise<{ default: GenericPageData }>,
+      "terms-of-use": () => import("@/data/pages/terms-of-use.json") as unknown as Promise<{ default: GenericPageData }>,
+      "privacy-statement": () => import("@/data/pages/privacy-statement.json") as unknown as Promise<{ default: GenericPageData }>,
+      cookies: () => import("@/data/pages/cookies.json") as unknown as Promise<{ default: GenericPageData }>,
+      delivery: () => import("@/data/pages/delivery.json") as unknown as Promise<{ default: GenericPageData }>,
+      "middle-east": () => import("@/data/pages/middle-east.json") as unknown as Promise<{ default: GenericPageData }>,
     };
 
     const fetcher = pageMap[slug];
@@ -97,7 +97,7 @@ export const locationFetchers = {
 
   async fetchLocationsByRegion(region: string) {
     const locations = await this.fetchLocations();
-    return locations.filter((loc: any) => loc.slug === region);
+    return locations.filter((loc: { slug: string }) => loc.slug === region);
   },
 };
 

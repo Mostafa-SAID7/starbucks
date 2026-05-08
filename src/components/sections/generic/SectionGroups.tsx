@@ -17,7 +17,7 @@ export const SectionGroups: React.FC<SectionGroupsProps> = ({
           <strong className="text-lg text-starbucks-dark dark:text-white font-bold border-b-2 border-starbucks-green inline-block pb-1 mb-2">
             {group.title[lang]}
           </strong>
-          {group.paragraphs.map((p: any, j: number) => (
+          {group.paragraphs.map((p: import("@/types").LocalizedText, j: number) => (
             <p key={j} className={j > 0 ? "mt-2" : ""}>
               {p[lang]}
             </p>

@@ -12,9 +12,9 @@ export const HomePage = () => {
   // Lazy load home translations
   useEffect(() => {
     let isMounted = true;
-    setIsTranslationLoaded(false);
 
     const loadTranslations = async () => {
+      setIsTranslationLoaded(false);
       try {
         const translations = await import(`../../locales/${lang}/pages/home.json`);
         if (isMounted) {
@@ -29,7 +29,7 @@ export const HomePage = () => {
 
     loadTranslations();
     return () => { isMounted = false; };
-  }, [lang]);
+  }, [lang, i18n]);
 
   // Fetch hero data using TanStack Query
   const { data: heroData, isLoading, error, refetch } = useHero();

@@ -51,8 +51,12 @@ export const MiddleEastPage = () => {
   const data = pageData as GenericPageData;
   const slug = "middle-east";
 
-  const t = (path: string, defaultValue: any = "") => {
-    return i18nextT(`pages:${slug}.${path}`, { defaultValue: typeof defaultValue === 'object' ? defaultValue[lang] : defaultValue });
+  const t = (path: string, defaultValue: unknown = "") => {
+    return i18nextT(`pages:${slug}.${path}`, { 
+      defaultValue: typeof defaultValue === 'object' && defaultValue !== null 
+        ? (defaultValue as Record<string, unknown>)[lang] 
+        : defaultValue 
+    });
   };
 
   const toggleSection = (id: string) => {
@@ -62,7 +66,7 @@ export const MiddleEastPage = () => {
   const localizedTitle = t("title", data.title);
   const localizedLastUpdated = t("lastUpdated", data.lastUpdated);
   const localizedIntroTitle = t("intro.title", data.intro?.title);
-  const localizedIntroParagraphs = i18nextT(`pages:${slug}.intro.paragraphs`, { returnObjects: true, defaultValue: data.intro?.paragraphs }) as any[];
+  const localizedIntroParagraphs = i18nextT(`pages:${slug}.intro.paragraphs`, { returnObjects: true, defaultValue: data.intro?.paragraphs }) as (string | LocalizedText)[];
   const localizedUpdateNote = t("updateNote", data.updateNote);
 
   const textAlignClass = isRTL ? "text-right" : "text-left";

@@ -108,7 +108,7 @@ export function Footer() {
                       </span>
                       <motion.div
                         animate={{ rotate: isOpen ? 180 : 0 }}
-                        transition={ANIMATION_CONFIG.TRANSITIONS.QUICK_ROTATE as any}
+                        transition={ANIMATION_CONFIG.TRANSITIONS.QUICK_ROTATE as unknown as import("framer-motion").Transition}
                       >
                         <ChevronDown className="h-4 w-4 text-gray-400" />
                       </motion.div>
@@ -162,7 +162,7 @@ export function Footer() {
                 </div>
                 <motion.div
                   animate={{ rotate: activeAccordion === "location" ? 180 : 0 }}
-                  transition={ANIMATION_CONFIG.TRANSITIONS.QUICK_ROTATE as any}
+                  transition={ANIMATION_CONFIG.TRANSITIONS.QUICK_ROTATE as unknown as import("framer-motion").Transition}
                 >
                   <ChevronDown className="h-4 w-4 text-gray-400" />
                 </motion.div>
@@ -185,7 +185,7 @@ export function Footer() {
                         {t("common:select_region")}
                       </div>
                       <div className="max-h-[200px] overflow-y-auto scrollbar-thin space-y-1">
-                        {footerData.countries.map((country: Country) => (
+                        {(footerData.countries as Country[]).map((country: Country) => (
                           <a
                             key={country.name}
                             href={country.href}
@@ -259,7 +259,7 @@ export function Footer() {
                         {t("common:select_region")}
                       </div>
                       <ul className="space-y-1">
-                        {footerData.countries.map((country: Country) => (
+                        {(footerData.countries as Country[]).map((country: Country) => (
                           <li key={country.name}>
                             <a
                               href={country.href}

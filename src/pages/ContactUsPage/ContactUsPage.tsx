@@ -16,9 +16,9 @@ export const ContactUsPage: React.FC = () => {
   // Lazy load contact translations
   useEffect(() => {
     let isMounted = true;
-    setIsTranslationLoaded(false);
 
     const loadTranslations = async () => {
+      setIsTranslationLoaded(false);
       try {
         const translations = await import(`../../locales/${currentLang}/pages/contact.json`);
         if (isMounted) {
@@ -33,7 +33,7 @@ export const ContactUsPage: React.FC = () => {
 
     loadTranslations();
     return () => { isMounted = false; };
-  }, [currentLang]);
+  }, [currentLang, i18n]);
 
   // Fetch contact data using TanStack Query
   const { data: contactData, isLoading, error } = useContactInfo();

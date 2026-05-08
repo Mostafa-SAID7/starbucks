@@ -48,7 +48,7 @@ export const Accordion = React.forwardRef<HTMLDivElement, AccordionProps>(
               <span className="flex-1">{item.title}</span>
               <motion.div
                 animate={{ rotate: openIndex === index ? 180 : 0 }}
-                transition={ANIMATION_CONFIG.TRANSITIONS.QUICK_ROTATE as any}
+                transition={ANIMATION_CONFIG.TRANSITIONS.QUICK_ROTATE as unknown as import("framer-motion").Transition}
                 className={cn(
                   "flex items-center justify-center h-8 w-8 rounded-full transition-colors",
                   openIndex === index ? "bg-starbucks-green text-white" : "bg-gray-100 dark:bg-zinc-800 text-gray-400"
@@ -69,7 +69,7 @@ export const Accordion = React.forwardRef<HTMLDivElement, AccordionProps>(
                     open: { opacity: 1, height: "auto" },
                     collapsed: { opacity: 0, height: 0 }
                   }}
-                  transition={ANIMATION_CONFIG.TRANSITIONS.ACCORDION as any}
+                  transition={ANIMATION_CONFIG.TRANSITIONS.ACCORDION as unknown as import("framer-motion").Transition}
                 >
                   <div className="px-6 pb-6 pt-2 text-base text-gray-600 dark:text-gray-400 leading-relaxed border-t border-gray-100/50 dark:border-zinc-700/50 mt-2">
                     {item.content}

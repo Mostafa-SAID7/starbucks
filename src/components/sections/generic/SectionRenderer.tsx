@@ -68,8 +68,8 @@ export const SectionRenderer: React.FC<SectionRendererProps> = ({
     address: slug && section.contactInfo.address 
       ? (typeof t(`pages:${slug}.sections.${section.id}.contactInfo.address`, { defaultValue: "" }) === 'string' 
           ? t(`pages:${slug}.sections.${section.id}.contactInfo.address`, { defaultValue: "" })
-          : (typeof section.contactInfo.address === 'object' ? (section.contactInfo.address as any)[lang] : section.contactInfo.address))
-      : (typeof section.contactInfo.address === 'object' ? (section.contactInfo.address as any)[lang] : section.contactInfo.address)
+          : (typeof section.contactInfo.address === 'object' ? (section.contactInfo.address as Record<string, string>)[lang] : section.contactInfo.address))
+      : (typeof section.contactInfo.address === 'object' ? (section.contactInfo.address as Record<string, string>)[lang] : section.contactInfo.address)
   } : undefined;
 
   const content = (
@@ -115,7 +115,7 @@ export const SectionRenderer: React.FC<SectionRendererProps> = ({
       {/* Contact Info & Note */}
       {processedContactInfo && (
         <SectionContactInfo
-          contactInfo={processedContactInfo as any}
+          contactInfo={processedContactInfo as import("@/types").GenericContactInfo}
           contactNote={localizedContactNote ? { ar: localizedContactNote, en: localizedContactNote } : undefined}
           lang={lang}
         />

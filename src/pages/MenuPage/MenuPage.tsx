@@ -21,9 +21,9 @@ export const MenuPage = () => {
   // Lazy load menu translations
   useEffect(() => {
     let isMounted = true;
-    setIsTranslationLoaded(false);
 
     const loadTranslations = async () => {
+      setIsTranslationLoaded(false);
       try {
         const translations = await import(`../../locales/${lang}/pages/menu.json`);
         if (isMounted) {
@@ -38,7 +38,7 @@ export const MenuPage = () => {
 
     loadTranslations();
     return () => { isMounted = false; };
-  }, [lang]);
+  }, [lang, i18n]);
 
   // Fetch structural menu data
   const { data: menuData, isLoading, error, refetch } = useMenuData();

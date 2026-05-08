@@ -293,7 +293,7 @@ export function Navbar() {
                 <motion.div
                   initial={false}
                   animate={{ rotate: theme === "dark" ? 180 : 0 }}
-                  transition={ANIMATION_CONFIG.TRANSITIONS.QUICK_ROTATE as any}
+                  transition={ANIMATION_CONFIG.TRANSITIONS.QUICK_ROTATE as unknown as import("framer-motion").Transition}
                 >
                   {theme === "dark" ? (
                     <Sun className="h-5 w-5 text-amber-400" />
@@ -339,7 +339,7 @@ export function Navbar() {
                     initial={{ opacity: 0, rotate: -90, scale: 0.5 }}
                     animate={{ opacity: 1, rotate: 0, scale: 1 }}
                     exit={{ opacity: 0, rotate: 90, scale: 0.5 }}
-                    transition={ANIMATION_CONFIG.TRANSITIONS.QUICK as any}
+                    transition={ANIMATION_CONFIG.TRANSITIONS.QUICK as unknown as import("framer-motion").Transition}
                   >
                   {isMobileMenuOpen ? (
                     <X className="h-6 w-6" />

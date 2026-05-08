@@ -42,18 +42,18 @@ export function FeaturedCards() {
 
       <div className="container mx-auto max-w-7xl px-4 relative z-10">
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-6">
-          {featuredCardsData?.cards?.map((card: any, index: number) => {
+          {featuredCardsData?.cards?.map((card: { id: string; image: string; theme?: string; ctaLink?: string; secondaryCtaLink?: string; [key: string]: unknown }, index: number) => {
             const title = t(`pages:home.featured.${card.id}.title`);
             const description = t(`pages:home.featured.${card.id}.description`);
-            const cta = t(`pages:home.featured.${card.id}.cta`);
-            const secondaryCta = t(`pages:home.featured.${card.id}.secondaryCta`, { defaultValue: "" });
-            const imageAlt = t(`pages:home.featured.${card.id}.imageAlt`);
+            const cta = t(`pages:home.featured.${card.id}.cta`) as string;
+            const secondaryCta = t(`pages:home.featured.${card.id}.secondaryCta`, { defaultValue: "" }) as string;
+            const imageAlt = t(`pages:home.featured.${card.id}.imageAlt`) as string;
             
             // Handle language-specific links if they exist in locales
-            const localeLink = t(`pages:home.featured.${card.id}.ctaLink`, { defaultValue: "" });
+            const localeLink = t(`pages:home.featured.${card.id}.ctaLink`, { defaultValue: "" }) as string;
             const ctaLink = localeLink || card.ctaLink;
             
-            const secondaryLocaleLink = t(`pages:home.featured.${card.id}.secondaryCtaLink`, { defaultValue: "" });
+            const secondaryLocaleLink = t(`pages:home.featured.${card.id}.secondaryCtaLink`, { defaultValue: "" }) as string;
             const secondaryCtaLink = secondaryLocaleLink || card.secondaryCtaLink;
 
             return (

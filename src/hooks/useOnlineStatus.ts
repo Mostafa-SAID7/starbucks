@@ -30,13 +30,26 @@ export function useStaleDataDetection() {
   const [wasOffline, setWasOffline] = useState(!isOnline);
 
   useEffect(() => {
-    if (!isOnline) {
+    let timer: number | ReturnType<typeof setTimeout>;
+    
+    const handleOnline = () => {
+      timer = setTimeout(() => setWasOffline(false), 1000);
+    };
+    
+    const handleOffline = () => {
+      clearTimeout(timer);
       setWasOffline(true);
-    } else if (wasOffline) {
-      const timer = setTimeout(() => setWasOffline(false), 1000);
-      return () => clearTimeout(timer);
-    }
-  }, [isOnline, wasOffline]);
+    };
+
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
+
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
+    };
+  }, []);
 
   return {
     isOnline,

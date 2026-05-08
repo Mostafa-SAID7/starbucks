@@ -23,9 +23,9 @@ export const GenericPageWrapper: React.FC<GenericPageWrapperProps> = ({
   // Lazy load page translations
   useEffect(() => {
     let isMounted = true;
-    setIsTranslationLoaded(false);
 
     const loadTranslations = async () => {
+      setIsTranslationLoaded(false);
       try {
         const lang = i18n.language === "ar" ? "ar" : "en";
         // Use a dynamic import to load the specific page translation
@@ -44,7 +44,7 @@ export const GenericPageWrapper: React.FC<GenericPageWrapperProps> = ({
 
     loadTranslations();
     return () => { isMounted = false; };
-  }, [slug, i18n.language]);
+  }, [slug, i18n, i18n.language]);
 
   // Fetch page data using TanStack Query
   const { data: pageData, isLoading, error, refetch } = usePageData(slug);

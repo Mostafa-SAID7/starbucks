@@ -24,8 +24,8 @@ export interface NavigationConfig {
     }[];
     legal: NavigationItem[];
     socials: { name: string; href: string; icon?: string }[];
-    app?: any;
-    countries?: any;
+    app?: unknown;
+    countries?: unknown;
   };
 }
 
@@ -67,7 +67,6 @@ export interface MenuCategory {
   href?: string;
   image?: string;
   subcategories?: MenuSubcategory[];
-  [key: string]: any;
 }
 
 export interface AllergyInfoType {
@@ -94,7 +93,6 @@ export interface MenuData {
   categories: MenuCategory[];
   allergyInfo?: AllergyInfoType;
   sidebar?: SidebarData;
-  [key: string]: any;
 }
 
 /** Generic Page Structure Types */
@@ -115,7 +113,13 @@ export interface GenericSection {
     images: string[];
     columns?: number;
   };
-  [key: string]: any; 
+  contactInfo?: GenericContactInfo;
+  subsections?: GenericSubsection[];
+  types?: GenericTypeItem[];
+  definitions?: GenericDefinition[];
+  groups?: GenericGroup[];
+  contactNote?: string | LocalizedText;
+  hideSideBorder?: boolean;
 }
 
 export interface GenericPageData {
@@ -146,7 +150,7 @@ export interface GenericPageData {
     }[];
   };
   sections: GenericSection[];
-  [key: string]: any;
+  updateNote?: string | LocalizedText;
 }
 
 export interface GenericPageProps {

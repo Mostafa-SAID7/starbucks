@@ -66,7 +66,7 @@ const SheetContent = React.forwardRef<
               side === "left" && "inset-y-0 left-0 h-full w-3/4 sm:max-w-sm border-r",
               className
             )}
-            {...props as any}
+            {...(props as import("framer-motion").HTMLMotionProps<"div">)}
           >
             <button
               onClick={() => onOpenChange?.(false)}
