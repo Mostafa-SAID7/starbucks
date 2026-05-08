@@ -1,0 +1,6 @@
+export * from './aboutUs'
+export * from './contactUs'
+export * from './cookieNotice'
+export * from './privacyStatement'
+export * from './sustainability'
+export * from './termsOfUse'

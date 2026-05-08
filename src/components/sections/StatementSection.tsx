@@ -4,7 +4,6 @@ import { Button } from "@/components/ui";
 import { Link } from "react-router-dom";
 import { useStatement } from "@/hooks/queries";
 
-import { StatementData } from "@/types/components";
 
 const StatementSection = () => {
   const { t, i18n } = useTranslation(["pages", "common"]);

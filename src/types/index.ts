@@ -1,8 +1,10 @@
-export * from './navigation'
-export * from './components'
-export * from './theme'
-export * from './i18n'
-export * from './menu'
-export * from './pages'
-export * from './generic-page'
-export * from './lib'
+/**
+ * Centralized Types Entry Point
+ * Re-exports everything from organized subfolders
+ */
+
+export * from "./common";
+export * from "./data";
+export * from "./components";
+export * from "./pages";
+export * from "./lib/index";

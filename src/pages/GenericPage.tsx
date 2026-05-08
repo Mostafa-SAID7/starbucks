@@ -24,13 +24,21 @@ export const GenericPage: React.FC<GenericPageProps> = ({
   const slug = data.slug;
 
   // Use translations if slug is available
-  const localizedTitle = slug ? t(`pages:${slug}.title`, { defaultValue: data.title?.[lang] ?? "" }) : (data.title?.[lang] ?? "");
-  const localizedSubtitle = slug ? t(`pages:${slug}.subtitle`, { defaultValue: data.subtitle?.[lang] ?? "" }) : (data.subtitle?.[lang] ?? "");
-  const localizedLastUpdated = slug ? t(`pages:${slug}.lastUpdated`, { defaultValue: data.lastUpdated?.[lang] ?? "" }) : (data.lastUpdated?.[lang] ?? "");
+  const localizedTitle = slug 
+    ? t(`pages:${slug}.title`, { defaultValue: typeof data.title === 'string' ? data.title : data.title?.[lang] ?? "" }) 
+    : (typeof data.title === 'string' ? data.title : data.title?.[lang] ?? "");
+    
+  const localizedLastUpdated = slug 
+    ? t(`pages:${slug}.lastUpdated`, { defaultValue: typeof data.lastUpdated === 'string' ? data.lastUpdated : data.lastUpdated?.[lang] ?? "" }) 
+    : (typeof data.lastUpdated === 'string' ? data.lastUpdated : data.lastUpdated?.[lang] ?? "");
   
   const introData = {
-    title: slug ? t(`pages:${slug}.intro.title`, { defaultValue: data.intro?.title?.[lang] ?? "" }) : (data.intro?.title?.[lang] ?? ""),
-    paragraphs: slug ? t(`pages:${slug}.intro.paragraphs`, { returnObjects: true, defaultValue: data.intro?.paragraphs }) : data.intro?.paragraphs,
+    title: slug 
+      ? t(`pages:${slug}.intro.title`, { defaultValue: typeof data.intro?.title === 'string' ? data.intro.title : data.intro?.title?.[lang] ?? "" }) 
+      : (typeof data.intro?.title === 'string' ? data.intro.title : data.intro?.title?.[lang] ?? ""),
+    paragraphs: slug 
+      ? t(`pages:${slug}.intro.paragraphs`, { returnObjects: true, defaultValue: data.intro?.paragraphs }) 
+      : data.intro?.paragraphs,
   };
 
   const renderSections = () => {
@@ -40,7 +48,9 @@ export const GenericPage: React.FC<GenericPageProps> = ({
           <Accordion
             defaultIndex={0}
             items={data.sections.map((section) => {
-              const sectionTitle = slug ? t(`pages:${slug}.sections.${section.id}.title`, { defaultValue: section.title?.[lang] ?? "" }) : (section.title?.[lang] ?? "");
+              const sectionTitle = slug 
+                ? t(`pages:${slug}.sections.${section.id}.title`, { defaultValue: typeof section.title === 'string' ? section.title : section.title?.[lang] ?? "" }) 
+                : (typeof section.title === 'string' ? section.title : section.title?.[lang] ?? "");
               return {
                 title: sectionTitle,
                 content: (
@@ -131,7 +141,7 @@ export const GenericPage: React.FC<GenericPageProps> = ({
           <div className="absolute inset-0">
             <img
               src={typeof data.hero.image === 'string' ? data.hero.image : data.hero.image[lang]}
-              alt={slug ? t(`pages:${slug}.hero.title`, { defaultValue: data.hero.title[lang] }) : data.hero.title[lang]}
+              alt={slug ? t(`pages:${slug}.hero.title`, { defaultValue: typeof data.hero.title === 'string' ? data.hero.title : data.hero.title[lang] }) : (typeof data.hero.title === 'string' ? data.hero.title : data.hero.title[lang])}
               className="w-full h-full object-cover opacity-60"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
@@ -143,11 +153,11 @@ export const GenericPage: React.FC<GenericPageProps> = ({
               className="max-w-2xl space-y-8"
             >
               <h1 className="text-4xl md:text-7xl font-black italic tracking-tight leading-tight">
-                {slug ? t(`pages:${slug}.hero.title`, { defaultValue: data.hero.title[lang] }) : data.hero.title[lang]}
+                {slug ? t(`pages:${slug}.hero.title`, { defaultValue: typeof data.hero.title === 'string' ? data.hero.title : data.hero.title[lang] }) : (typeof data.hero.title === 'string' ? data.hero.title : data.hero.title[lang])}
               </h1>
               {(data.hero.description || (slug && t(`pages:${slug}.hero.description`))) && (
                 <p className="text-xl text-gray-200 leading-relaxed max-w-xl mx-auto md:mx-0">
-                  {slug ? t(`pages:${slug}.hero.description`, { defaultValue: data.hero.description?.[lang] ?? "" }) : (data.hero.description?.[lang] ?? "")}
+                  {slug ? t(`pages:${slug}.hero.description`, { defaultValue: typeof data.hero.description === 'string' ? data.hero.description : data.hero.description?.[lang] ?? "" }) : (typeof data.hero.description === 'string' ? data.hero.description : data.hero.description?.[lang] ?? "")}
                 </p>
               )}
               {(data.hero.cta || (slug && t(`pages:${slug}.hero.cta`))) && (
@@ -165,7 +175,7 @@ export const GenericPage: React.FC<GenericPageProps> = ({
                       )
                     }
                   >
-                    {slug ? t(`pages:${slug}.hero.cta`, { defaultValue: data.hero.cta?.[lang] ?? "" }) : (data.hero.cta?.[lang] ?? "")}
+                    {slug ? t(`pages:${slug}.hero.cta`, { defaultValue: typeof data.hero.cta === 'string' ? data.hero.cta : data.hero.cta?.[lang] ?? "" }) : (typeof data.hero.cta === 'string' ? data.hero.cta : data.hero.cta?.[lang] ?? "")}
                   </Button>
                 </div>
               )}
@@ -262,7 +272,7 @@ export const GenericPage: React.FC<GenericPageProps> = ({
                   <div className="mt-16 space-y-8">
                     {data.accordion.title && (
                       <h2 className="text-3xl font-black text-starbucks-dark dark:text-white mb-8">
-                        {slug ? t(`pages:${slug}.accordion.title`, { defaultValue: data.accordion.title[lang] }) : data.accordion.title[lang]}
+                        {slug ? t(`pages:${slug}.accordion.title`, { defaultValue: typeof data.accordion.title === 'string' ? data.accordion.title : data.accordion.title[lang] }) : (typeof data.accordion.title === 'string' ? data.accordion.title : data.accordion.title[lang])}
                       </h2>
                     )}
                     <Accordion
@@ -290,7 +300,7 @@ export const GenericPage: React.FC<GenericPageProps> = ({
             <div className="container mx-auto max-w-4xl px-6 py-24">
                {data.accordion.title && (
                 <h2 className="text-4xl font-black text-center mb-12 italic text-starbucks-dark dark:text-white">
-                  {slug ? t(`pages:${slug}.accordion.title`, { defaultValue: data.accordion.title[lang] }) : data.accordion.title[lang]}
+                  {slug ? t(`pages:${slug}.accordion.title`, { defaultValue: typeof data.accordion.title === 'string' ? data.accordion.title : data.accordion.title[lang] }) : (typeof data.accordion.title === 'string' ? data.accordion.title : data.accordion.title[lang])}
                 </h2>
               )}
               <div className="bg-white dark:bg-zinc-900/50 rounded-[2.5rem] p-8 md:p-12 shadow-xl border border-gray-100 dark:border-zinc-800">
@@ -340,7 +350,7 @@ export const GenericPage: React.FC<GenericPageProps> = ({
             <div className="mt-20 space-y-8">
               {data.accordion.title && (
                 <h2 className="text-3xl font-extrabold text-starbucks-dark dark:text-white italic">
-                  {slug ? t(`pages:${slug}.accordion.title`, { defaultValue: data.accordion.title[lang] }) : data.accordion.title[lang]}
+                  {slug ? t(`pages:${slug}.accordion.title`, { defaultValue: typeof data.accordion.title === 'string' ? data.accordion.title : data.accordion.title[lang] }) : (typeof data.accordion.title === 'string' ? data.accordion.title : data.accordion.title[lang])}
                 </h2>
               )}
               <div className="bg-white dark:bg-zinc-900/50 rounded-[2rem] p-4 md:p-8 shadow-sm border border-gray-100 dark:border-zinc-800">
@@ -374,7 +384,7 @@ export const GenericPage: React.FC<GenericPageProps> = ({
                     .map((idx) => data.sections[idx])
                     .filter(Boolean)
                     .map((section) => ({
-                      title: section.title?.[lang] ?? "",
+                      title: typeof section.title === 'string' ? section.title : (section.title?.[lang] ?? ""),
                       content: (
                         <div className="pt-4">
                           <SectionRenderer

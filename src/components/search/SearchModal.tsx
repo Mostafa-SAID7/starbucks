@@ -11,7 +11,7 @@ import { useTranslation } from "react-i18next";
 import { useParams, useNavigate } from "react-router-dom";
 import { useMenuData } from "@/hooks/queries";
 import { Modal, Input } from "@/components/ui";
-import { SearchMenuItem, SearchSubcategory, SearchCategory } from "@/types/components";
+import { SearchMenuItem } from "@/types";
 
 interface SearchModalProps {
   isOpen: boolean;
@@ -35,9 +35,7 @@ const SearchModal: React.FC<SearchModalProps> = ({ isOpen, onClose }) => {
   ) as "ar" | "en";
 
   // Fetch menu data using TanStack Query hook
-  const { data: menuDataFull } = useMenuData();
-
-  const menuData = menuDataFull?.[lang];
+  const { data: menuData } = useMenuData();
 
   useEffect(() => {
     if (isOpen) {
@@ -57,19 +55,35 @@ const SearchModal: React.FC<SearchModalProps> = ({ isOpen, onClose }) => {
     inputRef.current?.focus();
   };
 
-  // Flatten menu items for search
+  // Flatten menu items for search with translations
   const allMenuItems = useMemo(() => {
     const items: SearchMenuItem[] = [];
     if (menuData && menuData.categories) {
-      menuData.categories.forEach((category: SearchCategory) => {
+      menuData.categories.forEach((category) => {
+        // Get translated category title
+        const categoryTitle = t(`menu:categories.${category.id}.title`, { 
+          defaultValue: category.id.charAt(0).toUpperCase() + category.id.slice(1) 
+        });
+
         if (category.subcategories) {
-          category.subcategories.forEach((sub: SearchSubcategory) => {
+          category.subcategories.forEach((sub) => {
+            // Get translated subcategory title
+            const subcategoryTitle = t(`menu:subcategories.${sub.id}.title`, { 
+              defaultValue: sub.id.charAt(0).toUpperCase() + sub.id.slice(1) 
+            });
+
             if (sub.items) {
-              sub.items.forEach((item: SearchMenuItem) => {
+              sub.items.forEach((item) => {
+                // Get translated item title and description
+                const title = t(`menu:items.${item.id}.title`, { defaultValue: item.id });
+                const description = t(`menu:items.${item.id}.description`, { defaultValue: "" });
+
                 items.push({
                   ...item,
-                  categoryTitle: category.title,
-                  subcategoryTitle: sub.title,
+                  title,
+                  description,
+                  categoryTitle,
+                  subcategoryTitle,
                 });
               });
             }
@@ -78,7 +92,7 @@ const SearchModal: React.FC<SearchModalProps> = ({ isOpen, onClose }) => {
       });
     }
     return items;
-  }, [menuData]);
+  }, [menuData, t]);
 
   // Filter items based on search term
   const searchResults = useMemo(() => {
@@ -87,7 +101,9 @@ const SearchModal: React.FC<SearchModalProps> = ({ isOpen, onClose }) => {
     return allMenuItems.filter(
       (item) =>
         item.title?.toLowerCase().includes(term) ||
-        item.description?.toLowerCase().includes(term),
+        item.description?.toLowerCase().includes(term) ||
+        item.categoryTitle?.toLowerCase().includes(term) ||
+        item.subcategoryTitle?.toLowerCase().includes(term),
     );
   }, [searchTerm, allMenuItems]);
 

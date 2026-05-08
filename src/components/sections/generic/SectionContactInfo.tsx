@@ -1,6 +1,6 @@
 import React from "react";
 import type { LocalizedText } from "@/types";
-import type { GenericContactInfo } from "@/types/generic-page";
+import type { GenericContactInfo } from "@/types";
 
 interface SectionContactInfoProps {
   contactInfo: GenericContactInfo;

@@ -1,4 +1,4 @@
-import type { LocalizedText } from '../i18n'
+import type { LocalizedText } from '../common'
 
 export interface PrivacyStatementSection {
   id: string

@@ -25,10 +25,13 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { Logo, Button, Tooltip } from "@/components/ui";
-import { SearchModal } from "@/components";
-import { AuthModal } from "@/components";
+import { lazy, Suspense } from "react";
 
-import { NavItem } from "@/types/navigation";
+const SearchModal = lazy(() => import("@/components").then(m => ({ default: m.SearchModal })));
+const AuthModal = lazy(() => import("@/components").then(m => ({ default: m.AuthModal })));
+
+
+import { NavItem } from "@/types";
 
 export function Navbar() {
   const { t, i18n } = useTranslation();
@@ -404,11 +407,16 @@ export function Navbar() {
           </div>
         )}
       </AnimatePresence>
-      <SearchModal
-        isOpen={isSearchOpen}
-        onClose={() => setIsSearchOpen(false)}
-      />
-      <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} />
+      <Suspense fallback={null}>
+        <SearchModal
+          isOpen={isSearchOpen}
+          onClose={() => setIsSearchOpen(false)}
+        />
+      </Suspense>
+      <Suspense fallback={null}>
+        <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} />
+      </Suspense>
+
     </>
   );
 }

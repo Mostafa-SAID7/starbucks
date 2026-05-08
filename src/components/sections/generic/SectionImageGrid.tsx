@@ -1,6 +1,6 @@
 import React from "react";
 
-import type { GenericImageGrid } from "@/types/generic-page";
+import type { GenericImageGrid } from "@/types";
 
 interface SectionImageGridProps {
   imageGrid: GenericImageGrid;

@@ -4,7 +4,7 @@ import { API_CONFIG } from "./constants";
 
 /**
  * Simulated delay for development (mimics network latency)
- * Remove in production or when connecting to real APIs
+ * In a real production app, this would be 0 or handled by the server
  */
 const simulateDelay = (ms: number = API_CONFIG.SIMULATED_DELAY) =>
   new Promise((resolve) => setTimeout(resolve, ms));
@@ -13,94 +13,45 @@ const simulateDelay = (ms: number = API_CONFIG.SIMULATED_DELAY) =>
  * Menu Data Fetchers
  */
 export const menuFetchers = {
-  /**
-   * Fetch all menu data (structural only)
-   */
   async fetchMenuData(): Promise<MenuData> {
     await simulateDelay();
-
-    const { menu } = await import("@/data");
-    return menu as MenuData;
+    const menu = await import("@/data/menu/menu.json");
+    return menu.default as MenuData;
   },
 
-  /**
-   * Fetch specific menu category (structural only)
-   */
-  async fetchMenuCategory(
-    categoryId: string,
-  ): Promise<MenuData["categories"][0]> {
+  async fetchMenuCategory(categoryId: string): Promise<MenuData["categories"][0]> {
     await simulateDelay();
-
-    const { menu } = await import("@/data");
-    const menuData = menu as MenuData;
-
+    const menu = await import("@/data/menu/menu.json");
+    const menuData = menu.default as MenuData;
     const category = menuData.categories?.find((c) => c.id === categoryId);
 
     if (!category) {
-      throw new AppError(
-        `Category not found: ${categoryId}`,
-        ErrorType.NOT_FOUND,
-        404,
-        "Not Found",
-      );
+      throw new AppError(`Category not found: ${categoryId}`, ErrorType.NOT_FOUND, 404);
     }
-
     return category;
   },
 
-  /**
-   * Fetch specific menu item (structural only)
-   */
-  async fetchMenuItem(
-    categoryId: string,
-    subcategoryId: string,
-  ): Promise<{
-    category: MenuCategory;
-    subcategory: MenuSubcategory;
-  }> {
+  async fetchMenuItem(categoryId: string, subcategoryId: string): Promise<{ category: MenuCategory; subcategory: MenuSubcategory }> {
     await simulateDelay();
-
-    const { menu } = await import("@/data");
-    const menuData = menu as MenuData;
-
+    const menu = await import("@/data/menu/menu.json");
+    const menuData = menu.default as MenuData;
     const category = menuData.categories?.find((c) => c.id === categoryId);
-    const subcategory = category?.subcategories?.find(
-      (s) => s.id === subcategoryId,
-    );
+    const subcategory = category?.subcategories?.find((s) => s.id === subcategoryId);
 
     if (!category || !subcategory) {
-      throw new AppError(
-        `Item not found: ${categoryId}/${subcategoryId}`,
-        ErrorType.NOT_FOUND,
-        404,
-        "Not Found",
-      );
+      throw new AppError(`Item not found: ${categoryId}/${subcategoryId}`, ErrorType.NOT_FOUND, 404);
     }
-
     return { category, subcategory };
   },
 
-  /**
-   * Fetch specific menu item
-   */
   async fetchMenuItemDetails(categoryId: string, itemId: string) {
     await simulateDelay();
-
     const category = await this.fetchMenuCategory(categoryId);
-
     for (const subcategory of category.subcategories || []) {
       const item = subcategory.items?.find((i) => i.id === itemId);
-      if (item) {
-        return { category, subcategory, item };
-      }
+      if (item) return { category, subcategory, item };
     }
-
-    throw new AppError(
-      `Item not found: ${itemId}`,
-      ErrorType.NOT_FOUND,
-      404,
-      "Not Found",
-    );
+    throw new AppError(`Item not found: ${itemId}`, ErrorType.NOT_FOUND, 404);
   },
 };
 
@@ -108,38 +59,29 @@ export const menuFetchers = {
  * Generic Page Data Fetchers
  */
 export const pageFetchers = {
-  /**
-   * Fetch generic page data by slug
-   */
   async fetchPageBySlug(slug: string): Promise<GenericPageData> {
     await simulateDelay();
 
-    const pageMap: Record<string, () => Promise<unknown>> = {
-      "about-us": () => import("@/data").then((m) => m.aboutUs),
-      sustainability: () => import("@/data").then((m) => m.sustainability),
-      "community-impact": () => import("@/data").then((m) => m.communityImpact),
-      "new-era": () => import("@/data").then((m) => m.newEra),
-      "our-coffees": () => import("@/data").then((m) => m.ourCoffees),
-      "terms-of-use": () => import("@/data").then((m) => m.termsOfUse),
-      "privacy-statement": () =>
-        import("@/data").then((m) => m.privacyStatement),
-      cookies: () => import("@/data").then((m) => m.cookies),
-      delivery: () => import("@/data").then((m) => m.delivery),
-      "middle-east": () => import("@/data").then((m) => m.middleEast),
+    const pageMap: Record<string, () => Promise<any>> = {
+      "about-us": () => import("@/data/pages/about-us.json"),
+      sustainability: () => import("@/data/pages/sustainability.json"),
+      "community-impact": () => import("@/data/pages/community-impact.json"),
+      "new-era": () => import("@/data/pages/new-era.json"),
+      "our-coffees": () => import("@/data/pages/our-coffees.json"),
+      "terms-of-use": () => import("@/data/pages/terms-of-use.json"),
+      "privacy-statement": () => import("@/data/pages/privacy-statement.json"),
+      cookies: () => import("@/data/pages/cookies.json"),
+      delivery: () => import("@/data/pages/delivery.json"),
+      "middle-east": () => import("@/data/pages/middle-east.json"),
     };
 
     const fetcher = pageMap[slug];
     if (!fetcher) {
-      throw new AppError(
-        `Page not found: ${slug}`,
-        ErrorType.NOT_FOUND,
-        404,
-        "Not Found",
-      );
+      throw new AppError(`Page not found: ${slug}`, ErrorType.NOT_FOUND, 404);
     }
 
     const data = await fetcher();
-    return data as GenericPageData;
+    return data.default as GenericPageData;
   },
 };
 
@@ -147,24 +89,15 @@ export const pageFetchers = {
  * Location Data Fetchers
  */
 export const locationFetchers = {
-  /**
-   * Fetch all locations (cities with store counts)
-   */
   async fetchLocations() {
     await simulateDelay();
-
-    const { locations } = await import("@/data");
-    return locations;
+    const locations = await import("@/data/locations/locations.json");
+    return locations.default;
   },
 
-  /**
-   * Fetch locations by region
-   */
   async fetchLocationsByRegion(region: string) {
-    await simulateDelay();
-
     const locations = await this.fetchLocations();
-    return locations.filter((loc) => loc.slug === region);
+    return locations.filter((loc: any) => loc.slug === region);
   },
 };
 
@@ -172,15 +105,10 @@ export const locationFetchers = {
  * Contact Data Fetchers
  */
 export const contactFetchers = {
-  /**
-   * Fetch contact information (structural data: email, phone, social URLs)
-   * UI labels come from i18next locales/contact.json
-   */
   async fetchContactInfo() {
     await simulateDelay();
-
-    const { contactUs } = await import("@/data");
-    return contactUs;
+    const contactUs = await import("@/data/contact/contact-us.json");
+    return contactUs.default;
   },
 };
 
@@ -188,50 +116,32 @@ export const contactFetchers = {
  * Featured Content Fetchers
  */
 export const featuredFetchers = {
-  /**
-   * Fetch featured cards (bilingual content + image URLs)
-   */
   async fetchFeaturedCards() {
     await simulateDelay();
-
-    const { featuredCards } = await import("@/data");
-    return featuredCards;
+    const featuredCards = await import("@/data/home/featured-cards.json");
+    return featuredCards.default;
   },
 
-  /**
-   * Fetch hero section data
-   */
   async fetchHero() {
     await simulateDelay();
-
-    const { hero } = await import("@/data");
-    return hero;
+    const hero = await import("@/data/home/hero.json");
+    return hero.default;
   },
 
-  /**
-   * Fetch statement section data
-   */
   async fetchStatement() {
     await simulateDelay();
-
-    const { statement } = await import("@/data");
-    return statement;
+    const statement = await import("@/data/home/statement.json");
+    return statement.default;
   },
 };
 
 /**
  * Navigation Data Fetchers
- * Structural data only (hrefs, socials, countries).
- * All labels come from i18next: t('navigation.navbar.*'), t('navigation.footer.*')
  */
 export const navigationFetchers = {
-  /**
-   * Fetch navigation structural data (link hrefs, socials, countries)
-   */
   async fetchNavigation(): Promise<NavigationConfig> {
     await simulateDelay();
-
-    const { navigation } = await import("@/data");
-    return navigation as NavigationConfig;
+    const navigation = await import("@/data/navigation/navigation.json");
+    return navigation.default as unknown as NavigationConfig;
   },
 };

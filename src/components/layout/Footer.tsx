@@ -6,7 +6,7 @@ import { useNavigation } from "@/hooks/queries";
 import { motion, AnimatePresence } from "framer-motion";
 import { ANIMATION_CONFIG } from "@/lib/constants";
 
-import { FooterLink, FooterSection, Country, Social } from "@/types/navigation";
+import { FooterLink, FooterSection, Country, Social } from "@/types";
 
 export function Footer() {
   const { t, i18n } = useTranslation();

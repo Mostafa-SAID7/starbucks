@@ -1,10 +1,10 @@
-import { useState, useEffect } from "react";
 import {
   performanceMonitor,
   checkPerformanceTargets,
-  PERFORMANCE_CONFIG,
 } from "@/lib/performanceMonitor";
-import { checkBundleTargets, BUNDLE_TARGETS } from "@/lib/bundleOptimization";
+import { checkBundleTargets } from "@/lib/bundleOptimization";
+import { PERFORMANCE_CONFIG, BUNDLE_TARGETS } from "@/lib/constants";
+import { useEffect, useState } from "react";
 
 /**
  * Performance Dashboard Component

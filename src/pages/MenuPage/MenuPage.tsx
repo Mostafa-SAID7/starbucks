@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -15,6 +16,29 @@ export const MenuPage = () => {
   const isRTL = lang === "ar";
   const textAlignClass = isRTL ? "text-right" : "text-left";
   const queryClient = useQueryClient();
+  const [isTranslationLoaded, setIsTranslationLoaded] = useState(false);
+
+  // Lazy load menu translations
+  useEffect(() => {
+    let isMounted = true;
+    setIsTranslationLoaded(false);
+
+    const loadTranslations = async () => {
+      try {
+        const translations = await import(`../../locales/${lang}/pages/menu.json`);
+        if (isMounted) {
+          i18n.addResourceBundle(lang, "pages", { menu: translations.default }, true, true);
+          setIsTranslationLoaded(true);
+        }
+      } catch (err) {
+        console.error("Failed to load menu translations:", err);
+        if (isMounted) setIsTranslationLoaded(true);
+      }
+    };
+
+    loadTranslations();
+    return () => { isMounted = false; };
+  }, [lang]);
 
   // Fetch structural menu data
   const { data: menuData, isLoading, error, refetch } = useMenuData();
@@ -29,7 +53,7 @@ export const MenuPage = () => {
   };
 
   // Loading state
-  if (isLoading) {
+  if (isLoading || !isTranslationLoaded) {
     return <MenuSkeleton />;
   }
 
@@ -181,19 +205,14 @@ export const MenuPage = () => {
             </div>
 
             {/* Allergy Info */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              className="w-full mt-8"
-            >
+            {allergyInfo && (
               <AllergyInfo
                 title={t("pages:menu.allergyInfo.title")}
                 description={t("pages:menu.allergyInfo.description")}
                 link={allergyInfo.link}
                 linkLabel={t("pages:menu.allergyInfo.linkLabel")}
               />
-            </motion.div>
+            )}
           </div>
         </div>
       </div>

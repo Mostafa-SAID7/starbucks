@@ -1,18 +1,41 @@
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Banner, StatementSection, FeaturedCards, SEO } from "@/components";
 import { HomeSkeleton } from "@/components/skeletons";
 import { useHero } from "@/hooks/queries";
 
-
 export const HomePage = () => {
   const { t, i18n } = useTranslation(["common", "errors", "pages"]);
   const lang = (i18n.language === "ar" ? "ar" : "en") as "ar" | "en";
+  const [isTranslationLoaded, setIsTranslationLoaded] = useState(false);
+
+  // Lazy load home translations
+  useEffect(() => {
+    let isMounted = true;
+    setIsTranslationLoaded(false);
+
+    const loadTranslations = async () => {
+      try {
+        const translations = await import(`../../locales/${lang}/pages/home.json`);
+        if (isMounted) {
+          i18n.addResourceBundle(lang, "pages", { home: translations.default }, true, true);
+          setIsTranslationLoaded(true);
+        }
+      } catch (err) {
+        console.error("Failed to load home translations:", err);
+        if (isMounted) setIsTranslationLoaded(true);
+      }
+    };
+
+    loadTranslations();
+    return () => { isMounted = false; };
+  }, [lang]);
 
   // Fetch hero data using TanStack Query
   const { data: heroData, isLoading, error, refetch } = useHero();
 
   // Loading state
-  if (isLoading) {
+  if (isLoading || !isTranslationLoaded) {
     return <HomeSkeleton />;
   }
 

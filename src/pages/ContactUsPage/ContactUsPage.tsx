@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
 import { Mail, Phone, Send, CheckCircle } from "lucide-react";
@@ -8,8 +8,32 @@ import { useContactInfo } from "@/hooks/queries";
 import { ContactUsData as ContactData } from "@/types/pages";
 
 export const ContactUsPage: React.FC = () => {
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation(["contact", "common"]);
   const isRTL = i18n.language === "ar";
+  const currentLang = (i18n.language === "ar" ? "ar" : "en") as "ar" | "en";
+  const [isTranslationLoaded, setIsTranslationLoaded] = useState(false);
+
+  // Lazy load contact translations
+  useEffect(() => {
+    let isMounted = true;
+    setIsTranslationLoaded(false);
+
+    const loadTranslations = async () => {
+      try {
+        const translations = await import(`../../locales/${currentLang}/pages/contact.json`);
+        if (isMounted) {
+          i18n.addResourceBundle(currentLang, "contact", translations.default, true, true);
+          setIsTranslationLoaded(true);
+        }
+      } catch (err) {
+        console.error("Failed to load contact translations:", err);
+        if (isMounted) setIsTranslationLoaded(true);
+      }
+    };
+
+    loadTranslations();
+    return () => { isMounted = false; };
+  }, [currentLang]);
 
   // Fetch contact data using TanStack Query
   const { data: contactData, isLoading, error } = useContactInfo();
@@ -47,7 +71,7 @@ export const ContactUsPage: React.FC = () => {
   const textAlignClass = isRTL ? "text-right" : "text-left";
 
   // Loading state
-  if (isLoading) {
+  if (isLoading || !isTranslationLoaded) {
     return (
       <div className="min-h-screen bg-white dark:bg-black flex items-center justify-center">
         <div className="text-center">
@@ -271,7 +295,7 @@ export const ContactUsPage: React.FC = () => {
                         ) : (
                           <div className="flex items-center gap-3">
                             <Send
-                              className={`h-6 w-6 ${isRTL ? "-rotate-180" : ""}`}
+                                className={`h-6 w-6 ${isRTL ? "-rotate-180" : ""}`}
                             />
                             <span>{t("contact:form.fields.submit")}</span>
                           </div>

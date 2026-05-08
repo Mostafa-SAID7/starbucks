@@ -1,5 +1,5 @@
 import React from "react";
-import type { GenericTypeItem } from "@/types/generic-page";
+import type { GenericTypeItem } from "@/types";
 
 interface SectionTypesProps {
   types: GenericTypeItem[];

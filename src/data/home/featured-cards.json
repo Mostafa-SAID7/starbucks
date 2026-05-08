@@ -27,6 +27,7 @@
     },
     {
       "id": "summer-menu",
+      "ctaLink": "/menu",
       "image": "/home/deliver.webp",
       "theme": "Green"
     }

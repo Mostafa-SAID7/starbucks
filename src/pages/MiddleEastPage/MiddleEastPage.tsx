@@ -4,7 +4,7 @@ import { useState } from "react";
 import { SEO } from "@/components";
 import { StaticPageSkeleton } from "@/components/skeletons";
 import { usePageData } from "@/hooks/queries";
-import { type GenericPageData } from "@/types";
+import { type GenericPageData, type LocalizedText } from "@/types";
 import { Plus, Minus } from "lucide-react";
 
 export const MiddleEastPage = () => {
@@ -162,8 +162,13 @@ export const MiddleEastPage = () => {
               {/* 2. Content Sections */}
               <div className="space-y-16">
                 {data.sections.map((section, index) => {
-                  const sectionTitle = i18nextT(`pages:${slug}.sections.${section.id}.title`, { defaultValue: section.title?.[lang] || "" });
-                  const sectionParagraphs = i18nextT(`pages:${slug}.sections.${section.id}.paragraphs`, { returnObjects: true, defaultValue: section.paragraphs }) as any[];
+                  const sectionTitle = i18nextT(`pages:${slug}.sections.${section.id}.title`, { 
+                    defaultValue: typeof section.title === 'string' ? section.title : section.title?.[lang] || "" 
+                  });
+                  const sectionParagraphs = i18nextT(`pages:${slug}.sections.${section.id}.paragraphs`, { 
+                    returnObjects: true, 
+                    defaultValue: section.paragraphs 
+                  }) as (string | LocalizedText)[];
 
                   return (
                     <div

@@ -1,5 +1,5 @@
 import React from "react";
-import type { GenericDefinition } from "@/types/generic-page";
+import type { GenericDefinition } from "@/types";
 
 interface SectionDefinitionsProps {
   definitions: GenericDefinition[];

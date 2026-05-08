@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { GenericPage } from "./GenericPage";
 import { StaticPageSkeleton } from "@/components/skeletons";
 import { usePageData } from "@/hooks/queries";
@@ -17,13 +17,40 @@ export const GenericPageWrapper: React.FC<GenericPageWrapperProps> = ({
   accordionSectionIndices,
   useAccordionLayout,
 }) => {
-  const { t } = useTranslation(["common"]);
+  const { t, i18n } = useTranslation(["common"]);
+  const [isTranslationLoaded, setIsTranslationLoaded] = useState(false);
+
+  // Lazy load page translations
+  useEffect(() => {
+    let isMounted = true;
+    setIsTranslationLoaded(false);
+
+    const loadTranslations = async () => {
+      try {
+        const lang = i18n.language === "ar" ? "ar" : "en";
+        // Use a dynamic import to load the specific page translation
+        const translations = await import(`../locales/${lang}/pages/${slug}.json`);
+        
+        if (isMounted) {
+          // Add the translation bundle to i18next
+          i18n.addResourceBundle(lang, "pages", { [slug]: translations.default }, true, true);
+          setIsTranslationLoaded(true);
+        }
+      } catch (err) {
+        console.error(`Failed to load translations for ${slug}:`, err);
+        if (isMounted) setIsTranslationLoaded(true); // Continue anyway, defaultValue will be used
+      }
+    };
+
+    loadTranslations();
+    return () => { isMounted = false; };
+  }, [slug, i18n.language]);
 
   // Fetch page data using TanStack Query
   const { data: pageData, isLoading, error, refetch } = usePageData(slug);
 
   // Loading state
-  if (isLoading) {
+  if (isLoading || !isTranslationLoaded) {
     return <StaticPageSkeleton />;
   }
 
@@ -52,6 +79,7 @@ export const GenericPageWrapper: React.FC<GenericPageWrapperProps> = ({
   // Render GenericPage with fetched data
   return (
     <GenericPage
+      slug={slug}
       data={pageData as GenericPageData}
       seoTitle={seoTitle}
       showAccordion={showAccordion}

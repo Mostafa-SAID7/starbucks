@@ -1,6 +1,6 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import type { GenericSubsection } from "@/types/generic-page";
+import type { GenericSubsection } from "@/types";
 
 interface SectionSubsectionsProps {
   subsections: GenericSubsection[];

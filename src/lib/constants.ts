@@ -42,7 +42,7 @@ export const CLEANUP_CONFIG = {
 export const API_CONFIG = {
   BASE_URL: import.meta.env.VITE_API_URL || "https://api.starbucks.eg",
   TIMEOUT: 10000,
-  SIMULATED_DELAY: 500, // For development/mocking
+  SIMULATED_DELAY: 10, // Significantly reduced for better user experience
 };
 
 /**
@@ -135,4 +135,13 @@ export const PERFORMANCE_CONFIG = {
     IMAGE_SIZE: 500 * 1024, // 500KB per image
     FONT_SIZE: 100 * 1024, // 100KB per font
   },
+};
+
+/**
+ * Bundle Size Targets (legacy support for PerformanceDashboard)
+ */
+export const BUNDLE_TARGETS = {
+  TOTAL_SIZE: PERFORMANCE_CONFIG.TARGET_BUNDLE_SIZE,
+  GZIP_SIZE: PERFORMANCE_CONFIG.TARGET_GZIP_SIZE,
+  INITIAL_CHUNK: PERFORMANCE_CONFIG.TARGET_INITIAL_CHUNK,
 };

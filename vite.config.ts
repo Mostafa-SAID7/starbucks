@@ -137,12 +137,12 @@ export default defineConfig({
               return "motion-vendor";
             }
             if (
-              id.includes("lucide-react") ||
               id.includes("clsx") ||
               id.includes("tailwind-merge")
             ) {
               return "ui-vendor";
             }
+
             if (id.includes("i18next")) {
               return "i18n-vendor";
             }

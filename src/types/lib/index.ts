@@ -11,16 +11,6 @@ export enum ErrorType {
  * Library-related types for performance, caching, and utilities
  */
 
-/**
- * Performance Metric types
- */
-export interface PerformanceMetric {
-  name: string;
-  value: number;
-  timestamp: number;
-  context?: string;
-}
-
 export interface BaseMetric {
   name: string;
   value: number;
@@ -32,26 +22,6 @@ export interface BaseMetric {
 }
 
 export type MetricCallback = (metric: BaseMetric) => void;
-
-/**
- * Cache and Monitoring types
- */
-export interface CacheMetrics {
-  hits: number;
-  misses: number;
-  hitRate: number;
-  totalQueries: number;
-}
-
-export interface BundleMetrics {
-  totalSize: number;
-  gzipSize: number;
-  chunks: Array<{
-    name: string;
-    size: number;
-    gzipSize: number;
-  }>;
-}
 
 /**
  * Cache Invalidation types

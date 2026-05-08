@@ -3,7 +3,6 @@ import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui";
 import { useFeaturedCards } from "@/hooks/queries";
 
-import { FeaturedCard } from "@/types/components";
 
 export function FeaturedCards() {
   const { t, i18n } = useTranslation(["pages", "common"]);
@@ -43,7 +42,7 @@ export function FeaturedCards() {
 
       <div className="container mx-auto max-w-7xl px-4 relative z-10">
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-6">
-          {featuredCardsData.cards.map((card: any, index: number) => {
+          {featuredCardsData?.cards?.map((card: any, index: number) => {
             const title = t(`pages:home.featured.${card.id}.title`);
             const description = t(`pages:home.featured.${card.id}.description`);
             const cta = t(`pages:home.featured.${card.id}.cta`);
@@ -108,9 +107,9 @@ export function FeaturedCards() {
                     >
                       <a
                         href={
-                          ctaLink.startsWith("http")
+                          ctaLink?.startsWith("http")
                             ? ctaLink
-                            : `/${lang}${ctaLink}`
+                            : `/${lang}${ctaLink || "#"}`
                         }
                       >
                         {cta}
@@ -126,9 +125,9 @@ export function FeaturedCards() {
                       >
                         <a
                           href={
-                            secondaryCtaLink.startsWith("http")
+                            secondaryCtaLink?.startsWith("http")
                               ? secondaryCtaLink
-                              : `/${lang}${secondaryCtaLink}`
+                              : `/${lang}${secondaryCtaLink || "#"}`
                           }
                         >
                           {secondaryCta}

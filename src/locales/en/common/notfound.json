@@ -1,5 +1,6 @@
 {
   "title": "404 - Page Not Found",
-  "message": "Sorry, the page you are looking for does not exist.",
-  "button": "Return to Homepage"
+  "message": "The page you're looking for doesn't exist. It may have been moved or removed.",
+  "go_home": "Go Home",
+  "browse_menu": "Browse Menu"
 }

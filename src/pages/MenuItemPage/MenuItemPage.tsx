@@ -11,14 +11,14 @@ import {
 import { MenuSkeleton } from "@/components/skeletons";
 import { NotFound } from "@/pages";
 import { useMenuData, useMenuItem } from "@/hooks/queries";
-import { MenuItem } from "@/types/menu";
+import { MenuItem } from "@/types";
 
 export const MenuItemPage = () => {
   const { categoryId, itemId: subcategoryId } = useParams<{
     categoryId: string;
     itemId: string;
   }>();
-  const { t, i18n } = useTranslation(["menu", "common"]);
+  const { t, i18n } = useTranslation(["pages", "common"]);
   const isRTL = i18n.language === "ar";
 
   // Fetch menu structural data
@@ -65,7 +65,7 @@ export const MenuItemPage = () => {
   }
 
   const { category, subcategory } = itemData;
-  const categoryKey = `categories.${category.id}`;
+  const categoryKey = `pages:menu.categories.${category.id}`;
   const subcategoryKey = `${categoryKey}.subcategories.${subcategory.id}`;
   
   const categoryTitle = t(`${categoryKey}.title`) || category.id;
@@ -73,10 +73,34 @@ export const MenuItemPage = () => {
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-7xl" dir={isRTL ? "rtl" : "ltr"}>
-      <SEO title={`${subcategoryTitle} - ${categoryTitle} - ${t("title")}`} />
+      <SEO title={`${subcategoryTitle} - ${categoryTitle} - ${t("pages:menu.title")}`} />
 
-      <div className="flex flex-col-reverse gap-8 md:flex-row">
-        {/* Main Content Area */}
+      <div className="flex flex-col lg:flex-row gap-12">
+        {/* Side 1: Sidebar */}
+        <div className="w-full lg:w-[350px] flex-shrink-0">
+          <div className="sticky top-28">
+            <VerticalCard
+              title={subcategoryTitle}
+              image={subcategory.image || menuData.sidebar?.image || ""}
+              actions={[
+                {
+                  id: "order",
+                  label: t("pages:menu.sidebar.actions.order"),
+                  href: t("pages:menu.order_url"),
+                  variant: "primary"
+                },
+                {
+                  id: "stores",
+                  label: t("pages:menu.sidebar.actions.stores"),
+                  href: `/${i18n.language}/locations`,
+                  variant: "secondary"
+                }
+              ]}
+            />
+          </div>
+        </div>
+
+        {/* Side 2: Main Content Area */}
         <div className="flex-1 space-y-8">
           <div className="text-center md:text-start">
             <h1 className="mb-4 text-3xl font-bold text-foreground-light dark:text-foreground-dark">
@@ -137,43 +161,21 @@ export const MenuItemPage = () => {
                 className="rounded-2xl bg-starbucks-green font-bold text-white shadow-sm hover:bg-starbucks-dark dark:bg-starbucks-light dark:text-black dark:hover:bg-white"
               >
                 <Link to={`/${i18n.language}/locations`}>
-                  {t("sidebar.actions.stores")}
+                  {t("pages:menu.sidebar.actions.stores")}
                 </Link>
               </Button>
             </div>
 
             <div className="mt-8 text-start">
-              <AllergyInfo
-                title={t("allergyInfo.title")}
-                description={t("allergyInfo.description")}
-                link={menuData.allergyInfo.link}
-                linkLabel={t("allergyInfo.linkLabel")}
-              />
+              {menuData.allergyInfo && (
+                <AllergyInfo
+                  title={t("pages:menu.allergyInfo.title")}
+                  description={t("pages:menu.allergyInfo.description")}
+                  link={menuData.allergyInfo.link}
+                  linkLabel={t("pages:menu.allergyInfo.linkLabel")}
+                />
+              )}
             </div>
-          </div>
-        </div>
-
-        {/* Sidebar */}
-        <div className="w-full md:w-80 lg:w-[350px] flex-shrink-0">
-          <div className="sticky top-28">
-            <VerticalCard
-              title={subcategoryTitle}
-              image={subcategory.image || menuData.sidebar.image}
-              actions={[
-                {
-                  id: "order",
-                  label: t("sidebar.actions.order"),
-                  href: t("order_url"),
-                  variant: "primary"
-                },
-                {
-                  id: "stores",
-                  label: t("sidebar.actions.stores"),
-                  href: `/${i18n.language}/locations`,
-                  variant: "secondary"
-                }
-              ]}
-            />
           </div>
         </div>
       </div>

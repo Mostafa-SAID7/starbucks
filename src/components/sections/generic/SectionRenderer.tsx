@@ -34,13 +34,33 @@ export const SectionRenderer: React.FC<SectionRendererProps> = ({
   const { t } = useTranslation(["pages", "common"]);
 
   // Use translations if slug and section.id are available
-  const localizedTitle = slug ? t(`pages:${slug}.sections.${section.id}.title`, { defaultValue: "" }) : (section.title?.[lang] ?? "");
-  const localizedSubtitle = slug ? t(`pages:${slug}.sections.${section.id}.subtitle`, { defaultValue: "" }) : (section.subtitle?.[lang] ?? "");
-  const localizedParagraphs = slug ? t(`pages:${slug}.sections.${section.id}.paragraphs`, { returnObjects: true, defaultValue: section.paragraphs }) : section.paragraphs;
-  const localizedNote = slug ? t(`pages:${slug}.sections.${section.id}.note`, { defaultValue: "" }) : (section.note?.[lang] ?? "");
-  const localizedContactNote = slug ? t(`pages:${slug}.sections.${section.id}.contactNote`, { defaultValue: "" }) : (section.contactNote?.[lang] ?? "");
-  const localizedCta = slug ? t(`pages:${slug}.sections.${section.id}.cta`, { defaultValue: "" }) : (section.cta?.[lang] ?? "");
-  const localizedList = slug ? t(`pages:${slug}.sections.${section.id}.list`, { returnObjects: true, defaultValue: section.list }) : section.list;
+  const localizedTitle = slug 
+    ? t(`pages:${slug}.sections.${section.id}.title`, { defaultValue: typeof section.title === 'string' ? section.title : section.title?.[lang] ?? "" }) 
+    : (typeof section.title === 'string' ? section.title : section.title?.[lang] ?? "");
+    
+  const localizedSubtitle = slug 
+    ? t(`pages:${slug}.sections.${section.id}.subtitle`, { defaultValue: typeof section.subtitle === 'string' ? section.subtitle : section.subtitle?.[lang] ?? "" }) 
+    : (typeof section.subtitle === 'string' ? section.subtitle : section.subtitle?.[lang] ?? "");
+    
+  const localizedParagraphs = slug 
+    ? t(`pages:${slug}.sections.${section.id}.paragraphs`, { returnObjects: true, defaultValue: section.paragraphs }) 
+    : section.paragraphs;
+    
+  const localizedNote = slug 
+    ? t(`pages:${slug}.sections.${section.id}.note`, { defaultValue: typeof section.note === 'string' ? section.note : section.note?.[lang] ?? "" }) 
+    : (typeof section.note === 'string' ? section.note : section.note?.[lang] ?? "");
+    
+  const localizedContactNote = slug 
+    ? t(`pages:${slug}.sections.${section.id}.contactNote`, { defaultValue: typeof section.contactNote === 'string' ? section.contactNote : section.contactNote?.[lang] ?? "" }) 
+    : (typeof section.contactNote === 'string' ? section.contactNote : section.contactNote?.[lang] ?? "");
+    
+  const localizedCta = slug 
+    ? t(`pages:${slug}.sections.${section.id}.cta`, { defaultValue: typeof section.cta === 'string' ? section.cta : section.cta?.[lang] ?? "" }) 
+    : (typeof section.cta === 'string' ? section.cta : section.cta?.[lang] ?? "");
+    
+  const localizedList = slug 
+    ? t(`pages:${slug}.sections.${section.id}.list`, { returnObjects: true, defaultValue: section.list }) 
+    : section.list;
 
   // Handle contact info address localization
   const processedContactInfo = section.contactInfo ? {
