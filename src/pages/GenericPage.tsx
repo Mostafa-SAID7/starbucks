@@ -44,43 +44,63 @@ export const GenericPage: React.FC<GenericPageProps> = ({
   const renderSections = () => {
     if (useAccordionLayout) {
       return (
-        <div className="space-y-4">
-          <Accordion
-            defaultIndex={0}
-            items={data.sections.map((section) => {
-              const sectionTitle = slug 
-                ? t(`pages:${slug}.sections.${section.id}.title`, { defaultValue: typeof section.title === 'string' ? section.title : section.title?.[lang] ?? "" }) 
-                : (typeof section.title === 'string' ? section.title : section.title?.[lang] ?? "");
-              return {
-                title: sectionTitle,
-                content: (
-                  <div className="pt-4">
-                    <SectionRenderer
-                      section={section}
-                      lang={lang}
-                      isRTL={isRTL}
-                      pageTitle={localizedTitle}
-                      hideTitle={true}
-                      hideImageGrid={true}
-                      slug={slug}
+        <div className="space-y-8">
+          {data.sections.map((section, idx) => {
+            const sectionTitle = slug 
+              ? t(`pages:${slug}.sections.${section.id}.title`, { defaultValue: typeof section.title === 'string' ? section.title : section.title?.[lang] ?? "" }) 
+              : (typeof section.title === 'string' ? section.title : section.title?.[lang] ?? "");
+
+            // Resolve section image (string or LocalizedText object)
+            const sectionImage = section.image
+              ? (typeof section.image === 'string' ? section.image : section.image[lang])
+              : null;
+
+            return (
+              <div key={section.id}>
+                {/* Image rendered ABOVE the accordion item */}
+                {sectionImage && (
+                  <div className="mb-4 rounded-2xl overflow-hidden shadow-md aspect-video">
+                    <img
+                      src={sectionImage}
+                      alt={sectionTitle}
+                      className="w-full h-full object-cover"
                     />
                   </div>
-                ),
-              };
-            })}
-          />
-          {/* Render the last section's image grid outside the accordion */}
-          {data.sections.slice(-1).map(
-            (section) =>
-              section.imageGrid?.images && (
-                <div key={`${section.id}-grid`} className="mt-12">
-                  <SectionImageGrid
-                    imageGrid={section.imageGrid}
-                    pageTitle={localizedTitle}
-                  />
-                </div>
-              ),
-          )}
+                )}
+
+                {/* imageGrid rendered ABOVE the accordion item */}
+                {section.imageGrid?.images && (
+                  <div className="mb-4">
+                    <SectionImageGrid
+                      imageGrid={section.imageGrid}
+                      pageTitle={localizedTitle}
+                    />
+                  </div>
+                )}
+
+                {/* Accordion for just this section's text content */}
+                <Accordion
+                  defaultIndex={idx === 0 ? 0 : undefined}
+                  items={[{
+                    title: sectionTitle,
+                    content: (
+                      <div className="pt-4">
+                        <SectionRenderer
+                          section={section}
+                          lang={lang}
+                          isRTL={isRTL}
+                          pageTitle={localizedTitle}
+                          hideTitle={true}
+                          hideImageGrid={true}
+                          slug={slug}
+                        />
+                      </div>
+                    ),
+                  }]}
+                />
+              </div>
+            );
+          })}
         </div>
       );
     }
@@ -267,14 +287,19 @@ export const GenericPage: React.FC<GenericPageProps> = ({
 
                 {renderSections()}
 
-                {/* Data-level Accordion (e.g. for Delivery FAQ) */}
+                {/* Data-level Accordion (e.g. for Delivery FAQ, Our Coffees brewing guides) */}
                 {data.accordion && (
                   <div className="mt-16 space-y-8">
-                    {data.accordion.title && (
-                      <h2 className="text-3xl font-black text-starbucks-dark dark:text-white mb-8">
-                        {slug ? t(`pages:${slug}.accordion.title`, { defaultValue: typeof data.accordion.title === 'string' ? data.accordion.title : data.accordion.title[lang] }) : (typeof data.accordion.title === 'string' ? data.accordion.title : data.accordion.title[lang])}
-                      </h2>
-                    )}
+                    {(data.accordion.title || slug) && (() => {
+                      const accordionTitle = slug
+                        ? t(`pages:${slug}.accordion.title`, { defaultValue: typeof data.accordion!.title === 'string' ? data.accordion!.title : '' })
+                        : (typeof data.accordion!.title === 'string' ? data.accordion!.title : '');
+                      return accordionTitle ? (
+                        <h2 className="text-3xl font-black text-starbucks-dark dark:text-white mb-8">
+                          {accordionTitle}
+                        </h2>
+                      ) : null;
+                    })()}
                     <Accordion
                       items={data.accordion.items?.map((item, i) => ({
                         title: slug ? t(`pages:${slug}.accordion.items.${i}.title`, { defaultValue: typeof item.title === 'string' ? item.title : item.title?.[lang] || '' }) : (typeof item.title === 'string' ? item.title : item.title?.[lang] || ''),
@@ -384,7 +409,9 @@ export const GenericPage: React.FC<GenericPageProps> = ({
                     .map((idx) => data.sections[idx])
                     .filter(Boolean)
                     .map((section) => ({
-                      title: typeof section.title === 'string' ? section.title : (section.title?.[lang] ?? ""),
+                      title: slug
+                        ? t(`pages:${slug}.sections.${section.id}.title`, { defaultValue: typeof section.title === 'string' ? section.title : (section.title?.[lang] ?? "") })
+                        : (typeof section.title === 'string' ? section.title : (section.title?.[lang] ?? "")),
                       content: (
                         <div className="pt-4">
                           <SectionRenderer
@@ -394,6 +421,7 @@ export const GenericPage: React.FC<GenericPageProps> = ({
                             pageTitle={localizedTitle}
                             hideTitle={true}
                             hideImageGrid={true}
+                            slug={slug}
                           />
                         </div>
                       ),

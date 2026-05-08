@@ -1,4 +1,5 @@
 {
+  "slug": "our-coffees",
   "layoutType": "sidebar",
   "sidebarImage": "/our-coffees.webp",
   "sections": [
@@ -13,11 +14,7 @@
     }
   ],
   "accordion": {
-    "items": [
-      {},
-      {},
-      {},
-      {}
-    ]
+    "title": "Learn Our Brewing Methods Step by Step",
+    "items": [{}, {}, {}, {}]
   }
 }

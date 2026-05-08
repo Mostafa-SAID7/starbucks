@@ -198,7 +198,6 @@ const AnimatedRoutes = () => {
                 <GenericPageWrapper
                   slug="our-coffees"
                   seoTitle={t("pages:our-coffees.seoTitle", { defaultValue: "Our Coffees - Starbucks Egypt" })}
-                  useAccordionLayout={true}
                 />
               </PageWrapper>
             }

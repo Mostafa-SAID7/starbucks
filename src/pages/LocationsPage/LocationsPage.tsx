@@ -138,13 +138,9 @@ export const LocationsPage: React.FC = () => {
             </div>
             <div className="w-full md:w-1/2 flex-shrink-0 order-1 md:order-2">
               <img
-                src="https://www.starbucks.eg/assets/image-cache/coffee-beans-hero.jpg"
+                src="https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=600&q=80"
                 alt="The Joy of Starbucks Coffee"
                 className="h-full w-full object-cover"
-                onError={(e) => {
-                  e.currentTarget.src =
-                    "https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=600&q=80";
-                }}
               />
             </div>
           </div>
@@ -171,13 +167,9 @@ export const LocationsPage: React.FC = () => {
             </div>
             <div className="w-full md:w-1/2 flex-shrink-0 order-1 md:order-2">
               <img
-                src="https://www.starbucks.eg/assets/image-cache/delivery-cups.jpg"
+                src="https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=600&q=80"
                 alt="Starbucks Delivers"
                 className="h-full w-full object-cover"
-                onError={(e) => {
-                  e.currentTarget.src =
-                    "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=600&q=80";
-                }}
               />
             </div>
           </div>
