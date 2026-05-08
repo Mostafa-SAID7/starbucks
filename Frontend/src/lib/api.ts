@@ -101,13 +101,13 @@ export const api = {
   /**
    * POST request
    */
-  post: <T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T> =>
+  post: <T>(url: string, data?: unknown, config?: AxiosRequestConfig): Promise<T> =>
     apiClient.post(url, data, config).then((response) => response.data),
 
   /**
    * PUT request
    */
-  put: <T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T> =>
+  put: <T>(url: string, data?: unknown, config?: AxiosRequestConfig): Promise<T> =>
     apiClient.put(url, data, config).then((response) => response.data),
 
   /**
@@ -119,7 +119,7 @@ export const api = {
   /**
    * PATCH request
    */
-  patch: <T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T> =>
+  patch: <T>(url: string, data?: unknown, config?: AxiosRequestConfig): Promise<T> =>
     apiClient.patch(url, data, config).then((response) => response.data),
 };
 

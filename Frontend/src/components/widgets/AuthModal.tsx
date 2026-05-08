@@ -4,11 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Modal, Button, Input } from "@/components/ui";
 import { useAuth } from "@/hooks/auth/useAuth";
 import { toast } from "sonner";
-
-interface AuthModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-}
+import { AuthModalProps } from "@/types/components";
 
 export function AuthModal({ isOpen, onClose }: AuthModalProps) {
   const { t, i18n } = useTranslation();
@@ -48,7 +44,7 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
   );
 
   const handleSubmit = useCallback(
-    async (e: React.FormEvent) => {
+    async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       
       try {
@@ -68,7 +64,7 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
           toast.success(t("common:auth.register_success"));
         }
         onClose();
-      } catch (error) {
+      } catch {
         // Error is handled by the auth store and displayed via error state
         toast.error(
           mode === "login" 

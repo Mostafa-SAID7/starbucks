@@ -1,8 +1,5 @@
 import React from 'react'
-
-interface LogoProps extends React.ImgHTMLAttributes<HTMLImageElement> {
-  className?: string
-}
+import { LogoProps } from "@/types/components";
 
 export const Logo = React.forwardRef<HTMLImageElement, LogoProps>(
   ({ className, ...props }, ref) => (

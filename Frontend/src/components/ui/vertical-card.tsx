@@ -1,17 +1,7 @@
 import React, { forwardRef } from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui";
-
-import { VerticalCardAction as Action } from "@/types/components";
-
-interface VerticalCardProps extends React.HTMLAttributes<HTMLDivElement> {
-  title: string;
-  description?: string;
-  image?: string;
-  href?: string;
-  actions?: Action[];
-  className?: string;
-}
+import { VerticalCardAction as Action, VerticalCardProps } from "@/types/components";
 
 export const VerticalCard = forwardRef<HTMLDivElement, VerticalCardProps>(
   ({ title, description, image, href, actions, className, ...props }, ref) => {

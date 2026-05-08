@@ -3,12 +3,7 @@ import { cn } from "@/lib/utils"
 import { ANIMATION_CONFIG } from "@/lib/constants"
 import { X } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
-
-interface DialogProps {
-  open?: boolean
-  onOpenChange?: (open: boolean) => void
-  children: React.ReactNode
-}
+import { DialogProps } from "@/types/components";
 
 const DialogContext = React.createContext<{
   open: boolean

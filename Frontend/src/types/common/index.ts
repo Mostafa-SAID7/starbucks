@@ -5,6 +5,25 @@
 /** Language identifiers */
 export type Language = "ar" | "en";
 
+/** User Types */
+export interface User {
+  id: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  role: string;
+  phone?: string;
+  dateOfBirth?: string;
+  loyaltyPoints?: number;
+  preferences?: {
+    language: Language;
+    notifications: boolean;
+    theme: Theme;
+  };
+  createdAt?: string;
+  updatedAt?: string;
+}
+
 /** UI Theme modes */
 export type Theme = "light" | "dark";
 

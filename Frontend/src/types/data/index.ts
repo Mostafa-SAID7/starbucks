@@ -212,3 +212,46 @@ export interface GenericDefinition {
   term: LocalizedText;
   definition: LocalizedText;
 }
+
+/** Business Domain Types */
+export interface Location {
+  id: string;
+  name: string;
+  address: string;
+  city: string;
+  phone?: string;
+  hours?: {
+    [key: string]: string;
+  };
+  coordinates?: {
+    lat: number;
+    lng: number;
+  };
+  amenities?: string[];
+}
+
+export interface OrderItem {
+  id: string;
+  menuItemId: string;
+  name: string;
+  quantity: number;
+  price: number;
+  customizations?: Record<string, unknown>;
+}
+
+export type OrderStatus = 'pending' | 'confirmed' | 'preparing' | 'ready' | 'completed' | 'cancelled';
+
+export interface Order {
+  id: string;
+  userId: string;
+  items: OrderItem[];
+  status: OrderStatus;
+  total: number;
+  locationId: string;
+  orderType: 'pickup' | 'delivery';
+  paymentMethod: string;
+  specialInstructions?: string;
+  scheduledTime?: string;
+  createdAt: string;
+  updatedAt: string;
+}

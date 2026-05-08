@@ -1,11 +1,5 @@
 import { useTranslation } from "react-i18next";
-
-interface LiveRegionProps {
-  message?: string;
-  politeness?: "polite" | "assertive" | "off";
-  atomic?: boolean;
-  relevant?: "additions" | "removals" | "text" | "all";
-}
+import { LiveRegionProps } from "@/types/components";
 
 /**
  * Live Region Component for Screen Reader Announcements

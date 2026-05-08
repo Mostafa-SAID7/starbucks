@@ -1,10 +1,6 @@
 import React from "react";
 import { cn } from "@/lib/utils";
-
-interface SectionBackgroundProps {
-  className?: string;
-  variant?: "green" | "neutral" | "default";
-}
+import { SectionBackgroundProps } from "@/types/components";
 
 export const SectionBackground: React.FC<SectionBackgroundProps> = ({ 
   className,

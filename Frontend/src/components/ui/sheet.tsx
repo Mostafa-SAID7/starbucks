@@ -3,12 +3,7 @@ import { cn } from "@/lib/utils"
 import { X } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import { ANIMATION_CONFIG } from "@/lib/constants"
-
-interface SheetProps {
-  open?: boolean
-  onOpenChange?: (open: boolean) => void
-  children: React.ReactNode
-}
+import { SheetProps } from "@/types/components";
 
 const Sheet = ({ open, onOpenChange, children }: SheetProps) => {
   return (
