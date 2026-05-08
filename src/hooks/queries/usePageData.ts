@@ -2,6 +2,7 @@ import { useQuery, type UseQueryResult } from "@tanstack/react-query";
 import { queryKeys } from "@/lib/queryKeys";
 import { pageFetchers } from "@/lib/fetchers";
 import type { GenericPageData } from "@/types";
+import { CACHE_TIMES } from "@/lib/constants";
 
 /**
  * Hook to fetch generic page data by slug
@@ -31,8 +32,8 @@ export function usePageData(
   return useQuery({
     queryKey: queryKeys.pages.bySlug(slug),
     queryFn: () => pageFetchers.fetchPageBySlug(slug),
-    staleTime: 24 * 60 * 60 * 1000, // 24 hours
-    gcTime: 48 * 60 * 60 * 1000, // 48 hours
+    staleTime: CACHE_TIMES.PAGE_STALE,
+    gcTime: CACHE_TIMES.PAGE_GC,
     enabled: !!slug,
   });
 }

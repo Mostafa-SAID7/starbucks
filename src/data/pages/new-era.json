@@ -1,0 +1,15 @@
+{
+  "layoutType": "sidebar",
+  "sidebarImage": "/home/UAE_1.webp",
+  "sections": [
+    {
+      "id": "miranda"
+    },
+    {
+      "id": "andy"
+    },
+    {
+      "id": "nigel"
+    }
+  ]
+}

@@ -1,0 +1,72 @@
+{
+  "categories": [
+    {
+      "id": "drinks",
+      "image": "https://www.starbucks.eg/sites/starbucks-eg-pwa/files/styles/c06_cards_grid_314x176/public/2021-01/ProductShot_5.jpg.webp?h=34e43602&itok=OqHJvNZs",
+      "href": "/menu/drinks",
+      "subcategories": [
+        {
+          "id": "espresso",
+          "image": "/menu/deink.webp",
+          "href": "/menu/drinks/espresso",
+          "items": [
+            {
+              "id": "caffe-latte",
+              "image": "/menu/deink.webp"
+            }
+          ]
+        },
+        {
+          "id": "frappuccino",
+          "image": "/menu/deink.webp",
+          "href": "/menu/drinks/frappuccino",
+          "items": []
+        }
+      ]
+    },
+    {
+      "id": "food",
+      "image": "https://www.starbucks.eg/sites/starbucks-eg-pwa/files/styles/c06_cards_grid_314x176/public/2021-01/Image-104_0.jpg.webp?h=04d92ac6&itok=JbtQOzRa",
+      "href": "/menu/food",
+      "subcategories": [
+        {
+          "id": "sandwiches",
+          "image": "/menu/food.webp",
+          "href": "/menu/food/sandwiches",
+          "items": [
+            {
+              "id": "halloumi",
+              "image": "/menu/food.webp"
+            },
+            {
+              "id": "focaccia",
+              "image": "/menu/food.webp"
+            }
+          ]
+        },
+        {
+          "id": "salads",
+          "image": "/menu/food.webp",
+          "href": "/menu/food/salads",
+          "items": []
+        }
+      ]
+    }
+  ],
+  "allergyInfo": {
+    "link": "https://www.alshaya.com/campaigns/Starbucks/uae/index.html"
+  },
+  "sidebar": {
+    "image": "/menu/Menu.webp",
+    "actions": [
+      {
+        "href": "order",
+        "primary": true
+      },
+      {
+        "href": "/locations",
+        "primary": false
+      }
+    ]
+  }
+}

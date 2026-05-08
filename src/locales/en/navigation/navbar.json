@@ -1,0 +1,13 @@
+{
+  "menu": "Menu",
+  "delivery": "Delivery",
+  "sustainability": "Sustainability",
+  "middle_east": "Starbucks Middle East",
+  "tooltips": {
+    "locations": "Find a Store",
+    "language": "Change Language",
+    "light_mode": "Light Mode",
+    "dark_mode": "Dark Mode",
+    "account": "Sign In / Join Rewards"
+  }
+}

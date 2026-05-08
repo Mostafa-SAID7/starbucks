@@ -1,0 +1,23 @@
+{
+  "layoutType": "sidebar",
+  "sidebarImage": "/our-coffees.webp",
+  "sections": [
+    {
+      "id": "roasts"
+    },
+    {
+      "id": "at-home"
+    },
+    {
+      "id": "brewing-guides"
+    }
+  ],
+  "accordion": {
+    "items": [
+      {},
+      {},
+      {},
+      {}
+    ]
+  }
+}

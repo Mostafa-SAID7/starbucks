@@ -13,7 +13,6 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
   const lang = (i18n.language === "ar" ? "ar" : "en") as "ar" | "en";
   const isRTL = lang === "ar";
 
-
   const [mode, setMode] = useState<"login" | "register">("login");
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -58,13 +57,16 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
     [onClose],
   );
 
-
   return (
     <Modal
       isOpen={isOpen}
       onClose={onClose}
       className="max-w-xl"
-      title={mode === "login" ? t("common:auth_login_title") : t("common:auth_register_title")}
+      title={
+        mode === "login"
+          ? t("common:auth.login_title")
+          : t("common:auth.register_title")
+      }
     >
       <div className="relative" dir={isRTL ? "rtl" : "ltr"}>
         {/* Mode Toggle Tabs */}
@@ -84,7 +86,7 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
               mode === "login" ? "text-starbucks-green" : "text-gray-500"
             }`}
           >
-            {t("common:auth_login_title")}
+            {t("common:auth.login_title")}
           </button>
           <button
             onClick={() => setMode("register")}
@@ -92,7 +94,7 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
               mode === "register" ? "text-starbucks-green" : "text-gray-500"
             }`}
           >
-            {t("common:auth_register_title")}
+            {t("common:auth.register_title")}
           </button>
         </div>
 
@@ -109,7 +111,7 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
               <div className="space-y-4">
                 <Input
                   type="email"
-                  placeholder={t("common:auth_login_email")}
+                  placeholder={t("common:auth.login_email")}
                   value={formData.email}
                   onChange={(e) => handleInputChange("email", e.target.value)}
                   required
@@ -117,7 +119,7 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
                 />
                 <Input
                   type="password"
-                  placeholder={t("common:auth_login_password")}
+                  placeholder={t("common:auth.login_password")}
                   value={formData.password}
                   onChange={(e) =>
                     handleInputChange("password", e.target.value)
@@ -149,14 +151,14 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
                     </svg>
                   </div>
                   <span className="text-sm font-medium text-gray-600 dark:text-gray-400 group-hover:text-starbucks-dark dark:group-hover:text-white transition-colors">
-                    {t("common:auth_login_remember")}
+                    {t("common:auth.login_remember")}
                   </span>
                 </label>
                 <button
                   type="button"
                   className="text-sm font-bold text-starbucks-green hover:underline decoration-2 underline-offset-4"
                 >
-                  {t("common:auth_login_forgot")}
+                  {t("common:auth.login_forgot")}
                 </button>
               </div>
 
@@ -165,17 +167,17 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
                 className="w-full h-14 rounded-full text-lg font-black uppercase tracking-widest shadow-xl shadow-starbucks-green/20 hover:scale-[1.02] transition-all"
                 loading={loading}
               >
-                {t("common:auth_login_submit")}
+                {t("common:auth.login_submit")}
               </Button>
 
               <p className="text-center text-sm text-gray-500 dark:text-gray-400">
-                {t("common:auth_login_no_account")}{" "}
+                {t("common:auth.login_no_account")}{" "}
                 <button
                   type="button"
                   onClick={toggleMode}
                   className="font-black text-starbucks-green hover:underline decoration-2 underline-offset-4"
                 >
-                  {t("common:auth_login_register")}
+                  {t("common:auth.login_register")}
                 </button>
               </p>
             </motion.form>
@@ -190,7 +192,7 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
             >
               <div className="grid grid-cols-2 gap-4">
                 <Input
-                  placeholder={t("common:auth_register_first_name")}
+                  placeholder={t("common:auth.register_first_name")}
                   value={formData.firstName}
                   onChange={(e) =>
                     handleInputChange("firstName", e.target.value)
@@ -199,7 +201,7 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
                   className="h-14 rounded-2xl border-gray-100 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-950 focus:bg-white transition-all px-6"
                 />
                 <Input
-                  placeholder={t("common:auth_register_last_name")}
+                  placeholder={t("common:auth.register_last_name")}
                   value={formData.lastName}
                   onChange={(e) =>
                     handleInputChange("lastName", e.target.value)
@@ -211,7 +213,7 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
               <div className="relative">
                 <Input
                   type="email"
-                  placeholder={t("common:auth_register_email")}
+                  placeholder={t("common:auth.register_email")}
                   value={formData.email}
                   onChange={(e) => handleInputChange("email", e.target.value)}
                   required
@@ -221,7 +223,7 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
               <div className="relative">
                 <Input
                   type="password"
-                  placeholder={t("common:auth_register_password")}
+                  placeholder={t("common:auth.register_password")}
                   value={formData.password}
                   onChange={(e) =>
                     handleInputChange("password", e.target.value)
@@ -254,7 +256,7 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
                     </svg>
                   </div>
                   <span className="text-sm font-medium text-gray-600 dark:text-gray-400 group-hover:text-starbucks-dark dark:group-hover:text-white transition-colors leading-relaxed">
-                    {t("common:auth_register_terms")}
+                    {t("common:auth.register_terms")}
                   </span>
                 </label>
               </div>
@@ -264,17 +266,17 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
                 className="w-full h-14 rounded-full text-lg font-black uppercase tracking-widest shadow-xl shadow-starbucks-green/20 hover:scale-[1.02] transition-all"
                 loading={loading}
               >
-                {t("common:auth_register_submit")}
+                {t("common:auth.register_submit")}
               </Button>
 
               <p className="text-center text-sm text-gray-500 dark:text-gray-400">
-                {t("common:auth_register_have_account")}{" "}
+                {t("common:auth.register_have_account")}{" "}
                 <button
                   type="button"
                   onClick={toggleMode}
                   className="font-black text-starbucks-green hover:underline decoration-2 underline-offset-4"
                 >
-                  {t("common:auth_register_login")}
+                  {t("common:auth.register_login")}
                 </button>
               </p>
             </motion.form>

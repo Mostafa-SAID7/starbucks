@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { queryKeys } from "@/lib/queryKeys";
 import { navigationFetchers } from "@/lib/fetchers";
+import { CACHE_TIMES } from "@/lib/constants";
 
 /**
  * Hook to fetch navigation data (navbar and footer)
@@ -13,7 +14,7 @@ export function useNavigation() {
   return useQuery({
     queryKey: queryKeys.navigation.config(),
     queryFn: () => navigationFetchers.fetchNavigation(),
-    staleTime: 24 * 60 * 60 * 1000, // 24 hours
-    gcTime: 48 * 60 * 60 * 1000, // 48 hours
+    staleTime: CACHE_TIMES.NAV_STALE,
+    gcTime: CACHE_TIMES.NAV_GC,
   });
 }

@@ -207,11 +207,13 @@ The application uses **TanStack Query** for comprehensive data management, repla
 
 ```typescript
 // src/lib/queryClient.ts
+import { CACHE_TIMES } from "./constants";
+
 export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 5 * 60 * 1000, // 5 minutes default
-      gcTime: 10 * 60 * 1000, // 10 minutes garbage collection
+      staleTime: CACHE_TIMES.DEFAULT_STALE,
+      gcTime: CACHE_TIMES.DEFAULT_GC,
       retry: 3, // Exponential backoff retry
       refetchOnWindowFocus: false, // Static content optimization
       refetchOnReconnect: true, // Network reconnection handling
@@ -257,16 +259,17 @@ export const queryKeys = {
 └─────────────────┘    └──────────────────┘    └─────────────────┘
 ```
 
-#### Cache Strategy by Data Type
+| Data Type        | TTL (Stale) | Rationale                       |
+| ---------------- | ----------- | ------------------------------- |
+| Menu Data        | 1 hour      | Menu items change infrequently  |
+| Page Content     | 24 hours    | Static content, rarely updated  |
+| Locations        | 30 minutes  | Store hours may change          |
+| Contact Info     | 24 hours    | Contact details are stable      |
+| Featured Content | 10 minutes  | Marketing content updates daily |
+| Navigation       | 4 hours     | Navigation structure is stable  |
 
-| Data Type        | Stale Time | Rationale                       |
-| ---------------- | ---------- | ------------------------------- |
-| Menu Data        | 1 hour     | Menu items change infrequently  |
-| Page Content     | 24 hours   | Static content, rarely updated  |
-| Locations        | 30 minutes | Store hours may change          |
-| Contact Info     | 24 hours   | Contact details are stable      |
-| Featured Content | 24 hours   | Marketing content updates daily |
-| Navigation       | 24 hours   | Navigation structure is stable  |
+> [!NOTE]
+> All timing values are centralized in `src/lib/constants.ts` under the `CACHE_TIMES` object.
 
 #### Error Handling Strategy
 

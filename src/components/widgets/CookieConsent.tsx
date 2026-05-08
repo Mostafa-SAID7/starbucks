@@ -26,7 +26,7 @@ const Toggle = ({ checked, onChange }: { checked: boolean; onChange: () => void 
 )
 
 const CookieConsent: React.FC = () => {
-  const { t } = useTranslation('cookieConsent')
+  const { t } = useTranslation('common')
 
   const [visible, setVisible] = useState(() => !localStorage.getItem(COOKIE_KEY))
   const [showPrefs, setShowPrefs] = useState(false)
@@ -73,25 +73,25 @@ const CookieConsent: React.FC = () => {
                   <div className="flex items-center gap-3 mb-2">
                     <Logo className="h-8 w-8 object-contain" />
                     <h2 className="text-base font-extrabold text-starbucks-dark dark:text-white">
-                      {t('title')}
+                      {t('cookieConsent.title')}
                     </h2>
                   </div>
                   <p className="text-sm text-gray-500 dark:text-gray-400">
-                    {t('prefsDesc')}
+                    {t('cookieConsent.prefsDesc')}
                   </p>
 
                   {/* Required — always on */}
                   <div className="flex items-start justify-between gap-4 rounded-xl bg-gray-50 dark:bg-zinc-800 p-5 border dark:border-zinc-700">
                     <div className="flex-1">
                       <p className="font-extrabold text-starbucks-dark dark:text-white mb-1">
-                        {t('requiredTitle')}
+                        {t('cookieConsent.requiredTitle')}
                       </p>
                       <p className="text-sm text-gray-500 dark:text-gray-400">
-                        {t('requiredDesc')}
+                        {t('cookieConsent.requiredDesc')}
                       </p>
                     </div>
                     <div className="flex-shrink-0">
-                      <span className="text-xs font-bold text-starbucks-green uppercase tracking-widest">{t('alwaysOn')}</span>
+                      <span className="text-xs font-bold text-starbucks-green uppercase tracking-widest">{t('cookieConsent.alwaysOn')}</span>
                     </div>
                   </div>
 
@@ -99,10 +99,10 @@ const CookieConsent: React.FC = () => {
                   <div className="flex items-start justify-between gap-4 rounded-xl bg-gray-50 dark:bg-zinc-800 p-5 border dark:border-zinc-700">
                     <div className="flex-1">
                       <p className="font-extrabold text-starbucks-dark dark:text-white mb-1">
-                        {t('functionalTitle')}
+                        {t('cookieConsent.functionalTitle')}
                       </p>
                       <p className="text-sm text-gray-500 dark:text-gray-400">
-                        {t('functionalDesc')}
+                        {t('cookieConsent.functionalDesc')}
                       </p>
                     </div>
                     <Toggle checked={prefs.functional} onChange={() => setPrefs(p => ({ ...p, functional: !p.functional }))} />
@@ -112,10 +112,10 @@ const CookieConsent: React.FC = () => {
                   <div className="flex items-start justify-between gap-4 rounded-xl bg-gray-50 dark:bg-zinc-800 p-5 border dark:border-zinc-700">
                     <div className="flex-1">
                       <p className="font-extrabold text-starbucks-dark dark:text-white mb-1">
-                        {t('advertisingTitle')}
+                        {t('cookieConsent.advertisingTitle')}
                       </p>
                       <p className="text-sm text-gray-500 dark:text-gray-400">
-                        {t('advertisingDesc')}
+                        {t('cookieConsent.advertisingDesc')}
                       </p>
                     </div>
                     <Toggle checked={prefs.advertising} onChange={() => setPrefs(p => ({ ...p, advertising: !p.advertising }))} />
@@ -124,10 +124,10 @@ const CookieConsent: React.FC = () => {
                   {/* Functionality list */}
                   <div className="rounded-xl border dark:border-zinc-700 overflow-hidden">
                     <div className="bg-gray-100 dark:bg-zinc-800 px-5 py-3 border-b dark:border-zinc-700">
-                      <p className="text-sm font-extrabold text-starbucks-dark dark:text-white">{t('functionalityAllowed')}</p>
+                      <p className="text-sm font-extrabold text-starbucks-dark dark:text-white">{t('cookieConsent.functionalityAllowed')}</p>
                     </div>
                     <ul className="divide-y divide-gray-100 dark:divide-zinc-700">
-                      {(t('items', { returnObjects: true }) as string[]).map((item: string) => (
+                      {(t('cookieConsent.items', { returnObjects: true }) as string[]).map((item: string) => (
                         <li key={item} className="flex items-center gap-3 px-5 py-3 text-sm text-gray-600 dark:text-gray-400">
                           <span className="h-1.5 w-1.5 flex-shrink-0 rounded-full bg-starbucks-green" />
                           {item}
@@ -142,32 +142,32 @@ const CookieConsent: React.FC = () => {
                       onClick={() => setShowPrefs(false)}
                       className="rounded-full border-2 border-gray-300 dark:border-zinc-600 px-8 py-3 text-sm font-extrabold text-gray-600 dark:text-gray-300 hover:border-starbucks-dark hover:text-starbucks-dark dark:hover:border-white dark:hover:text-white transition-all"
                     >
-                      {t('cancel')}
+                      {t('cookieConsent.cancel')}
                     </button>
                     <button
                       onClick={submitPrefs}
                       className="rounded-full bg-starbucks-green px-8 py-3 text-sm font-extrabold text-white hover:bg-starbucks-dark transition-all"
                     >
-                      {t('submitPrefs')}
+                      {t('cookieConsent.submitPrefs')}
                     </button>
                     <button
                       onClick={declineAll}
                       className="rounded-full border-2 border-gray-300 dark:border-zinc-600 px-8 py-3 text-sm font-extrabold text-gray-600 dark:text-gray-300 hover:border-starbucks-dark hover:text-starbucks-dark transition-all"
                     >
-                      {t('decline')}
+                      {t('cookieConsent.decline')}
                     </button>
                   </div>
 
                   {/* TrustArc + legal links */}
                   <div className="flex flex-wrap items-center justify-between gap-4 pt-2 border-t dark:border-zinc-700">
                     <div className="flex gap-4 text-xs text-gray-400">
-                      <Link to="/privacy-statement" className="hover:text-starbucks-green transition-colors" onClick={acceptAll}>{t('privacyPolicy')}</Link>
-                      <Link to="/terms-of-use" className="hover:text-starbucks-green transition-colors" onClick={acceptAll}>{t('termsOfUse')}</Link>
-                      <Link to="/cookie-notice" className="hover:text-starbucks-green transition-colors" onClick={acceptAll}>{t('cookieNotice')}</Link>
-                      <Link to="/cookie-notice" className="hover:text-starbucks-green transition-colors" onClick={acceptAll}>{t('cookiePolicy')}</Link>
+                      <Link to="/privacy-statement" className="hover:text-starbucks-green transition-colors" onClick={acceptAll}>{t('cookieConsent.privacyPolicy')}</Link>
+                      <Link to="/terms-of-use" className="hover:text-starbucks-green transition-colors" onClick={acceptAll}>{t('cookieConsent.termsOfUse')}</Link>
+                      <Link to="/cookie-notice" className="hover:text-starbucks-green transition-colors" onClick={acceptAll}>{t('cookieConsent.cookieNotice')}</Link>
+                      <Link to="/cookie-notice" className="hover:text-starbucks-green transition-colors" onClick={acceptAll}>{t('cookieConsent.cookiePolicy')}</Link>
                     </div>
                     <div className="flex items-center gap-2 text-xs text-gray-400">
-                      <span>{t('poweredBy')}</span>
+                      <span>{t('cookieConsent.poweredBy')}</span>
                       <span className="font-bold text-gray-500 dark:text-gray-400">TrustArc</span>
                     </div>
                   </div>
@@ -184,10 +184,10 @@ const CookieConsent: React.FC = () => {
                 <Logo className="h-8 w-8 flex-shrink-0 object-contain mt-0.5" />
                 <div>
                   <p className="text-sm font-extrabold text-starbucks-dark dark:text-white mb-0.5">
-                    {t('title')}
+                    {t('cookieConsent.title')}
                   </p>
                   <p className="text-xs text-gray-500 dark:text-gray-400 max-w-2xl leading-relaxed">
-                    {t('body')}
+                    {t('cookieConsent.body')}
                   </p>
                 </div>
               </div>
@@ -198,19 +198,19 @@ const CookieConsent: React.FC = () => {
                   onClick={acceptAll}
                   className="rounded-full bg-starbucks-green px-6 py-2.5 text-sm font-extrabold text-white hover:bg-starbucks-dark transition-all"
                 >
-                  {t('agree')}
+                  {t('cookieConsent.agree')}
                 </button>
                 <button
                   onClick={declineAll}
                   className="rounded-full border-2 border-gray-300 dark:border-zinc-600 px-6 py-2.5 text-sm font-extrabold text-gray-600 dark:text-gray-300 hover:border-starbucks-dark hover:text-starbucks-dark transition-all"
                 >
-                  {t('decline')}
+                  {t('cookieConsent.decline')}
                 </button>
                 <button
                   onClick={() => setShowPrefs(v => !v)}
                   className="rounded-full px-6 py-2.5 text-sm font-extrabold text-starbucks-green hover:underline transition-all"
                 >
-                  {t('more')}
+                  {t('cookieConsent.more')}
                 </button>
                 <button onClick={declineAll} className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors ml-1">
                   <X className="h-4 w-4" />

@@ -1,6 +1,8 @@
 import * as React from "react"
 import { cn } from "@/lib/utils"
 import { X } from "lucide-react"
+import { motion, AnimatePresence } from "framer-motion"
+import { ANIMATION_CONFIG } from "@/lib/constants"
 
 interface SheetProps {
   open?: boolean
@@ -45,34 +47,39 @@ const SheetContent = React.forwardRef<
 >(({ className, children, side = "right", ...props }, ref) => {
   const { open, onOpenChange } = React.useContext(SheetContext)
 
-  if (!open) return null
-
   return (
-    <>
-      <div
-        className="fixed inset-0 z-50 bg-black/50 transition-opacity"
-        onClick={() => onOpenChange?.(false)}
-      />
-      <div
-        ref={ref}
-        className={cn(
-          "fixed z-50 gap-4 bg-card-light dark:bg-card-dark p-6 shadow-lg transition ease-in-out border-border-light dark:border-border-dark",
-          side === "right" && "inset-y-0 right-0 h-full w-3/4 sm:max-w-sm border-l",
-          side === "left" && "inset-y-0 left-0 h-full w-3/4 sm:max-w-sm border-r",
-          className
-        )}
-        {...props}
-      >
-        <button
-          onClick={() => onOpenChange?.(false)}
-          className="absolute left-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 text-foreground-light dark:text-foreground-dark"
-        >
-          <X className="h-6 w-6" />
-          <span className="sr-only">إغلاق</span>
-        </button>
-        {children}
-      </div>
-    </>
+    <AnimatePresence>
+      {open && (
+        <div className="fixed inset-0 z-50 flex items-center justify-end">
+          <motion.div
+            {...ANIMATION_CONFIG.VARIANTS.FADE_IN}
+            className="fixed inset-0 bg-black/50"
+            onClick={() => onOpenChange?.(false)}
+          />
+          <motion.div
+            ref={ref}
+            {...(side === "right" ? ANIMATION_CONFIG.VARIANTS.SLIDE_IN_RIGHT : ANIMATION_CONFIG.VARIANTS.SLIDE_IN_LEFT)}
+            transition={ANIMATION_CONFIG.TRANSITIONS.SPRING}
+            className={cn(
+              "fixed z-50 gap-4 bg-white dark:bg-zinc-900 p-6 shadow-lg border-border-light dark:border-border-dark",
+              side === "right" && "inset-y-0 right-0 h-full w-3/4 sm:max-w-sm border-l",
+              side === "left" && "inset-y-0 left-0 h-full w-3/4 sm:max-w-sm border-r",
+              className
+            )}
+            {...props as any}
+          >
+            <button
+              onClick={() => onOpenChange?.(false)}
+              className="absolute left-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 text-foreground-light dark:text-foreground-dark"
+            >
+              <X className="h-6 w-6" />
+              <span className="sr-only">إغلاق</span>
+            </button>
+            {children}
+          </motion.div>
+        </div>
+      )}
+    </AnimatePresence>
   )
 })
 SheetContent.displayName = "SheetContent"

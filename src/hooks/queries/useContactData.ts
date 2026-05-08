@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { queryKeys } from "@/lib/queryKeys";
 import { contactFetchers } from "@/lib/fetchers";
+import { CACHE_TIMES } from "@/lib/constants";
 
 /**
  * Hook to fetch contact information
@@ -13,7 +14,7 @@ export function useContactInfo() {
   return useQuery({
     queryKey: queryKeys.contact.all(),
     queryFn: contactFetchers.fetchContactInfo,
-    staleTime: 24 * 60 * 60 * 1000, // 24 hours
-    gcTime: 48 * 60 * 60 * 1000, // 48 hours
+    staleTime: CACHE_TIMES.PAGE_STALE,
+    gcTime: CACHE_TIMES.PAGE_GC,
   });
 }

@@ -1,5 +1,6 @@
 import * as React from "react"
 import { cn } from "@/lib/utils"
+import { ANIMATION_CONFIG } from "@/lib/constants"
 import { X } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 
@@ -51,17 +52,13 @@ const DialogContent = React.forwardRef<
       {open && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-8">
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+            {...ANIMATION_CONFIG.VARIANTS.FADE_IN}
             onClick={() => onOpenChange?.(false)}
             className="absolute inset-0 bg-black/40 backdrop-blur-2xl"
           />
           <motion.div
             ref={ref}
-            initial={{ opacity: 0, scale: 0.9, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.9, y: 20 }}
+            {...ANIMATION_CONFIG.VARIANTS.DIALOG}
             className={cn(
               "relative w-full max-w-lg overflow-hidden rounded-[2rem] bg-white/95 dark:bg-zinc-900/95 p-6 shadow-2xl backdrop-blur-md border border-white/20 dark:border-zinc-800/50",
               className

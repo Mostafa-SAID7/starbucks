@@ -7,7 +7,7 @@ import { useStatement } from "@/hooks/queries";
 import { StatementData } from "@/types/components";
 
 const StatementSection = () => {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation(["pages", "common"]);
   const lang = i18n.language as "ar" | "en";
 
   // Fetch statement data using TanStack Query
@@ -35,8 +35,8 @@ const StatementSection = () => {
     return null; // Gracefully hide section if data fails to load
   }
 
-  const localizedData = (statementData[lang] ||
-    statementData.en) as StatementData;
+  // Paragraphs are stored as an array in pages.json
+  const paragraphs = t("pages:home.statement.paragraphs", { returnObjects: true }) as string[];
 
   return (
     <section className="bg-background py-16 transition-colors">
@@ -49,13 +49,13 @@ const StatementSection = () => {
           className="text-center"
         >
           <h2 className="mb-6 text-3xl font-bold text-starbucks-dark dark:text-foreground-dark md:text-4xl transition-colors">
-            {localizedData.title}
+            {t("pages:home.statement.title")}
           </h2>
           <div className="mb-8 space-y-4 text-center">
             <h4 className="text-xl font-semibold text-starbucks-green">
-              {localizedData.subtitle}
+              {t("pages:home.statement.subtitle")}
             </h4>
-            {localizedData.paragraphs.map(
+            {Array.isArray(paragraphs) && paragraphs.map(
               (paragraph: string, index: number) => (
                 <p
                   key={index}
@@ -66,9 +66,9 @@ const StatementSection = () => {
               ),
             )}
           </div>
-          <Link to={`/${lang}${localizedData.ctaLink}`}>
+          <Link to={`/${lang}${statementData.ctaLink}`}>
             <Button variant="outline" size="lg">
-              {localizedData.ctaText}
+              {t("pages:home.statement.ctaText")}
             </Button>
           </Link>
         </motion.div>

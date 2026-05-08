@@ -69,7 +69,8 @@ export interface GenericSection {
 }
 
 export interface GenericPageData {
-  title: LocalizedText;
+  slug?: string;
+  title?: LocalizedText;
   subtitle?: LocalizedText;
   lastUpdated?: LocalizedText;
   updateNote?: LocalizedText;

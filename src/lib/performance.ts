@@ -1,22 +1,12 @@
+export { debounce, throttle } from "./utils";
+import { performanceMonitor } from "./performanceMonitor";
+
 /**
  * Web Vitals reporting for performance monitoring
  * Only runs in production and when analytics is configured
  */
 
-import { performanceMonitor } from "./performanceMonitor";
-
-// Use a flexible metric type that can accommodate web-vitals structure
-interface BaseMetric {
-  name: string;
-  value: number;
-  rating?: "good" | "needs-improvement" | "poor";
-  delta?: number;
-  entries?: PerformanceEntry[];
-  id?: string;
-  navigationType?: string;
-}
-
-type MetricCallback = (metric: BaseMetric) => void;
+import { BaseMetric, MetricCallback } from "@/types";
 
 export function reportWebVitals(onPerfEntry?: MetricCallback) {
   if (onPerfEntry && import.meta.env.PROD) {
@@ -85,51 +75,40 @@ export function reportWebVitals(onPerfEntry?: MetricCallback) {
 }
 
 /**
+ * Preload a single resource
+ */
+export function preloadResource(href: string, as: "image" | "font" | "script" | "style", type?: string) {
+  const link = document.createElement("link");
+  link.rel = "preload";
+  link.href = href;
+  link.as = as;
+  if (type) link.type = type;
+  if (as === "font") link.crossOrigin = "anonymous";
+  document.head.appendChild(link);
+}
+
+/**
  * Preload critical resources for faster initial load
  */
 export function preloadCriticalResources() {
-  const resources = [
+  const resources: Array<{ href: string; as: "image" | "font"; type?: string }> = [
     { href: "/src/assets/fonts/cairo.woff2", as: "font", type: "font/woff2" },
   ];
 
-  resources.forEach(({ href, as, type }) => {
-    const link = document.createElement("link");
-    link.rel = "preload";
-    link.href = href;
-    link.as = as;
-    if (type) link.type = type;
-    link.crossOrigin = "anonymous";
-    document.head.appendChild(link);
-  });
+  resources.forEach(({ href, as, type }) => preloadResource(href, as, type));
+}
+
+
+/**
+ * Mark a custom performance event
+ */
+export function markPerformanceEvent(name: string) {
+  performanceMonitor.startMeasure(name);
 }
 
 /**
- * Debounce function for performance-sensitive operations
+ * End a custom performance event
  */
-export function debounce<T extends (...args: unknown[]) => unknown>(
-  func: T,
-  wait: number,
-): (...args: Parameters<T>) => void {
-  let timeout: ReturnType<typeof setTimeout>;
-  return (...args: Parameters<T>) => {
-    clearTimeout(timeout);
-    timeout = setTimeout(() => func(...args), wait);
-  };
-}
-
-/**
- * Throttle function for scroll/resize handlers
- */
-export function throttle<T extends (...args: unknown[]) => unknown>(
-  func: T,
-  limit: number,
-): (...args: Parameters<T>) => void {
-  let inThrottle: boolean;
-  return (...args: Parameters<T>) => {
-    if (!inThrottle) {
-      func(...args);
-      inThrottle = true;
-      setTimeout(() => (inThrottle = false), limit);
-    }
-  };
+export function endPerformanceEvent(name: string) {
+  performanceMonitor.endMeasure(name);
 }

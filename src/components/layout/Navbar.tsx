@@ -13,6 +13,7 @@ import { queryKeys } from "@/lib/queryKeys";
 import { pageFetchers } from "@/lib/fetchers";
 import { useNavigation } from "@/hooks/queries";
 import { motion, AnimatePresence } from "framer-motion";
+import { ANIMATION_CONFIG, CACHE_TIMES } from "@/lib/constants";
 import {
   MapPin,
   Menu as MenuIcon,
@@ -60,7 +61,7 @@ export function Navbar() {
       queryClient.prefetchQuery({
         queryKey: queryKeys.pages.bySlug(slug),
         queryFn: () => pageFetchers.fetchPageBySlug(slug),
-        staleTime: 24 * 60 * 60 * 1000, // 24 hours
+        staleTime: CACHE_TIMES.PAGE_STALE,
       });
     },
     [queryClient],
@@ -195,17 +196,13 @@ export function Navbar() {
                   role="menuitem"
                 >
                   <span className="relative z-10 font-branding">
-                    {t(`navigation:navbar.${item.id}`)}
+                    {t([`navigation:navbar.${item.id}`, `common:${item.id}`])}
                   </span>
                   {location.pathname === `/${lang}${item.href}` ? (
                     <motion.div
                       layoutId="nav-underline"
                       className="absolute -bottom-6 left-0 right-0 h-1 bg-starbucks-green rounded-t-full"
-                      transition={{
-                        type: "spring",
-                        stiffness: 380,
-                        damping: 30,
-                      }}
+                      transition={ANIMATION_CONFIG.TRANSITIONS.SPRING}
                     />
                   ) : (
                     <div className="absolute -bottom-6 left-1/2 right-1/2 h-1 bg-starbucks-green opacity-0 group-hover:left-0 group-hover:right-0 group-hover:opacity-100 transition-all duration-300 rounded-t-full" />
@@ -236,7 +233,7 @@ export function Navbar() {
 
             {/* Search Button */}
             <Tooltip
-              content={t("navigation:navbar.tooltips.search")}
+              content={t("common:search")}
               className="w-11 h-11"
             >
               <Button
@@ -247,7 +244,7 @@ export function Navbar() {
                   setIsMobileMenuOpen(false);
                 }}
                 className="rounded-full h-11 w-11 hover:bg-gray-100 dark:hover:bg-zinc-900 hover:scale-110 active:scale-95 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-starbucks-green"
-                aria-label={t("navigation:navbar.tooltips.search")}
+                aria-label={t("common:search")}
               >
                 <Search className="h-5 w-5" />
               </Button>
@@ -293,6 +290,7 @@ export function Navbar() {
                 <motion.div
                   initial={false}
                   animate={{ rotate: theme === "dark" ? 180 : 0 }}
+                  transition={ANIMATION_CONFIG.TRANSITIONS.QUICK_ROTATE as any}
                 >
                   {theme === "dark" ? (
                     <Sun className="h-5 w-5 text-amber-400" />
@@ -329,17 +327,17 @@ export function Navbar() {
               size="icon"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className="lg:hidden text-starbucks-dark dark:text-foreground-dark rounded-full h-11 w-11 hover:bg-gray-100 dark:hover:bg-zinc-900 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-starbucks-green"
-              aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
+              aria-label={isMobileMenuOpen ? t("common:close_menu") : t("common:open_menu")}
               aria-expanded={isMobileMenuOpen}
             >
               <AnimatePresence mode="wait">
-                <motion.div
-                  key={isMobileMenuOpen ? "close" : "menu"}
-                  initial={{ opacity: 0, rotate: -90, scale: 0.5 }}
-                  animate={{ opacity: 1, rotate: 0, scale: 1 }}
-                  exit={{ opacity: 0, rotate: 90, scale: 0.5 }}
-                  transition={{ duration: 0.2 }}
-                >
+                  <motion.div
+                    key={isMobileMenuOpen ? "close" : "menu"}
+                    initial={{ opacity: 0, rotate: -90, scale: 0.5 }}
+                    animate={{ opacity: 1, rotate: 0, scale: 1 }}
+                    exit={{ opacity: 0, rotate: 90, scale: 0.5 }}
+                    transition={ANIMATION_CONFIG.TRANSITIONS.QUICK as any}
+                  >
                   {isMobileMenuOpen ? (
                     <X className="h-6 w-6" />
                   ) : (
@@ -357,9 +355,7 @@ export function Navbar() {
           <div className="fixed inset-0 top-20 lg:top-24 z-[110] lg:hidden">
             {/* Backdrop */}
             <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
+              {...ANIMATION_CONFIG.VARIANTS.FADE_IN}
               onClick={() => setIsMobileMenuOpen(false)}
               className="absolute inset-0 bg-black/40 backdrop-blur-sm"
             />
@@ -370,7 +366,7 @@ export function Navbar() {
               initial={{ y: "-100%" }}
               animate={{ y: 0 }}
               exit={{ y: "-100%" }}
-              transition={{ type: "spring", damping: 30, stiffness: 300 }}
+              transition={ANIMATION_CONFIG.TRANSITIONS.SPRING}
               className="absolute top-0 left-0 right-0 z-50 border-t border-gray-100/50 dark:border-zinc-800/50 bg-white/95 dark:bg-zinc-950/95 backdrop-blur-xl overflow-hidden shadow-2xl rounded-b-[2rem]"
               role="menu"
               aria-label="Mobile navigation menu"
@@ -398,7 +394,7 @@ export function Navbar() {
                         `}
                         role="menuitem"
                       >
-                        {t(`navigation:navbar.${item.id}`)}
+                        {t([`navigation:navbar.${item.id}`, `common:${item.id}`])}
                       </NavLink>
                     </motion.div>
                   ))}

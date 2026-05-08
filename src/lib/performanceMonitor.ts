@@ -1,31 +1,5 @@
-/**
- * Performance Monitoring Utilities
- * Measures and tracks application performance metrics
- */
-
-interface PerformanceMetric {
-  name: string;
-  value: number;
-  timestamp: number;
-  context?: string;
-}
-
-interface CacheMetrics {
-  hits: number;
-  misses: number;
-  hitRate: number;
-  totalQueries: number;
-}
-
-interface BundleMetrics {
-  totalSize: number;
-  gzipSize: number;
-  chunks: Array<{
-    name: string;
-    size: number;
-    gzipSize: number;
-  }>;
-}
+import { PerformanceMetric, CacheMetrics, BundleMetrics } from "@/types";
+import { PERFORMANCE_CONFIG } from "./constants";
 
 class PerformanceMonitor {
   private metrics: PerformanceMetric[] = [];
@@ -160,46 +134,6 @@ class PerformanceMonitor {
   }
 
   /**
-   * Get Web Vitals metrics
-   */
-  getWebVitals(): Promise<{
-    fcp?: number;
-    lcp?: number;
-    fid?: number;
-    cls?: number;
-    ttfb?: number;
-  }> {
-    return new Promise((resolve) => {
-      const vitals: Record<string, number> = {};
-
-      // First Contentful Paint
-      const fcpEntry = performance.getEntriesByName(
-        "first-contentful-paint",
-      )[0] as PerformanceEntry;
-      if (fcpEntry) {
-        vitals.fcp = fcpEntry.startTime;
-      }
-
-      // Time to First Byte
-      const navigationEntry = performance.getEntriesByType(
-        "navigation",
-      )[0] as PerformanceNavigationTiming;
-      if (navigationEntry) {
-        vitals.ttfb =
-          navigationEntry.responseStart - navigationEntry.requestStart;
-      }
-
-      // Use web-vitals library if available
-      if (typeof window !== "undefined" && "webVitals" in window) {
-        // This would require installing web-vitals package
-        // For now, we'll return what we have
-      }
-
-      resolve(vitals);
-    });
-  }
-
-  /**
    * Measure bundle size (client-side estimation)
    */
   async estimateBundleSize(): Promise<BundleMetrics> {
@@ -243,7 +177,6 @@ class PerformanceMonitor {
     overallCacheHitRate: number;
     averagePageLoad: number;
     averageQueryTime: number;
-    webVitals?: Record<string, number>;
   } {
     return {
       metrics: this.getMetrics(),
@@ -359,23 +292,6 @@ export function measureQuery(queryKey: string, isFromCache: boolean) {
 
   return () => {}; // No-op for cached queries
 }
-
-/**
- * Performance monitoring configuration
- */
-export const PERFORMANCE_CONFIG = {
-  // Thresholds for performance warnings
-  SLOW_PAGE_LOAD: 3000, // 3 seconds
-  SLOW_QUERY: 1000, // 1 second
-  SLOW_RENDER: 16, // 16ms (60fps)
-
-  // Cache performance targets
-  TARGET_CACHE_HIT_RATE: 80, // 80%
-
-  // Bundle size targets
-  TARGET_BUNDLE_SIZE: 7 * 1024 * 1024, // 7MB
-  TARGET_GZIP_SIZE: 2 * 1024 * 1024, // 2MB
-};
 
 /**
  * Check if performance meets targets

@@ -18,9 +18,20 @@ export const GenericPage: React.FC<GenericPageProps> = ({
   accordionSectionIndices = [1, 2, 3, 4],
   useAccordionLayout = false,
 }) => {
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation(["pages", "common"]);
   const lang = (i18n.language === "ar" ? "ar" : "en") as "ar" | "en";
   const isRTL = i18n.language === "ar";
+  const slug = data.slug;
+
+  // Use translations if slug is available
+  const localizedTitle = slug ? t(`pages:${slug}.title`, { defaultValue: data.title?.[lang] ?? "" }) : (data.title?.[lang] ?? "");
+  const localizedSubtitle = slug ? t(`pages:${slug}.subtitle`, { defaultValue: data.subtitle?.[lang] ?? "" }) : (data.subtitle?.[lang] ?? "");
+  const localizedLastUpdated = slug ? t(`pages:${slug}.lastUpdated`, { defaultValue: data.lastUpdated?.[lang] ?? "" }) : (data.lastUpdated?.[lang] ?? "");
+  
+  const introData = {
+    title: slug ? t(`pages:${slug}.intro.title`, { defaultValue: data.intro?.title?.[lang] ?? "" }) : (data.intro?.title?.[lang] ?? ""),
+    paragraphs: slug ? t(`pages:${slug}.intro.paragraphs`, { returnObjects: true, defaultValue: data.intro?.paragraphs }) : data.intro?.paragraphs,
+  };
 
   const renderSections = () => {
     if (useAccordionLayout) {
@@ -28,21 +39,25 @@ export const GenericPage: React.FC<GenericPageProps> = ({
         <div className="space-y-4">
           <Accordion
             defaultIndex={0}
-            items={data.sections.map((section) => ({
-              title: section.title?.[lang] ?? "",
-              content: (
-                <div className="pt-4">
-                  <SectionRenderer
-                    section={section}
-                    lang={lang}
-                    isRTL={isRTL}
-                    pageTitle={data.title[lang]}
-                    hideTitle={true}
-                    hideImageGrid={true}
-                  />
-                </div>
-              ),
-            }))}
+            items={data.sections.map((section) => {
+              const sectionTitle = slug ? t(`pages:${slug}.sections.${section.id}.title`, { defaultValue: section.title?.[lang] ?? "" }) : (section.title?.[lang] ?? "");
+              return {
+                title: sectionTitle,
+                content: (
+                  <div className="pt-4">
+                    <SectionRenderer
+                      section={section}
+                      lang={lang}
+                      isRTL={isRTL}
+                      pageTitle={localizedTitle}
+                      hideTitle={true}
+                      hideImageGrid={true}
+                      slug={slug}
+                    />
+                  </div>
+                ),
+              };
+            })}
           />
           {/* Render the last section's image grid outside the accordion */}
           {data.sections.slice(-1).map(
@@ -51,7 +66,7 @@ export const GenericPage: React.FC<GenericPageProps> = ({
                 <div key={`${section.id}-grid`} className="mt-12">
                   <SectionImageGrid
                     imageGrid={section.imageGrid}
-                    pageTitle={data.title[lang]}
+                    pageTitle={localizedTitle}
                   />
                 </div>
               ),
@@ -83,7 +98,8 @@ export const GenericPage: React.FC<GenericPageProps> = ({
                     }}
                     lang={lang}
                     isRTL={isRTL}
-                    pageTitle={data.title[lang]}
+                    pageTitle={localizedTitle}
+                    slug={slug}
                   />
                 </div>
               </section>
@@ -96,7 +112,8 @@ export const GenericPage: React.FC<GenericPageProps> = ({
               section={section}
               lang={lang}
               isRTL={isRTL}
-              pageTitle={data.title[lang]}
+              pageTitle={localizedTitle}
+              slug={slug}
             />
           );
         })}
@@ -106,7 +123,7 @@ export const GenericPage: React.FC<GenericPageProps> = ({
 
   const content = (
     <div className="min-h-screen bg-white dark:bg-black pb-24">
-      <SEO title={seoTitle || data.title[lang]} />
+      <SEO title={seoTitle || localizedTitle} />
 
       {/* Hero Section */}
       {data.hero && (
@@ -114,7 +131,7 @@ export const GenericPage: React.FC<GenericPageProps> = ({
           <div className="absolute inset-0">
             <img
               src={typeof data.hero.image === 'string' ? data.hero.image : data.hero.image[lang]}
-              alt={data.hero.title[lang]}
+              alt={slug ? t(`pages:${slug}.hero.title`, { defaultValue: data.hero.title[lang] }) : data.hero.title[lang]}
               className="w-full h-full object-cover opacity-60"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
@@ -126,14 +143,14 @@ export const GenericPage: React.FC<GenericPageProps> = ({
               className="max-w-2xl space-y-8"
             >
               <h1 className="text-4xl md:text-7xl font-black italic tracking-tight leading-tight">
-                {data.hero.title[lang]}
+                {slug ? t(`pages:${slug}.hero.title`, { defaultValue: data.hero.title[lang] }) : data.hero.title[lang]}
               </h1>
-              {data.hero.description && (
+              {(data.hero.description || (slug && t(`pages:${slug}.hero.description`))) && (
                 <p className="text-xl text-gray-200 leading-relaxed max-w-xl mx-auto md:mx-0">
-                  {data.hero.description[lang]}
+                  {slug ? t(`pages:${slug}.hero.description`, { defaultValue: data.hero.description?.[lang] ?? "" }) : (data.hero.description?.[lang] ?? "")}
                 </p>
               )}
-              {data.hero.cta && (
+              {(data.hero.cta || (slug && t(`pages:${slug}.hero.cta`))) && (
                 <div className="pt-4">
                   <Button
                     variant="primary"
@@ -148,7 +165,7 @@ export const GenericPage: React.FC<GenericPageProps> = ({
                       )
                     }
                   >
-                    {data.hero.cta[lang]}
+                    {slug ? t(`pages:${slug}.hero.cta`, { defaultValue: data.hero.cta?.[lang] ?? "" }) : (data.hero.cta?.[lang] ?? "")}
                   </Button>
                 </div>
               )}
@@ -162,14 +179,36 @@ export const GenericPage: React.FC<GenericPageProps> = ({
         <div className="container mx-auto px-4 pt-8 pb-0 lg:py-12">
           <div className={`flex flex-col lg:flex-row gap-12 ${isRTL ? "lg:flex-row-reverse" : ""}`}>
             
-            {/* Side 1: Sticky Sidebar Image */}
+            {/* Side 1: Sticky Sidebar Image or Video */}
             <div className="lg:w-[40%] lg:sticky lg:top-24 lg:h-[calc(100vh-8rem)] group">
-              <div className="h-full rounded-3xl overflow-hidden shadow-2xl relative">
-                <img
-                  src={typeof data.sidebarImage === 'string' ? data.sidebarImage : data.sidebarImage?.[lang]}
-                  alt={data.title[lang]}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                />
+              <div className="h-full rounded-3xl overflow-hidden shadow-2xl relative bg-black">
+                {(() => {
+                  const mediaUrl = typeof data.sidebarImage === 'string' ? data.sidebarImage : data.sidebarImage?.[lang];
+                  const isVideo = mediaUrl?.includes("player.cloudinary.com") || mediaUrl?.includes("embed");
+                  
+                  if (isVideo) {
+                    return (
+                      <div className="w-full h-full relative pointer-events-none">
+                        <div className="absolute inset-0 z-10 bg-transparent" />
+                        <iframe
+                          src={mediaUrl}
+                          className="w-full h-full absolute inset-0 border-0"
+                          allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
+                          allowFullScreen
+                          title={localizedTitle}
+                        />
+                      </div>
+                    );
+                  }
+                  
+                  return (
+                    <img
+                      src={mediaUrl}
+                      alt={localizedTitle}
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+                  );
+                })()}
               </div>
             </div>
 
@@ -183,26 +222,35 @@ export const GenericPage: React.FC<GenericPageProps> = ({
                 >
                   {!data.hideMainTitle && (
                     <h1 className="text-4xl lg:text-5xl font-black text-starbucks-dark dark:text-white mb-6">
-                      {data.title[lang]}
+                      {localizedTitle}
                     </h1>
                   )}
-                  {data.lastUpdated && (
+                  {localizedLastUpdated && (
                     <span className="inline-block mb-4 px-3 py-1 bg-gray-100 dark:bg-white/5 text-gray-500 dark:text-gray-400 text-xs font-bold rounded-full uppercase tracking-widest">
-                      {data.lastUpdated[lang]}
+                      {localizedLastUpdated}
                     </span>
                   )}
                 </motion.div>
 
                 {/* Intro */}
-                {data.intro && (
+                {(introData.title || (Array.isArray(introData.paragraphs) && introData.paragraphs.length > 0) || data.intro?.image) && (
                   <div className="space-y-6 mb-12 text-xl text-gray-600 dark:text-gray-400 leading-relaxed">
-                    {data.intro.title && (
+                    {data.intro?.image && (
+                      <div className="mb-8 rounded-3xl overflow-hidden shadow-lg aspect-video lg:aspect-[21/9]">
+                        <img
+                          src={typeof data.intro.image === 'string' ? data.intro.image : data.intro.image[lang]}
+                          alt={introData.title || localizedTitle}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                    )}
+                    {introData.title && (
                       <h2 className="text-2xl lg:text-3xl font-black text-starbucks-dark dark:text-white mb-6">
-                        {data.intro.title[lang]}
+                        {introData.title}
                       </h2>
                     )}
-                    {data.intro.paragraphs?.map((p, i) => (
-                      <p key={i} className="font-medium">{p[lang]}</p>
+                    {Array.isArray(introData.paragraphs) && introData.paragraphs.map((p, i) => (
+                      <p key={i} className="font-medium">{typeof p === 'string' ? p : p[lang]}</p>
                     ))}
                   </div>
                 )}
@@ -214,15 +262,15 @@ export const GenericPage: React.FC<GenericPageProps> = ({
                   <div className="mt-16 space-y-8">
                     {data.accordion.title && (
                       <h2 className="text-3xl font-black text-starbucks-dark dark:text-white mb-8">
-                        {data.accordion.title[lang]}
+                        {slug ? t(`pages:${slug}.accordion.title`, { defaultValue: data.accordion.title[lang] }) : data.accordion.title[lang]}
                       </h2>
                     )}
                     <Accordion
-                      items={data.accordion.items?.map((item) => ({
-                        title: typeof item.title === 'string' ? item.title : item.title?.[lang] || '',
+                      items={data.accordion.items?.map((item, i) => ({
+                        title: slug ? t(`pages:${slug}.accordion.items.${i}.title`, { defaultValue: typeof item.title === 'string' ? item.title : item.title?.[lang] || '' }) : (typeof item.title === 'string' ? item.title : item.title?.[lang] || ''),
                         content: (
                           <div className="pt-4 text-lg text-gray-600 dark:text-gray-400 leading-relaxed font-medium whitespace-pre-line">
-                            {typeof item.content === 'string' ? item.content : item.content?.[lang] || ''}
+                            {slug ? t(`pages:${slug}.accordion.items.${i}.content`, { defaultValue: typeof item.content === 'string' ? item.content : item.content?.[lang] || '' }) : (typeof item.content === 'string' ? item.content : item.content?.[lang] || '')}
                           </div>
                         ),
                       })) || []}
@@ -242,16 +290,16 @@ export const GenericPage: React.FC<GenericPageProps> = ({
             <div className="container mx-auto max-w-4xl px-6 py-24">
                {data.accordion.title && (
                 <h2 className="text-4xl font-black text-center mb-12 italic text-starbucks-dark dark:text-white">
-                  {data.accordion.title[lang]}
+                  {slug ? t(`pages:${slug}.accordion.title`, { defaultValue: data.accordion.title[lang] }) : data.accordion.title[lang]}
                 </h2>
               )}
               <div className="bg-white dark:bg-zinc-900/50 rounded-[2.5rem] p-8 md:p-12 shadow-xl border border-gray-100 dark:border-zinc-800">
                 <Accordion
-                  items={data.accordion.items?.map((item) => ({
-                    title: typeof item.title === 'string' ? item.title : item.title?.[lang] || '',
+                  items={data.accordion.items?.map((item, i) => ({
+                    title: slug ? t(`pages:${slug}.accordion.items.${i}.title`, { defaultValue: typeof item.title === 'string' ? item.title : item.title?.[lang] || '' }) : (typeof item.title === 'string' ? item.title : item.title?.[lang] || ''),
                     content: (
                       <div className="pt-4 text-lg text-gray-600 dark:text-gray-400 leading-relaxed">
-                        {typeof item.content === 'string' ? item.content : item.content?.[lang] || ''}
+                        {slug ? t(`pages:${slug}.accordion.items.${i}.content`, { defaultValue: typeof item.content === 'string' ? item.content : item.content?.[lang] || '' }) : (typeof item.content === 'string' ? item.content : item.content?.[lang] || '')}
                       </div>
                     ),
                   })) || []}
@@ -261,25 +309,25 @@ export const GenericPage: React.FC<GenericPageProps> = ({
           )}
         </div>
       ) : (
-        <StaticPageLayout title={data.title} headerSubtitle={data.lastUpdated}>
-          {data.intro && (
+        <StaticPageLayout title={{ ar: localizedTitle, en: localizedTitle }} headerSubtitle={{ ar: localizedLastUpdated, en: localizedLastUpdated }}>
+          {(introData.title || (Array.isArray(introData.paragraphs) && introData.paragraphs.length > 0)) && (
             <div className="space-y-4 mb-12">
-              {data.intro.title && (
+              {introData.title && (
                 <h1 className="text-3xl font-black text-starbucks-dark dark:text-white">
-                  {data.intro.title[lang]}
+                  {introData.title}
                 </h1>
               )}
-              {!data.intro.title && !data.hideMainTitle && (
+              {!introData.title && !data.hideMainTitle && (
                  <h1 className="text-3xl font-black text-starbucks-dark dark:text-white">
-                  {data.title[lang]}
+                  {localizedTitle}
                 </h1>
               )}
-              {data.intro.paragraphs?.map((p, i) => (
+              {Array.isArray(introData.paragraphs) && introData.paragraphs.map((p, i) => (
                 <p
                   key={i}
                   className="text-lg text-gray-600 dark:text-gray-400 leading-relaxed"
                 >
-                  {p[lang]}
+                  {typeof p === 'string' ? p : p[lang]}
                 </p>
               ))}
             </div>
@@ -292,16 +340,16 @@ export const GenericPage: React.FC<GenericPageProps> = ({
             <div className="mt-20 space-y-8">
               {data.accordion.title && (
                 <h2 className="text-3xl font-extrabold text-starbucks-dark dark:text-white italic">
-                  {data.accordion.title[lang]}
+                  {slug ? t(`pages:${slug}.accordion.title`, { defaultValue: data.accordion.title[lang] }) : data.accordion.title[lang]}
                 </h2>
               )}
               <div className="bg-white dark:bg-zinc-900/50 rounded-[2rem] p-4 md:p-8 shadow-sm border border-gray-100 dark:border-zinc-800">
                 <Accordion
-                  items={data.accordion.items?.map((item) => ({
-                    title: typeof item.title === 'string' ? item.title : item.title?.[lang] || '',
+                  items={data.accordion.items?.map((item, i) => ({
+                    title: slug ? t(`pages:${slug}.accordion.items.${i}.title`, { defaultValue: typeof item.title === 'string' ? item.title : item.title?.[lang] || '' }) : (typeof item.title === 'string' ? item.title : item.title?.[lang] || ''),
                     content: (
                       <div className="pt-4 text-gray-600 dark:text-gray-400 leading-relaxed">
-                        {typeof item.content === 'string' ? item.content : item.content?.[lang] || ''}
+                        {slug ? t(`pages:${slug}.accordion.items.${i}.content`, { defaultValue: typeof item.content === 'string' ? item.content : item.content?.[lang] || '' }) : (typeof item.content === 'string' ? item.content : item.content?.[lang] || '')}
                       </div>
                     ),
                   })) || []}
@@ -333,7 +381,7 @@ export const GenericPage: React.FC<GenericPageProps> = ({
                             section={section}
                             lang={lang}
                             isRTL={isRTL}
-                            pageTitle={data.title[lang]}
+                            pageTitle={localizedTitle}
                             hideTitle={true}
                             hideImageGrid={true}
                           />

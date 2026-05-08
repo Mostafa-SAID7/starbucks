@@ -1,5 +1,6 @@
 import { QueryClient } from "@tanstack/react-query";
 import { initializeCacheManager, setupAutoCleanup } from "./cacheInvalidation";
+import { CACHE_TIMES, CLEANUP_CONFIG } from "./constants";
 
 /**
  * Global QueryClient configuration
@@ -9,8 +10,8 @@ export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       // Cache Configuration
-      staleTime: 5 * 60 * 1000, // 5 minutes - data considered fresh
-      gcTime: 10 * 60 * 1000, // 10 minutes - cache garbage collection (formerly cacheTime)
+      staleTime: CACHE_TIMES.DEFAULT_STALE,
+      gcTime: CACHE_TIMES.DEFAULT_GC,
 
       // Retry Configuration
       retry: 3, // Retry failed requests 3 times
@@ -37,9 +38,9 @@ initializeCacheManager(queryClient);
 // Setup automatic cleanup in production
 if (import.meta.env.PROD) {
   setupAutoCleanup(queryClient, {
-    cleanupInterval: 5 * 60 * 1000, // 5 minutes
-    staleAge: 10 * 60 * 1000, // 10 minutes
-    unusedAge: 15 * 60 * 1000, // 15 minutes
+    cleanupInterval: CLEANUP_CONFIG.INTERVAL,
+    staleAge: CLEANUP_CONFIG.STALE_AGE,
+    unusedAge: CLEANUP_CONFIG.UNUSED_AGE,
   });
 }
 

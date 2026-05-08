@@ -6,6 +6,7 @@ export interface HeroBannerData {
   ctaLink: string
   imageUrl: string
   imageAlt: string
+  secondaryImageUrls?: Record<string, string>
 }
 
 // Statement Section Types
@@ -86,7 +87,9 @@ export interface Product {
 }
 
 export interface VerticalCardAction {
+  id?: string;
   label: string;
   href: string;
   primary?: boolean;
+  variant?: "primary" | "secondary";
 }

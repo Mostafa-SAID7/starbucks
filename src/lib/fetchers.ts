@@ -1,32 +1,12 @@
-import type { MenuData, GenericPageData, NavigationConfig } from "@/types";
-
-/**
- * Type for the menu data structure that includes both languages
- */
-type MenuDataWithLanguages = {
-  ar: MenuData;
-  en: MenuData;
-};
-
-/**
- * Custom error class for fetch errors
- */
-export class FetchError extends Error {
-  constructor(
-    message: string,
-    public status?: number,
-    public statusText?: string,
-  ) {
-    super(message);
-    this.name = "FetchError";
-  }
-}
+import { AppError, ErrorType } from "./errorUtils";
+import type { MenuData, GenericPageData, NavigationConfig, MenuCategory, MenuSubcategory } from "@/types";
+import { API_CONFIG } from "./constants";
 
 /**
  * Simulated delay for development (mimics network latency)
  * Remove in production or when connecting to real APIs
  */
-const simulateDelay = (ms: number = 300) =>
+const simulateDelay = (ms: number = API_CONFIG.SIMULATED_DELAY) =>
   new Promise((resolve) => setTimeout(resolve, ms));
 
 /**
@@ -34,18 +14,17 @@ const simulateDelay = (ms: number = 300) =>
  */
 export const menuFetchers = {
   /**
-   * Fetch all menu data
-   * Currently returns static data, will be replaced with API call
+   * Fetch all menu data (structural only)
    */
-  async fetchMenuData(): Promise<MenuDataWithLanguages> {
+  async fetchMenuData(): Promise<MenuData> {
     await simulateDelay();
 
     const { menu } = await import("@/data");
-    return menu as MenuDataWithLanguages;
+    return menu as MenuData;
   },
 
   /**
-   * Fetch specific menu category
+   * Fetch specific menu category (structural only)
    */
   async fetchMenuCategory(
     categoryId: string,
@@ -53,16 +32,14 @@ export const menuFetchers = {
     await simulateDelay();
 
     const { menu } = await import("@/data");
-    const menuData = menu as MenuDataWithLanguages;
+    const menuData = menu as MenuData;
 
-    const lang = document.documentElement.getAttribute("lang") || "ar";
-    const langData = menuData[lang as keyof MenuDataWithLanguages];
-
-    const category = langData?.categories?.find((c) => c.id === categoryId);
+    const category = menuData.categories?.find((c) => c.id === categoryId);
 
     if (!category) {
-      throw new FetchError(
+      throw new AppError(
         `Category not found: ${categoryId}`,
+        ErrorType.NOT_FOUND,
         404,
         "Not Found",
       );
@@ -72,9 +49,41 @@ export const menuFetchers = {
   },
 
   /**
+   * Fetch specific menu item (structural only)
+   */
+  async fetchMenuItem(
+    categoryId: string,
+    subcategoryId: string,
+  ): Promise<{
+    category: MenuCategory;
+    subcategory: MenuSubcategory;
+  }> {
+    await simulateDelay();
+
+    const { menu } = await import("@/data");
+    const menuData = menu as MenuData;
+
+    const category = menuData.categories?.find((c) => c.id === categoryId);
+    const subcategory = category?.subcategories?.find(
+      (s) => s.id === subcategoryId,
+    );
+
+    if (!category || !subcategory) {
+      throw new AppError(
+        `Item not found: ${categoryId}/${subcategoryId}`,
+        ErrorType.NOT_FOUND,
+        404,
+        "Not Found",
+      );
+    }
+
+    return { category, subcategory };
+  },
+
+  /**
    * Fetch specific menu item
    */
-  async fetchMenuItem(categoryId: string, itemId: string) {
+  async fetchMenuItemDetails(categoryId: string, itemId: string) {
     await simulateDelay();
 
     const category = await this.fetchMenuCategory(categoryId);
@@ -86,7 +95,12 @@ export const menuFetchers = {
       }
     }
 
-    throw new FetchError(`Item not found: ${itemId}`, 404, "Not Found");
+    throw new AppError(
+      `Item not found: ${itemId}`,
+      ErrorType.NOT_FOUND,
+      404,
+      "Not Found",
+    );
   },
 };
 
@@ -116,7 +130,12 @@ export const pageFetchers = {
 
     const fetcher = pageMap[slug];
     if (!fetcher) {
-      throw new FetchError(`Page not found: ${slug}`, 404, "Not Found");
+      throw new AppError(
+        `Page not found: ${slug}`,
+        ErrorType.NOT_FOUND,
+        404,
+        "Not Found",
+      );
     }
 
     const data = await fetcher();
@@ -134,24 +153,8 @@ export const locationFetchers = {
   async fetchLocations() {
     await simulateDelay();
 
-    const cities = [
-      {
-        name: "Alexandria",
-        nameAr: "الإسكندرية",
-        count: 7,
-        slug: "alexandria",
-      },
-      { name: "Cairo", nameAr: "القاهرة", count: 62, slug: "cairo" },
-      { name: "Giza", nameAr: "الجيزة", count: 5, slug: "giza" },
-      {
-        name: "North Coast",
-        nameAr: "الساحل الشمالي",
-        count: 1,
-        slug: "north-coast",
-      },
-    ];
-
-    return cities;
+    const { locations } = await import("@/data");
+    return locations;
   },
 
   /**

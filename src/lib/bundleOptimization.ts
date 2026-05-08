@@ -1,4 +1,6 @@
 import React from "react";
+import { PERFORMANCE_CONFIG } from "./constants";
+import { preloadResource } from "./performance";
 
 /**
  * Bundle Size Optimization Utilities
@@ -147,76 +149,20 @@ export const bundleAnalysis = {
   },
 };
 
+
 /**
  * Production optimization strategies
  */
 export const productionOptimizations = {
   /**
-   * Remove development-only code
-   */
-  stripDevCode: () => {
-    // This is handled by build tools, but we can provide runtime checks
-    if (import.meta.env.PROD) {
-      // Remove console logs in production
-      console.log = () => {};
-      console.warn = () => {};
-      // Keep console.error for monitoring
-    }
-  },
-
-  /**
    * Optimize images and assets
    */
   optimizeAssets: {
-    // Preload critical images
-    preloadImage: (src: string) => {
-      const link = document.createElement("link");
-      link.rel = "preload";
-      link.as = "image";
-      link.href = src;
-      document.head.appendChild(link);
-    },
-  },
-
-  /**
-   * Service worker optimization
-   */
-  serviceWorker: {
-    // Cache strategy for different asset types
-    getCacheStrategy: (url: string) => {
-      if (url.includes("/api/")) {
-        return "NetworkFirst"; // API calls
-      } else if (url.includes(".js") || url.includes(".css")) {
-        return "CacheFirst"; // Static assets
-      } else if (
-        url.includes(".jpg") ||
-        url.includes(".png") ||
-        url.includes(".webp")
-      ) {
-        return "CacheFirst"; // Images
-      }
-      return "NetworkFirst"; // Default
-    },
+    // Preload critical images using shared performance utility
+    preloadImage: (src: string) => preloadResource(src, "image"),
   },
 };
 
-/**
- * Bundle size targets and monitoring
- */
-export const BUNDLE_TARGETS = {
-  // Size targets in bytes
-  TOTAL_SIZE: 7 * 1024 * 1024, // 7MB
-  GZIP_SIZE: 2 * 1024 * 1024, // 2MB
-  INITIAL_CHUNK: 1 * 1024 * 1024, // 1MB
-
-  // Performance budgets
-  FIRST_LOAD_JS: 512 * 1024, // 512KB
-  ROUTE_CHUNK: 256 * 1024, // 256KB
-
-  // Asset targets
-  IMAGE_SIZE: 500 * 1024, // 500KB per image
-  FONT_SIZE: 100 * 1024, // 100KB per font
-};
 
 /**
  * Check if bundle meets size targets
@@ -243,13 +189,13 @@ export function checkBundleTargets(): {
   if (import.meta.env.DEV) {
     console.group("📦 Bundle Size Check");
     console.log(
-      `Total Size: ${results.totalSize ? "✅" : "❌"} Target: ${(BUNDLE_TARGETS.TOTAL_SIZE / 1024 / 1024).toFixed(1)}MB`,
+      `Total Size: ${results.totalSize ? "✅" : "❌"} Target: ${(PERFORMANCE_CONFIG.TARGET_BUNDLE_SIZE / 1024 / 1024).toFixed(1)}MB`,
     );
     console.log(
-      `Gzip Size: ${results.gzipSize ? "✅" : "❌"} Target: ${(BUNDLE_TARGETS.GZIP_SIZE / 1024 / 1024).toFixed(1)}MB`,
+      `Gzip Size: ${results.gzipSize ? "✅" : "❌"} Target: ${(PERFORMANCE_CONFIG.TARGET_GZIP_SIZE / 1024 / 1024).toFixed(1)}MB`,
     );
     console.log(
-      `Initial Chunk: ${results.initialChunk ? "✅" : "❌"} Target: ${(BUNDLE_TARGETS.INITIAL_CHUNK / 1024).toFixed(0)}KB`,
+      `Initial Chunk: ${results.initialChunk ? "✅" : "❌"} Target: ${(PERFORMANCE_CONFIG.TARGET_INITIAL_CHUNK / 1024).toFixed(0)}KB`,
     );
     console.log(
       `Overall: ${results.overall ? "✅ PASS" : "❌ NEEDS OPTIMIZATION"}`,
@@ -274,9 +220,6 @@ export function initializeBundleOptimizations() {
     setTimeout(() => {
       checkBundleTargets();
     }, 2000);
-  } else {
-    // Production optimizations
-    productionOptimizations.stripDevCode();
   }
 }
 

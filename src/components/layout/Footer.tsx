@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { Globe, ChevronDown } from "lucide-react";
 import { useNavigation } from "@/hooks/queries";
 import { motion, AnimatePresence } from "framer-motion";
+import { ANIMATION_CONFIG } from "@/lib/constants";
 
 import { FooterLink, FooterSection, Country, Social } from "@/types/navigation";
 
@@ -107,7 +108,7 @@ export function Footer() {
                       </span>
                       <motion.div
                         animate={{ rotate: isOpen ? 180 : 0 }}
-                        transition={{ duration: 0.2 }}
+                        transition={ANIMATION_CONFIG.TRANSITIONS.QUICK_ROTATE as any}
                       >
                         <ChevronDown className="h-4 w-4 text-gray-400" />
                       </motion.div>
@@ -123,10 +124,7 @@ export function Footer() {
                             open: { opacity: 1, height: "auto" },
                             collapsed: { opacity: 0, height: 0 },
                           }}
-                          transition={{
-                            duration: 0.3,
-                            ease: [0.04, 0.62, 0.23, 0.98],
-                          }}
+                          transition={ANIMATION_CONFIG.TRANSITIONS.SPRING}
                         >
                           <ul className="px-4 pb-4 space-y-3">
                             {section.links.map((link: FooterLink) => (
@@ -159,12 +157,12 @@ export function Footer() {
                 <div className="flex items-center gap-2">
                   <Globe className="h-4 w-4 text-starbucks-green" />
                   <span className="text-sm font-extrabold uppercase tracking-wider text-white">
-                    {t("navigation:footer.location_selector")}
+                    {t("common:locations")}
                   </span>
                 </div>
                 <motion.div
                   animate={{ rotate: activeAccordion === "location" ? 180 : 0 }}
-                  transition={{ duration: 0.2 }}
+                  transition={ANIMATION_CONFIG.TRANSITIONS.QUICK_ROTATE as any}
                 >
                   <ChevronDown className="h-4 w-4 text-gray-400" />
                 </motion.div>
@@ -180,14 +178,11 @@ export function Footer() {
                       open: { opacity: 1, height: "auto" },
                       collapsed: { opacity: 0, height: 0 },
                     }}
-                    transition={{
-                      duration: 0.3,
-                      ease: [0.04, 0.62, 0.23, 0.98],
-                    }}
+                    transition={ANIMATION_CONFIG.TRANSITIONS.SPRING}
                   >
                     <div className="px-4 pb-4">
                       <div className="mb-3 text-xs font-bold uppercase tracking-widest text-gray-400">
-                        {t("navigation:footer.select_region")}
+                        {t("common:select_region")}
                       </div>
                       <div className="max-h-[200px] overflow-y-auto scrollbar-thin space-y-1">
                         {footerData.countries.map((country: Country) => (
@@ -234,13 +229,13 @@ export function Footer() {
             {/* Location Selector - Desktop Only */}
             <div>
               <h3 className="mb-6 text-lg font-extrabold uppercase tracking-widest text-white">
-                {t("navigation:footer.location_selector")}
+                {t("common:egypt")}
               </h3>
               <div className="group relative inline-block">
                 <button className="flex items-center gap-3 text-base text-gray-400 hover:text-white transition-colors cursor-pointer py-2">
                   <Globe className="h-5 w-5 text-starbucks-green" />
                   <span className="font-bold underline decoration-white/20 underline-offset-8 group-hover:decoration-starbucks-green transition-all">
-                    {t("navigation:footer.location_selector")}
+                    {t("common:egypt")}
                   </span>
                   <svg
                     className="h-4 w-4 transition-transform group-hover:rotate-180"
@@ -261,7 +256,7 @@ export function Footer() {
                   <div className="h-[300px] overflow-y-auto scrollbar-thin rtl">
                     <div className="p-5 px-6">
                       <div className="mb-4 text-xs font-bold uppercase tracking-widest text-gray-400">
-                        {t("navigation:footer.select_region")}
+                        {t("common:select_region")}
                       </div>
                       <ul className="space-y-1">
                         {footerData.countries.map((country: Country) => (
@@ -405,7 +400,7 @@ export function Footer() {
           <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-8">
             <p>
               © {new Date().getFullYear()} Starbucks Coffee Company.{" "}
-              {t("navigation:footer.all_rights_reserved")}
+              {t("common:all_rights_reserved")}
             </p>
             <p className="flex items-center justify-center gap-2">
               <span>{t("navigation:footer.designed_by")}</span>

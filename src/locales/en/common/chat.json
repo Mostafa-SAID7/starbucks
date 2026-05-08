@@ -1,0 +1,10 @@
+{
+  "welcome_message": "Hello! How can we help you today? We're here to assist you.",
+  "bot_response": "Thank you for reaching out. One of our representatives will get back to you shortly.",
+  "support_title": "Starbucks Support",
+  "support_status": "Online and ready to help",
+  "input_placeholder": "Type your message...",
+  "aria_label_open": "Open chat",
+  "aria_label_close": "Close chat",
+  "aria_label_send": "Send message"
+}

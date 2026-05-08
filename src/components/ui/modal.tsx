@@ -1,6 +1,7 @@
 import * as React from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { cn } from "@/lib/utils"
+import { ANIMATION_CONFIG } from "@/lib/constants"
 
 export interface ModalProps {
   isOpen: boolean
@@ -53,9 +54,7 @@ export const Modal = React.forwardRef<HTMLDivElement, ModalProps>(
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+            {...ANIMATION_CONFIG.VARIANTS.FADE_IN}
             className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
             onClick={onClose}
             role="dialog"
@@ -63,10 +62,8 @@ export const Modal = React.forwardRef<HTMLDivElement, ModalProps>(
             aria-labelledby={title ? "modal-title" : undefined}
           >
             <motion.div
-              initial={{ scale: 0.95, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.95, opacity: 0 }}
-              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              {...ANIMATION_CONFIG.VARIANTS.SCALE_IN}
+              transition={ANIMATION_CONFIG.TRANSITIONS.SPRING}
               className={cn(
                 "relative w-full max-w-lg rounded-2xl bg-white dark:bg-zinc-900 shadow-2xl",
                 className

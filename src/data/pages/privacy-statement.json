@@ -1,0 +1,39 @@
+{
+  "slug": "privacy-statement",
+  "layout": "sidebar",
+  "sidebar": {
+    "links": {
+      "menu": "/our-coffees",
+      "about": "/about-us"
+    }
+  },
+  "sections": [
+    { "id": "intro" },
+    { "id": "collection", "list": [] },
+    { "id": "usage", "list": [] },
+    { "id": "sharing", "list": [] },
+    { 
+      "id": "cookies", 
+      "subsections": [
+        { "id": "essential" },
+        { "id": "functional" },
+        { "id": "advertising" }
+      ]
+    },
+    { "id": "international" },
+    { "id": "security" },
+    { "id": "retention" },
+    { "id": "rights", "list": [] },
+    { "id": "children" },
+    { "id": "modifications" },
+    { 
+      "id": "contact",
+      "contactInfo": {
+        "email": "privacy@alshaya.com",
+        "phone": "+965 2227 0180",
+        "phoneTel": "+96522270180",
+        "address": {}
+      }
+    }
+  ]
+}

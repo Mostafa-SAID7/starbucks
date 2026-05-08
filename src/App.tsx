@@ -12,6 +12,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { queryClient } from "@/lib/queryClient";
+import { ANIMATION_CONFIG } from "@/lib/constants";
 
 // Layout & Components
 import { MainLayout, SkipNav } from "@/components";
@@ -51,15 +52,6 @@ const ContactUsPage = lazy(() =>
     default: module.ContactUsPage,
   })),
 );
-const DeliveryPage = lazy(() =>
-  import("@/pages").then((module) => ({ default: module.DeliveryPage })),
-);
-const SustainabilityPage = lazy(() =>
-  import("@/pages").then((module) => ({ default: module.SustainabilityPage })),
-);
-const MiddleEastPage = lazy(() =>
-  import("@/pages").then((module) => ({ default: module.MiddleEastPage })),
-);
 const GenericPageWrapper = lazy(() =>
   import("@/pages").then((module) => ({ default: module.GenericPageWrapper })),
 );
@@ -78,10 +70,8 @@ const PageWrapper = ({
   skeleton?: React.ReactNode;
 }) => (
   <motion.div
-    initial={{ opacity: 0 }}
-    animate={{ opacity: 1 }}
-    exit={{ opacity: 0 }}
-    transition={{ duration: 0.5, ease: "easeInOut" }}
+    {...ANIMATION_CONFIG.VARIANTS.FADE_IN}
+    transition={{ duration: ANIMATION_CONFIG.DURATION_SEC.SLOW, ease: "easeInOut" }}
   >
     <Suspense
       fallback={skeleton || <div className="min-h-screen bg-background" />}
@@ -125,58 +115,24 @@ const MenuRedirect = () => {
 
 const AnimatedRoutes = () => {
   const location = useLocation();
+  const { t } = useTranslation(["pages", "common"]);
 
   return (
     <AnimatePresence mode="wait">
       <Routes location={location} key={location.pathname}>
-        {/* Redirect root to default language */}
+        {/* ... existing redirects ... */}
         <Route path="/" element={<Navigate to="/ar" replace />} />
-
-        {/* Top-level redirects to handle non-prefixed URLs */}
-        <Route
-          path="/about-us"
-          element={<Navigate to="/ar/about-us" replace />}
-        />
-        <Route
-          path="/delivery"
-          element={<Navigate to="/ar/delivery" replace />}
-        />
-        <Route
-          path="/social-impact-sustainability"
-          element={<Navigate to="/ar/social-impact-sustainability" replace />}
-        />
-        <Route
-          path="/locations"
-          element={<Navigate to="/ar/locations" replace />}
-        />
-        <Route
-          path="/contact-us"
-          element={<Navigate to="/ar/contact-us" replace />}
-        />
-        <Route
-          path="/terms-of-use"
-          element={<Navigate to="/ar/terms-of-use" replace />}
-        />
-        <Route
-          path="/privacy-statement"
-          element={<Navigate to="/ar/privacy-statement" replace />}
-        />
-        <Route
-          path="/cookie-notice"
-          element={<Navigate to="/ar/cookie-notice" replace />}
-        />
-        <Route
-          path="/starbucks-middle-east"
-          element={<Navigate to="/ar/starbucks-middle-east" replace />}
-        />
-        <Route
-          path="/community-impact-starbucks"
-          element={<Navigate to="/ar/community-impact-starbucks" replace />}
-        />
-        <Route
-          path="/new-era-same-icons"
-          element={<Navigate to="/ar/new-era-same-icons" replace />}
-        />
+        <Route path="/about-us" element={<Navigate to="/ar/about-us" replace />} />
+        <Route path="/delivery" element={<Navigate to="/ar/delivery" replace />} />
+        <Route path="/social-impact-sustainability" element={<Navigate to="/ar/social-impact-sustainability" replace />} />
+        <Route path="/locations" element={<Navigate to="/ar/locations" replace />} />
+        <Route path="/contact-us" element={<Navigate to="/ar/contact-us" replace />} />
+        <Route path="/terms-of-use" element={<Navigate to="/ar/terms-of-use" replace />} />
+        <Route path="/privacy-statement" element={<Navigate to="/ar/privacy-statement" replace />} />
+        <Route path="/cookie-notice" element={<Navigate to="/ar/cookie-notice" replace />} />
+        <Route path="/starbucks-middle-east" element={<Navigate to="/ar/starbucks-middle-east" replace />} />
+        <Route path="/community-impact-starbucks" element={<Navigate to="/ar/community-impact-starbucks" replace />} />
+        <Route path="/new-era-same-icons" element={<Navigate to="/ar/new-era-same-icons" replace />} />
 
         {/* Menu Redirects */}
         <Route path="/menu" element={<MenuRedirect />} />
@@ -241,7 +197,7 @@ const AnimatedRoutes = () => {
               <PageWrapper skeleton={<StaticPageSkeleton />}>
                 <GenericPageWrapper
                   slug="our-coffees"
-                  seoTitle="Our Coffees - Starbucks Egypt"
+                  seoTitle={t("pages:our-coffees.seoTitle", { defaultValue: "Our Coffees - Starbucks Egypt" })}
                   useAccordionLayout={true}
                 />
               </PageWrapper>
@@ -251,7 +207,11 @@ const AnimatedRoutes = () => {
             path="starbucks-middle-east"
             element={
               <PageWrapper skeleton={<StaticPageSkeleton />}>
-                <MiddleEastPage />
+                <GenericPageWrapper
+                  slug="middle-east"
+                  seoTitle={t("pages:middle-east.seoTitle", { defaultValue: "Starbucks Middle East - Starbucks Egypt" })}
+                  useAccordionLayout={true}
+                />
               </PageWrapper>
             }
           />
@@ -261,7 +221,7 @@ const AnimatedRoutes = () => {
               <PageWrapper skeleton={<StaticPageSkeleton />}>
                 <GenericPageWrapper
                   slug="community-impact"
-                  seoTitle="Community Impact - Starbucks Egypt"
+                  seoTitle={t("pages:community-impact.seoTitle", { defaultValue: "Community Impact - Starbucks Egypt" })}
                   useAccordionLayout={true}
                 />
               </PageWrapper>
@@ -273,7 +233,7 @@ const AnimatedRoutes = () => {
               <PageWrapper skeleton={<StaticPageSkeleton />}>
                 <GenericPageWrapper
                   slug="new-era"
-                  seoTitle="New Era. Same Icons. - Starbucks Egypt"
+                  seoTitle={t("pages:new-era.seoTitle", { defaultValue: "New Era. Same Icons. - Starbucks Egypt" })}
                 />
               </PageWrapper>
             }
@@ -285,7 +245,10 @@ const AnimatedRoutes = () => {
             path="delivery"
             element={
               <PageWrapper skeleton={<StaticPageSkeleton />}>
-                <DeliveryPage />
+                <GenericPageWrapper
+                  slug="delivery"
+                  seoTitle={t("pages:delivery.seoTitle", { defaultValue: "Delivery - Starbucks Egypt" })}
+                />
               </PageWrapper>
             }
           />
@@ -295,7 +258,7 @@ const AnimatedRoutes = () => {
               <PageWrapper skeleton={<StaticPageSkeleton />}>
                 <GenericPageWrapper
                   slug="about-us"
-                  seoTitle="About Us - Starbucks Egypt"
+                  seoTitle={t("pages:about-us.seoTitle", { defaultValue: "About Us - Starbucks Egypt" })}
                   useAccordionLayout={true}
                 />
               </PageWrapper>
@@ -305,7 +268,11 @@ const AnimatedRoutes = () => {
             path="social-impact-sustainability"
             element={
               <PageWrapper skeleton={<StaticPageSkeleton />}>
-                <SustainabilityPage />
+                <GenericPageWrapper
+                  slug="sustainability"
+                  seoTitle={t("pages:sustainability.seoTitle", { defaultValue: "Sustainability - Starbucks Egypt" })}
+                  useAccordionLayout={true}
+                />
               </PageWrapper>
             }
           />
@@ -315,7 +282,7 @@ const AnimatedRoutes = () => {
               <PageWrapper skeleton={<StaticPageSkeleton />}>
                 <GenericPageWrapper
                   slug="privacy-statement"
-                  seoTitle="Privacy Statement - Starbucks Egypt"
+                  seoTitle={t("pages:privacy-statement.seoTitle", { defaultValue: "Privacy Statement - Starbucks Egypt" })}
                   showAccordion={true}
                   accordionSectionIndices={[1, 2, 3, 4]}
                 />
@@ -328,7 +295,7 @@ const AnimatedRoutes = () => {
               <PageWrapper skeleton={<StaticPageSkeleton />}>
                 <GenericPageWrapper
                   slug="terms-of-use"
-                  seoTitle="Terms of Use - Starbucks Egypt"
+                  seoTitle={t("pages:terms-of-use.seoTitle", { defaultValue: "Terms of Use - Starbucks Egypt" })}
                   showAccordion={true}
                   accordionSectionIndices={[1, 2, 3, 4, 5]}
                   accordionTitle={{
@@ -353,7 +320,7 @@ const AnimatedRoutes = () => {
               <PageWrapper skeleton={<StaticPageSkeleton />}>
                 <GenericPageWrapper
                   slug="cookies"
-                  seoTitle="Cookie Notice - Starbucks Egypt"
+                  seoTitle={t("pages:cookies.seoTitle", { defaultValue: "Cookie Notice - Starbucks Egypt" })}
                   useAccordionLayout={true}
                 />
               </PageWrapper>

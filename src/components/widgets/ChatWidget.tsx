@@ -7,17 +7,14 @@ import { useTranslation } from "react-i18next";
 export const ChatWidget = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [message, setMessage] = useState("");
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const isRTL = i18n.language === "ar";
   const [messages, setMessages] = useState<
     { id: number; text: string; isBot: boolean }[]
   >(() => [
     {
       id: 1,
-      text:
-        i18n.language === "ar"
-          ? "مرحباً! كيف يمكننا مساعدتك اليوم؟ نحن هنا لخدمتك."
-          : "Hello! How can we help you today? We're here to assist you.",
+      text: t("common:chat.welcome_message"),
       isBot: true,
     },
   ]);
@@ -46,9 +43,7 @@ export const ChatWidget = () => {
         ...prev,
         {
           id: Date.now() + 1,
-          text: isRTL
-            ? "شكراً لتواصلك معنا. سيقوم أحد ممثلينا بالرد عليك قريباً."
-            : "Thank you for reaching out. One of our representatives will get back to you shortly.",
+          text: t("common:chat.bot_response"),
           isBot: true,
         },
       ]);
@@ -78,15 +73,16 @@ export const ChatWidget = () => {
                   <MessageCircle className="w-8 h-8" />
                 </div>
                 <div>
-                  <h3 className="font-black text-xl">Starbucks Support</h3>
+                  <h3 className="font-black text-xl">{t("common:chat.support_title")}</h3>
                   <p className="text-white/80 text-sm italic">
-                    Online and ready to help
+                    {t("common:chat.support_status")}
                   </p>
                 </div>
               </div>
               <button
                 onClick={() => setIsOpen(false)}
                 className="absolute top-6 end-6 p-2 hover:bg-white/10 rounded-2xl transition-colors z-10"
+                aria-label={t("common:chat.aria_label_close")}
               >
                 <X className="w-6 h-6" />
               </button>
@@ -130,9 +126,7 @@ export const ChatWidget = () => {
                 <Input
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
-                  placeholder={
-                    isRTL ? "اكتب رسالتك..." : "Type your message..."
-                  }
+                  placeholder={t("common:chat.input_placeholder")}
                   className="h-14 pe-14 ps-6 rounded-2xl border-gray-100 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-950 focus:bg-white transition-all text-base w-full"
                   dir="auto"
                 />
@@ -140,6 +134,7 @@ export const ChatWidget = () => {
                   type="submit"
                   disabled={!message.trim()}
                   className="absolute end-3 p-2.5 text-starbucks-green hover:bg-starbucks-green/10 disabled:opacity-30 disabled:hover:bg-transparent rounded-xl transition-all z-30"
+                  aria-label={t("common:chat.aria_label_send")}
                 >
                   <Send className={`w-6 h-6 ${isRTL ? "scale-x-[-1]" : ""}`} />
                 </button>
@@ -156,6 +151,7 @@ export const ChatWidget = () => {
             whileTap={{ scale: 0.95 }}
             onClick={() => setIsOpen(true)}
             className="w-16 h-16 bg-starbucks-green text-white rounded-[2rem] shadow-2xl shadow-starbucks-green/30 flex items-center justify-center group relative overflow-hidden"
+            aria-label={t("common:chat.aria_label_open")}
           >
             <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />
             <MessageCircle className="w-8 h-8" />

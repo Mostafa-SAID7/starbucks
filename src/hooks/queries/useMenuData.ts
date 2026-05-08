@@ -2,42 +2,23 @@ import { useQuery, type UseQueryResult } from "@tanstack/react-query";
 import { queryKeys } from "@/lib/queryKeys";
 import { menuFetchers } from "@/lib/fetchers";
 import type { MenuData } from "@/types";
+import { CACHE_TIMES } from "@/lib/constants";
 
 /**
- * Type for the menu data structure that includes both languages
- */
-type MenuDataWithLanguages = {
-  ar: MenuData;
-  en: MenuData;
-};
-
-/**
- * Hook to fetch all menu data
+ * Hook to fetch all menu data (structural)
  *
  * Cache Strategy:
  * - Stale Time: 1 hour (menu data changes infrequently)
  * - GC Time: 2 hours
  *
  * @returns Query result with menu data
- *
- * @example
- * ```tsx
- * function MenuPage() {
- *   const { data, isLoading, error, refetch } = useMenuData();
- *
- *   if (isLoading) return <MenuSkeleton />;
- *   if (error) return <ErrorState onRetry={refetch} />;
- *
- *   return <MenuContent data={data} />;
- * }
- * ```
  */
-export function useMenuData(): UseQueryResult<MenuDataWithLanguages, Error> {
+export function useMenuData(): UseQueryResult<MenuData, Error> {
   return useQuery({
     queryKey: queryKeys.menu.all(),
-    queryFn: menuFetchers.fetchMenuData,
-    staleTime: 60 * 60 * 1000, // 1 hour
-    gcTime: 2 * 60 * 60 * 1000, // 2 hours
+    queryFn: () => menuFetchers.fetchMenuData(),
+    staleTime: CACHE_TIMES.MENU_STALE,
+    gcTime: CACHE_TIMES.MENU_GC,
   });
 }
 
@@ -61,8 +42,8 @@ export function useMenuCategory(categoryId: string) {
   return useQuery({
     queryKey: queryKeys.menu.byCategory(categoryId),
     queryFn: () => menuFetchers.fetchMenuCategory(categoryId),
-    staleTime: 60 * 60 * 1000, // 1 hour
-    gcTime: 2 * 60 * 60 * 1000, // 2 hours
+    staleTime: CACHE_TIMES.MENU_STALE,
+    gcTime: CACHE_TIMES.MENU_GC,
     enabled: !!categoryId, // Only fetch if categoryId is provided
   });
 }
@@ -78,8 +59,8 @@ export function useMenuItem(categoryId: string, itemId: string) {
   return useQuery({
     queryKey: queryKeys.menu.byItem(categoryId, itemId),
     queryFn: () => menuFetchers.fetchMenuItem(categoryId, itemId),
-    staleTime: 60 * 60 * 1000, // 1 hour
-    gcTime: 2 * 60 * 60 * 1000, // 2 hours
+    staleTime: CACHE_TIMES.MENU_STALE,
+    gcTime: CACHE_TIMES.MENU_GC,
     enabled: !!categoryId && !!itemId,
   });
 }

@@ -1,15 +1,15 @@
-// ─── Shared Menu Types ────────────────────────────────────────────────────────
+/**
+ * Structural Menu Types (Localized labels are handled via i18next namespaces)
+ */
+
 export interface MenuItem {
   id: string;
-  title: string;
-  description: string;
   image: string;
   href: string;
 }
 
 export interface MenuSubcategory {
   id: string;
-  title: string;
   image?: string;
   href: string;
   /** Present on item-level pages */
@@ -18,37 +18,42 @@ export interface MenuSubcategory {
 
 export interface MenuCategory {
   id: string;
-  title: string;
-  description?: string;
-  sidebarTitle?: string;
   image?: string;
   href?: string;
   subcategories?: MenuSubcategory[];
 }
 
 export interface AllergyInfoType {
-  title: string;
-  description: string;
+  title?: string;
+  description?: string;
   link: string;
-  linkLabel: string;
+  linkLabel?: string;
 }
 
 export interface SidebarAction {
-  label: string;
+  id?: string;
+  label?: string;
   href: string;
-  primary: boolean;
+  primary?: boolean;
+  variant?: "primary" | "secondary";
 }
 
 export interface SidebarData {
-  title: string;
   image: string;
   actions: SidebarAction[];
 }
 
 export interface MenuData {
-  title: string;
-  description: string;
   categories: MenuCategory[];
   allergyInfo: AllergyInfoType;
   sidebar: SidebarData;
+}
+
+/**
+ * Legacy type for transition support if needed
+ * @deprecated Use MenuData and i18next namespaces instead
+ */
+export interface MenuDataWithLanguages {
+  ar: MenuData;
+  en: MenuData;
 }

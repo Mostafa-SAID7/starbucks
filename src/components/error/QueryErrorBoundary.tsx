@@ -7,7 +7,7 @@ import {
 import { useTranslation } from "react-i18next";
 import { AlertTriangle, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui";
-import { logError } from "@/lib/errorUtils";
+import { logError, getErrorMessages } from "@/lib/errorUtils";
 
 interface ErrorFallbackProps {
   error: Error;
@@ -21,17 +21,17 @@ interface ErrorFallbackProps {
  * Now uses i18n translations for better error messages
  */
 function ErrorFallback({ error, resetErrorBoundary }: ErrorFallbackProps) {
-  const { i18n } = useTranslation();
-  const lang = (i18n.language === "ar" ? "ar" : "en") as "ar" | "en";
-  const isRTL = lang === "ar";
+  const { t } = useTranslation("common");
 
   // Log error for debugging and monitoring
   logError(error, "ErrorBoundary");
 
+  // Get intelligent error messages
+  const errorInfo = getErrorMessages(error, t);
+
   return (
     <div
       className="min-h-[400px] flex items-center justify-center bg-background p-6"
-      dir={isRTL ? "rtl" : "ltr"}
       role="alert"
       aria-live="assertive"
       aria-atomic="true"
@@ -49,7 +49,7 @@ function ErrorFallback({ error, resetErrorBoundary }: ErrorFallbackProps) {
           className="text-2xl font-bold text-foreground mb-3"
           id="error-title"
         >
-          {lang === "ar" ? "حدث خطأ غير متوقع" : "Something went wrong"}
+          {errorInfo.title}
         </h2>
 
         {/* Error Message */}
@@ -57,9 +57,7 @@ function ErrorFallback({ error, resetErrorBoundary }: ErrorFallbackProps) {
           className="text-foreground/70 mb-6 leading-relaxed"
           id="error-description"
         >
-          {lang === "ar"
-            ? "عذراً، حدث خطأ أثناء تحميل هذا المحتوى. يرجى المحاولة مرة أخرى."
-            : "Sorry, there was an error loading this content. Please try again."}
+          {errorInfo.message}
         </p>
 
         {/* Error Details (Development Only) */}
@@ -67,20 +65,13 @@ function ErrorFallback({ error, resetErrorBoundary }: ErrorFallbackProps) {
           <details className="mb-6 text-left">
             <summary
               className="cursor-pointer text-sm font-medium text-foreground/80 mb-2"
-              aria-label={
-                lang === "ar" ? "عرض تفاصيل الخطأ" : "Show error details"
-              }
+              aria-label={t("errors.general.show_details") || "Show details"}
             >
-              {lang === "ar" ? "تفاصيل الخطأ" : "Error Details"}
+              {t("errors.general.details") || "Error Details"}
             </summary>
             <pre
               className="text-xs bg-card border border-border p-4 rounded-lg overflow-auto max-h-40 text-red-600 dark:text-red-400"
               role="region"
-              aria-label={
-                lang === "ar"
-                  ? "رسالة الخطأ التقنية"
-                  : "Technical error message"
-              }
             >
               {error.message}
             </pre>
@@ -92,22 +83,15 @@ function ErrorFallback({ error, resetErrorBoundary }: ErrorFallbackProps) {
           onClick={resetErrorBoundary}
           variant="primary"
           className="inline-flex items-center gap-2 px-6 py-3 rounded-full shadow-lg"
-          aria-label={
-            lang === "ar"
-              ? "إعادة المحاولة لتحميل المحتوى"
-              : "Retry loading content"
-          }
-          aria-describedby="error-description"
+          aria-label={t("common:retry_aria")}
         >
           <RefreshCw className="h-5 w-5" aria-hidden="true" />
-          <span>{lang === "ar" ? "إعادة المحاولة" : "Try Again"}</span>
+          <span>{errorInfo.retry}</span>
         </Button>
 
         {/* Help Text */}
         <p className="mt-6 text-sm text-foreground/60">
-          {lang === "ar"
-            ? "إذا استمرت المشكلة، يرجى تحديث الصفحة أو الاتصال بالدعم."
-            : "If the problem persists, please refresh the page or contact support."}
+          {errorInfo.help}
         </p>
       </div>
     </div>
@@ -166,8 +150,7 @@ export function CompactErrorFallback({
 }: {
   resetErrorBoundary: () => void;
 }) {
-  const { i18n } = useTranslation();
-  const lang = (i18n.language === "ar" ? "ar" : "en") as "ar" | "en";
+  const { t } = useTranslation("common");
 
   return (
     <div
@@ -184,21 +167,16 @@ export function CompactErrorFallback({
         className="text-sm text-foreground/70 mb-3 text-center"
         id="compact-error-message"
       >
-        {lang === "ar" ? "حدث خطأ" : "Error occurred"}
+        {t("errors.general.title")}
       </p>
       <Button
         onClick={resetErrorBoundary}
         variant="primary"
         size="sm"
         className="text-sm"
-        aria-label={
-          lang === "ar"
-            ? "إعادة المحاولة لتحميل المحتوى"
-            : "Retry loading content"
-        }
-        aria-describedby="compact-error-message"
+        aria-label={t("common:retry_aria")}
       >
-        {lang === "ar" ? "إعادة المحاولة" : "Retry"}
+        {t("common:retry")}
       </Button>
     </div>
   );

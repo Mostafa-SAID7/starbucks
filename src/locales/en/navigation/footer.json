@@ -1,0 +1,25 @@
+{
+  "sections": {
+    "about": "About Us",
+    "contact": "Customer Service",
+    "social_impact": "Social Impact"
+  },
+  "links": {
+    "about_us": "Our Company",
+    "our_coffees": "Our Coffees",
+    "contact_us": "Contact Us",
+    "store_locator": "Store Locator",
+    "sustainability": "Sustainability",
+    "privacy_policy": "Privacy Policy",
+    "terms_conditions": "Terms of Use",
+    "cookie_notice": "Cookie Notice"
+  },
+  "app": {
+    "title": "Get the Starbucks App",
+    "description": "The best way to order, pay and earn rewards is through the Starbucks app.",
+    "app_store": "Download on the App Store",
+    "google_play": "Get it on Google Play"
+  },
+  "description": "Starbucks is committed to providing high quality coffee and exceptional service.",
+  "designed_by": "Designed and Developed by"
+}

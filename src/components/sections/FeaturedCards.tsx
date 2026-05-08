@@ -6,7 +6,7 @@ import { useFeaturedCards } from "@/hooks/queries";
 import { FeaturedCard } from "@/types/components";
 
 export function FeaturedCards() {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation(["pages", "common"]);
   const lang = i18n.language as "ar" | "en";
 
   // Fetch featured cards data using TanStack Query
@@ -21,8 +21,6 @@ export function FeaturedCards() {
   if (error || !featuredCardsData) {
     return <FeaturedCardsSkeleton />;
   }
-
-  const localizedData = featuredCardsData[lang] || featuredCardsData.en;
 
   return (
     <section className="py-12 relative overflow-hidden bg-background transition-colors">
@@ -45,67 +43,63 @@ export function FeaturedCards() {
 
       <div className="container mx-auto max-w-7xl px-4 relative z-10">
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-6">
-          {localizedData.cards.map((card: FeaturedCard, index: number) => (
-            <motion.div
-              key={card.id}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              className={`group relative overflow-hidden rounded-xl shadow-lg transition-all hover:shadow-xl flex flex-col ${
-                card.theme === "Green"
-                  ? "bg-[#d4e9e2] dark:bg-[#1e3932]"
-                  : "bg-[#f2f0eb] dark:bg-[#2d2926]"
-              } ${
-                // Medium screens: Last card (index 4) spans full width (2 columns)
-                index === 4 ? "sm:col-span-2" : ""
-              } ${
-                // Large screens: First 3 cards span 2 columns each (2*3=6), last 2 cards span 3 columns each (3*2=6)
-                index <= 2 ? "lg:col-span-2" : "lg:col-span-3"
-              }`}
-            >
-              {/* Image Section */}
-              <div className="h-64 w-full overflow-hidden">
-                <img
-                  src={card.image}
-                  alt={card.imageAlt}
-                  loading="lazy"
-                  decoding="async"
-                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
-                />
-              </div>
+          {featuredCardsData.cards.map((card: any, index: number) => {
+            const title = t(`pages:home.featured.${card.id}.title`);
+            const description = t(`pages:home.featured.${card.id}.description`);
+            const cta = t(`pages:home.featured.${card.id}.cta`);
+            const secondaryCta = t(`pages:home.featured.${card.id}.secondaryCta`, { defaultValue: "" });
+            const imageAlt = t(`pages:home.featured.${card.id}.imageAlt`);
+            
+            // Handle language-specific links if they exist in locales
+            const localeLink = t(`pages:home.featured.${card.id}.ctaLink`, { defaultValue: "" });
+            const ctaLink = localeLink || card.ctaLink;
+            
+            const secondaryLocaleLink = t(`pages:home.featured.${card.id}.secondaryCtaLink`, { defaultValue: "" });
+            const secondaryCtaLink = secondaryLocaleLink || card.secondaryCtaLink;
 
-              {/* Content Section */}
-              <div className="flex flex-col flex-grow p-4 text-center">
-                <div className="flex-grow">
-                  <h3 className="mb-2 text-lg font-extrabold text-starbucks-dark dark:text-foreground-dark lg:text-xl">
-                    {card.title}
-                  </h3>
-                  {card.description && (
-                    <p className="mb-4 text-sm leading-relaxed text-gray-700 dark:text-gray-300 line-clamp-3">
-                      {card.description}
-                    </p>
-                  )}
+            return (
+              <motion.div
+                key={card.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                className={`group relative overflow-hidden rounded-xl shadow-lg transition-all hover:shadow-xl flex flex-col ${
+                  card.theme === "Green"
+                    ? "bg-[#d4e9e2] dark:bg-[#1e3932]"
+                    : "bg-[#f2f0eb] dark:bg-[#2d2926]"
+                } ${
+                  // Medium screens: Last card (index 4) spans full width (2 columns)
+                  index === 4 ? "sm:col-span-2" : ""
+                } ${
+                  // Large screens: First 3 cards span 2 columns each (2*3=6), last 2 cards span 3 columns each (3*2=6)
+                  index <= 2 ? "lg:col-span-2" : "lg:col-span-3"
+                }`}
+              >
+                {/* Image Section */}
+                <div className="h-64 w-full overflow-hidden">
+                  <img
+                    src={card.image}
+                    alt={imageAlt}
+                    loading="lazy"
+                    decoding="async"
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  />
                 </div>
-                <div className="flex flex-col gap-2 mt-auto pt-4">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="rounded-full border-2 border-starbucks-dark px-4 py-2 text-sm font-bold font-branding text-starbucks-dark hover:bg-starbucks-dark hover:text-white dark:border-foreground-dark dark:text-foreground-dark dark:hover:bg-foreground-dark dark:hover:text-black transition-all"
-                    asChild
-                  >
-                    <a
-                      href={
-                        card.ctaLink.startsWith("http")
-                          ? card.ctaLink
-                          : `/${lang}${card.ctaLink}`
-                      }
-                    >
-                      {card.cta}
-                    </a>
-                  </Button>
 
-                  {card.secondaryCta && card.secondaryCtaLink && (
+                {/* Content Section */}
+                <div className="flex flex-col flex-grow p-4 text-center">
+                  <div className="flex-grow">
+                    <h3 className="mb-2 text-lg font-extrabold text-starbucks-dark dark:text-foreground-dark lg:text-xl">
+                      {title}
+                    </h3>
+                    {description && (
+                      <p className="mb-4 text-sm leading-relaxed text-gray-700 dark:text-gray-300 line-clamp-3">
+                        {description}
+                      </p>
+                    )}
+                  </div>
+                  <div className="flex flex-col gap-2 mt-auto pt-4">
                     <Button
                       variant="outline"
                       size="sm"
@@ -114,19 +108,38 @@ export function FeaturedCards() {
                     >
                       <a
                         href={
-                          card.secondaryCtaLink.startsWith("http")
-                            ? card.secondaryCtaLink
-                            : `/${lang}${card.secondaryCtaLink}`
+                          ctaLink.startsWith("http")
+                            ? ctaLink
+                            : `/${lang}${ctaLink}`
                         }
                       >
-                        {card.secondaryCta}
+                        {cta}
                       </a>
                     </Button>
-                  )}
+
+                    {secondaryCta && secondaryCtaLink && (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="rounded-full border-2 border-starbucks-dark px-4 py-2 text-sm font-bold font-branding text-starbucks-dark hover:bg-starbucks-dark hover:text-white dark:border-foreground-dark dark:text-foreground-dark dark:hover:bg-foreground-dark dark:hover:text-black transition-all"
+                        asChild
+                      >
+                        <a
+                          href={
+                            secondaryCtaLink.startsWith("http")
+                              ? secondaryCtaLink
+                              : `/${lang}${secondaryCtaLink}`
+                          }
+                        >
+                          {secondaryCta}
+                        </a>
+                      </Button>
+                    )}
+                  </div>
                 </div>
-              </div>
-            </motion.div>
-          ))}
+              </motion.div>
+            );
+          })}
         </div>
       </div>
     </section>

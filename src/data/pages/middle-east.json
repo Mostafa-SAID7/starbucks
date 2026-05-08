@@ -1,0 +1,19 @@
+{
+  "slug": "middle-east",
+  "layoutType": "sidebar",
+  "sidebarImage": "/starbucks-middle-east.webp",
+  "sections": [
+    {
+      "id": "political-neutrality"
+    },
+    {
+      "id": "faq-support"
+    },
+    {
+      "id": "faq-israel-stores"
+    },
+    {
+      "id": "alshaya-partnership"
+    }
+  ]
+}

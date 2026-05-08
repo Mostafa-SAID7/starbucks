@@ -1,16 +1,6 @@
 import { QueryClient } from "@tanstack/react-query";
 import { queryKeys } from "./queryKeys";
-
-/**
- * Cache Invalidation Utilities
- * Provides smart cache invalidation patterns for optimal performance
- */
-
-export interface InvalidationOptions {
-  refetchType?: "active" | "inactive" | "all";
-  exact?: boolean;
-  predicate?: (query: unknown) => boolean;
-}
+import { CLEANUP_CONFIG } from "./constants";
 
 /**
  * Cache Invalidation Manager
@@ -242,8 +232,8 @@ export class CacheInvalidationManager {
    * Selective invalidation based on data freshness
    * Only invalidates stale queries to avoid unnecessary refetches
    */
-  async invalidateStaleQueries(maxAge: number = 5 * 60 * 1000) {
-    // 5 minutes default
+  async invalidateStaleQueries(maxAge: number = CLEANUP_CONFIG.STALE_AGE) {
+    // Default from global config
     const queryCache = this.queryClient.getQueryCache();
     const queries = queryCache.getAll();
     const now = Date.now();
@@ -268,8 +258,8 @@ export class CacheInvalidationManager {
    * Remove unused queries from cache
    * Helps manage memory usage
    */
-  removeUnusedQueries(maxAge: number = 10 * 60 * 1000) {
-    // 10 minutes default
+  removeUnusedQueries(maxAge: number = CLEANUP_CONFIG.UNUSED_AGE) {
+    // Default from global config
     const queryCache = this.queryClient.getQueryCache();
     const queries = queryCache.getAll();
     const now = Date.now();
@@ -413,8 +403,8 @@ export function setupAutoCleanup(
   } = {},
 ) {
   const {
-    cleanupInterval = 5 * 60 * 1000, // 5 minutes
-    unusedAge = 15 * 60 * 1000, // 15 minutes
+    cleanupInterval = CLEANUP_CONFIG.INTERVAL,
+    unusedAge = CLEANUP_CONFIG.UNUSED_AGE,
   } = options;
 
   const manager = getCacheManager();

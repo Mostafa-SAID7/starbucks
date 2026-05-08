@@ -1,0 +1,47 @@
+{
+  "slug": "terms-of-use",
+  "layoutType": "sidebar",
+  "sidebar": {
+    "links": {
+      "menu": "https://www.starbucks.eg/ar/our-coffees",
+      "about": "https://www.starbucks.eg/ar/about-us"
+    }
+  },
+  "sections": [
+    {
+      "id": "intro"
+    },
+    {
+      "id": "responsibilities"
+    },
+    {
+      "id": "intellectual_property"
+    },
+    {
+      "id": "license"
+    },
+    {
+      "id": "comments"
+    },
+    {
+      "id": "disclaimer"
+    },
+    {
+      "id": "links"
+    },
+    {
+      "id": "law"
+    },
+    {
+      "id": "modifications"
+    },
+    {
+      "id": "contact",
+      "contactInfo": {
+        "email": "privacy@alshaya.com",
+        "phone": "+965 2227 0180",
+        "phoneTel": "+96522270180"
+      }
+    }
+  ]
+}

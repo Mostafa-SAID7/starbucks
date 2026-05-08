@@ -7,16 +7,16 @@ import { MenuSkeleton } from "@/components/skeletons";
 import { useMenuData } from "@/hooks/queries";
 import { queryKeys } from "@/lib/queryKeys";
 import { menuFetchers } from "@/lib/fetchers";
-import type { MenuCategory, AllergyInfoType, SidebarAction } from "@/types";
+import type { MenuCategory, SidebarAction } from "@/types";
 
 export const MenuPage = () => {
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation(["pages", "common"]);
   const lang = (i18n.language === "ar" ? "ar" : "en") as "ar" | "en";
   const isRTL = lang === "ar";
   const textAlignClass = isRTL ? "text-right" : "text-left";
   const queryClient = useQueryClient();
 
-  // Fetch menu data using TanStack Query
+  // Fetch structural menu data
   const { data: menuData, isLoading, error, refetch } = useMenuData();
 
   // Prefetch function for menu categories
@@ -39,10 +39,10 @@ export const MenuPage = () => {
       <div className="min-h-screen flex items-center justify-center bg-white dark:bg-background-dark">
         <div className="text-center px-4">
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-            {t("common:error_loading_menu")}
+            {t("common:errors.loading_menu")}
           </h2>
           <p className="text-gray-600 dark:text-gray-400 mb-6">
-            {t("common:error_loading_page_desc")}
+            {t("common:errors.loading_page_desc")}
           </p>
           <button
             onClick={() => refetch()}
@@ -55,36 +55,29 @@ export const MenuPage = () => {
     );
   }
 
-  // Access menu data safely
-  const pageData = menuData?.[lang];
-
   // Safety check
-  if (!pageData) {
+  if (!menuData) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <p className="text-xl">Loading menu...</p>
+        <p className="text-xl">{t("common:loading")}</p>
       </div>
     );
   }
 
-  const categories = Array.isArray(pageData.categories)
-    ? pageData.categories
-    : [];
-  const allergyInfo = pageData.allergyInfo || ({} as AllergyInfoType);
-  const sidebar = pageData.sidebar;
+  const categories = menuData.categories || [];
+  const allergyInfo = menuData.allergyInfo;
+  const sidebar = menuData.sidebar;
 
   return (
     <div
       className="bg-white dark:bg-background-dark min-h-screen"
       dir={isRTL ? "rtl" : "ltr"}
     >
-      <SEO title={pageData.title || "Menu"} />
+      <SEO title={t("pages:menu.title") || "Menu"} />
 
       <div className="container mx-auto px-4 py-8 lg:py-12">
         {/* Main 2-Side Layout */}
-        <div
-          className={`flex flex-col lg:flex-row gap-12 ${isRTL ? "lg:flex-row-reverse" : ""}`}
-        >
+        <div className="flex flex-col lg:flex-row gap-12">
           {/* Side 1: Sticky Sidebar Image */}
           <div className="lg:w-[40%] lg:sticky lg:top-24 lg:h-[calc(100vh-8rem)] group">
             <motion.div
@@ -94,31 +87,39 @@ export const MenuPage = () => {
             >
               <img
                 src={sidebar?.image || ""}
-                alt={sidebar?.title || "Menu"}
+                alt={t("pages:menu.sidebar.title") || "Menu"}
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
 
               <div className="absolute inset-0 flex flex-col items-center justify-end pb-12 px-6 text-center text-white">
                 <h1 className="text-4xl md:text-5xl font-black mb-8 drop-shadow-lg">
-                  {sidebar?.title}
+                  {t("pages:menu.sidebar.title")}
                 </h1>
 
                 <div className="flex flex-col gap-4 w-full max-w-sm">
                   {sidebar?.actions?.map(
-                    (action: SidebarAction, index: number) => (
-                      <Link
-                        key={index}
-                        to={action.href}
-                        className={`w-full py-3 px-6 rounded-full font-bold text-lg transition-all shadow-lg ${
-                          action.primary
-                            ? "bg-white text-gray-900 hover:bg-gray-100"
-                            : "border-2 border-white/80 text-white hover:bg-white/10 backdrop-blur-sm"
-                        }`}
-                      >
-                        {action.label}
-                      </Link>
-                    ),
+                    (action: SidebarAction, index: number) => {
+                      const isOrder = action.href === "order";
+                      const href = isOrder ? t("pages:menu.order_url") : action.href;
+                      const label = isOrder
+                        ? t("pages:menu.sidebar.actions.order")
+                        : t("pages:menu.sidebar.actions.stores");
+
+                      return (
+                        <Link
+                          key={index}
+                          to={href}
+                          className={`w-full py-3 px-6 rounded-full font-bold text-lg transition-all shadow-lg ${
+                            action.primary
+                              ? "bg-white text-gray-900 hover:bg-gray-100"
+                              : "border-2 border-white/80 text-white hover:bg-white/10 backdrop-blur-sm"
+                          }`}
+                        >
+                          {label}
+                        </Link>
+                      );
+                    },
                   )}
                 </div>
               </div>
@@ -132,7 +133,7 @@ export const MenuPage = () => {
               animate={{ opacity: 1, y: 0 }}
               className={`text-lg md:text-xl font-bold text-gray-900 dark:text-white mb-12 leading-relaxed whitespace-pre-line ${textAlignClass}`}
             >
-              {pageData.description}
+              {t("pages:menu.description")}
             </motion.p>
 
             {/* Categories Grid */}
@@ -152,25 +153,26 @@ export const MenuPage = () => {
                   }}
                 >
                   <Link
-                    to={category.href || "#"}
+                    to={`/${lang}${category.href}`}
                     className="flex flex-col h-full"
                   >
                     <div className="relative h-48 overflow-hidden">
                       <img
                         src={category.image}
-                        alt={category.title}
+                        alt={t(`menu:categories.${category.id}.title`)}
                         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                       />
                     </div>
                     <div className="p-6 flex flex-col flex-1 items-center text-center">
                       <h2 className="text-xl md:text-2xl font-black text-gray-900 dark:text-white mb-3">
-                        {category.title}
+                        {t(`pages:menu.categories.${category.id}.title`)}
                       </h2>
                       <p className="text-sm text-gray-600 dark:text-gray-400 mb-6 flex-1">
-                        {category.description}
+                        {t(`pages:menu.categories.${category.id}.description`)}
                       </p>
                       <span className="inline-flex items-center justify-center px-6 py-2 border-2 border-starbucks-green text-starbucks-green font-bold rounded-full group-hover:bg-starbucks-green/5 transition-colors">
-                        {category.sidebarTitle || t("common:explore")}
+                        {t(`pages:menu.categories.${category.id}.sidebarTitle`) ||
+                          t("common:explore")}
                       </span>
                     </div>
                   </Link>
@@ -179,21 +181,19 @@ export const MenuPage = () => {
             </div>
 
             {/* Allergy Info */}
-            {allergyInfo.title && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                viewport={{ once: true }}
-                className="w-full mt-8"
-              >
-                <AllergyInfo
-                  title={allergyInfo.title}
-                  description={allergyInfo.description}
-                  link={allergyInfo.link}
-                  linkLabel={allergyInfo.linkLabel}
-                />
-              </motion.div>
-            )}
+            <motion.div
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              className="w-full mt-8"
+            >
+              <AllergyInfo
+                title={t("pages:menu.allergyInfo.title")}
+                description={t("pages:menu.allergyInfo.description")}
+                link={allergyInfo.link}
+                linkLabel={t("pages:menu.allergyInfo.linkLabel")}
+              />
+            </motion.div>
           </div>
         </div>
       </div>

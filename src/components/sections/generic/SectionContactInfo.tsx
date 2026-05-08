@@ -50,7 +50,11 @@ export const SectionContactInfo: React.FC<SectionContactInfoProps> = ({
               <p className="text-gray-400 text-sm">
                 {lang === "ar" ? "العنوان" : "Address"}
               </p>
-              <p className="text-xl font-bold">{contactInfo.address[lang]}</p>
+              <p className="text-xl font-bold">
+                {typeof contactInfo.address === 'string' 
+                  ? contactInfo.address 
+                  : contactInfo.address[lang]}
+              </p>
             </div>
           )}
         </div>

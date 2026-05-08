@@ -5,7 +5,6 @@ export * from "./card";
 export * from "./dialog";
 export * from "./header";
 export * from "./input";
-export * from "./loader";
 export * from "./logo";
 export * from "./modal";
 export * from "./OfflineIndicator";

@@ -2,36 +2,37 @@
 // Translations live in src/locales/ (i18next)
 // Structural data (URLs, images, content) lives here
 
-import menu from "./menu.json";
-import navigation from "./navigation.json";
-import hero from "./hero.json";
-import statement from "./statement.json";
-import featuredCards from "./featured-cards.json";
-import aboutUs from "./about-us.json";
-import sustainability from "./sustainability.json";
-import middleEast from "./middle-east.json";
-import termsOfUse from "./terms-of-use.json";
-import privacyStatement from "./privacy-statement.json";
-import delivery from "./delivery.json";
-import cookies from "./cookies.json";
-import communityImpact from "./community-impact.json";
-import newEra from "./new-era.json";
-import ourCoffees from "./our-coffees.json";
-import contactUs from "./contact-us.json";
+// Menu & Navigation
+import menu from "./menu/menu.json";
+import navigation from "./navigation/navigation.json";
+
+// Home page components
+import hero from "./home/hero.json";
+import statement from "./home/statement.json";
+import featuredCards from "./home/featured-cards.json";
+
+// Pages
+import aboutUs from "./pages/about-us.json";
+import sustainability from "./pages/sustainability.json";
+import middleEast from "./pages/middle-east.json";
+import termsOfUse from "./pages/terms-of-use.json";
+import privacyStatement from "./pages/privacy-statement.json";
+import delivery from "./pages/delivery.json";
+import cookies from "./pages/cookies.json";
+import communityImpact from "./pages/community-impact.json";
+import newEra from "./pages/new-era.json";
+import ourCoffees from "./pages/our-coffees.json";
+
+// Contact & Locations
+import contactUs from "./contact/contact-us.json";
+import locations from "./locations/locations.json";
 
 export {
-  // Navigation — structural data (URLs, socials, countries)
   navigation,
-
-  // Menu — categories with items, images, hrefs (bilingual labels inside)
   menu,
-
-  // Home page sections
   hero,
   statement,
   featuredCards,
-
-  // Generic pages — bilingual structured content by slug
   aboutUs,
   sustainability,
   middleEast,
@@ -42,7 +43,6 @@ export {
   communityImpact,
   newEra,
   ourCoffees,
-
-  // Contact — contact form data and info
   contactUs,
+  locations,
 };

@@ -1,6 +1,8 @@
 import * as React from "react";
 import { Check, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { motion, AnimatePresence } from "framer-motion";
+import { ANIMATION_CONFIG } from "@/lib/constants";
 
 export interface SelectOption {
   id: string;
@@ -78,39 +80,43 @@ export function Select({
         />
       </button>
 
-      {isOpen && (
-        <div
-          className={cn(
-            "absolute z-50 mt-1 w-full rounded-xl border border-gray-100 bg-white shadow-lg dark:border-zinc-700 dark:bg-zinc-900",
-            isRTL && "right-0",
-          )}
-          role="listbox"
-        >
-          {options.map((option) => (
-            <button
-              key={option.id}
-              type="button"
-              onClick={() => handleSelect(option)}
-              className={cn(
-                "flex w-full items-center gap-2 px-4 py-3 text-sm text-gray-900 transition-colors hover:bg-gray-50 dark:text-white dark:hover:bg-zinc-800",
-                selectedOption?.id === option.id &&
-                  "bg-starbucks-green/10 text-starbucks-green dark:bg-starbucks-light/10",
-                isRTL && "flex-row-reverse",
-              )}
-              role="option"
-              aria-selected={selectedOption?.id === option.id}
-            >
-              <Check
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            {...ANIMATION_CONFIG.VARIANTS.FADE_IN}
+            transition={ANIMATION_CONFIG.TRANSITIONS.QUICK}
+            className={cn(
+              "absolute z-50 mt-1 w-full overflow-hidden rounded-xl border border-gray-100 bg-white shadow-lg dark:border-zinc-700 dark:bg-zinc-900",
+              isRTL && "right-0",
+            )}
+            role="listbox"
+          >
+            {options.map((option) => (
+              <button
+                key={option.id}
+                type="button"
+                onClick={() => handleSelect(option)}
                 className={cn(
-                  "h-4 w-4",
-                  selectedOption?.id !== option.id && "invisible",
+                  "flex w-full items-center gap-2 px-4 py-3 text-sm text-gray-900 transition-colors hover:bg-gray-50 dark:text-white dark:hover:bg-zinc-800",
+                  selectedOption?.id === option.id &&
+                    "bg-starbucks-green/10 text-starbucks-green dark:bg-starbucks-light/10",
+                  isRTL && "flex-row-reverse",
                 )}
-              />
-              {option.label}
-            </button>
-          ))}
-        </div>
-      )}
+                role="option"
+                aria-selected={selectedOption?.id === option.id}
+              >
+                <Check
+                  className={cn(
+                    "h-4 w-4",
+                    selectedOption?.id !== option.id && "invisible",
+                  )}
+                />
+                {option.label}
+              </button>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

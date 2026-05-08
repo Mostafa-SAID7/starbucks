@@ -17,10 +17,10 @@ document.documentElement.setAttribute("lang", initialLang);
 
 const resources = {
   ar: {
-    translation: ar,
+    ...ar,
   },
   en: {
-    translation: en,
+    ...en,
   },
 };
 
@@ -28,6 +28,7 @@ i18n.use(initReactI18next).init({
   resources,
   lng: initialLang,
   fallbackLng: "en",
+  defaultNS: "common",
   interpolation: {
     escapeValue: false,
   },

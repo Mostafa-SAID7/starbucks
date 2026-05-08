@@ -1,0 +1,13 @@
+{
+  "slug": "about-us",
+  "layoutType": "sidebar",
+  "sidebarImage": "/about-us.webp",
+  "sections": [
+    {
+      "id": "connecting"
+    },
+    {
+      "id": "history"
+    }
+  ]
+}

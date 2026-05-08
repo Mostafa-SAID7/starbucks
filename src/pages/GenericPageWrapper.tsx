@@ -17,8 +17,7 @@ export const GenericPageWrapper: React.FC<GenericPageWrapperProps> = ({
   accordionSectionIndices,
   useAccordionLayout,
 }) => {
-  const { i18n } = useTranslation();
-  const lang = (i18n.language === "ar" ? "ar" : "en") as "ar" | "en";
+  const { t } = useTranslation(["common"]);
 
   // Fetch page data using TanStack Query
   const { data: pageData, isLoading, error, refetch } = usePageData(slug);
@@ -34,18 +33,16 @@ export const GenericPageWrapper: React.FC<GenericPageWrapperProps> = ({
       <div className="min-h-screen flex items-center justify-center bg-white dark:bg-background-dark">
         <div className="text-center px-4">
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-            {lang === "ar" ? "حدث خطأ في تحميل الصفحة" : "Error loading page"}
+            {t("common:errors.loading_page")}
           </h2>
           <p className="text-gray-600 dark:text-gray-400 mb-6">
-            {lang === "ar"
-              ? "عذراً، حدث خطأ أثناء تحميل الصفحة. يرجى المحاولة مرة أخرى."
-              : "Sorry, there was an error loading the page. Please try again."}
+            {t("common:errors.loading_page_desc")}
           </p>
           <button
             onClick={() => refetch()}
             className="px-6 py-3 bg-starbucks-green text-white font-bold rounded-full hover:bg-starbucks-green/90 transition-colors"
           >
-            {lang === "ar" ? "إعادة المحاولة" : "Retry"}
+            {t("common:retry")}
           </button>
         </div>
       </div>

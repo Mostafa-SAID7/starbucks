@@ -3,10 +3,9 @@ import { Banner, StatementSection, FeaturedCards, SEO } from "@/components";
 import { HomeSkeleton } from "@/components/skeletons";
 import { useHero } from "@/hooks/queries";
 
-import { HeroBannerData as HeroData } from "@/types/components";
 
 export const HomePage = () => {
-  const { t, i18n } = useTranslation(["common", "errors"]);
+  const { t, i18n } = useTranslation(["common", "errors", "pages"]);
   const lang = (i18n.language === "ar" ? "ar" : "en") as "ar" | "en";
 
   // Fetch hero data using TanStack Query
@@ -39,9 +38,6 @@ export const HomePage = () => {
     );
   }
 
-  // Get hero data for the current language
-  const currentHeroData = heroData[lang] as HeroData;
-
   // Page title
   const pageTitle = lang === "ar" ? "ستاربكس مصر" : "Starbucks Egypt";
 
@@ -49,17 +45,13 @@ export const HomePage = () => {
     <div className="flex flex-col">
       <SEO title={pageTitle} />
       <Banner
-        title={currentHeroData.title}
-        description={currentHeroData.description}
-        ctaText={currentHeroData.ctaText}
-        ctaLink={currentHeroData.ctaLink}
-        imageUrl="/home/banner/backgrouund.webp"
-        secondaryImageUrl={
-          lang === "ar"
-            ? "/home/banner/woman-Photoroom.webp"
-            : "/home/banner/woman-Photoroom-en.png"
-        }
-        imageAlt={currentHeroData.imageAlt}
+        title={t("pages:home.hero.title")}
+        description={t("pages:home.hero.description")}
+        ctaText={t("pages:home.hero.ctaText")}
+        ctaLink={heroData.ctaLink}
+        imageUrl={heroData.imageUrl}
+        secondaryImageUrl={heroData.secondaryImageUrls?.[lang]}
+        imageAlt={t("pages:home.hero.imageAlt")}
         isRTL={lang === "ar"}
       />
 

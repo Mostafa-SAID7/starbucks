@@ -1,14 +1,5 @@
-/**
- * Error types for better error handling
- */
-export enum ErrorType {
-  NETWORK = "network",
-  TIMEOUT = "timeout",
-  SERVER = "server",
-  NOT_FOUND = "not_found",
-  UNAUTHORIZED = "unauthorized",
-  GENERAL = "general",
-}
+import { ErrorType } from "@/types";
+export { ErrorType };
 
 /**
  * Enhanced error class with type information
@@ -16,18 +7,21 @@ export enum ErrorType {
 export class AppError extends Error {
   public type: ErrorType;
   public statusCode?: number;
+  public statusText?: string;
   public originalError?: Error;
 
   constructor(
     message: string,
     type: ErrorType = ErrorType.GENERAL,
     statusCode?: number,
+    statusText?: string,
     originalError?: Error,
   ) {
     super(message);
     this.name = "AppError";
     this.type = type;
     this.statusCode = statusCode;
+    this.statusText = statusText;
     this.originalError = originalError;
   }
 }
@@ -100,19 +94,19 @@ export function getErrorMessages(error: unknown, t: (key: string) => string) {
     [ErrorType.NETWORK]: {
       title: t("errors.network.title"),
       message: t("errors.network.message"),
-      retry: t("errors.network.retry"),
+      retry: t("common:retry"),
       help: t("errors.network.help"),
     },
     [ErrorType.TIMEOUT]: {
       title: t("errors.timeout.title"),
       message: t("errors.timeout.message"),
-      retry: t("errors.timeout.retry"),
+      retry: t("common:retry"),
       help: t("errors.timeout.help"),
     },
     [ErrorType.SERVER]: {
       title: t("errors.server.title"),
       message: t("errors.server.message"),
-      retry: t("errors.server.retry"),
+      retry: t("common:retry"),
       help: t("errors.server.help"),
     },
     [ErrorType.NOT_FOUND]: {
@@ -124,13 +118,13 @@ export function getErrorMessages(error: unknown, t: (key: string) => string) {
     [ErrorType.UNAUTHORIZED]: {
       title: t("errors.unauthorized.title"),
       message: t("errors.unauthorized.message"),
-      retry: t("errors.unauthorized.retry"),
+      retry: t("common:sign_in"),
       help: t("errors.unauthorized.help"),
     },
     [ErrorType.GENERAL]: {
       title: t("errors.general.title"),
       message: t("errors.general.message"),
-      retry: t("errors.general.retry"),
+      retry: t("common:retry"),
       help: t("errors.general.help"),
     },
   };
@@ -229,31 +223,3 @@ export function createFetchError(
   return new AppError(message, errorType, response.status);
 }
 
-/**
- * Retry utility with exponential backoff
- */
-export async function retryWithBackoff<T>(
-  fn: () => Promise<T>,
-  maxRetries: number = 3,
-  baseDelay: number = 1000,
-): Promise<T> {
-  let lastError: unknown;
-
-  for (let attempt = 0; attempt <= maxRetries; attempt++) {
-    try {
-      return await fn();
-    } catch (error) {
-      lastError = error;
-
-      if (attempt === maxRetries) {
-        break;
-      }
-
-      // Exponential backoff with jitter
-      const delay = baseDelay * Math.pow(2, attempt) + Math.random() * 1000;
-      await new Promise((resolve) => setTimeout(resolve, delay));
-    }
-  }
-
-  throw lastError;
-}
