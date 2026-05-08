@@ -6,6 +6,18 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) · Versioning: 
 
 ---
 
+## [2.2.0] — 2026-05-08
+
+### Changed
+- 🧹 **Documentation Overhaul** — Refactored 20+ fragmented documentation files into a focused set of 13 high-quality documents.
+- 🏗️ **Architectural Separation** — Split complex architecture docs into separate `STRUCTURE.md`, `System_Design.md`, and `TECHNOLOGIES.md` files for better maintainability.
+- 🤝 **Community Docs Split** — Decoupled `CODE_OF_CONDUCT.md` and `CONTRIBUTORS.md` from the main contribution guide.
+- 🎯 **Product Specs** — Created standalone `USE_CASES.md` and `FEATURES.md` to clearly distinguish between user goals and technical specs.
+- 🧼 **Duplicate Purge** — Stripped redundant tables and guides from the root `README.md`, transforming it into a clean, link-focused landing page.
+- 🧭 **Docs Index** — Updated `docs/README.md` with a comprehensive directory map and folder structure visualization.
+
+---
+
 ## [2.1.0] — 2026-05-08
 
 ### Added
@@ -90,7 +102,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) · Versioning: 
 
 ---
 
+[2.2.0]: https://github.com/Mostafa-SAID7/starbucks/compare/v2.1.0...v2.2.0
 [2.1.0]: https://github.com/Mostafa-SAID7/starbucks/compare/v2.0.0...v2.1.0
 [2.0.0]: https://github.com/Mostafa-SAID7/starbucks/compare/v1.0.0...v2.0.0
 [1.0.0]: https://github.com/Mostafa-SAID7/starbucks/releases/tag/v1.0.0
-[Unreleased]: https://github.com/Mostafa-SAID7/starbucks/compare/v2.1.0...HEAD
+[Unreleased]: https://github.com/Mostafa-SAID7/starbucks/compare/v2.2.0...HEAD

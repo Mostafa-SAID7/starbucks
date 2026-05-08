@@ -1,154 +1,44 @@
-# 📚 Documentation Index
+# 📖 Documentation Index
 
-Welcome to the Starbucks Egypt React Clone documentation!
+Welcome to the comprehensive documentation for the Starbucks Egypt React Clone.
 
----
+## 🧭 Directory Index
 
-## 📖 Available Documentation
+| Section | Document | Purpose |
+|:---|:---|:---|
+| **🚀 Getting Started** | [PROJECT_SETUP.md](PROJECT_SETUP.md) | Installation and local development |
+| **✨ Product** | [FEATURES.md](FEATURES.md) | Checklist of implemented features |
+| | [USE_CASES.md](USE_CASES.md) | Common user workflows |
+| | [TECHNOLOGIES.md](TECHNOLOGIES.md) | Detailed technology stack |
+| **🏗️ Engineering** | [ARCHITECTURE.md](ARCHITECTURE.md) | High-level technical philosophy |
+| | [STRUCTURE.md](STRUCTURE.md) | Folder and component organization |
+| | [System_Design.md](System_Design.md) | Logic flow and Mermaid diagrams |
+| **🚢 Ops & Safety** | [DEPLOYMENT.md](DEPLOYMENT.md) | Production hosting guides |
+| | [SECURITY.md](SECURITY.md) | Security policy and CI checks |
+| | [CHANGELOG.md](CHANGELOG.md) | Version history |
+| **🤝 Community** | [CONTRIBUTING.md](CONTRIBUTING.md) | How to participate |
+| | [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) | Community standards |
+| | [CONTRIBUTORS.md](CONTRIBUTORS.md) | Maintainers and participants |
 
-| Document | Description | Link |
-|----------|-------------|------|
-| **Project Summary** | Complete overview of the project, features, and implementation details | [PROJECT_SUMMARY.md](PROJECT_SUMMARY.md) |
-| **Quick Start** | Get started in 3 simple steps | [QUICK_START.md](QUICK_START.md) |
-| **Architecture** | Technical architecture, design patterns, and component hierarchy | [ARCHITECTURE.md](ARCHITECTURE.md) |
-| **TanStack Query Guide** | Deep dive into data fetching, caching, and state management | [TANSTACK_QUERY_GUIDE.md](TANSTACK_QUERY_GUIDE.md) |
-| **Migration Guide** | Comprehensive guide for the Tailwind v4 and TanStack Query migration | [MIGRATION_GUIDE.md](MIGRATION_GUIDE.md) |
-| **Generic Page Guide** | Instructions for creating and managing flexible content pages | [GENERIC_PAGE_GUIDE.md](GENERIC_PAGE_GUIDE.md) |
-| **Deployment** | Complete deployment guide for various platforms | [DEPLOYMENT.md](DEPLOYMENT.md) |
+## 📂 Folder Structure
 
----
-
-## 🚀 Quick Links
-
-### Getting Started
-- [Installation Guide](QUICK_START.md#installation)
-- [Running Locally](QUICK_START.md#running-locally)
-- [Available Commands](QUICK_START.md#available-commands)
-
-### Development
-- [Project Structure](ARCHITECTURE.md#project-structure)
-- [Component Hierarchy](ARCHITECTURE.md#component-hierarchy)
-- [Data Fetching Strategy](TANSTACK_QUERY_GUIDE.md)
-- [Styling Architecture](ARCHITECTURE.md#styling-architecture)
-
-### Guides
-- [Centralized Data Pattern](MIGRATION_GUIDE.md#centralized-data-layer)
-- [Managing Generic Pages](GENERIC_PAGE_GUIDE.md)
-- [Sidebar Implementation](STICKY_SIDEBAR_IMPLEMENTATION.md)
-
-### Deployment
-- [Deploy to Vercel](DEPLOYMENT.md#deploy-to-vercel)
-- [Docker Deployment](DEPLOYMENT.md#deploy-with-docker)
-
-### Contributing
-- [Contributing Guidelines](../CONTRIBUTING.md)
-- [Code of Conduct](../CONTRIBUTING.md#code-of-conduct)
-- [Pull Request Process](../CONTRIBUTING.md#pull-request-process)
-
----
-
-## 🎯 What's Inside
-
-### [📊 Project Summary](PROJECT_SUMMARY.md)
-
-Complete overview including:
-- ✅ Project status and completion
-- 🎨 All implemented components
-- 📁 Complete file structure
-- 🔧 Technical configuration
-- 📦 Dependencies list
-- 🌐 Content extraction details
-- ✨ Key features
-
-### [⚡ Quick Start Guide](QUICK_START.md)
-
-Get up and running:
-- 📥 Installation steps
-- 🚀 Running the dev server
-- 🛠️ Available commands
-- 🎨 Customization tips
-- 🐛 Troubleshooting
-
-### [🏗️ Architecture](ARCHITECTURE.md)
-
-Technical deep dive:
-- 📊 Component hierarchy
-- 🎨 Design patterns used
-- 📦 Data flow
-- 🎯 State management
-- 🔄 Animation strategy
-- 📱 Responsive approach
-- 🔧 Build process
-
-### [🚢 Deployment Guide](DEPLOYMENT.md)
-
-Deploy anywhere:
-- ☁️ Vercel deployment
-- 🌐 Netlify deployment
-- 🐳 Docker deployment
-- ☁️ AWS deployment
-- ⚙️ Environment variables
-- ⚡ Performance optimization
-
----
-
-## 🎨 Tech Stack Overview
-
-```
-Frontend Framework:    React 18 + TypeScript
-Build Tool:           Vite 8
-Styling:              Tailwind CSS 4
-UI Components:        shadcn/ui
-Animations:           Framer Motion
-Icons:                Lucide React
-Containerization:     Docker + Docker Compose
-CI/CD:                GitHub Actions
-```
-
----
-
-## 📂 Documentation Structure
-
-```
+```text
 docs/
-├── README.md              # This file - Documentation index
-├── PROJECT_SUMMARY.md     # Complete project overview
-├── QUICK_START.md         # Quick start guide
-├── ARCHITECTURE.md        # Technical architecture
-└── DEPLOYMENT.md          # Deployment guide
+├── ARCHITECTURE.md      # Core philosophy
+├── CHANGELOG.md         # History
+├── CODE_OF_CONDUCT.md   # Ethics
+├── CONTRIBUTING.md      # Process
+├── CONTRIBUTORS.md      # People
+├── DEPLOYMENT.md        # Ops
+├── FEATURES.md          # Specs
+├── PROJECT_SETUP.md     # Dev
+├── README.md            # Index (This file)
+├── SECURITY.md          # Safety
+├── STRUCTURE.md         # Folders
+├── System_Design.md     # Diagrams
+├── TECHNOLOGIES.md      # Tools
+└── USE_CASES.md         # User Goals
 ```
 
 ---
-
-## 🤝 Need Help?
-
-- 📧 **Email**: your.email@example.com
-- 🐛 **Issues**: [GitHub Issues](https://github.com/yourusername/starbucks-eg-react/issues)
-- 💬 **Discussions**: [GitHub Discussions](https://github.com/yourusername/starbucks-eg-react/discussions)
-
----
-
-## 📝 Additional Resources
-
-### External Links
-- [React Documentation](https://react.dev)
-- [TypeScript Handbook](https://www.typescriptlang.org/docs)
-- [Vite Guide](https://vitejs.dev/guide)
-- [Tailwind CSS Docs](https://tailwindcss.com/docs)
-- [shadcn/ui Components](https://ui.shadcn.com)
-- [Framer Motion API](https://www.framer.com/motion)
-
-### Related Files
-- [Main README](../README.md) - Project overview
-- [Contributing Guide](../CONTRIBUTING.md) - How to contribute
-- [License](../LICENSE) - MIT License
-
----
-
-<div align="center">
-
-**Happy Coding! 🎉**
-
-[⬆ Back to Top](#-documentation-index)
-
-</div>
+*Maintained with ❤️ for the community.*
