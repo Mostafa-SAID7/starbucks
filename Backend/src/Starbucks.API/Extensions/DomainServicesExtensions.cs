@@ -6,6 +6,7 @@ namespace Starbucks.API.Extensions;
 
 /// <summary>
 /// Extension methods for registering domain and application services
+/// Consolidates all service lifetime registrations in one place
 /// </summary>
 public static class DomainServicesExtensions
 {
@@ -18,13 +19,12 @@ public static class DomainServicesExtensions
         services.AddSingleton<IDateTimeService, DateTimeService>();
 
         // Scoped: one instance per HTTP request
-        services.AddScoped<ICacheService,              CacheService>();
-        services.AddScoped<ICacheInvalidationService,  CacheInvalidationService>();
-        services.AddScoped<ITokenService,              TokenService>();
-        services.AddScoped<ICurrentUserService,        CurrentUserService>();
-        services.AddScoped<IPasswordService,           PasswordService>();
-        services.AddScoped<ISoftDeleteService,         SoftDeleteService>();
-        services.AddScoped<IAuditService,              AuditService>();
+        services.AddScoped<ICacheService, CacheService>();
+        services.AddScoped<ITokenService, TokenService>();
+        services.AddScoped<ICurrentUserService, CurrentUserService>();
+        services.AddScoped<IPasswordService, PasswordService>();
+        services.AddScoped<ISoftDeleteService, SoftDeleteService>();
+        services.AddScoped<IAuditService, AuditService>();
 
         // Transient: new instance per injection (email is stateless, cheap to create)
         services.AddTransient<IEmailService, EmailService>();

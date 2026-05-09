@@ -1,3 +1,5 @@
+using Starbucks.Infrastructure.Extensions;
+
 namespace Starbucks.API.Extensions;
 
 /// <summary>
