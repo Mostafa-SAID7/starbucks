@@ -1,9 +1,13 @@
-namespace Starbucks.Infrastructure.Data.Configurations.Extensions;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System.Text.Json;
+using Starbucks.Domain.Common;
+
+namespace Starbucks.Infrastructure.Extensions;
 
 /// <summary>
 /// Extension methods for PropertyBuilder to eliminate duplicate configuration code
 /// </summary>
-public static class PropertyBuilderExtensions
+public static class BuilderExtensions
 {
     private static readonly JsonSerializerOptions JsonOptions = new()
     {

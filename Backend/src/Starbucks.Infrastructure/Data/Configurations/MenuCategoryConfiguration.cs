@@ -1,4 +1,4 @@
-using Starbucks.Infrastructure.Data.Configurations.Extensions;
+using Starbucks.Infrastructure.Extensions;
 
 namespace Starbucks.Infrastructure.Data.Configurations;
 
