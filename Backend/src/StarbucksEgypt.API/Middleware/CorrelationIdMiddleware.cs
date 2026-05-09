@@ -23,7 +23,7 @@ public class CorrelationIdMiddleware
             ?? Guid.NewGuid().ToString();
 
         // Add correlation ID to response headers
-        context.Response.Headers.Add(CorrelationIdHeader, correlationId);
+        context.Response.Headers.Append(CorrelationIdHeader, correlationId);
 
         // Add correlation ID to all log entries for this request
         using (LogContext.PushProperty("CorrelationId", correlationId))

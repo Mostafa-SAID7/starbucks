@@ -35,7 +35,7 @@ try
     app.UseGlobalExceptionHandler();        // must be early — catches everything below
     app.UseSecurityHeaders();
     app.UseHttpsRedirection();
-    app.UseCors("AllowFrontend");
+    app.UseCors(CorsExtensions.AllowFrontendPolicy);
     AspNetCoreRateLimit.StartupExtensions.UseIpRateLimiting(app);
     app.UseSerilogRequestLogging();         // structured request logs
     app.UseAuthentication();

@@ -1,5 +1,6 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Versioning;
 using StarbucksEgypt.Application.Features.Locations.Queries;
 
 namespace StarbucksEgypt.API.Controllers;
