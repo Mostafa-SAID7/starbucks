@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Versioning;
+using StarbucksEgypt.API.Attributes;
 using StarbucksEgypt.Application.Features.Menu.Queries;
 
 namespace StarbucksEgypt.API.Controllers;
@@ -26,6 +27,7 @@ public class MenuController : ControllerBase
     /// <param name="pageSize">Page size (default: 20)</param>
     /// <returns>Paginated list of menu categories</returns>
     [HttpGet("categories")]
+    [Cache(CacheAttribute.Durations.Long)] // Cache for 30 minutes
     public async Task<IActionResult> GetCategories(
         [FromQuery] string? language = null,
         [FromQuery] int pageNumber = 1,
@@ -48,6 +50,7 @@ public class MenuController : ControllerBase
     /// <param name="language">Language preference (en/ar)</param>
     /// <returns>Menu category with subcategories and items</returns>
     [HttpGet("categories/{slug}")]
+    [Cache(CacheAttribute.Durations.Long)]
     public async Task<IActionResult> GetCategoryBySlug(string slug, [FromQuery] string? language = null)
     {
         // TODO: Implement GetMenuCategoryBySlugQuery
@@ -62,6 +65,7 @@ public class MenuController : ControllerBase
     /// <param name="language">Language preference (en/ar)</param>
     /// <returns>Menu subcategory with items</returns>
     [HttpGet("categories/{categorySlug}/{subcategorySlug}")]
+    [Cache(CacheAttribute.Durations.Long)]
     public async Task<IActionResult> GetSubcategoryBySlug(string categorySlug, string subcategorySlug, [FromQuery] string? language = null)
     {
         // TODO: Implement GetMenuSubcategoryBySlugQuery
@@ -74,6 +78,7 @@ public class MenuController : ControllerBase
     /// <param name="id">Menu item ID</param>
     /// <returns>Menu item details</returns>
     [HttpGet("items/{id:guid}")]
+    [Cache(CacheAttribute.Durations.Medium)] // Cache for 5 minutes
     public async Task<IActionResult> GetMenuItem(Guid id)
     {
         var result = await _mediator.Send(new GetMenuItemQuery(id));
@@ -94,6 +99,7 @@ public class MenuController : ControllerBase
     /// <param name="language">Language preference (en/ar)</param>
     /// <returns>List of matching menu items</returns>
     [HttpGet("search")]
+    [Cache(CacheAttribute.Durations.Short)] // Cache for 1 minute (search results change frequently)
     public async Task<IActionResult> SearchMenuItems([FromQuery] string query, [FromQuery] string? category = null, [FromQuery] string? language = null)
     {
         // TODO: Implement SearchMenuItemsQuery

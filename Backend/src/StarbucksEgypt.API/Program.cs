@@ -32,6 +32,7 @@ try
     // ── Middleware pipeline (order matters) ───────────────────────────────────
     app.UseCorrelationId();                 // correlation ID first for tracing
     app.UseResponseCompression();           // compress responses early
+    app.UseResponseCaching();               // response caching after compression
     app.UseGlobalExceptionHandler();        // must be early — catches everything below
     app.UseSecurityHeaders();
     app.UseHttpsRedirection();
