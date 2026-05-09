@@ -53,12 +53,6 @@ public static class SwaggerExtensions
                 }
             });
 
-            // Include XML comments for better documentation
-            var xmlFile = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
-            var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-            if (File.Exists(xmlPath))
-                c.IncludeXmlComments(xmlPath);
-
             // Support for API versioning in Swagger
             c.DocInclusionPredicate((docName, apiDesc) =>
             {

@@ -1,6 +1,87 @@
-@StarbucksEgypt.API_HostAddress = http://localhost:5134
+@baseUrl = http://localhost:5134
+@apiVersion = v1
 
-GET {{StarbucksEgypt.API_HostAddress}}/weatherforecast/
+### Health Check - Liveness
+GET {{baseUrl}}/health/live
 Accept: application/json
 
-###
+### Health Check - Readiness
+GET {{baseUrl}}/health/ready
+Accept: application/json
+
+### ============================================
+### Authentication Endpoints
+### ============================================
+
+### Register New User
+POST {{baseUrl}}/api/{{apiVersion}}/auth/register
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "password": "Test@123456",
+  "firstName": "Test",
+  "lastName": "User",
+  "phoneNumber": "+201234567890"
+}
+
+### Login
+# @name login
+POST {{baseUrl}}/api/{{apiVersion}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "password": "Test@123456"
+}
+
+### Refresh Token
+@accessToken = {{login.response.body.accessToken}}
+@refreshToken = {{login.response.body.refreshToken}}
+
+POST {{baseUrl}}/api/{{apiVersion}}/auth/refresh
+Content-Type: application/json
+
+{
+  "refreshToken": "{{refreshToken}}"
+}
+
+### Logout
+POST {{baseUrl}}/api/{{apiVersion}}/auth/logout
+Authorization: Bearer {{accessToken}}
+
+### ============================================
+### Menu Endpoints
+### ============================================
+
+### Get Menu Categories (Paginated)
+GET {{baseUrl}}/api/{{apiVersion}}/menu/categories?pageNumber=1&pageSize=20
+Accept: application/json
+
+### Get Menu Categories (Arabic)
+GET {{baseUrl}}/api/{{apiVersion}}/menu/categories?language=ar&pageNumber=1&pageSize=20
+Accept: application/json
+
+### Get Menu Item by ID
+GET {{baseUrl}}/api/{{apiVersion}}/menu/items/00000000-0000-0000-0000-000000000000
+Accept: application/json
+
+### ============================================
+### Location Endpoints
+### ============================================
+
+### Get All Locations (Paginated)
+GET {{baseUrl}}/api/{{apiVersion}}/locations?pageNumber=1&pageSize=50
+Accept: application/json
+
+### Get Locations by City
+GET {{baseUrl}}/api/{{apiVersion}}/locations?city=Cairo&pageNumber=1&pageSize=50
+Accept: application/json
+
+### Get Locations by Governorate
+GET {{baseUrl}}/api/{{apiVersion}}/locations?governorate=Cairo&pageNumber=1&pageSize=50
+Accept: application/json
+
+### Get Locations by City (Alternative Route)
+GET {{baseUrl}}/api/{{apiVersion}}/locations/cities/Cairo?pageNumber=1&pageSize=50
+Accept: application/json
