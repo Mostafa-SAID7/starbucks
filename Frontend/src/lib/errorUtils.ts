@@ -9,6 +9,7 @@ export class AppError extends Error {
   public statusCode?: number;
   public statusText?: string;
   public originalError?: Error;
+  public context?: Record<string, unknown>;
 
   constructor(
     message: string,
@@ -16,6 +17,7 @@ export class AppError extends Error {
     statusCode?: number,
     statusText?: string,
     originalError?: Error,
+    context?: Record<string, unknown>,
   ) {
     super(message);
     this.name = "AppError";
@@ -23,6 +25,7 @@ export class AppError extends Error {
     this.statusCode = statusCode;
     this.statusText = statusText;
     this.originalError = originalError;
+    this.context = context;
   }
 }
 

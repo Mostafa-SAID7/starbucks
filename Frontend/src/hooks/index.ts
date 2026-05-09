@@ -37,5 +37,11 @@ export { useAccordion } from "./useAccordion";
 // Auth hooks
 export { useAuth } from "./auth/useAuth";
 
+// Error monitoring hooks
+export { useErrorMonitoring } from "./useErrorMonitoring";
+
+// Form handling hooks
+export { useFormHandler } from "./useFormHandler";
+
 // Theme hooks (if exists)
 // export { useTheme } from "./useTheme";
