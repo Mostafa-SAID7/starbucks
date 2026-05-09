@@ -1,4 +1,4 @@
-import { lazy, Suspense, useLayoutEffect } from "react";
+import { lazy, Suspense, useLayoutEffect, useEffect } from "react";
 import {
   BrowserRouter as Router,
   Routes,
@@ -11,7 +11,9 @@ import { useTranslation } from "react-i18next";
 import { motion, AnimatePresence } from "framer-motion";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import * as Sentry from "@sentry/react";
 import { queryClient } from "@/lib/queryClient";
+import { initializeErrorMonitoring } from "@/lib/errorMonitoring";
 import { ANIMATION_CONFIG } from "@/lib/constants";
 
 // Layout & Components
@@ -20,6 +22,15 @@ import { OfflineIndicator } from "@/components/ui/OfflineIndicator";
 
 // Route configuration
 import { REDIRECT_ROUTES, MENU_REDIRECT_ROUTES, PAGE_ROUTES } from "@/config/routes";
+
+// Initialize error monitoring
+const errorMonitoring = initializeErrorMonitoring({
+  enabled: import.meta.env.VITE_ERROR_MONITORING_ENABLED !== 'false',
+  environment: import.meta.env.MODE as 'development' | 'staging' | 'production',
+  dsn: import.meta.env.VITE_SENTRY_DSN,
+  tracesSampleRate: import.meta.env.MODE === 'production' ? 0.1 : 1.0,
+  debug: import.meta.env.MODE === 'development',
+});
 
 // Page Wrapper for transitions using centralized constants and specific skeletons
 const PageWrapper = ({
@@ -135,15 +146,28 @@ const AnimatedRoutes = () => {
 };
 
 function App() {
+  // Track page navigation for error monitoring
+  useEffect(() => {
+    const handleRouteChange = () => {
+      // Breadcrumb will be added by useErrorMonitoring hook in components
+    };
+
+    return () => {
+      handleRouteChange();
+    };
+  }, []);
+
   return (
     <QueryClientProvider client={queryClient}>
       <ErrorBoundary>
-        <Router>
-          <SkipNav />
-          <div id="main-content" />
-          <AnimatedRoutes />
-          <OfflineIndicator />
-        </Router>
+        <Sentry.ErrorBoundary fallback={<div>An error occurred</div>} showDialog>
+          <Router>
+            <SkipNav />
+            <div id="main-content" />
+            <AnimatedRoutes />
+            <OfflineIndicator />
+          </Router>
+        </Sentry.ErrorBoundary>
       </ErrorBoundary>
 
       {/* Devtools - only in development */}

@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { authApi } from '@/lib/api';
 import { logError } from '@/lib/errorUtils';
+import { errorMonitor } from '@/lib/errorMonitoring';
 import { AuthStore } from '@/types/auth';
 
 export const useAuthStore = create<AuthStore>()(
@@ -26,6 +27,9 @@ export const useAuthStore = create<AuthStore>()(
           // Store tokens in localStorage for axios interceptor
           localStorage.setItem('auth_token', token);
           localStorage.setItem('refresh_token', refreshToken);
+
+          // Set user context for error monitoring
+          errorMonitor.setUser(user.id, user.email, user.username);
 
           set({
             user,
@@ -63,6 +67,9 @@ export const useAuthStore = create<AuthStore>()(
           localStorage.setItem('auth_token', token);
           localStorage.setItem('refresh_token', refreshToken);
 
+          // Set user context for error monitoring
+          errorMonitor.setUser(user.id, user.email, user.username);
+
           set({
             user,
             token,
@@ -93,6 +100,9 @@ export const useAuthStore = create<AuthStore>()(
         authApi.logout().catch((error) => {
           logError(error, 'Auth Logout');
         });
+
+        // Clear user context from error monitoring
+        errorMonitor.clearUser();
 
         // Clear tokens from localStorage
         localStorage.removeItem('auth_token');

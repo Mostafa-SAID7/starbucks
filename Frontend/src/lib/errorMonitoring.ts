@@ -8,6 +8,7 @@
  * - Console logging (development)
  */
 
+import * as Sentry from '@sentry/react';
 import { AppError, ErrorType } from './errorUtils';
 
 export interface ErrorMonitoringConfig {
@@ -48,14 +49,23 @@ class ErrorMonitoringService {
     }
 
     try {
-      // TODO: Initialize Sentry when installed
-      // import * as Sentry from "@sentry/react";
-      // Sentry.init({
-      //   dsn: this.config.dsn,
-      //   environment: this.config.environment,
-      //   tracesSampleRate: this.config.tracesSampleRate || 0.1,
-      //   debug: this.config.debug,
-      // });
+      // Initialize Sentry
+      if (this.config.dsn) {
+        Sentry.init({
+          dsn: this.config.dsn,
+          environment: this.config.environment,
+          tracesSampleRate: this.config.tracesSampleRate || 0.1,
+          debug: this.config.debug,
+          integrations: [
+            new Sentry.Replay({
+              maskAllText: true,
+              blockAllMedia: true,
+            }),
+          ],
+          replaysSessionSampleRate: 0.1,
+          replaysOnErrorSampleRate: 1.0,
+        });
+      }
 
       this.initialized = true;
       console.log('Error monitoring initialized');
@@ -70,9 +80,8 @@ class ErrorMonitoringService {
   setUser(userId: string, email?: string, username?: string): void {
     this.context.userId = userId;
 
-    // TODO: Set Sentry user context
-    // import * as Sentry from "@sentry/react";
-    // Sentry.setUser({ id: userId, email, username });
+    // Set Sentry user context
+    Sentry.setUser({ id: userId, email, username });
   }
 
   /**
@@ -81,9 +90,8 @@ class ErrorMonitoringService {
   clearUser(): void {
     delete this.context.userId;
 
-    // TODO: Clear Sentry user context
-    // import * as Sentry from "@sentry/react";
-    // Sentry.setUser(null);
+    // Clear Sentry user context
+    Sentry.setUser(null);
   }
 
   /**
@@ -92,9 +100,8 @@ class ErrorMonitoringService {
   setContext(key: string, value: unknown): void {
     this.context[key] = value;
 
-    // TODO: Set Sentry context
-    // import * as Sentry from "@sentry/react";
-    // Sentry.setContext(key, { [key]: value });
+    // Set Sentry context
+    Sentry.setContext(key, { [key]: value });
   }
 
   /**
@@ -106,14 +113,13 @@ class ErrorMonitoringService {
     level: 'info' | 'warning' | 'error' = 'info',
     data?: Record<string, unknown>
   ): void {
-    // TODO: Add Sentry breadcrumb
-    // import * as Sentry from "@sentry/react";
-    // Sentry.addBreadcrumb({
-    //   message,
-    //   category,
-    //   level,
-    //   data,
-    // });
+    // Add Sentry breadcrumb
+    Sentry.addBreadcrumb({
+      message,
+      category,
+      level,
+      data,
+    });
 
     if (this.config.debug) {
       console.log(`[${category}] ${message}`, data);
@@ -134,14 +140,13 @@ class ErrorMonitoringService {
       console.error('Error captured:', error, mergedContext);
     }
 
-    // TODO: Send to Sentry
-    // import * as Sentry from "@sentry/react";
-    // Sentry.captureException(error, {
-    //   contexts: { app: mergedContext },
-    //   tags: {
-    //     errorType: error instanceof AppError ? error.type : 'unknown',
-    //   },
-    // });
+    // Send to Sentry
+    Sentry.captureException(error, {
+      contexts: { app: mergedContext },
+      tags: {
+        errorType: error instanceof AppError ? error.type : 'unknown',
+      },
+    });
 
     // Send to custom error logging service
     this.sendToLoggingService(error, mergedContext);
@@ -162,9 +167,8 @@ class ErrorMonitoringService {
       console.log(`[${level}] ${message}`, mergedContext);
     }
 
-    // TODO: Send to Sentry
-    // import * as Sentry from "@sentry/react";
-    // Sentry.captureMessage(message, level);
+    // Send to Sentry
+    Sentry.captureMessage(message, level);
   }
 
   /**
