@@ -24,6 +24,7 @@ public static class DomainServicesExtensions
         services.AddScoped<ICurrentUserService,        CurrentUserService>();
         services.AddScoped<IPasswordService,           PasswordService>();
         services.AddScoped<ISoftDeleteService,         SoftDeleteService>();
+        services.AddScoped<IAuditService,              AuditService>();
 
         // Transient: new instance per injection (email is stateless, cheap to create)
         services.AddTransient<IEmailService, EmailService>();

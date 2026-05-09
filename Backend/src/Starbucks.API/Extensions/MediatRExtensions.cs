@@ -12,7 +12,7 @@ public static class MediatRExtensions
     {
         services.AddMediatR(cfg =>
             cfg.RegisterServicesFromAssembly(
-                typeof(StarbucksEgypt.Application.Features.Auth.Commands.LoginCommand).Assembly));
+                typeof(Starbucks.Application.Features.Auth.Commands.LoginCommand).Assembly));
 
         return services;
     }

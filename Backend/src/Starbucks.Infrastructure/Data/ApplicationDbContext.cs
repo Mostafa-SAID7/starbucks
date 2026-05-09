@@ -29,6 +29,9 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     public DbSet<Location> Locations => Set<Location>();
     public DbSet<Order> Orders => Set<Order>();
     public DbSet<OrderItem> OrderItems => Set<OrderItem>();
+    public DbSet<AuditLog> AuditLogs => Set<AuditLog>();
+    public DbSet<ErrorLog> ErrorLogs => Set<ErrorLog>();
+    public DbSet<SystemMetric> SystemMetrics => Set<SystemMetric>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

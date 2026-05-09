@@ -36,7 +36,7 @@ public class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand, Resul
             }
 
             // Prevent deleting SuperAdmin
-            if (user.Role == StarbucksEgypt.Domain.Enums.UserRole.SuperAdmin)
+            if (user.Role == Starbucks.Domain.Enums.UserRole.SuperAdmin)
             {
                 return Result<string>.Failure("Cannot delete SuperAdmin user.");
             }

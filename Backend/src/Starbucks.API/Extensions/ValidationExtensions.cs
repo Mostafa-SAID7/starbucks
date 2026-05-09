@@ -15,7 +15,7 @@ public static class ValidationExtensions
     {
         services.AddFluentValidationAutoValidation();
         services.AddValidatorsFromAssembly(
-            typeof(StarbucksEgypt.Application.Features.Auth.Validators.LoginRequestValidator).Assembly);
+            typeof(Starbucks.Application.Features.Auth.Validators.LoginRequestValidator).Assembly);
 
         return services;
     }

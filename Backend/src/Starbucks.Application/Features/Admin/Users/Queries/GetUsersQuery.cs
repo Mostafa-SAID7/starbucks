@@ -94,7 +94,7 @@ public class GetUsersQueryHandler : IRequestHandler<GetUsersQuery, Result<PagedR
             // Enrich DTOs with additional data
             foreach (var userDto in userDtos)
             {
-                var user = users.First(u => u.Id.ToString() == userDto.Id);
+                var user = users.First(u => u.Id == userDto.Id);
                 userDto.IsLocked = user.LockoutEnd.HasValue && user.LockoutEnd.Value > DateTime.UtcNow;
                 userDto.LockoutEnd = user.LockoutEnd;
             }

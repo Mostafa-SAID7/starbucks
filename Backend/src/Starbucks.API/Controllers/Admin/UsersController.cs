@@ -198,42 +198,6 @@ public class UsersController : ControllerBase
 
         return Ok(result.Data);
     }
-
-    /// <summary>
-    /// Get user activity log.
-    /// </summary>
-    [HttpGet("{id}/activity")]
-    [ProducesResponseType(typeof(PagedResult<UserActivityDto>), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetUserActivity(Guid id, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 20)
-    {
-        var result = await _mediator.Send(new GetUserActivityQuery(id, pageNumber, pageSize));
-        
-        if (!result.IsSuccess)
-        {
-            return NotFound(new { message = result.Errors.FirstOrDefault() });
-        }
-
-        return Ok(result.Data);
-    }
-
-    /// <summary>
-    /// Get user login history.
-    /// </summary>
-    [HttpGet("{id}/login-history")]
-    [ProducesResponseType(typeof(PagedResult<UserLoginHistoryDto>), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetUserLoginHistory(Guid id, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 20)
-    {
-        var result = await _mediator.Send(new GetUserLoginHistoryQuery(id, pageNumber, pageSize));
-        
-        if (!result.IsSuccess)
-        {
-            return NotFound(new { message = result.Errors.FirstOrDefault() });
-        }
-
-        return Ok(result.Data);
-    }
 }
 
 /// <summary>
