@@ -75,8 +75,18 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, Result<Lo
         _context.Users.Add(user);
         _context.UserProfiles.Add(profile);
 
-        // Single SaveChangesAsync — was previously called twice (bug)
-        await _context.SaveChangesAsync(cancellationToken);
+        // Use explicit transaction for multi-entity operation
+        using var transaction = await _context.Database.BeginTransactionAsync(cancellationToken);
+        try
+        {
+            await _context.SaveChangesAsync(cancellationToken);
+            await transaction.CommitAsync(cancellationToken);
+        }
+        catch
+        {
+            await transaction.RollbackAsync(cancellationToken);
+            throw;
+        }
 
         var accessToken = _tokenService.GenerateAccessToken(user);
         user.Profile    = profile;

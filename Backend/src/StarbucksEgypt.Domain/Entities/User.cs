@@ -46,6 +46,11 @@ public class User : BaseEntity
     
     public DateTime? LastLoginAt { get; set; }
     
+    // Account lockout for brute force protection
+    public int FailedLoginAttempts { get; set; } = 0;
+    public DateTime? LockoutEnd { get; set; }
+    public DateTime? LastFailedLoginAt { get; set; }
+    
     public string? RefreshToken { get; set; }
     
     public DateTime? RefreshTokenExpiry { get; set; }

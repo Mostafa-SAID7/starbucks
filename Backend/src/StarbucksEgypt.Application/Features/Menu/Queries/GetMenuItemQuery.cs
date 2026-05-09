@@ -31,6 +31,7 @@ public class GetMenuItemQueryHandler : IRequestHandler<GetMenuItemQuery, Result<
         }
 
         var menuItem = await _context.MenuItems
+            .AsNoTracking()
             .Where(i => i.Id == request.Id && i.IsActive && !i.IsDeleted)
             .Include(i => i.Variants.Where(v => v.IsAvailable && !v.IsDeleted))
             .Include(i => i.Subcategory)

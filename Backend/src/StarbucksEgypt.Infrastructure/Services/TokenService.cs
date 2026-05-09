@@ -25,6 +25,14 @@ public sealed class TokenService : ITokenService
         _jwt      = jwt.Value;
         _context  = context;
         _dateTime = dateTime;
+
+        // Validate JWT secret length (minimum 256 bits = 32 characters)
+        if (string.IsNullOrEmpty(_jwt.Secret) || _jwt.Secret.Length < 32)
+        {
+            throw new InvalidOperationException(
+                "JWT Secret must be at least 32 characters (256 bits) long. " +
+                "Configure a secure secret in appsettings.json or use User Secrets/Key Vault.");
+        }
     }
 
     public string GenerateAccessToken(User user)

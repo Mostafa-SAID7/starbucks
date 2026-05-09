@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using StarbucksEgypt.Domain.Entities;
 
 namespace StarbucksEgypt.Application.Common.Interfaces;
@@ -14,6 +15,8 @@ public interface IApplicationDbContext
     DbSet<Location> Locations { get; }
     DbSet<Order> Orders { get; }
     DbSet<OrderItem> OrderItems { get; }
+    
+    DatabaseFacade Database { get; }
     
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

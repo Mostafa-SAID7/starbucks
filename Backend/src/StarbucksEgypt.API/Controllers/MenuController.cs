@@ -19,11 +19,16 @@ public class MenuController : ControllerBase
     /// Get all menu categories with subcategories and items
     /// </summary>
     /// <param name="language">Language preference (en/ar)</param>
-    /// <returns>List of menu categories</returns>
+    /// <param name="pageNumber">Page number (default: 1)</param>
+    /// <param name="pageSize">Page size (default: 20)</param>
+    /// <returns>Paginated list of menu categories</returns>
     [HttpGet("categories")]
-    public async Task<IActionResult> GetCategories([FromQuery] string? language = null)
+    public async Task<IActionResult> GetCategories(
+        [FromQuery] string? language = null,
+        [FromQuery] int pageNumber = 1,
+        [FromQuery] int pageSize = 20)
     {
-        var result = await _mediator.Send(new GetMenuCategoriesQuery(language));
+        var result = await _mediator.Send(new GetMenuCategoriesQuery(language, pageNumber, pageSize));
         
         if (!result.IsSuccess)
         {

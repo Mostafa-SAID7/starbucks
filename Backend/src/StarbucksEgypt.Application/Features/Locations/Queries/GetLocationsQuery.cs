@@ -7,9 +7,10 @@ using Mapster;
 
 namespace StarbucksEgypt.Application.Features.Locations.Queries;
 
-public record GetLocationsQuery(string? City = null, string? Governorate = null) : IRequest<Result<List<LocationDto>>>;
+public record GetLocationsQuery(string? City = null, string? Governorate = null, int PageNumber = 1, int PageSize = 50) 
+    : IRequest<Result<PagedResult<LocationDto>>>;
 
-public class GetLocationsQueryHandler : IRequestHandler<GetLocationsQuery, Result<List<LocationDto>>>
+public class GetLocationsQueryHandler : IRequestHandler<GetLocationsQuery, Result<PagedResult<LocationDto>>>
 {
     private readonly IApplicationDbContext _context;
     private readonly ICacheService _cacheService;
@@ -20,17 +21,18 @@ public class GetLocationsQueryHandler : IRequestHandler<GetLocationsQuery, Resul
         _cacheService = cacheService;
     }
 
-    public async Task<Result<List<LocationDto>>> Handle(GetLocationsQuery request, CancellationToken cancellationToken)
+    public async Task<Result<PagedResult<LocationDto>>> Handle(GetLocationsQuery request, CancellationToken cancellationToken)
     {
-        var cacheKey = $"locations_{request.City ?? "all"}_{request.Governorate ?? "all"}";
+        var cacheKey = $"locations_{request.City ?? "all"}_{request.Governorate ?? "all"}_page{request.PageNumber}_size{request.PageSize}";
         
-        var cachedResult = await _cacheService.GetAsync<List<LocationDto>>(cacheKey, cancellationToken);
+        var cachedResult = await _cacheService.GetAsync<PagedResult<LocationDto>>(cacheKey, cancellationToken);
         if (cachedResult != null)
         {
-            return Result<List<LocationDto>>.Success(cachedResult);
+            return Result<PagedResult<LocationDto>>.Success(cachedResult);
         }
 
         var query = _context.Locations
+            .AsNoTracking()
             .Where(l => l.IsActive && !l.IsDeleted);
 
         if (!string.IsNullOrEmpty(request.City))
@@ -43,16 +45,21 @@ public class GetLocationsQueryHandler : IRequestHandler<GetLocationsQuery, Resul
             query = query.Where(l => l.Governorate.ToLower() == request.Governorate.ToLower());
         }
 
+        var totalCount = await query.CountAsync(cancellationToken);
+
         var locations = await query
             .OrderBy(l => l.SortOrder)
             .ThenBy(l => l.Name)
+            .Skip((request.PageNumber - 1) * request.PageSize)
+            .Take(request.PageSize)
             .ToListAsync(cancellationToken);
 
-        var result = locations.Adapt<List<LocationDto>>();
+        var items = locations.Adapt<List<LocationDto>>();
+        var result = PagedResult<LocationDto>.Create(items, totalCount, request.PageNumber, request.PageSize);
 
         // Cache for 2 hours
         await _cacheService.SetAsync(cacheKey, result, TimeSpan.FromHours(2), cancellationToken);
 
-        return Result<List<LocationDto>>.Success(result);
+        return Result<PagedResult<LocationDto>>.Success(result);
     }
 }

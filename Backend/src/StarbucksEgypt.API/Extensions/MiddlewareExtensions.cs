@@ -55,7 +55,15 @@ public static class MiddlewareExtensions
             context.Response.Headers["X-XSS-Protection"]        = "1; mode=block";
             context.Response.Headers["Referrer-Policy"]         = "strict-origin-when-cross-origin";
             context.Response.Headers["Permissions-Policy"]      = "geolocation=(), microphone=(), camera=()";
-            context.Response.Headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains";
+            
+            // HSTS with preload for production
+            var isProduction = context.RequestServices
+                .GetRequiredService<IWebHostEnvironment>()
+                .IsProduction();
+            
+            context.Response.Headers["Strict-Transport-Security"] = isProduction
+                ? "max-age=31536000; includeSubDomains; preload"
+                : "max-age=31536000; includeSubDomains";
 
             var isLocalhost = context.Request.Host.Value?.Contains("localhost") ?? true;
 

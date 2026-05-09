@@ -40,11 +40,36 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, Result<LoginRes
             return Result<LoginResponse>.Failure("Invalid email or password.");
         }
 
-        // Verify password (you'll need to implement password hashing)
+        // Check account lockout
+        if (user.LockoutEnd.HasValue && user.LockoutEnd.Value > _dateTime.UtcNow)
+        {
+            var remainingMinutes = (int)(user.LockoutEnd.Value - _dateTime.UtcNow).TotalMinutes;
+            return Result<LoginResponse>.Failure($"Account is locked. Try again in {remainingMinutes} minutes.");
+        }
+
+        // Verify password
         if (!_passwordService.Verify(request.Request.Password, user.PasswordHash))
         {
+            // Increment failed login attempts
+            user.FailedLoginAttempts++;
+            user.LastFailedLoginAt = _dateTime.UtcNow;
+
+            // Lock account after 5 failed attempts
+            if (user.FailedLoginAttempts >= 5)
+            {
+                user.LockoutEnd = _dateTime.UtcNow.AddMinutes(15);
+                await _context.SaveChangesAsync(cancellationToken);
+                return Result<LoginResponse>.Failure("Account locked due to multiple failed login attempts. Try again in 15 minutes.");
+            }
+
+            await _context.SaveChangesAsync(cancellationToken);
             return Result<LoginResponse>.Failure("Invalid email or password.");
         }
+
+        // Reset failed login attempts on successful login
+        user.FailedLoginAttempts = 0;
+        user.LockoutEnd = null;
+        user.LastFailedLoginAt = null;
 
         // Generate tokens
         var accessToken = _tokenService.GenerateAccessToken(user);

@@ -20,11 +20,17 @@ public class LocationsController : ControllerBase
     /// </summary>
     /// <param name="city">Filter by city</param>
     /// <param name="governorate">Filter by governorate</param>
-    /// <returns>List of store locations</returns>
+    /// <param name="pageNumber">Page number (default: 1)</param>
+    /// <param name="pageSize">Page size (default: 50)</param>
+    /// <returns>Paginated list of store locations</returns>
     [HttpGet]
-    public async Task<IActionResult> GetLocations([FromQuery] string? city = null, [FromQuery] string? governorate = null)
+    public async Task<IActionResult> GetLocations(
+        [FromQuery] string? city = null, 
+        [FromQuery] string? governorate = null,
+        [FromQuery] int pageNumber = 1,
+        [FromQuery] int pageSize = 50)
     {
-        var result = await _mediator.Send(new GetLocationsQuery(city, governorate));
+        var result = await _mediator.Send(new GetLocationsQuery(city, governorate, pageNumber, pageSize));
         
         if (!result.IsSuccess)
         {
@@ -50,11 +56,16 @@ public class LocationsController : ControllerBase
     /// Get locations by city
     /// </summary>
     /// <param name="city">City name</param>
-    /// <returns>List of locations in the city</returns>
+    /// <param name="pageNumber">Page number (default: 1)</param>
+    /// <param name="pageSize">Page size (default: 50)</param>
+    /// <returns>Paginated list of locations in the city</returns>
     [HttpGet("cities/{city}")]
-    public async Task<IActionResult> GetLocationsByCity(string city)
+    public async Task<IActionResult> GetLocationsByCity(
+        string city,
+        [FromQuery] int pageNumber = 1,
+        [FromQuery] int pageSize = 50)
     {
-        var result = await _mediator.Send(new GetLocationsQuery(city));
+        var result = await _mediator.Send(new GetLocationsQuery(city, null, pageNumber, pageSize));
         
         if (!result.IsSuccess)
         {
