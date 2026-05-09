@@ -25,12 +25,12 @@ redis-server
 
 ### 3. Update Database
 ```bash
-dotnet ef database update --project src/StarbucksEgypt.Infrastructure --startup-project src/StarbucksEgypt.API
+dotnet ef database update --project src/Starbucks.Infrastructure --startup-project src/Starbucks.API
 ```
 
 ### 4. Run the API
 ```bash
-cd src/StarbucksEgypt.API
+cd src/Starbucks.API
 dotnet run
 ```
 
@@ -44,10 +44,10 @@ Navigate to: `http://localhost:5000`
 ```
 Backend/
 ├── src/
-│   ├── StarbucksEgypt.API/           # Controllers, Middleware
-│   ├── StarbucksEgypt.Application/   # Features, DTOs, Validators
-│   ├── StarbucksEgypt.Infrastructure/# DbContext, Services
-│   └── StarbucksEgypt.Domain/        # Entities, Enums
+│   ├── Starbucks.API/           # Controllers, Middleware
+│   ├── Starbucks.Application/   # Features, DTOs, Validators
+│   ├── Starbucks.Infrastructure/# DbContext, Services
+│   └── Starbucks.Domain/        # Entities, Enums
 ├── docker-compose.yml                # Redis, SQL Server
 └── README.md
 ```
@@ -187,18 +187,18 @@ public async Task<IActionResult> CreateOrder(
 ```bash
 # Add migration
 dotnet ef migrations add AddOrderTable \
-  --project src/StarbucksEgypt.Infrastructure \
-  --startup-project src/StarbucksEgypt.API
+  --project src/Starbucks.Infrastructure \
+  --startup-project src/Starbucks.API
 
 # Update database
 dotnet ef database update \
-  --project src/StarbucksEgypt.Infrastructure \
-  --startup-project src/StarbucksEgypt.API
+  --project src/Starbucks.Infrastructure \
+  --startup-project src/Starbucks.API
 
 # Rollback migration
 dotnet ef database update PreviousMigrationName \
-  --project src/StarbucksEgypt.Infrastructure \
-  --startup-project src/StarbucksEgypt.API
+  --project src/Starbucks.Infrastructure \
+  --startup-project src/Starbucks.API
 ```
 
 ### Add a New Service
@@ -242,7 +242,7 @@ services.AddScoped<INotificationService, NotificationService>();
 "DefaultConnection": "Server=(localdb)\\mssqllocaldb;Database=StarbucksEgyptDb;..."
 
 # Test connection
-dotnet ef database update --project src/StarbucksEgypt.Infrastructure
+dotnet ef database update --project src/Starbucks.Infrastructure --startup-project src/Starbucks.API
 ```
 
 ### Redis Connection Issues
@@ -260,11 +260,11 @@ redis-cli ping
 ### Migration Issues
 ```bash
 # Drop database and recreate
-dotnet ef database drop --project src/StarbucksEgypt.Infrastructure
-dotnet ef database update --project src/StarbucksEgypt.Infrastructure
+dotnet ef database drop --project src/Starbucks.Infrastructure --startup-project src/Starbucks.API
+dotnet ef database update --project src/Starbucks.Infrastructure --startup-project src/Starbucks.API
 
 # Remove last migration
-dotnet ef migrations remove --project src/StarbucksEgypt.Infrastructure
+dotnet ef migrations remove --project src/Starbucks.Infrastructure --startup-project src/Starbucks.API
 ```
 
 ### Port Already in Use
@@ -288,10 +288,10 @@ lsof -ti:5000 | xargs kill -9
 ### View Logs
 ```bash
 # Console logs (real-time)
-dotnet run --project src/StarbucksEgypt.API
+dotnet run --project src/Starbucks.API
 
 # File logs
-tail -f src/StarbucksEgypt.API/logs/starbucks-api-*.txt
+tail -f src/Starbucks.API/logs/starbucks-api-*.txt
 ```
 
 ### Check Health
@@ -350,8 +350,8 @@ dotnet build --configuration Release
 
 ### Run
 ```bash
-dotnet run --project src/StarbucksEgypt.API
-dotnet watch run --project src/StarbucksEgypt.API  # Hot reload
+dotnet run --project src/Starbucks.API
+dotnet watch run --project src/Starbucks.API  # Hot reload
 ```
 
 ### Test

@@ -28,13 +28,13 @@ This backend follows **Clean Architecture** principles with clear separation of 
 
 ## 📁 Project Structure
 
-### **StarbucksEgypt.API** (Presentation Layer)
+### **Starbucks.API** (Presentation Layer)
 - **Controllers**: Thin controllers that delegate to MediatR
 - **Extensions**: Service registration and middleware configuration
 - **Services**: API-specific services (CurrentUserService)
 - **Configuration**: appsettings.json, launchSettings.json
 
-### **StarbucksEgypt.Application** (Application Layer)
+### **Starbucks.Application** (Application Layer)
 - **Features**: Organized by domain (Auth, Menu, Locations)
   - Commands: Write operations (Register, Login, Logout)
   - Queries: Read operations (GetMenu, GetLocations)
@@ -42,7 +42,7 @@ This backend follows **Clean Architecture** principles with clear separation of 
 - **DTOs**: Data transfer objects for API contracts
 - **Common**: Shared interfaces, models, settings
 
-### **StarbucksEgypt.Infrastructure** (Infrastructure Layer)
+### **Starbucks.Infrastructure** (Infrastructure Layer)
 - **Data**: DbContext, Entity Configurations, Migrations
 - **Services**: Concrete implementations
   - CacheService (Redis)
@@ -52,7 +52,7 @@ This backend follows **Clean Architecture** principles with clear separation of 
   - DateTimeService (testable time)
   - SoftDeleteService (centralized soft delete)
 
-### **StarbucksEgypt.Domain** (Domain Layer)
+### **Starbucks.Domain** (Domain Layer)
 - **Entities**: Core business entities (User, MenuItem, Order, Location)
 - **Enums**: Domain enumerations (UserRole, OrderStatus)
 - **Common**: BaseEntity with audit fields
@@ -250,10 +250,10 @@ public abstract class BaseEntity
 docker-compose up -d
 
 # Run migrations
-dotnet ef database update --project src/StarbucksEgypt.Infrastructure
+dotnet ef database update --project src/Starbucks.Infrastructure
 
 # Run API
-dotnet run --project src/StarbucksEgypt.API
+dotnet run --project src/Starbucks.API
 ```
 
 ### Environment Configuration
@@ -264,13 +264,13 @@ dotnet run --project src/StarbucksEgypt.API
 ### Database Migrations
 ```bash
 # Add migration
-dotnet ef migrations add MigrationName --project src/StarbucksEgypt.Infrastructure
+dotnet ef migrations add MigrationName --project src/Starbucks.Infrastructure
 
 # Update database
-dotnet ef database update --project src/StarbucksEgypt.Infrastructure
+dotnet ef database update --project src/Starbucks.Infrastructure
 
 # Remove last migration
-dotnet ef migrations remove --project src/StarbucksEgypt.Infrastructure
+dotnet ef migrations remove --project src/Starbucks.Infrastructure
 ```
 
 ---

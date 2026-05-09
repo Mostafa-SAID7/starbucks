@@ -9,10 +9,10 @@ Enterprise-grade ASP.NET Core backend following Clean Architecture principles wi
 docker-compose up -d
 
 # 2. Update database
-dotnet ef database update --project src/StarbucksEgypt.Infrastructure
+dotnet ef database update --project src/Starbucks.Infrastructure
 
 # 3. Run the API
-cd src/StarbucksEgypt.API
+cd src/Starbucks.API
 dotnet run
 ```
 
@@ -72,12 +72,12 @@ dotnet run
 ```
 Backend/
 ├── src/
-│   ├── StarbucksEgypt.API/              # Presentation Layer
+│   ├── Starbucks.API/              # Presentation Layer
 │   │   ├── Controllers/                 # API Controllers
 │   │   ├── Extensions/                  # Service & Middleware Extensions
 │   │   └── Services/                    # API-specific Services
 │   │
-│   ├── StarbucksEgypt.Application/      # Application Layer
+│   ├── Starbucks.Application/      # Application Layer
 │   │   ├── Features/                    # CQRS Features
 │   │   │   ├── Auth/                    # Authentication Features
 │   │   │   ├── Menu/                    # Menu Features
@@ -86,11 +86,11 @@ Backend/
 │   │   ├── Common/                      # Shared Interfaces & Models
 │   │   └── Validators/                  # FluentValidation Rules
 │   │
-│   ├── StarbucksEgypt.Infrastructure/   # Infrastructure Layer
+│   ├── Starbucks.Infrastructure/   # Infrastructure Layer
 │   │   ├── Data/                        # DbContext & Configurations
 │   │   └── Services/                    # Service Implementations
 │   │
-│   └── StarbucksEgypt.Domain/           # Domain Layer
+│   └── Starbucks.Domain/           # Domain Layer
 │       ├── Entities/                    # Domain Entities
 │       ├── Enums/                       # Domain Enumerations
 │       └── Common/                      # Base Classes
@@ -235,13 +235,13 @@ dotnet tool install --global dotnet-ef
 #### Database
 ```bash
 # Add migration
-dotnet ef migrations add MigrationName --project src/StarbucksEgypt.Infrastructure
+dotnet ef migrations add MigrationName --project src/Starbucks.Infrastructure
 
 # Update database
-dotnet ef database update --project src/StarbucksEgypt.Infrastructure
+dotnet ef database update --project src/Starbucks.Infrastructure
 
 # Drop database
-dotnet ef database drop --project src/StarbucksEgypt.Infrastructure
+dotnet ef database drop --project src/Starbucks.Infrastructure
 ```
 
 #### Build & Run
@@ -250,10 +250,10 @@ dotnet ef database drop --project src/StarbucksEgypt.Infrastructure
 dotnet build
 
 # Run
-dotnet run --project src/StarbucksEgypt.API
+dotnet run --project src/Starbucks.API
 
 # Watch (hot reload)
-dotnet watch run --project src/StarbucksEgypt.API
+dotnet watch run --project src/Starbucks.API
 ```
 
 #### Docker
@@ -340,7 +340,7 @@ export Jwt__Secret="your-production-secret"
 ```bash
 # Check connection string in appsettings.json
 # Update database
-dotnet ef database update --project src/StarbucksEgypt.Infrastructure
+dotnet ef database update --project src/Starbucks.Infrastructure
 ```
 
 **Redis Connection Failed**

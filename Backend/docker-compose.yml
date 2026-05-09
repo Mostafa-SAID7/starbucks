@@ -31,7 +31,7 @@ services:
   api:
     build:
       context: .
-      dockerfile: src/StarbucksEgypt.API/Dockerfile
+      dockerfile: src/Starbucks.API/Dockerfile
     container_name: starbucks-api
     environment:
       - ASPNETCORE_ENVIRONMENT=Development

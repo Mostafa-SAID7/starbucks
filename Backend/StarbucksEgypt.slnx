@@ -1,8 +1,8 @@
 <Solution>
   <Folder Name="/src/">
-    <Project Path="src/StarbucksEgypt.API/StarbucksEgypt.API.csproj" />
-    <Project Path="src/StarbucksEgypt.Application/StarbucksEgypt.Application.csproj" />
-    <Project Path="src/StarbucksEgypt.Domain/StarbucksEgypt.Domain.csproj" />
-    <Project Path="src/StarbucksEgypt.Infrastructure/StarbucksEgypt.Infrastructure.csproj" />
+    <Project Path="src/Starbucks.API/Starbucks.API.csproj" />
+    <Project Path="src/Starbucks.Application/Starbucks.Application.csproj" />
+    <Project Path="src/Starbucks.Domain/Starbucks.Domain.csproj" />
+    <Project Path="src/Starbucks.Infrastructure/Starbucks.Infrastructure.csproj" />
   </Folder>
 </Solution>

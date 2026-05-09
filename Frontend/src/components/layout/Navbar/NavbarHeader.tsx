@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { Link } from "react-router-dom";
 import { Logo } from "@/components/ui";
 import { Language } from "@/hooks";
@@ -10,9 +11,10 @@ interface NavbarHeaderProps {
 /**
  * Navbar Header Component
  * Displays logo and branding
- * ~50 LOC
+ * Memoized to prevent unnecessary re-renders
+ * ~40 LOC
  */
-export function NavbarHeader({ lang, onClose }: NavbarHeaderProps) {
+const NavbarHeaderComponent = ({ lang, onClose }: NavbarHeaderProps) => {
   return (
     <Link
       to={`/${lang}`}
@@ -23,4 +25,9 @@ export function NavbarHeader({ lang, onClose }: NavbarHeaderProps) {
       <Logo className="h-10 lg:h-12 w-auto aspect-square object-contain hover:scale-105 transition-transform duration-300" />
     </Link>
   );
-}
+};
+
+// Memoize component - only re-render if props change
+export const NavbarHeader = memo(NavbarHeaderComponent, (prevProps, nextProps) => {
+  return prevProps.lang === nextProps.lang && prevProps.onClose === nextProps.onClose;
+});

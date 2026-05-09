@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useMemo, memo } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Search, Navigation } from "lucide-react";
@@ -8,11 +8,49 @@ import { useLocations, useLanguage } from "@/hooks";
 import { TALABAT_URL } from "./constants";
 import type { Location } from "@/types";
 
+/**
+ * Memoized LocationCard Component
+ * Prevents unnecessary re-renders when parent list updates
+ */
+const LocationCard = memo(
+  ({ city, isRTL }: { city: Location; isRTL: boolean }) => (
+    <motion.a
+      href={`https://locations.starbucks.eg/directory/${city.slug}`}
+      target="_blank"
+      rel="noopener noreferrer"
+      whileHover={{ x: isRTL ? -8 : 8 }}
+      className="flex items-center justify-between p-6 bg-gray-50 dark:bg-white/5 rounded-2xl border border-gray-100 dark:border-white/10 group transition-all hover:bg-starbucks-green/5 hover:border-starbucks-green/30 shadow-sm"
+    >
+      <div className="flex items-center gap-4">
+        <div className="w-10 h-10 rounded-full bg-starbucks-green/10 flex items-center justify-center text-starbucks-green group-hover:bg-starbucks-green group-hover:text-white transition-colors">
+          <Navigation className="h-5 w-5" />
+        </div>
+        <span className="text-lg font-black text-gray-900 dark:text-white group-hover:text-starbucks-green transition-colors">
+          {isRTL ? city.nameAr : city.name}
+        </span>
+      </div>
+      <span className="text-sm font-bold text-gray-400 dark:text-gray-500 bg-white dark:bg-black/20 px-3 py-1 rounded-full border border-gray-100 dark:border-white/5">
+        {city.count} {isRTL ? "فرع" : "stores"}
+      </span>
+    </motion.a>
+  ),
+  (prevProps, nextProps) => {
+    // Custom comparison: only re-render if city data or RTL changes
+    return (
+      prevProps.city.id === nextProps.city.id &&
+      prevProps.isRTL === nextProps.isRTL
+    );
+  }
+);
+
+LocationCard.displayName = "LocationCard";
+
 export const LocationsPage: React.FC = () => {
   const { lang, isRTL } = useLanguage();
   const [search, setSearch] = useState("");
   const [geoStatus, setGeoStatus] = useState<"idle" | "loading" | "error">("idle");
 
+  // Memoize callback to prevent re-creation
   const handleUseMyLocation = useCallback(() => {
     if (!navigator.geolocation) {
       setGeoStatus("error");
@@ -50,17 +88,25 @@ export const LocationsPage: React.FC = () => {
     );
   }, [lang]);
 
+  // Memoize search handler
+  const handleSearch = useCallback((value: string) => {
+    setSearch(value);
+  }, []);
+
   // Fetch locations using TanStack Query
   const { data: cities } = useLocations() as { data: Location[] | undefined };
 
-  // Filter cities based on search
-  const filteredCities =
-    cities?.filter(
-      (c: Location) =>
-        search === "" ||
-        c.name.toLowerCase().includes(search.toLowerCase()) ||
-        c.nameAr.includes(search),
-    ) || [];
+  // Memoize filtered cities - only recalculate when cities or search changes
+  const filteredCities = useMemo(() => {
+    return (
+      cities?.filter(
+        (c: Location) =>
+          search === "" ||
+          c.name.toLowerCase().includes(search.toLowerCase()) ||
+          c.nameAr.includes(search),
+      ) || []
+    );
+  }, [cities, search]);
 
   return (
     <div className={`min-h-screen bg-white dark:bg-zinc-950 transition-colors duration-300`} dir={isRTL ? "rtl" : "ltr"}>
@@ -122,7 +168,7 @@ export const LocationsPage: React.FC = () => {
                   <input
                     type="text"
                     value={search}
-                    onChange={(e) => setSearch(e.target.value)}
+                    onChange={(e) => handleSearch(e.target.value)}
                     placeholder={isRTL ? "ابحث عن فرع..." : "Find a store"}
                     className={`w-full rounded-full bg-white/10 hover:bg-white/15 backdrop-blur-md py-4 ${isRTL ? "pr-6 pl-14 text-right" : "pl-6 pr-14"} text-white placeholder-white/50 outline-none ring-2 ring-white/10 focus:ring-starbucks-green focus:bg-white/20 transition-all shadow-xl`}
                   />
@@ -231,26 +277,7 @@ export const LocationsPage: React.FC = () => {
                       </p>
                     ) : (
                       filteredCities.map((city: Location) => (
-                        <motion.a
-                          key={city.slug}
-                          href={`https://locations.starbucks.eg/directory/${city.slug}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          whileHover={{ x: isRTL ? -8 : 8 }}
-                          className="flex items-center justify-between p-6 bg-gray-50 dark:bg-white/5 rounded-2xl border border-gray-100 dark:border-white/10 group transition-all hover:bg-starbucks-green/5 hover:border-starbucks-green/30 shadow-sm"
-                        >
-                          <div className="flex items-center gap-4">
-                            <div className="w-10 h-10 rounded-full bg-starbucks-green/10 flex items-center justify-center text-starbucks-green group-hover:bg-starbucks-green group-hover:text-white transition-colors">
-                              <Navigation className="h-5 w-5" />
-                            </div>
-                            <span className="text-lg font-black text-gray-900 dark:text-white group-hover:text-starbucks-green transition-colors">
-                              {isRTL ? city.nameAr : city.name}
-                            </span>
-                          </div>
-                          <span className="text-sm font-bold text-gray-400 dark:text-gray-500 bg-white dark:bg-black/20 px-3 py-1 rounded-full border border-gray-100 dark:border-white/5">
-                            {city.count} {isRTL ? "فرع" : "stores"}
-                          </span>
-                        </motion.a>
+                        <LocationCard key={city.id} city={city} isRTL={isRTL} />
                       ))
                     )}
                   </div>

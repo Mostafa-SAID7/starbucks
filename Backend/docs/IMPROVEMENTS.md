@@ -18,7 +18,7 @@ This document tracks all improvements made to the Starbucks Egypt backend to ens
 - ✅ All time-related operations now use the abstraction for testability
 
 **Files Modified**:
-- `Backend/src/StarbucksEgypt.Application/Features/Auth/Commands/RefreshTokenCommand.cs`
+- `Backend/src/Starbucks.Application/Features/Auth/Commands/RefreshTokenCommand.cs`
 
 **Benefits**:
 - Fully testable time-dependent logic
@@ -39,9 +39,9 @@ This document tracks all improvements made to the Starbucks Egypt backend to ens
 - ✅ Restore functionality included
 
 **Files**:
-- `Backend/src/StarbucksEgypt.Application/Common/Interfaces/ISoftDeleteService.cs`
-- `Backend/src/StarbucksEgypt.Infrastructure/Services/SoftDeleteService.cs`
-- `Backend/src/StarbucksEgypt.Infrastructure/Data/ApplicationDbContext.cs`
+- `Backend/src/Starbucks.Application/Common/Interfaces/ISoftDeleteService.cs`
+- `Backend/src/Starbucks.Infrastructure/Services/SoftDeleteService.cs`
+- `Backend/src/Starbucks.Infrastructure/Data/ApplicationDbContext.cs`
 
 **Benefits**:
 - Centralized soft delete logic
@@ -96,8 +96,8 @@ This document tracks all improvements made to the Starbucks Egypt backend to ens
 - ✅ Clear, user-friendly error messages
 
 **Files**:
-- `Backend/src/StarbucksEgypt.Application/Features/Auth/Validators/LoginRequestValidator.cs`
-- `Backend/src/StarbucksEgypt.Application/Features/Auth/Validators/RegisterRequestValidator.cs`
+- `Backend/src/Starbucks.Application/Features/Auth/Validators/LoginRequestValidator.cs`
+- `Backend/src/Starbucks.Application/Features/Auth/Validators/RegisterRequestValidator.cs`
 
 **Benefits**:
 - Consistent validation across the application

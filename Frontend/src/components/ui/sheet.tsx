@@ -41,6 +41,59 @@ const SheetContent = React.forwardRef<
   React.HTMLAttributes<HTMLDivElement> & { side?: "right" | "left" }
 >(({ className, children, side = "right", ...props }, ref) => {
   const { open, onOpenChange } = React.useContext(SheetContext)
+  const mergedRef = React.useRef<HTMLDivElement>(null)
+
+  // Merge refs
+  React.useImperativeHandle(ref, () => mergedRef.current as HTMLDivElement)
+
+  // Handle keyboard navigation
+  React.useEffect(() => {
+    if (!open || !mergedRef.current) return
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Close on Escape key
+      if (e.key === "Escape") {
+        e.preventDefault()
+        onOpenChange?.(false)
+        return
+      }
+
+      // Tab trap - keep focus within sheet
+      if (e.key === "Tab") {
+        const focusableElements = mergedRef.current?.querySelectorAll(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        )
+        if (!focusableElements || focusableElements.length === 0) return
+
+        const firstElement = focusableElements[0] as HTMLElement
+        const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement
+        const activeElement = document.activeElement
+
+        if (e.shiftKey) {
+          if (activeElement === firstElement) {
+            e.preventDefault()
+            lastElement.focus()
+          }
+        } else {
+          if (activeElement === lastElement) {
+            e.preventDefault()
+            firstElement.focus()
+          }
+        }
+      }
+    }
+
+    document.addEventListener("keydown", handleKeyDown)
+    return () => document.removeEventListener("keydown", handleKeyDown)
+  }, [open, onOpenChange])
+
+  // Focus management: focus sheet when opened
+  React.useEffect(() => {
+    if (open && mergedRef.current) {
+      const closeButton = mergedRef.current.querySelector('button[aria-label*="إغلاق"], button[aria-label*="Close"]') as HTMLElement
+      closeButton?.focus()
+    }
+  }, [open])
 
   return (
     <AnimatePresence>
@@ -50,9 +103,10 @@ const SheetContent = React.forwardRef<
             {...ANIMATION_CONFIG.VARIANTS.FADE_IN}
             className="fixed inset-0 bg-black/50"
             onClick={() => onOpenChange?.(false)}
+            aria-hidden="true"
           />
           <motion.div
-            ref={ref}
+            ref={mergedRef}
             {...(side === "right" ? ANIMATION_CONFIG.VARIANTS.SLIDE_IN_RIGHT : ANIMATION_CONFIG.VARIANTS.SLIDE_IN_LEFT)}
             transition={ANIMATION_CONFIG.TRANSITIONS.SPRING}
             className={cn(
@@ -61,11 +115,14 @@ const SheetContent = React.forwardRef<
               side === "left" && "inset-y-0 left-0 h-full w-3/4 sm:max-w-sm border-r",
               className
             )}
+            role="dialog"
+            aria-modal="true"
             {...(props as import("framer-motion").HTMLMotionProps<"div">)}
           >
             <button
               onClick={() => onOpenChange?.(false)}
-              className="absolute left-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 text-foreground-light dark:text-foreground-dark"
+              className="absolute left-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-starbucks-green text-foreground-light dark:text-foreground-dark"
+              aria-label="إغلاق"
             >
               <X className="h-6 w-6" />
               <span className="sr-only">إغلاق</span>

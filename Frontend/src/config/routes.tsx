@@ -8,47 +8,66 @@ import { HomeSkeleton, MenuSkeleton, StaticPageSkeleton, ContactSkeleton } from 
  */
 export interface PageRoute {
   path: string;
-  component: ComponentType<any>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  component: ComponentType<any> | React.LazyExoticComponent<ComponentType<any>>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   skeleton: ComponentType<any>;
   name: string;
   props?: Record<string, unknown>;
 }
 
 // Lazy loaded Pages for performance
+// eslint-disable-next-line react-refresh/only-export-components
 const HomePage = lazy(() =>
   import('@/pages/HomePage').then((module) => ({ default: module.HomePage }))
 );
+
+// eslint-disable-next-line react-refresh/only-export-components
 const MenuPage = lazy(() =>
   import('@/pages/MenuPage').then((module) => ({ default: module.MenuPage }))
 );
+
+// eslint-disable-next-line react-refresh/only-export-components
 const MenuCategoryPage = lazy(() =>
   import('@/pages/MenuCategoryPage').then((module) => ({
     default: module.MenuCategoryPage,
   }))
 );
+
+// eslint-disable-next-line react-refresh/only-export-components
 const MenuItemPage = lazy(() =>
   import('@/pages/MenuItemPage').then((module) => ({
     default: module.MenuItemPage,
   }))
 );
+
+// eslint-disable-next-line react-refresh/only-export-components
 const LocationsPage = lazy(() =>
   import('@/pages/LocationsPage').then((module) => ({
     default: module.LocationsPage,
   }))
 );
+
+// eslint-disable-next-line react-refresh/only-export-components
 const ContactUsPage = lazy(() =>
   import('@/pages/ContactUsPage').then((module) => ({
     default: module.ContactUsPage,
   }))
 );
+
+// eslint-disable-next-line react-refresh/only-export-components
 const SustainabilityPage = lazy(() =>
   import('@/pages').then((module) => ({
     default: module.SustainabilityPage,
   }))
 );
+
+// eslint-disable-next-line react-refresh/only-export-components
 const GenericPageWrapper = lazy(() =>
   import('@/pages').then((module) => ({ default: module.GenericPageWrapper }))
 );
+
+// eslint-disable-next-line react-refresh/only-export-components
 const NotFound = lazy(() =>
   import('@/pages').then((module) => ({ default: module.NotFound }))
 );
