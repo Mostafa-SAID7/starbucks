@@ -1,5 +1,6 @@
 using Serilog;
 using StarbucksEgypt.API.Extensions;
+using StarbucksEgypt.API.Middleware;
 using AspNetCoreRateLimit;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using System.Text.Json;
@@ -29,7 +30,9 @@ try
     var app = builder.Build();
 
     // ── Middleware pipeline (order matters) ───────────────────────────────────
-    app.UseGlobalExceptionHandler();        // must be first — catches everything below
+    app.UseCorrelationId();                 // correlation ID first for tracing
+    app.UseResponseCompression();           // compress responses early
+    app.UseGlobalExceptionHandler();        // must be early — catches everything below
     app.UseSecurityHeaders();
     app.UseHttpsRedirection();
     app.UseCors("AllowFrontend");

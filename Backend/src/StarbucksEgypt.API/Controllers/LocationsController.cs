@@ -5,7 +5,9 @@ using StarbucksEgypt.Application.Features.Locations.Queries;
 namespace StarbucksEgypt.API.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[ApiVersion("1.0")]
+[Route("api/v{version:apiVersion}/[controller]")]
+[Produces("application/json")]
 public class LocationsController : ControllerBase
 {
     private readonly IMediator _mediator;

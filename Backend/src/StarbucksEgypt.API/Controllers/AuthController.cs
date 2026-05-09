@@ -7,7 +7,9 @@ using System.Security.Claims;
 namespace StarbucksEgypt.API.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[ApiVersion("1.0")]
+[Route("api/v{version:apiVersion}/[controller]")]
+[Produces("application/json")]
 public class AuthController : ControllerBase
 {
     private readonly IMediator _mediator;

@@ -5,7 +5,9 @@ using StarbucksEgypt.Application.Features.Menu.Queries;
 namespace StarbucksEgypt.API.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[ApiVersion("1.0")]
+[Route("api/v{version:apiVersion}/[controller]")]
+[Produces("application/json")]
 public class MenuController : ControllerBase
 {
     private readonly IMediator _mediator;

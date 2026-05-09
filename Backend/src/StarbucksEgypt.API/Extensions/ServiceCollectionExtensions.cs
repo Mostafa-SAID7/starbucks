@@ -27,6 +27,39 @@ public static class ServiceCollectionExtensions
     {
         services.AddControllers();
 
+        // API Versioning
+        services.AddApiVersioning(options =>
+        {
+            options.DefaultApiVersion = new Microsoft.AspNetCore.Mvc.ApiVersion(1, 0);
+            options.AssumeDefaultVersionWhenUnspecified = true;
+            options.ReportApiVersions = true;
+            options.ApiVersionReader = Microsoft.AspNetCore.Mvc.Versioning.ApiVersionReader.Combine(
+                new Microsoft.AspNetCore.Mvc.Versioning.UrlSegmentApiVersionReader(),
+                new Microsoft.AspNetCore.Mvc.Versioning.HeaderApiVersionReader("X-API-Version"));
+        }).AddApiExplorer(options =>
+        {
+            options.GroupNameFormat = "'v'VVV";
+            options.SubstituteApiVersionInUrl = true;
+        });
+
+        // Response Compression
+        services.AddResponseCompression(options =>
+        {
+            options.EnableForHttps = true;
+            options.Providers.Add<Microsoft.AspNetCore.ResponseCompression.GzipCompressionProvider>();
+            options.Providers.Add<Microsoft.AspNetCore.ResponseCompression.BrotliCompressionProvider>();
+        });
+
+        services.Configure<Microsoft.AspNetCore.ResponseCompression.GzipCompressionProviderOptions>(options =>
+        {
+            options.Level = System.IO.Compression.CompressionLevel.Fastest;
+        });
+
+        services.Configure<Microsoft.AspNetCore.ResponseCompression.BrotliCompressionProviderOptions>(options =>
+        {
+            options.Level = System.IO.Compression.CompressionLevel.Fastest;
+        });
+
         // FluentValidation — discovers all validators in Application assembly automatically
         services.AddFluentValidationAutoValidation();
         services.AddValidatorsFromAssembly(
@@ -60,28 +93,33 @@ public static class ServiceCollectionExtensions
             .AddDbContextCheck<ApplicationDbContext>("database", tags: new[] { "ready" })
             .AddRedis(configuration.GetConnectionString("Redis")!, "redis", tags: new[] { "ready" });
 
-        // Swagger with JWT support
+        // Swagger with JWT support and API versioning
         services.AddSwaggerGen(c =>
         {
             c.SwaggerDoc("v1", new OpenApiInfo
             {
                 Title       = "Starbucks Egypt API",
                 Version     = "v1",
-                Description = "RESTful API for Starbucks Egypt",
+                Description = "RESTful API for Starbucks Egypt - Version 1.0",
                 Contact     = new OpenApiContact
                 {
                     Name  = "Starbucks Egypt",
                     Email = "support@starbucks.eg"
+                },
+                License = new OpenApiLicense
+                {
+                    Name = "Private",
                 }
             });
 
             c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
             {
-                Description = "JWT Authorization header. Example: \"Authorization: Bearer {token}\"",
+                Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
                 Name        = "Authorization",
                 In          = ParameterLocation.Header,
                 Type        = SecuritySchemeType.ApiKey,
-                Scheme      = "Bearer"
+                Scheme      = "Bearer",
+                BearerFormat = "JWT"
             });
 
             c.AddSecurityRequirement(new OpenApiSecurityRequirement
@@ -99,10 +137,22 @@ public static class ServiceCollectionExtensions
                 }
             });
 
+            // Include XML comments for better documentation
             var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
             var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
             if (File.Exists(xmlPath))
                 c.IncludeXmlComments(xmlPath);
+
+            // Support for API versioning in Swagger
+            c.DocInclusionPredicate((docName, apiDesc) =>
+            {
+                if (!apiDesc.TryGetMethodInfo(out var methodInfo)) return false;
+                var versions = methodInfo.DeclaringType?
+                    .GetCustomAttributes(true)
+                    .OfType<Microsoft.AspNetCore.Mvc.ApiVersionAttribute>()
+                    .SelectMany(attr => attr.Versions);
+                return versions?.Any(v => $"v{v}" == docName) ?? false;
+            });
         });
 
         return services;
