@@ -1,11 +1,11 @@
 # Use the official .NET runtime as a parent image
-FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
+FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS base
 WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 
 # Use the SDK image to build the application
-FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /src
 
 # Copy csproj files and restore dependencies
@@ -38,5 +38,8 @@ RUN mkdir -p /app/logs
 # Set environment variables
 ENV ASPNETCORE_ENVIRONMENT=Production
 ENV ASPNETCORE_URLS=http://+:80
+
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+  CMD curl -f http://localhost:80/health || exit 1
 
 ENTRYPOINT ["dotnet", "StarbucksEgypt.API.dll"]

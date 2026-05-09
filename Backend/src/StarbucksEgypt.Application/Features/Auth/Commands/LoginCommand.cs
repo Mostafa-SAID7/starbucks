@@ -13,12 +13,20 @@ public record LoginCommand(LoginRequest Request) : IRequest<Result<LoginResponse
 public class LoginCommandHandler : IRequestHandler<LoginCommand, Result<LoginResponse>>
 {
     private readonly IApplicationDbContext _context;
-    private readonly ITokenService _tokenService;
+    private readonly ITokenService         _tokenService;
+    private readonly IPasswordService      _passwordService;
+    private readonly IDateTimeService      _dateTime;
 
-    public LoginCommandHandler(IApplicationDbContext context, ITokenService tokenService)
+    public LoginCommandHandler(
+        IApplicationDbContext context,
+        ITokenService tokenService,
+        IPasswordService passwordService,
+        IDateTimeService dateTime)
     {
-        _context = context;
-        _tokenService = tokenService;
+        _context         = context;
+        _tokenService    = tokenService;
+        _passwordService = passwordService;
+        _dateTime        = dateTime;
     }
 
     public async Task<Result<LoginResponse>> Handle(LoginCommand request, CancellationToken cancellationToken)
@@ -33,7 +41,7 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, Result<LoginRes
         }
 
         // Verify password (you'll need to implement password hashing)
-        if (!VerifyPassword(request.Request.Password, user.PasswordHash))
+        if (!_passwordService.Verify(request.Request.Password, user.PasswordHash))
         {
             return Result<LoginResponse>.Failure("Invalid email or password.");
         }
@@ -43,9 +51,9 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, Result<LoginRes
         var refreshToken = _tokenService.GenerateRefreshToken();
 
         // Update user login info
-        user.LastLoginAt = DateTime.UtcNow;
-        user.RefreshToken = refreshToken;
-        user.RefreshTokenExpiry = DateTime.UtcNow.AddDays(7); // 7 days for refresh token
+        user.LastLoginAt        = _dateTime.UtcNow;
+        user.RefreshToken       = refreshToken;
+        user.RefreshTokenExpiry = _dateTime.UtcNow.AddDays(7);
 
         await _context.SaveChangesAsync(cancellationToken);
 
@@ -55,16 +63,10 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, Result<LoginRes
         {
             AccessToken = accessToken,
             RefreshToken = refreshToken,
-            ExpiresAt = DateTime.UtcNow.AddHours(1), // 1 hour for access token
+            ExpiresAt   = _dateTime.UtcNow.AddHours(1),
             User = userDto
         };
 
         return Result<LoginResponse>.Success(response);
-    }
-
-    private static bool VerifyPassword(string password, string hash)
-    {
-        // Implement password verification using BCrypt or similar
-        return BCrypt.Net.BCrypt.Verify(password, hash);
     }
 }

@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using StarbucksEgypt.Domain.Common;
 using StarbucksEgypt.Domain.Enums;
 
@@ -20,6 +21,7 @@ public class User : BaseEntity
     public string Email { get; set; } = string.Empty;
     
     [Required]
+    [Phone]
     [MaxLength(20)]
     public string PhoneNumber { get; set; } = string.Empty;
     

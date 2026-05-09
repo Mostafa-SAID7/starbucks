@@ -2,6 +2,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using StarbucksEgypt.Application.DTOs.Auth;
 using StarbucksEgypt.Application.Features.Auth.Commands;
+using System.Security.Claims;
 
 namespace StarbucksEgypt.API.Controllers;
 
@@ -60,8 +61,14 @@ public class AuthController : ControllerBase
     [HttpPost("refresh")]
     public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequest request)
     {
-        // TODO: Implement refresh token logic
-        return Ok();
+        var result = await _mediator.Send(new RefreshTokenCommand(request.RefreshToken));
+        
+        if (!result.IsSuccess)
+        {
+            return BadRequest(new { errors = result.Errors });
+        }
+
+        return Ok(result.Data);
     }
 
     /// <summary>
@@ -71,12 +78,12 @@ public class AuthController : ControllerBase
     [HttpPost("logout")]
     public async Task<IActionResult> Logout()
     {
-        // TODO: Implement logout logic (revoke refresh token)
+        var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (Guid.TryParse(userIdClaim, out var userId))
+        {
+            await _mediator.Send(new LogoutCommand(userId));
+        }
+        
         return Ok(new { message = "Logged out successfully" });
     }
-}
-
-public class RefreshTokenRequest
-{
-    public string RefreshToken { get; set; } = string.Empty;
 }

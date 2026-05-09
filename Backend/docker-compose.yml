@@ -7,7 +7,6 @@ services:
     container_name: starbucks-sqlserver
     environment:
       - ACCEPT_EULA=Y
-      - SA_PASSWORD=StarbucksEgypt123!
       - MSSQL_PID=Express
     ports:
       - "1433:1433"
@@ -36,11 +35,12 @@ services:
     container_name: starbucks-api
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=StarbucksEgyptDb;User Id=sa;Password=StarbucksEgypt123!;TrustServerCertificate=true;Encrypt=false
+      - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=StarbucksEgyptDb;User Id=sa;Password=${SQLSERVER_PASSWORD};TrustServerCertificate=true;Encrypt=false
       - ConnectionStrings__Redis=redis:6379
-      - Jwt__Secret=YourSuperSecretKeyThatIsAtLeast32CharactersLongForDevelopment!
+      - Jwt__Secret=${JWT_SECRET}
       - Jwt__Issuer=StarbucksEgyptAPI
       - Jwt__Audience=StarbucksEgyptClient
+      - Cors__AllowedOrigins=http://localhost:3000,http://localhost:5173
     ports:
       - "5000:80"
     depends_on:

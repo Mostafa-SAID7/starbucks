@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace StarbucksEgypt.Domain.Common;
 
@@ -20,4 +21,7 @@ public abstract class BaseEntity
     public DateTime? DeletedAt { get; set; }
     
     public string? DeletedBy { get; set; }
+    
+    [Timestamp]
+    public byte[] RowVersion { get; set; } = Array.Empty<byte>();
 }

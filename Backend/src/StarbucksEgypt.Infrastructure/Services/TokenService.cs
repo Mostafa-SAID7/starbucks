@@ -1,6 +1,7 @@
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using StarbucksEgypt.Application.Common.Interfaces;
+using StarbucksEgypt.Application.Common.Settings;
 using StarbucksEgypt.Domain.Entities;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -10,77 +11,86 @@ using Microsoft.EntityFrameworkCore;
 
 namespace StarbucksEgypt.Infrastructure.Services;
 
-public class TokenService : ITokenService
+public sealed class TokenService : ITokenService
 {
-    private readonly IConfiguration _configuration;
+    private readonly JwtSettings _jwt;
     private readonly IApplicationDbContext _context;
+    private readonly IDateTimeService _dateTime;
 
-    public TokenService(IConfiguration configuration, IApplicationDbContext context)
+    public TokenService(
+        IOptions<JwtSettings> jwt,
+        IApplicationDbContext context,
+        IDateTimeService dateTime)
     {
-        _configuration = configuration;
-        _context = context;
+        _jwt      = jwt.Value;
+        _context  = context;
+        _dateTime = dateTime;
     }
 
     public string GenerateAccessToken(User user)
     {
-        var tokenHandler = new JwtSecurityTokenHandler();
-        var key = Encoding.ASCII.GetBytes(_configuration["Jwt:Secret"] ?? throw new InvalidOperationException("JWT Secret not configured"));
+        var key     = Encoding.ASCII.GetBytes(_jwt.Secret);
+        var now     = _dateTime.UtcNow;
+        var expires = now.AddHours(_jwt.ExpiryInHours);
 
         var claims = new List<Claim>
         {
             new(ClaimTypes.NameIdentifier, user.Id.ToString()),
-            new(ClaimTypes.Email, user.Email),
-            new(ClaimTypes.Name, $"{user.FirstName} {user.LastName}"),
-            new(ClaimTypes.Role, user.Role.ToString()),
-            new("phone_number", user.PhoneNumber),
-            new("email_verified", user.IsEmailVerified.ToString()),
-            new("phone_verified", user.IsPhoneVerified.ToString())
+            new(ClaimTypes.Email,          user.Email),
+            new(ClaimTypes.Name,           $"{user.FirstName} {user.LastName}"),
+            new(ClaimTypes.Role,           user.Role.ToString()),
+            new("phone_number",            user.PhoneNumber),
+            new("email_verified",          user.IsEmailVerified.ToString()),
         };
 
-        var tokenDescriptor = new SecurityTokenDescriptor
+        var descriptor = new SecurityTokenDescriptor
         {
-            Subject = new ClaimsIdentity(claims),
-            Expires = DateTime.UtcNow.AddHours(1), // 1 hour expiration
-            Issuer = _configuration["Jwt:Issuer"],
-            Audience = _configuration["Jwt:Audience"],
-            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            Subject            = new ClaimsIdentity(claims),
+            Expires            = expires,
+            IssuedAt           = now,
+            NotBefore          = now,
+            Issuer             = _jwt.Issuer,
+            Audience           = _jwt.Audience,
+            SigningCredentials = new SigningCredentials(
+                new SymmetricSecurityKey(key),
+                SecurityAlgorithms.HmacSha256Signature)
         };
 
-        var token = tokenHandler.CreateToken(tokenDescriptor);
-        return tokenHandler.WriteToken(token);
+        var handler = new JwtSecurityTokenHandler();
+        return handler.WriteToken(handler.CreateToken(descriptor));
     }
 
     public string GenerateRefreshToken()
     {
-        var randomNumber = new byte[64];
+        var bytes = new byte[64];
         using var rng = RandomNumberGenerator.Create();
-        rng.GetBytes(randomNumber);
-        return Convert.ToBase64String(randomNumber);
+        rng.GetBytes(bytes);
+        return Convert.ToBase64String(bytes);
     }
 
-    public async Task<bool> ValidateRefreshTokenAsync(string refreshToken, Guid userId, CancellationToken cancellationToken = default)
+    public async Task<bool> ValidateRefreshTokenAsync(
+        string refreshToken, Guid userId,
+        CancellationToken cancellationToken = default)
     {
         var user = await _context.Users
             .FirstOrDefaultAsync(u => u.Id == userId && !u.IsDeleted, cancellationToken);
 
-        if (user == null || user.RefreshToken != refreshToken || user.RefreshTokenExpiry < DateTime.UtcNow)
-        {
-            return false;
-        }
-
-        return true;
+        return user is not null
+            && user.RefreshToken == refreshToken
+            && user.RefreshTokenExpiry > _dateTime.UtcNow;
     }
 
-    public async Task RevokeRefreshTokenAsync(Guid userId, CancellationToken cancellationToken = default)
+    public async Task RevokeRefreshTokenAsync(
+        Guid userId,
+        CancellationToken cancellationToken = default)
     {
         var user = await _context.Users
             .FirstOrDefaultAsync(u => u.Id == userId && !u.IsDeleted, cancellationToken);
 
-        if (user != null)
-        {
-            user.RefreshToken = null;
-            user.RefreshTokenExpiry = null;
-            await _context.SaveChangesAsync(cancellationToken);
-        }
+        if (user is null) return;
+
+        user.RefreshToken       = null;
+        user.RefreshTokenExpiry = null;
+        await _context.SaveChangesAsync(cancellationToken);
     }
 }
