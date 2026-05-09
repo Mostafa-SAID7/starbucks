@@ -29,7 +29,7 @@ export const useAuthStore = create<AuthStore>()(
           localStorage.setItem('refresh_token', refreshToken);
 
           // Set user context for error monitoring
-          errorMonitor.setUser(user.id, user.email, user.username);
+          errorMonitor.setUser(user.id, user.email, user.firstName);
 
           set({
             user,
@@ -68,7 +68,7 @@ export const useAuthStore = create<AuthStore>()(
           localStorage.setItem('refresh_token', refreshToken);
 
           // Set user context for error monitoring
-          errorMonitor.setUser(user.id, user.email, user.username);
+          errorMonitor.setUser(user.id, user.email, user.firstName);
 
           set({
             user,

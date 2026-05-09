@@ -1,8 +1,18 @@
-import { lazy } from 'react';
-import { Navigate } from 'react-router-dom';
+import { lazy, ComponentType } from 'react';
 import MiddleEastPage from '@/pages/MiddleEastPage/MiddleEastPage';
 import { DeliveryPage } from '@/pages/DeliveryPage/DeliveryPage';
 import { HomeSkeleton, MenuSkeleton, StaticPageSkeleton, ContactSkeleton } from '@/components/skeletons';
+
+/**
+ * Route configuration type
+ */
+export interface PageRoute {
+  path: string;
+  component: ComponentType<any>;
+  skeleton: ComponentType<any>;
+  name: string;
+  props?: Record<string, unknown>;
+}
 
 // Lazy loaded Pages for performance
 const HomePage = lazy(() =>
@@ -75,7 +85,7 @@ export const MENU_REDIRECT_ROUTES = [
  * Page route configuration
  * Defines all language-prefixed routes with their components and skeletons
  */
-export const PAGE_ROUTES = [
+export const PAGE_ROUTES: PageRoute[] = [
   {
     path: '',
     component: HomePage,

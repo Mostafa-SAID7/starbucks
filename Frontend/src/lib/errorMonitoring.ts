@@ -9,7 +9,7 @@
  */
 
 import * as Sentry from '@sentry/react';
-import { AppError, ErrorType } from './errorUtils';
+import { AppError } from './errorUtils';
 
 export interface ErrorMonitoringConfig {
   enabled: boolean;
@@ -57,7 +57,7 @@ class ErrorMonitoringService {
           tracesSampleRate: this.config.tracesSampleRate || 0.1,
           debug: this.config.debug,
           integrations: [
-            new Sentry.Replay({
+            Sentry.replayIntegration({
               maskAllText: true,
               blockAllMedia: true,
             }),
@@ -69,8 +69,8 @@ class ErrorMonitoringService {
 
       this.initialized = true;
       console.log('Error monitoring initialized');
-    } catch (error) {
-      console.error('Failed to initialize error monitoring:', error);
+    } catch (err) {
+      console.error('Failed to initialize error monitoring:', err);
     }
   }
 
@@ -149,7 +149,7 @@ class ErrorMonitoringService {
     });
 
     // Send to custom error logging service
-    this.sendToLoggingService(error, mergedContext);
+    this.sendToLoggingService();
   }
 
   /**
@@ -174,10 +174,7 @@ class ErrorMonitoringService {
   /**
    * Send error to custom logging service
    */
-  private async sendToLoggingService(
-    error: Error | AppError,
-    context: ErrorContext
-  ): Promise<void> {
+  private sendToLoggingService(): void {
     try {
       // TODO: Implement custom logging service
       // const response = await fetch('/api/logs/errors', {
