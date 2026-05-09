@@ -31,21 +31,21 @@ public class GetMenuCategoriesQueryHandler : IRequestHandler<GetMenuCategoriesQu
             return Result<PagedResult<MenuCategoryDto>>.Success(cachedResult);
         }
 
-        var query = _context.MenuCategories
+        // Single query with pagination - avoid duplicate query for count
+        var baseQuery = _context.MenuCategories
             .AsNoTracking()
-            .Where(c => c.IsActive && !c.IsDeleted)
+            .Where(c => c.IsActive && !c.IsDeleted);
+
+        // Get total count from base query
+        var totalCount = await baseQuery.CountAsync(cancellationToken);
+
+        // Get paginated data with includes
+        var categories = await baseQuery
             .Include(c => c.Subcategories.Where(s => s.IsActive && !s.IsDeleted))
             .ThenInclude(s => s.Items.Where(i => i.IsActive && !i.IsDeleted))
             .ThenInclude(i => i.Variants.Where(v => v.IsAvailable && !v.IsDeleted))
             .OrderBy(c => c.SortOrder)
-            .ThenBy(c => c.Name.English);
-
-        var totalCount = await _context.MenuCategories
-            .AsNoTracking()
-            .Where(c => c.IsActive && !c.IsDeleted)
-            .CountAsync(cancellationToken);
-
-        var categories = await query
+            .ThenBy(c => c.Name.English)
             .Skip((request.PageNumber - 1) * request.PageSize)
             .Take(request.PageSize)
             .ToListAsync(cancellationToken);

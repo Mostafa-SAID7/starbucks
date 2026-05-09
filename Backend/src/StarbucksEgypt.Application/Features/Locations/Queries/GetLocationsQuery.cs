@@ -31,23 +31,26 @@ public class GetLocationsQueryHandler : IRequestHandler<GetLocationsQuery, Resul
             return Result<PagedResult<LocationDto>>.Success(cachedResult);
         }
 
-        var query = _context.Locations
+        // Single base query - avoid duplicate query for count
+        var baseQuery = _context.Locations
             .AsNoTracking()
             .Where(l => l.IsActive && !l.IsDeleted);
 
         if (!string.IsNullOrEmpty(request.City))
         {
-            query = query.Where(l => l.City.ToLower() == request.City.ToLower());
+            baseQuery = baseQuery.Where(l => l.City.ToLower() == request.City.ToLower());
         }
 
         if (!string.IsNullOrEmpty(request.Governorate))
         {
-            query = query.Where(l => l.Governorate.ToLower() == request.Governorate.ToLower());
+            baseQuery = baseQuery.Where(l => l.Governorate.ToLower() == request.Governorate.ToLower());
         }
 
-        var totalCount = await query.CountAsync(cancellationToken);
+        // Get total count from base query
+        var totalCount = await baseQuery.CountAsync(cancellationToken);
 
-        var locations = await query
+        // Get paginated data
+        var locations = await baseQuery
             .OrderBy(l => l.SortOrder)
             .ThenBy(l => l.Name)
             .Skip((request.PageNumber - 1) * request.PageSize)
