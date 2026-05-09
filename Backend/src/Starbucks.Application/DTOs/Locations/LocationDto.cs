@@ -1,3 +1,5 @@
+using Starbucks.Application.Common.Models;
+
 namespace Starbucks.Application.DTOs.Locations;
 
 public class LocationDto
@@ -47,10 +49,4 @@ public class DayHoursDto
     public TimeSpan? OpenTime { get; set; }
     public TimeSpan? CloseTime { get; set; }
     public bool Is24Hours { get; set; } = false;
-}
-
-public class LocalizedContentDto
-{
-    public string English { get; set; } = string.Empty;
-    public string Arabic { get; set; } = string.Empty;
 }

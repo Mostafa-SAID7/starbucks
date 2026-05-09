@@ -1,3 +1,5 @@
+using Starbucks.Application.Common.Models;
+
 namespace Starbucks.Application.DTOs.Menu;
 
 public class MenuCategoryDto
@@ -64,10 +66,15 @@ public class MenuItemVariantDto
     public int SortOrder { get; set; }
 }
 
-public class LocalizedContentDto
+public class AllergenInfoDto
 {
-    public string English { get; set; } = string.Empty;
-    public string Arabic { get; set; } = string.Empty;
+    public bool ContainsMilk { get; set; }
+    public bool ContainsEggs { get; set; }
+    public bool ContainsNuts { get; set; }
+    public bool ContainsGluten { get; set; }
+    public bool ContainsSoy { get; set; }
+    public bool IsVegan { get; set; }
+    public bool IsVegetarian { get; set; }
 }
 
 public class NutritionalInfoDto
@@ -82,15 +89,4 @@ public class NutritionalInfoDto
     public decimal? Sugar { get; set; }
     public decimal? Protein { get; set; }
     public decimal? Caffeine { get; set; }
-}
-
-public class AllergenInfoDto
-{
-    public bool ContainsMilk { get; set; }
-    public bool ContainsEggs { get; set; }
-    public bool ContainsNuts { get; set; }
-    public bool ContainsGluten { get; set; }
-    public bool ContainsSoy { get; set; }
-    public bool IsVegan { get; set; }
-    public bool IsVegetarian { get; set; }
 }
