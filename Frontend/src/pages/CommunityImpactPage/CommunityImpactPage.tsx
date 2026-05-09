@@ -3,12 +3,12 @@ import { motion } from "framer-motion";
 import { SEO } from "@/components";
 import { StaticPageSkeleton } from "@/components/skeletons";
 import { SectionRenderer } from "@/components/sections/generic/SectionRenderer";
+import { useLanguage } from "@/hooks";
 import { usePageData } from "@/hooks/queries";
 import { type GenericPageData, type LocalizedText } from "@/types";
 
 export const CommunityImpactPage = () => {
-  const { i18n } = useTranslation();
-  const lang = (i18n.language === "ar" ? "ar" : "en") as "ar" | "en";
+  const { lang } = useLanguage();
 
   // Fetch community impact page data using TanStack Query
   const {

@@ -3,13 +3,13 @@ import { useTranslation } from "react-i18next";
 import { motion, AnimatePresence } from "framer-motion";
 import { Mail, Phone, Send, CheckCircle } from "lucide-react";
 import { SEO, Button, Input, Select, Textarea, QueryErrorBoundary } from "@/components";
-import { useContactInfo } from "@/hooks/queries";
+import { useContactInfo, useLanguage } from "@/hooks";
 import { ContactUsData as ContactData } from "@/types/pages";
 import { cn } from "@/lib/utils";
 
 const ContactUsPageContent: React.FC<{ data: ContactData }> = ({ data }) => {
-  const { t, i18n } = useTranslation(["pages", "common"]);
-  const isRTL = i18n.language === "ar";
+  const { t } = useTranslation(["pages", "common"]);
+  const { isRTL } = useLanguage();
 
   const [form, setForm] = useState({
     name: "",

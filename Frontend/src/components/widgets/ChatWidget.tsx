@@ -3,12 +3,13 @@ import { motion, AnimatePresence } from "framer-motion";
 import { MessageCircle, X, Send, User } from "lucide-react";
 import { Input } from "@/components/ui";
 import { useTranslation } from "react-i18next";
+import { useLanguage } from "@/hooks";
 
 export const ChatWidget = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [message, setMessage] = useState("");
-  const { t, i18n } = useTranslation();
-  const isRTL = i18n.language === "ar";
+  const { t } = useTranslation();
+  const { isRTL } = useLanguage();
   const [messages, setMessages] = useState<
     { id: number; text: string; isBot: boolean }[]
   >(() => [

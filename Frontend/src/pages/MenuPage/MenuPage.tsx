@@ -6,16 +6,17 @@ import { useQueryClient } from "@tanstack/react-query";
 import { cn } from "@/lib/utils";
 import { AllergyInfo, SEO, QueryErrorBoundary } from "@/components";
 import { MenuSkeleton } from "@/components/skeletons";
+import { useLanguage } from "@/hooks";
 import { useMenuData } from "@/hooks/queries";
 import { queryKeys } from "@/lib/queryKeys";
 import { menuFetchers } from "@/lib/fetchers";
+import { getTextAlignClass } from "@/lib/classUtils";
 import type { MenuCategory, SidebarAction } from "@/types";
 
 const MenuPageContent: React.FC<{ menuData: any }> = ({ menuData }) => {
-  const { t, i18n } = useTranslation(["pages", "common"]);
-  const lang = (i18n.language === "ar" ? "ar" : "en") as "ar" | "en";
-  const isRTL = lang === "ar";
-  const textAlignClass = isRTL ? "text-right" : "text-left";
+  const { lang, isRTL } = useLanguage();
+  const { t } = useTranslation(["pages", "common"]);
+  const textAlignClass = getTextAlignClass(isRTL);
   const queryClient = useQueryClient();
 
   const prefetchCategory = (categoryId: string) => {
@@ -158,8 +159,8 @@ const MenuPageContent: React.FC<{ menuData: any }> = ({ menuData }) => {
 };
 
 export const MenuPage = () => {
+  const { lang } = useLanguage();
   const { i18n } = useTranslation();
-  const lang = (i18n.language === "ar" ? "ar" : "en") as "ar" | "en";
   const [isTranslationLoaded, setIsTranslationLoaded] = useState(false);
 
   useEffect(() => {

@@ -319,10 +319,10 @@ export function checkPerformanceTargets(): {
   return results;
 }
 
-// Development-only performance logging
+// Development-only performance logging with proper cleanup
 if (import.meta.env.DEV) {
   // Log performance summary every 30 seconds
-  setInterval(() => {
+  const performanceLoggingInterval = setInterval(() => {
     const report = performanceMonitor.generateReport();
     if (report.metrics.length > 0) {
       console.group("📊 Performance Summary");
@@ -335,4 +335,11 @@ if (import.meta.env.DEV) {
       console.groupEnd();
     }
   }, 30000);
+
+  // Cleanup on module unload (for HMR and app shutdown)
+  if (typeof window !== 'undefined') {
+    window.addEventListener('beforeunload', () => {
+      clearInterval(performanceLoggingInterval);
+    });
+  }
 }

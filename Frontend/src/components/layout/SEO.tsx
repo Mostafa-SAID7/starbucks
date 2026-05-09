@@ -1,5 +1,6 @@
 import { Helmet } from 'react-helmet-async'
 import { useTranslation } from 'react-i18next'
+import { useLanguage } from '@/hooks'
 
 interface SEOProps {
   title?: string
@@ -9,9 +10,10 @@ interface SEOProps {
 
 export const SEO = ({ title, description, canonical }: SEOProps) => {
   const { i18n } = useTranslation()
-  const siteName = i18n.language === 'ar' ? 'ستاربكس مصر' : 'Starbucks Egypt'
+  const { lang } = useLanguage()
+  const siteName = lang === 'ar' ? 'ستاربكس مصر' : 'Starbucks Egypt'
   const fullTitle = title ? `${title} | ${siteName}` : siteName
-  const defaultDescription = i18n.language === 'ar' 
+  const defaultDescription = lang === 'ar' 
     ? 'ستاربكس مصر - الصفحة الرئيسية'
     : 'Starbucks Egypt - Home'
 
@@ -19,7 +21,7 @@ export const SEO = ({ title, description, canonical }: SEOProps) => {
     <Helmet>
       <title>{fullTitle}</title>
       <meta name="description" content={description || defaultDescription} />
-      <html lang={i18n.language} dir={i18n.dir()} />
+      <html lang={lang} dir={i18n.dir()} />
       {canonical && <link rel="canonical" href={canonical} />}
       <meta property="og:title" content={fullTitle} />
       <meta property="og:description" content={description || defaultDescription} />

@@ -31,7 +31,9 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, Result<LoginRes
 
     public async Task<Result<LoginResponse>> Handle(LoginCommand request, CancellationToken cancellationToken)
     {
+        // Use AsNoTracking for initial read, then attach for update
         var user = await _context.Users
+            .AsNoTracking()
             .Include(u => u.Profile)
             .FirstOrDefaultAsync(u => u.Email == request.Request.Email && !u.IsDeleted, cancellationToken);
 
@@ -50,6 +52,9 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, Result<LoginRes
         // Verify password
         if (!_passwordService.Verify(request.Request.Password, user.PasswordHash))
         {
+            // Attach user for update
+            _context.Users.Attach(user);
+            
             // Increment failed login attempts
             user.FailedLoginAttempts++;
             user.LastFailedLoginAt = _dateTime.UtcNow;
@@ -65,6 +70,9 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, Result<LoginRes
             await _context.SaveChangesAsync(cancellationToken);
             return Result<LoginResponse>.Failure("Invalid email or password.");
         }
+
+        // Attach user for successful login update
+        _context.Users.Attach(user);
 
         // Reset failed login attempts on successful login
         user.FailedLoginAttempts = 0;

@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useParams, useNavigate } from "react-router-dom";
-import { useMenuData } from "@/hooks/queries";
+import { useMenuData, useLanguage } from "@/hooks";
 import { Modal, Input } from "@/components/ui";
 import { SearchMenuItem } from "@/types";
 
@@ -19,20 +19,12 @@ interface SearchModalProps {
 }
 
 const SearchModal: React.FC<SearchModalProps> = ({ isOpen, onClose }) => {
-  const { t,i18n } = useTranslation();
-  const { lang: urlLang } = useParams<{ lang: string }>();
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const inputRef = useRef<HTMLInputElement>(null);
   const [searchTerm, setSearchTerm] = useState("");
 
-  const isRTL = i18n.language === "ar";
-  const lang = (
-    urlLang && (urlLang === "ar" || urlLang === "en")
-      ? urlLang
-      : i18n.language === "ar"
-        ? "ar"
-        : "en"
-  ) as "ar" | "en";
+  const { lang, isRTL } = useLanguage();
 
   // Fetch menu data using TanStack Query hook
   const { data: menuData } = useMenuData();

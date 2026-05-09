@@ -1,8 +1,8 @@
 import { useTranslation } from "react-i18next";
+import { useLanguage } from "@/hooks";
 
 export const SkipNav = () => {
-  const { i18n } = useTranslation();
-  const isRTL = i18n.language === "ar";
+  const { isRTL } = useLanguage();
 
   return (
     <a

@@ -9,14 +9,14 @@ import {
 } from "@/components";
 import { MenuSkeleton } from "@/components/skeletons";
 import { NotFound } from "@/pages";
-import { useMenuData, useMenuCategory } from "@/hooks/queries";
+import { useMenuData, useMenuCategory, useLanguage } from "@/hooks";
 
 import { QueryErrorBoundary } from "@/components";
 
 const MenuCategoryContent = () => {
   const { categoryId } = useParams<{ categoryId: string }>();
-  const { t, i18n } = useTranslation(["pages", "common"]);
-  const isRTL = i18n.language === "ar";
+  const { t } = useTranslation(["pages", "common"]);
+  const { lang, isRTL } = useLanguage();
   const textAlignClass = isRTL ? "text-right" : "text-left";
 
   const { data: menuData, isLoading: isMenuLoading } = useMenuData();
@@ -79,7 +79,7 @@ const MenuCategoryContent = () => {
                     {t("pages:menu.sidebar.actions.order")}
                   </Link>
                   <Link
-                    to={`/${i18n.language}/locations`}
+                    to={`/${lang}/locations`}
                     className="w-full py-3 px-6 rounded-full font-bold text-lg transition-all shadow-lg border-2 border-white/80 text-white hover:bg-white/10 backdrop-blur-sm"
                   >
                     {t("pages:menu.sidebar.actions.stores")}
@@ -115,7 +115,7 @@ const MenuCategoryContent = () => {
                     className="flex flex-col h-full bg-white dark:bg-zinc-900 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all border border-gray-100 dark:border-zinc-800 group"
                   >
                     <Link
-                      to={`/${i18n.language}${sub.href}`}
+                      to={`/${lang}${sub.href}`}
                       className="flex flex-col h-full"
                     >
                       <div className="relative h-48 overflow-hidden bg-starbucks-dark/5">

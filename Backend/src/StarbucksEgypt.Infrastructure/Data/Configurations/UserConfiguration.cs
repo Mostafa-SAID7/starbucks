@@ -1,7 +1,4 @@
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using StarbucksEgypt.Domain.Entities;
-using System.Text.Json;
+using StarbucksEgypt.Infrastructure.Data.Configurations.Extensions;
 
 namespace StarbucksEgypt.Infrastructure.Data.Configurations;
 
@@ -30,14 +27,17 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.Property(u => u.PasswordHash)
             .IsRequired();
 
+        // Unique indexes with soft-delete filter
         builder.HasIndex(u => u.Email)
-            .IsUnique()
-            .HasFilter("[IsDeleted] = 0");
+            .HasUniqueIndexWithSoftDelete();
 
         builder.HasIndex(u => u.PhoneNumber)
-            .IsUnique()
-            .HasFilter("[IsDeleted] = 0");
+            .HasUniqueIndexWithSoftDelete();
 
+        // Index for refresh token lookups
+        builder.HasIndex(u => u.RefreshToken);
+
+        // Relationships
         builder.HasOne(u => u.Profile)
             .WithOne(p => p.User)
             .HasForeignKey<UserProfile>(p => p.UserId)

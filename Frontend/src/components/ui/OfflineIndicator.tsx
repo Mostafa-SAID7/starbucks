@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
-import { useTranslation } from "react-i18next";
 import { WifiOff, Wifi } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useLanguage } from "@/hooks";
 import { ANIMATION_CONFIG } from "@/lib/constants";
 
 /**
@@ -12,9 +12,7 @@ import { ANIMATION_CONFIG } from "@/lib/constants";
 export function OfflineIndicator() {
   const [isOnline, setIsOnline] = useState(() => navigator.onLine);
   const [showIndicator, setShowIndicator] = useState(() => !navigator.onLine);
-  const { i18n } = useTranslation();
-  const lang = (i18n.language === "ar" ? "ar" : "en") as "ar" | "en";
-  const isRTL = lang === "ar";
+  const { lang, isRTL } = useLanguage();
 
   useEffect(() => {
     const handleOnline = () => {

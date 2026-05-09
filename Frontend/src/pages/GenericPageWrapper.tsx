@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { GenericPage } from "./GenericPage";
 import { StaticPageSkeleton } from "@/components/skeletons";
-import { usePageData } from "@/hooks/queries";
+import { usePageData, useLanguage } from "@/hooks";
 import { useTranslation } from "react-i18next";
 import type { GenericPageData, GenericPageWrapperProps } from "@/types";
 import { QueryErrorBoundary } from "@/components";
@@ -35,6 +35,7 @@ const GenericPageContent: React.FC<GenericPageWrapperProps> = ({
 
 export const GenericPageWrapper: React.FC<GenericPageWrapperProps> = (props) => {
   const { i18n } = useTranslation();
+  const { lang } = useLanguage();
   const [isTranslationLoaded, setIsTranslationLoaded] = useState(false);
 
   // Lazy load page translations
@@ -44,7 +45,6 @@ export const GenericPageWrapper: React.FC<GenericPageWrapperProps> = (props) => 
     const loadTranslations = async () => {
       setIsTranslationLoaded(false);
       try {
-        const lang = i18n.language === "ar" ? "ar" : "en";
         const translations = await import(`../locales/${lang}/pages/${props.slug}.json`);
         
         if (isMounted) {
@@ -59,7 +59,7 @@ export const GenericPageWrapper: React.FC<GenericPageWrapperProps> = (props) => 
 
     loadTranslations();
     return () => { isMounted = false; };
-  }, [props.slug, i18n, i18n.language]);
+  }, [props.slug, i18n, lang]);
 
   if (!isTranslationLoaded) {
     return <StaticPageSkeleton />;

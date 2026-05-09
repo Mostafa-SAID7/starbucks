@@ -38,12 +38,12 @@ public class GetLocationsQueryHandler : IRequestHandler<GetLocationsQuery, Resul
 
         if (!string.IsNullOrEmpty(request.City))
         {
-            baseQuery = baseQuery.Where(l => l.City.ToLower() == request.City.ToLower());
+            baseQuery = baseQuery.Where(l => EF.Functions.Like(l.City, request.City));
         }
 
         if (!string.IsNullOrEmpty(request.Governorate))
         {
-            baseQuery = baseQuery.Where(l => l.Governorate.ToLower() == request.Governorate.ToLower());
+            baseQuery = baseQuery.Where(l => EF.Functions.Like(l.Governorate, request.Governorate));
         }
 
         // Get total count from base query

@@ -1,17 +1,15 @@
 import React, { useState, useCallback } from "react";
-import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Search, Navigation } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { SEO, QueryErrorBoundary } from "@/components";
-import { useLocations } from "@/hooks/queries";
+import { useLocations, useLanguage } from "@/hooks";
 import { TALABAT_URL } from "./constants";
+import type { Location } from "@/types";
 
 export const LocationsPage: React.FC = () => {
-  const { i18n } = useTranslation();
-  const isRTL = i18n.language === "ar";
-  const currentLang = (i18n.language === "ar" ? "ar" : "en") as "ar" | "en";
+  const { lang, isRTL } = useLanguage();
   const [search, setSearch] = useState("");
   const [geoStatus, setGeoStatus] = useState<"idle" | "loading" | "error">("idle");
 
@@ -28,7 +26,7 @@ export const LocationsPage: React.FC = () => {
           // Reverse geocode with free Nominatim API
           const res = await fetch(
             `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`,
-            { headers: { "Accept-Language": currentLang } }
+            { headers: { "Accept-Language": lang } }
           );
           const data = await res.json();
           // Try city, then town, then suburb
@@ -50,15 +48,15 @@ export const LocationsPage: React.FC = () => {
       },
       { timeout: 8000 }
     );
-  }, [currentLang]);
+  }, [lang]);
 
   // Fetch locations using TanStack Query
-  const { data: cities, isLoading, error, refetch } = useLocations();
+  const { data: cities } = useLocations() as { data: Location[] | undefined };
 
   // Filter cities based on search
   const filteredCities =
     cities?.filter(
-      (c) =>
+      (c: Location) =>
         search === "" ||
         c.name.toLowerCase().includes(search.toLowerCase()) ||
         c.nameAr.includes(search),
@@ -90,7 +88,7 @@ export const LocationsPage: React.FC = () => {
                     e.currentTarget.style.display = "none";
                   }}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-starbucks-dark via-starbucks-dark/50 to-transparent" />
+                <div className="absolute inset-0 bg-linear-to-t from-starbucks-dark via-starbucks-dark/50 to-transparent" />
               </div>
 
               <div className="relative z-10 w-full max-w-sm">
@@ -168,7 +166,7 @@ export const LocationsPage: React.FC = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-16">
                 {/* Card 1 — Joy of Coffee */}
                 <div className="group bg-gray-50 dark:bg-white/5 rounded-2xl overflow-hidden border border-gray-100 dark:border-white/10 shadow-sm hover:shadow-xl transition-all duration-500 flex flex-col h-full">
-                  <div className="aspect-[4/3] overflow-hidden">
+                  <div className="aspect-4/3 overflow-hidden">
                     <img
                       src="https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=800&q=80"
                       alt="The Joy of Starbucks Coffee"
@@ -183,7 +181,7 @@ export const LocationsPage: React.FC = () => {
                         {isRTL ? "اكتشف طيف تحميص ستاربكس وتعمق في تقنيات التخمير" : "Discover Starbucks Roast Spectrum and dive deep into brewing techniques"}
                       </p>
                       <Link
-                        to={`/${currentLang}/our-coffees`}
+                        to={`/${lang}/our-coffees`}
                         className="inline-flex items-center justify-center px-6 py-2 border-2 border-starbucks-green text-starbucks-green font-black rounded-full hover:bg-starbucks-green hover:text-white transition-all w-fit"
                       >
                         {isRTL ? "اقرأ المزيد" : "Read more"}
@@ -193,7 +191,7 @@ export const LocationsPage: React.FC = () => {
  
                   {/* Card 2 — Starbucks Delivers */}
                   <div className="group bg-gray-50 dark:bg-white/5 rounded-2xl overflow-hidden border border-gray-100 dark:border-white/10 shadow-sm hover:shadow-xl transition-all duration-500 flex flex-col h-full">
-                    <div className="aspect-[4/3] overflow-hidden">
+                    <div className="aspect-4/3 overflow-hidden">
                       <img
                         src="https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=800&q=80"
                         alt="Starbucks Delivers"
@@ -232,7 +230,7 @@ export const LocationsPage: React.FC = () => {
                         {isRTL ? "لم يتم العثور على نتائج" : "No locations found"}
                       </p>
                     ) : (
-                      filteredCities.map((city) => (
+                      filteredCities.map((city: Location) => (
                         <motion.a
                           key={city.slug}
                           href={`https://locations.starbucks.eg/directory/${city.slug}`}

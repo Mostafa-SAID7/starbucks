@@ -3,14 +3,14 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import { SEO, QueryErrorBoundary } from "@/components";
 import { StaticPageSkeleton } from "@/components/skeletons";
+import { useLanguage } from "@/hooks";
 import { usePageData } from "@/hooks/queries";
 import { type GenericPageData, type LocalizedText } from "@/types";
 import { Plus, Minus } from "lucide-react";
 
 const SustainabilityPageContent: React.FC<{ data: GenericPageData }> = ({ data }) => {
-  const { t: i18nextT, i18n } = useTranslation(["pages", "common"]);
-  const lang = (i18n.language === "ar" ? "ar" : "en") as "ar" | "en";
-  const isRTL = lang === "ar";
+  const { lang, isRTL } = useLanguage();
+  const { t: i18nextT } = useTranslation(["pages", "common"]);
   const [openSection, setOpenSection] = useState<string | null>("intro");
 
   const t = (obj: LocalizedText | string | null | undefined) => {

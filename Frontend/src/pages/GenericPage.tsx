@@ -7,6 +7,7 @@ import {
   SEO,
   Button
 } from "@/components";
+import { useLanguage } from "@/hooks";
 import type { GenericPageProps } from "@/types";
 import { SectionRenderer, SectionImageGrid } from "@/components/sections/generic";
 
@@ -19,9 +20,8 @@ export const GenericPage: React.FC<GenericPageProps> = ({
   accordionSectionIndices = [1, 2, 3, 4],
   useAccordionLayout = false,
 }) => {
-  const { t, i18n } = useTranslation(["pages", "common"]);
-  const lang = (i18n.language === "ar" ? "ar" : "en") as "ar" | "en";
-  const isRTL = i18n.language === "ar";
+  const { lang, isRTL } = useLanguage();
+  const { t } = useTranslation(["pages", "common"]);
   const slug = propSlug || data.slug;
 
   // Use translations if slug is available

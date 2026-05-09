@@ -81,6 +81,7 @@ public sealed class TokenService : ITokenService
         CancellationToken cancellationToken = default)
     {
         var user = await _context.Users
+            .AsNoTracking()
             .FirstOrDefaultAsync(u => u.Id == userId && !u.IsDeleted, cancellationToken);
 
         return user is not null
@@ -93,9 +94,13 @@ public sealed class TokenService : ITokenService
         CancellationToken cancellationToken = default)
     {
         var user = await _context.Users
+            .AsNoTracking()
             .FirstOrDefaultAsync(u => u.Id == userId && !u.IsDeleted, cancellationToken);
 
         if (user is null) return;
+
+        // Attach for update
+        _context.Users.Attach(user);
 
         user.RefreshToken       = null;
         user.RefreshTokenExpiry = null;

@@ -1,23 +1,16 @@
 import React, { useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Globe, ChevronDown } from "lucide-react";
-import { useNavigation } from "@/hooks/queries";
+import { useNavigation, useLanguage } from "@/hooks";
 import { motion, AnimatePresence } from "framer-motion";
 import { ANIMATION_CONFIG } from "@/lib/constants";
 
 import { FooterLink, FooterSection, Country, Social } from "@/types";
 
 export function Footer() {
-  const { t, i18n } = useTranslation();
-  const { lang: urlLang } = useParams<{ lang: string }>();
-  const lang = (
-    urlLang && (urlLang === "ar" || urlLang === "en")
-      ? urlLang
-      : i18n.language === "ar"
-        ? "ar"
-        : "en"
-  ) as "ar" | "en";
+  const { t } = useTranslation();
+  const { lang } = useLanguage();
 
   // Fetch footer structural data
   const { data: footerDataRaw } = useNavigation();

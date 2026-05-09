@@ -4,10 +4,12 @@ import { useTranslation } from 'react-i18next'
 import { motion } from 'framer-motion'
 import { Home, Coffee } from 'lucide-react'
 import { SEO, Logo } from '@/components'
+import { useLanguage } from '@/hooks'
 import bg404 from '@/assets/bg-404.png'
 
 export const NotFound: React.FC = () => {
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
+  const { lang } = useLanguage()
 
   return (
     <div className="relative flex min-h-[calc(100vh-64px)] flex-col items-center justify-center overflow-hidden px-4 text-center">
@@ -82,13 +84,13 @@ export const NotFound: React.FC = () => {
           transition={{ delay: 0.38 }}
           className="flex flex-col gap-4 sm:flex-row"
         >
-          <Link to={`/${i18n.language}`}>
+          <Link to={`/${lang}`}>
             <button className="flex items-center gap-2 rounded-full bg-starbucks-green px-10 py-4 font-extrabold text-white shadow-lg hover:bg-white hover:text-starbucks-dark transition-all">
               <Home className="h-5 w-5" />
               {t('common:notfound.go_home', 'Go Home')}
             </button>
           </Link>
-          <Link to={`/${i18n.language}/menu`}>
+          <Link to={`/${lang}/menu`}>
             <button className="flex items-center gap-2 rounded-full border-2 border-white/60 px-10 py-4 font-extrabold text-white hover:border-white hover:bg-white hover:text-starbucks-dark transition-all">
               <Coffee className="h-5 w-5" />
               {t('common:notfound.browse_menu', 'Browse Menu')}

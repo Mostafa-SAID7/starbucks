@@ -34,19 +34,23 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, Result<Lo
         RegisterCommand request,
         CancellationToken cancellationToken)
     {
-        // Duplicate email check (global query filter already excludes soft-deleted)
-        var emailExists = await _context.Users
-            .AnyAsync(u => u.Email == request.Request.Email, cancellationToken);
+        // Combined duplicate check (single query instead of two)
+        var duplicateExists = await _context.Users
+            .AsNoTracking()
+            .AnyAsync(u => u.Email == request.Request.Email || u.PhoneNumber == request.Request.PhoneNumber, 
+                cancellationToken);
 
-        if (emailExists)
-            return Result<LoginResponse>.Failure("User with this email already exists.");
-
-        // Duplicate phone check
-        var phoneExists = await _context.Users
-            .AnyAsync(u => u.PhoneNumber == request.Request.PhoneNumber, cancellationToken);
-
-        if (phoneExists)
-            return Result<LoginResponse>.Failure("User with this phone number already exists.");
+        if (duplicateExists)
+        {
+            // Detailed check to provide specific error message
+            var emailExists = await _context.Users
+                .AsNoTracking()
+                .AnyAsync(u => u.Email == request.Request.Email, cancellationToken);
+            
+            return emailExists 
+                ? Result<LoginResponse>.Failure("User with this email already exists.")
+                : Result<LoginResponse>.Failure("User with this phone number already exists.");
+        }
 
         var now          = _dateTime.UtcNow;
         var refreshToken = _tokenService.GenerateRefreshToken();

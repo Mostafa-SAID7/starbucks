@@ -3,14 +3,14 @@ import { useTranslation } from "react-i18next";
 import { motion, AnimatePresence } from "framer-motion";
 import { Modal, Button, Input } from "@/components/ui";
 import { useAuth } from "@/hooks/auth/useAuth";
+import { useLanguage } from "@/hooks";
 import { toast } from "sonner";
 import { AuthModalProps } from "@/types/components";
 
 export function AuthModal({ isOpen, onClose }: AuthModalProps) {
-  const { t, i18n } = useTranslation();
+  const { isRTL } = useLanguage();
+  const { t } = useTranslation();
   const { login, register, isLoading, error, clearError } = useAuth();
-  const lang = (i18n.language === "ar" ? "ar" : "en") as "ar" | "en";
-  const isRTL = lang === "ar";
 
   const [mode, setMode] = useState<"login" | "register">("login");
   const [formData, setFormData] = useState({

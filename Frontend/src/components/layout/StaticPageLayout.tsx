@@ -1,6 +1,6 @@
 import React from 'react'
 import { motion } from 'framer-motion'
-import { useTranslation } from 'react-i18next'
+import { useLanguage } from '@/hooks'
 import { SEO, Header } from '@/components'
 
 interface StaticPageLayoutProps {
@@ -18,8 +18,7 @@ export const StaticPageLayout: React.FC<StaticPageLayoutProps> = ({
   children,
   sidebar,
 }) => {
-  const { i18n } = useTranslation()
-  const lang = (i18n.language === 'ar' ? 'ar' : 'en') as 'ar' | 'en'
+  const { lang } = useLanguage()
 
   return (
     <div className="min-h-screen bg-white dark:bg-black">

@@ -1,20 +1,14 @@
-import { Link, useLocation, useParams } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Home, MapPin, ShoppingBag, User } from "lucide-react";
 import { motion } from "framer-motion";
+import { useLanguage } from "@/hooks";
 
 
 export function MobileTabBar() {
   const location = useLocation();
-  const { t, i18n } = useTranslation();
-  const { lang: urlLang } = useParams<{ lang: string }>();
-  const lang = (
-    urlLang && (urlLang === "ar" || urlLang === "en")
-      ? urlLang
-      : i18n.language === "ar"
-        ? "ar"
-        : "en"
-  ) as "ar" | "en";
+  const { t } = useTranslation();
+  const { lang } = useLanguage();
 
   const tabs = [
     { id: "home", icon: Home, label: t("common:home"), path: `/${lang}` },

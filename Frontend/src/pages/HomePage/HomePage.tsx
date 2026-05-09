@@ -3,11 +3,12 @@ import { useTranslation } from "react-i18next";
 import { Banner, StatementSection, FeaturedCards, SEO, QueryErrorBoundary } from "@/components";
 import { LoadingAnnouncement } from "@/components/accessibility";
 import { HomeSkeleton } from "@/components/skeletons";
+import { useLanguage } from "@/hooks";
 import { useHero } from "@/hooks/queries";
 
 const HomePageContent: React.FC<{ heroData: any }> = ({ heroData }) => {
-  const { t, i18n } = useTranslation(["common", "errors", "pages"]);
-  const lang = (i18n.language === "ar" ? "ar" : "en") as "ar" | "en";
+  const { lang } = useLanguage();
+  const { t } = useTranslation(["common", "errors", "pages"]);
   const pageTitle = lang === "ar" ? "ستاربكس مصر" : "Starbucks Egypt";
 
   return (
@@ -44,8 +45,8 @@ const HomePageContent: React.FC<{ heroData: any }> = ({ heroData }) => {
 };
 
 export const HomePage = () => {
+  const { lang } = useLanguage();
   const { i18n } = useTranslation();
-  const lang = (i18n.language === "ar" ? "ar" : "en") as "ar" | "en";
   const [isTranslationLoaded, setIsTranslationLoaded] = useState(false);
 
   useEffect(() => {

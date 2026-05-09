@@ -2,12 +2,12 @@ import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui";
 import { Link } from "react-router-dom";
-import { useStatement } from "@/hooks/queries";
+import { useStatement, useLanguage } from "@/hooks";
 
 
 const StatementSection = () => {
-  const { t, i18n } = useTranslation(["pages", "common"]);
-  const lang = i18n.language as "ar" | "en";
+  const { t } = useTranslation(["pages", "common"]);
+  const { lang } = useLanguage();
 
   // Fetch statement data using TanStack Query
   const { data: statementData, isLoading, error } = useStatement();

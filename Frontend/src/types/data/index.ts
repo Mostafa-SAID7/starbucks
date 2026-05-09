@@ -215,10 +215,13 @@ export interface GenericDefinition {
 
 /** Business Domain Types */
 export interface Location {
-  id: string;
+  id?: string;
   name: string;
-  address: string;
-  city: string;
+  nameAr: string;
+  address?: string;
+  city?: string;
+  slug: string;
+  count: number;
   phone?: string;
   hours?: {
     [key: string]: string;

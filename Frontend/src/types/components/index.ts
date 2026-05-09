@@ -3,6 +3,16 @@
  */
 
 import { LocalizedText } from '../common';
+import {
+  MenuCategory,
+  GenericSection,
+  GenericTypeItem,
+  GenericDefinition,
+  GenericSubsection,
+  GenericGroup,
+  GenericContactInfo,
+  GenericImageGrid,
+} from '../data';
 
 // Hero Banner Types
 export interface HeroBannerData {
@@ -166,7 +176,7 @@ export interface CookiePreferences {
 }
 
 export interface MenuGridProps {
-  categories: any[]; // Use proper MenuCategory type from data types
+  categories: MenuCategory[];
 }
 
 export interface FeaturedCardProps {
@@ -220,17 +230,17 @@ export interface ErrorBoundaryProps {
 
 // Generic Section Component Props
 export interface SectionTypesProps {
-  types: any[]; // Use proper GenericTypeItem type from data types
+  types: GenericTypeItem[];
   lang: "ar" | "en";
 }
 
 export interface SectionDefinitionsProps {
-  definitions: any[]; // Use proper GenericDefinition type from data types
+  definitions: GenericDefinition[];
   lang: "ar" | "en";
 }
 
 export interface SectionSubsectionsProps {
-  subsections: any[]; // Use proper GenericSubsection type from data types
+  subsections: GenericSubsection[];
   lang: "ar" | "en";
 }
 
@@ -240,8 +250,13 @@ export interface SectionParagraphsProps {
 }
 
 export interface SectionRendererProps {
-  section: any; // Use proper GenericSection type from data types
+  section: GenericSection;
   lang: "ar" | "en";
+  isRTL?: boolean;
+  pageTitle?: string;
+  hideTitle?: boolean;
+  hideImageGrid?: boolean;
+  slug?: string;
 }
 
 export interface SectionListProps {
@@ -250,16 +265,16 @@ export interface SectionListProps {
 }
 
 export interface SectionGroupsProps {
-  groups: any[]; // Use proper GenericGroup type from data types
+  groups: GenericGroup[];
   lang: "ar" | "en";
 }
 
 export interface SectionContactInfoProps {
-  contactInfo: any; // Use proper GenericContactInfo type from data types
+  contactInfo: GenericContactInfo;
   contactNote?: LocalizedText;
 }
 
 export interface SectionImageGridProps {
-  imageGrid: any; // Use proper GenericImageGrid type from data types
+  imageGrid: GenericImageGrid;
   pageTitle: string;
 }

@@ -1,4 +1,4 @@
-import { useTranslation } from "react-i18next";
+import { useLanguage } from "@/hooks";
 import { LiveRegionProps } from "@/types/components";
 
 /**
@@ -35,8 +35,7 @@ export function LiveRegion({
  * Announces loading states to screen readers
  */
 export function LoadingAnnouncement({ isLoading }: { isLoading: boolean }) {
-  const { i18n } = useTranslation();
-  const lang = (i18n.language === "ar" ? "ar" : "en") as "ar" | "en";
+  const { lang } = useLanguage();
 
   if (!isLoading) return null;
 
@@ -53,8 +52,7 @@ export function LoadingAnnouncement({ isLoading }: { isLoading: boolean }) {
  * Announces errors to screen readers
  */
 export function ErrorAnnouncement({ error }: { error: Error | null }) {
-  const { i18n } = useTranslation();
-  const lang = (i18n.language === "ar" ? "ar" : "en") as "ar" | "en";
+  const { lang } = useLanguage();
 
   if (!error) return null;
 
@@ -75,8 +73,7 @@ export function ErrorAnnouncement({ error }: { error: Error | null }) {
  * Announces successful actions to screen readers
  */
 export function SuccessAnnouncement({ message }: { message?: string }) {
-  const { i18n } = useTranslation();
-  const lang = (i18n.language === "ar" ? "ar" : "en") as "ar" | "en";
+  const { lang } = useLanguage();
 
   if (!message) return null;
 

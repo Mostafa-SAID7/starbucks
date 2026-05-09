@@ -7,6 +7,7 @@ import { Button, SectionBackground } from "@/components/ui";
 import { LiveRegion } from "@/components/accessibility";
 import { logError, getErrorMessages } from "@/lib/errorUtils";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/hooks";
 
 interface ErrorFallbackProps extends FallbackProps {
   variant?: "full" | "compact";
@@ -20,8 +21,8 @@ export const ErrorFallback: React.FC<ErrorFallbackProps> = ({
   resetErrorBoundary,
   variant = "full" 
 }) => {
-  const { i18n, t } = useTranslation("common");
-  const isRTL = i18n.language === "ar";
+  const { t } = useTranslation("common");
+  const { isRTL, lang } = useLanguage();
   
   // Log error for debugging and monitoring
   logError(error, "ErrorBoundary");
@@ -120,7 +121,7 @@ export const ErrorFallback: React.FC<ErrorFallbackProps> = ({
           
           <Button
             variant="outline"
-            onClick={() => window.location.href = `/${i18n.language}/`}
+            onClick={() => window.location.href = `/${lang}/`}
             className="rounded-full px-8 py-6 h-auto text-lg w-full sm:w-auto border-2 border-starbucks-green text-starbucks-green hover:bg-starbucks-green hover:text-white transition-all hover:scale-105 active:scale-95"
           >
             <Home className="h-5 w-5 me-2" />

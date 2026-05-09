@@ -1,6 +1,6 @@
 import React from 'react'
 import { motion } from 'framer-motion'
-import { useTranslation } from 'react-i18next'
+import { useLanguage } from '@/hooks'
 
 interface StaticSectionProps {
   title?: { ar: string; en: string }
@@ -12,8 +12,7 @@ interface StaticSectionProps {
 }
 
 export const StaticSection: React.FC<StaticSectionProps> = ({ title, children, id, hideTitle = false, hideSideBorder = false, image }) => {
-  const { i18n } = useTranslation()
-  const lang = (i18n.language === 'ar' ? 'ar' : 'en') as 'ar' | 'en'
+  const { lang } = useLanguage()
   const imageUrl = image ? (typeof image === 'string' ? image : image[lang]) : null
 
   return (

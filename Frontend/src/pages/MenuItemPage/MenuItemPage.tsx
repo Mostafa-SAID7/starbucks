@@ -9,7 +9,7 @@ import {
 } from "@/components";
 import { MenuSkeleton } from "@/components/skeletons";
 import { NotFound } from "@/pages";
-import { useMenuData, useMenuItem } from "@/hooks/queries";
+import { useMenuData, useMenuItem, useLanguage } from "@/hooks";
 import { MenuItem } from "@/types";
 
 import { QueryErrorBoundary } from "@/components";
@@ -19,8 +19,8 @@ const MenuItemContent = () => {
     categoryId: string;
     itemId: string;
   }>();
-  const { t, i18n } = useTranslation(["pages", "common"]);
-  const isRTL = i18n.language === "ar";
+  const { t } = useTranslation(["pages", "common"]);
+  const { lang, isRTL } = useLanguage();
 
   const { data: menuData, isLoading: isMenuLoading } = useMenuData();
   const {
@@ -87,7 +87,7 @@ const MenuItemContent = () => {
                     {t("pages:menu.sidebar.actions.order")}
                   </Link>
                   <Link
-                    to={`/${i18n.language}/locations`}
+                    to={`/${lang}/locations`}
                     className="w-full py-3 px-6 rounded-full font-bold text-lg transition-all shadow-lg border-2 border-white/80 text-white hover:bg-white/10 backdrop-blur-sm"
                   >
                     {t("pages:menu.sidebar.actions.stores")}

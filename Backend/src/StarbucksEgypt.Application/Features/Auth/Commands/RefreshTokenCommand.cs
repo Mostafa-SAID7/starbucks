@@ -28,8 +28,9 @@ public class RefreshTokenCommandHandler : IRequestHandler<RefreshTokenCommand, R
 
     public async Task<Result<LoginResponse>> Handle(RefreshTokenCommand request, CancellationToken cancellationToken)
     {
-        // Find user with refresh token
+        // Find user with refresh token - use AsNoTracking for read, then attach for update
         var user = await _context.Users
+            .AsNoTracking()
             .FirstOrDefaultAsync(u => u.RefreshToken == request.RefreshToken && !u.IsDeleted, cancellationToken);
 
         if (user == null)
@@ -42,6 +43,9 @@ public class RefreshTokenCommandHandler : IRequestHandler<RefreshTokenCommand, R
         {
             return Result<LoginResponse>.Failure("Refresh token has expired.");
         }
+
+        // Attach user for update
+        _context.Users.Attach(user);
 
         // Generate new tokens
         var newAccessToken = _tokenService.GenerateAccessToken(user);

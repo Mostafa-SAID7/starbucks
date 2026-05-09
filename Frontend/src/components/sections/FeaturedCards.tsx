@@ -1,12 +1,12 @@
 import { useTranslation } from "react-i18next";
 import { SectionBackground } from "@/components/ui";
 import { LoadingAnnouncement, LiveRegion } from "@/components/accessibility";
-import { useFeaturedCards } from "@/hooks/queries";
+import { useFeaturedCards, useLanguage } from "@/hooks";
 import { FeaturedCard } from "./FeaturedCard";
 
 export function FeaturedCards() {
-  const { t, i18n } = useTranslation(["pages", "common"]);
-  const lang = i18n.language as "ar" | "en";
+  const { t } = useTranslation(["pages", "common"]);
+  const { lang } = useLanguage();
 
   // Fetch featured cards data using TanStack Query
   const { data: featuredCardsData, isLoading, error } = useFeaturedCards();

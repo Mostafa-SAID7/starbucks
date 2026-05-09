@@ -32,69 +32,12 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        // Configure LocalizedContent as owned type (not an entity)
+        modelBuilder.Owned<Domain.Common.LocalizedContent>();
+        
+        // Apply all entity configurations from assembly
+        // All indexes, relationships, and query filters are in Configuration files
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(UserConfiguration).Assembly);
-        
-        // ── Indexes ───────────────────────────────────────────────────────────
-        modelBuilder.Entity<User>()
-            .HasIndex(u => u.Email)
-            .IsUnique();
-        
-        modelBuilder.Entity<User>()
-            .HasIndex(u => u.PhoneNumber);
-        
-        modelBuilder.Entity<User>()
-            .HasIndex(u => u.RefreshToken);
-        
-        modelBuilder.Entity<Location>()
-            .HasIndex(l => l.City);
-        
-        modelBuilder.Entity<Location>()
-            .HasIndex(l => l.Governorate);
-
-        // ── Foreign Key Indexes (Critical for Performance) ───────────────────
-        // EF Core does NOT automatically create indexes on foreign keys
-        // Missing FK indexes cause table scans and kill performance at scale
-        
-        modelBuilder.Entity<Order>()
-            .HasIndex(o => o.UserId);
-        
-        modelBuilder.Entity<Order>()
-            .HasIndex(o => o.LocationId);
-        
-        modelBuilder.Entity<OrderItem>()
-            .HasIndex(oi => oi.OrderId);
-        
-        modelBuilder.Entity<OrderItem>()
-            .HasIndex(oi => oi.MenuItemId);
-        
-        modelBuilder.Entity<OrderItem>()
-            .HasIndex(oi => oi.VariantId);
-        
-        modelBuilder.Entity<MenuSubcategory>()
-            .HasIndex(s => s.CategoryId);
-        
-        modelBuilder.Entity<MenuItem>()
-            .HasIndex(i => i.SubcategoryId);
-        
-        modelBuilder.Entity<MenuItemVariant>()
-            .HasIndex(v => v.MenuItemId);
-        
-        modelBuilder.Entity<UserProfile>()
-            .HasIndex(p => p.UserId)
-            .IsUnique();
-
-        // ── Global soft-delete query filters ─────────────────────────────────
-        // Entities NOT covered by individual Configurations must be added here.
-        // User, MenuCategory, MenuSubcategory, MenuItem are handled in their
-        // own IEntityTypeConfiguration files. Location, Order, OrderItem are not.
-        modelBuilder.Entity<Location>()
-            .HasQueryFilter(l => !l.IsDeleted);
-
-        modelBuilder.Entity<Order>()
-            .HasQueryFilter(o => !o.IsDeleted);
-
-        modelBuilder.Entity<OrderItem>()
-            .HasQueryFilter(oi => !oi.IsDeleted);
         
         base.OnModelCreating(modelBuilder);
     }

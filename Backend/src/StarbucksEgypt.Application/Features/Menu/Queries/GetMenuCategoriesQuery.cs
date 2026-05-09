@@ -40,6 +40,7 @@ public class GetMenuCategoriesQueryHandler : IRequestHandler<GetMenuCategoriesQu
         var totalCount = await baseQuery.CountAsync(cancellationToken);
 
         // Get paginated data with includes
+        // Note: AsSplitQuery() prevents Cartesian explosion but requires EF Core 5+
         var categories = await baseQuery
             .Include(c => c.Subcategories.Where(s => s.IsActive && !s.IsDeleted))
             .ThenInclude(s => s.Items.Where(i => i.IsActive && !i.IsDeleted))

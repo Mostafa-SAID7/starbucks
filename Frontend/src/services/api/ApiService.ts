@@ -1,5 +1,9 @@
 /**
  * Enterprise API Service Class
+ * 
+ * @deprecated Use the centralized API client from @/lib/api.ts instead
+ * This class is kept for backward compatibility but should not be used for new code.
+ * All API calls should go through the unified api client in lib/api.ts
  */
 
 import axios, { AxiosInstance } from 'axios';

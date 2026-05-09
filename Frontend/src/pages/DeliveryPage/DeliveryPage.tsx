@@ -1,26 +1,19 @@
-import { useTranslation } from "react-i18next";
 import { motion, AnimatePresence } from "framer-motion";
-import { useState } from "react";
 import { SEO, QueryErrorBoundary } from "@/components";
 import { StaticPageSkeleton } from "@/components/skeletons";
+import { useLanguage, useAccordion } from "@/hooks";
 import { usePageData } from "@/hooks/queries";
 import { type GenericPageData, type LocalizedText } from "@/types";
 import { Plus, Minus, ExternalLink } from "lucide-react";
 
 const DeliveryPageContent: React.FC<{ data: GenericPageData }> = ({ data }) => {
-  const { i18n } = useTranslation();
-  const lang = (i18n.language === "ar" ? "ar" : "en") as "ar" | "en";
-  const isRTL = lang === "ar";
-  const [openSection, setOpenSection] = useState<string | null>("intro");
+  const { lang, isRTL } = useLanguage();
+  const { toggleSection, isOpen } = useAccordion("intro");
 
   const t = (obj: LocalizedText | string | null | undefined) => {
     if (!obj) return "";
     if (typeof obj === "string") return obj;
     return (obj as LocalizedText)[lang] || "";
-  };
-
-  const toggleSection = (id: string) => {
-    setOpenSection(openSection === id ? null : id);
   };
 
   const sidebarMedia = t(data.sidebarImage);
@@ -86,7 +79,7 @@ const DeliveryPageContent: React.FC<{ data: GenericPageData }> = ({ data }) => {
                   <motion.div
                     initial={{ opacity: 0, scale: 0.98 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    className="mb-8 rounded-3xl overflow-hidden shadow-lg aspect-video lg:aspect-[21/9]"
+                    className="mb-8 rounded-3xl overflow-hidden shadow-lg aspect-video lg:aspect-21/9"
                   >
                     <img
                       src={t(data.intro.image)}
@@ -100,7 +93,7 @@ const DeliveryPageContent: React.FC<{ data: GenericPageData }> = ({ data }) => {
                   onClick={() => toggleSection("intro")}
                   className={`w-full flex items-center justify-between group gap-6 ${textAlignClass}`}
                 >
-                  <div className={`flex flex-col ${itemsAlignClass} flex-grow`}>
+                  <div className={`flex flex-col ${itemsAlignClass} grow`}>
                     <span className="text-starbucks-green font-bold text-sm uppercase tracking-widest mb-1 opacity-80">
                       {lang === "ar" ? "نظرة عامة" : "Overview"}
                     </span>
@@ -110,8 +103,8 @@ const DeliveryPageContent: React.FC<{ data: GenericPageData }> = ({ data }) => {
                         : "Starbucks Experience At Home"}
                     </h3>
                   </div>
-                  <div className="text-starbucks-green bg-gray-50 dark:bg-white/5 p-3 rounded-full flex-shrink-0">
-                    {openSection === "intro" ? (
+                  <div className="text-starbucks-green bg-gray-50 dark:bg-white/5 p-3 rounded-full shrink-0">
+                    {isOpen("intro") ? (
                       <Minus size={24} />
                     ) : (
                       <Plus size={24} />
@@ -120,7 +113,7 @@ const DeliveryPageContent: React.FC<{ data: GenericPageData }> = ({ data }) => {
                 </button>
 
                 <AnimatePresence>
-                  {openSection === "intro" && (
+                  {isOpen("intro") && (
                     <motion.div
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: "auto", opacity: 1 }}
@@ -148,7 +141,7 @@ const DeliveryPageContent: React.FC<{ data: GenericPageData }> = ({ data }) => {
                     className={`pb-12 ${index !== data.sections.length - 1 ? "border-b border-gray-100 dark:border-gray-800" : ""}`}
                   >
                     {section.image && (
-                      <div className="mb-8 rounded-3xl overflow-hidden shadow-lg aspect-video lg:aspect-[21/9]">
+                      <div className="mb-8 rounded-3xl overflow-hidden shadow-lg aspect-video lg:aspect-21/9">
                         <img
                           src={t(section.image)}
                           alt={t(section.title)}
@@ -162,7 +155,7 @@ const DeliveryPageContent: React.FC<{ data: GenericPageData }> = ({ data }) => {
                       className={`w-full flex items-center justify-between group gap-6 ${textAlignClass}`}
                     >
                       <div
-                        className={`flex flex-col ${itemsAlignClass} flex-grow`}
+                        className={`flex flex-col ${itemsAlignClass} grow`}
                       >
                         <span className="text-starbucks-green font-bold text-sm uppercase tracking-widest mb-1 opacity-80">
                           {t(section.subtitle)}
@@ -171,8 +164,8 @@ const DeliveryPageContent: React.FC<{ data: GenericPageData }> = ({ data }) => {
                           {t(section.title)}
                         </h3>
                       </div>
-                      <div className="text-starbucks-green bg-gray-50 dark:bg-white/5 p-3 rounded-full flex-shrink-0">
-                        {openSection === section.id ? (
+                      <div className="text-starbucks-green bg-gray-50 dark:bg-white/5 p-3 rounded-full shrink-0">
+                        {isOpen(section.id) ? (
                           <Minus size={24} />
                         ) : (
                           <Plus size={24} />
@@ -181,7 +174,7 @@ const DeliveryPageContent: React.FC<{ data: GenericPageData }> = ({ data }) => {
                     </button>
 
                     <AnimatePresence>
-                      {openSection === section.id && (
+                      {isOpen(section.id) && (
                         <motion.div
                           initial={{ height: 0, opacity: 0 }}
                           animate={{ height: "auto", opacity: 1 }}
@@ -247,7 +240,7 @@ const DeliveryPageContent: React.FC<{ data: GenericPageData }> = ({ data }) => {
                             {t(item.title)}
                           </span>
                           <div className="text-starbucks-green">
-                            {openSection === `faq-${idx}` ? (
+                            {isOpen(`faq-${idx}`) ? (
                               <Minus size={20} />
                             ) : (
                               <Plus size={20} />
@@ -255,7 +248,7 @@ const DeliveryPageContent: React.FC<{ data: GenericPageData }> = ({ data }) => {
                           </div>
                         </button>
                         <AnimatePresence>
-                          {openSection === `faq-${idx}` && (
+                          {isOpen(`faq-${idx}`) && (
                             <motion.div
                               initial={{ height: 0, opacity: 0 }}
                               animate={{ height: "auto", opacity: 1 }}
