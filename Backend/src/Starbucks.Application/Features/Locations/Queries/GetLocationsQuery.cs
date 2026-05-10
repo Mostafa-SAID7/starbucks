@@ -21,7 +21,7 @@ public class GetLocationsQueryHandler : CachedPagedQueryHandler<GetLocationsQuer
 
     public GetLocationsQueryHandler(
         IUnitOfWork unitOfWork,
-        ICacheService cacheService,
+        IDistributedCacheService cacheService,
         ILogger<GetLocationsQueryHandler> logger)
         : base(cacheService)
     {

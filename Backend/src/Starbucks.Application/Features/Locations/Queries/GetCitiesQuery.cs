@@ -17,7 +17,7 @@ public class GetCitiesQueryHandler : CachedQueryHandler<GetCitiesQuery, List<Cit
 {
     private readonly IApplicationDbContext _context;
 
-    public GetCitiesQueryHandler(IApplicationDbContext context, ICacheService cacheService)
+    public GetCitiesQueryHandler(IApplicationDbContext context, IDistributedCacheService cacheService)
         : base(cacheService)
     {
         _context = context;

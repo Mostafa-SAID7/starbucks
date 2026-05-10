@@ -87,3 +87,11 @@ public class UserFilterDto
     public DateTime? CreatedAfter { get; set; }
     public DateTime? CreatedBefore { get; set; }
 }
+
+/// <summary>
+/// DTO for changing user role.
+/// </summary>
+public class ChangeUserRoleRequestDto
+{
+    public UserRole Role { get; set; }
+}

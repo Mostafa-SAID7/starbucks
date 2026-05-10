@@ -2,6 +2,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Starbucks.API.Attributes;
+using Starbucks.API.Extensions;
 using Starbucks.Application.Features.Menu.Queries;
 
 namespace Starbucks.API.Controllers;
@@ -34,13 +35,7 @@ public class MenuController : ControllerBase
         [FromQuery] int pageSize = 20)
     {
         var result = await _mediator.Send(new GetMenuCategoriesQuery(language, pageNumber, pageSize));
-        
-        if (!result.IsSuccess)
-        {
-            return BadRequest(new { errors = result.Errors });
-        }
-
-        return Ok(result.Data);
+        return result.ToActionResult(this);
     }
 
     /// <summary>
@@ -54,13 +49,7 @@ public class MenuController : ControllerBase
     public async Task<IActionResult> GetCategoryBySlug(string slug, [FromQuery] string? language = null)
     {
         var result = await _mediator.Send(new GetMenuCategoryBySlugQuery(slug, language));
-        
-        if (!result.IsSuccess)
-        {
-            return NotFound(new { errors = result.Errors });
-        }
-
-        return Ok(result.Data);
+        return result.ToNotFoundActionResult(this);
     }
 
     /// <summary>
@@ -75,13 +64,7 @@ public class MenuController : ControllerBase
     public async Task<IActionResult> GetSubcategoryBySlug(string categorySlug, string subcategorySlug, [FromQuery] string? language = null)
     {
         var result = await _mediator.Send(new GetMenuSubcategoryBySlugQuery(categorySlug, subcategorySlug, language));
-        
-        if (!result.IsSuccess)
-        {
-            return NotFound(new { errors = result.Errors });
-        }
-
-        return Ok(result.Data);
+        return result.ToNotFoundActionResult(this);
     }
 
     /// <summary>
@@ -94,13 +77,7 @@ public class MenuController : ControllerBase
     public async Task<IActionResult> GetMenuItem(Guid id)
     {
         var result = await _mediator.Send(new GetMenuItemQuery(id));
-        
-        if (!result.IsSuccess)
-        {
-            return BadRequest(new { errors = result.Errors });
-        }
-
-        return Ok(result.Data);
+        return result.ToActionResult(this);
     }
 
     /// <summary>
@@ -120,12 +97,6 @@ public class MenuController : ControllerBase
         }
 
         var result = await _mediator.Send(new SearchMenuItemsQuery(query, category, language));
-        
-        if (!result.IsSuccess)
-        {
-            return BadRequest(new { errors = result.Errors });
-        }
-
-        return Ok(result.Data);
+        return result.ToActionResult(this);
     }
 }

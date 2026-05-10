@@ -2,6 +2,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Versioning;
+using Starbucks.API.Extensions;
 using Starbucks.Application.Common.Models;
 using Starbucks.Application.DTOs.Admin;
 using Starbucks.Application.Features.Admin.Users.Commands;
@@ -41,13 +42,7 @@ public class UsersController : ControllerBase
         [FromQuery] UserRole? role = null)
     {
         var result = await _mediator.Send(new GetUsersQuery(pageNumber, pageSize, searchTerm, role));
-        
-        if (!result.IsSuccess)
-        {
-            return BadRequest(new { errors = result.Errors });
-        }
-
-        return Ok(result.Data);
+        return result.ToActionResult(this);
     }
 
     /// <summary>
@@ -59,13 +54,7 @@ public class UsersController : ControllerBase
     public async Task<IActionResult> GetUserById(Guid id)
     {
         var result = await _mediator.Send(new GetUserByIdQuery(id));
-        
-        if (!result.IsSuccess)
-        {
-            return NotFound(new { message = result.Errors.FirstOrDefault() });
-        }
-
-        return Ok(result.Data);
+        return result.ToNotFoundActionResult(this);
     }
 
     /// <summary>
@@ -77,13 +66,7 @@ public class UsersController : ControllerBase
     public async Task<IActionResult> CreateUser([FromBody] CreateUserRequestDto request)
     {
         var result = await _mediator.Send(new CreateUserCommand(request));
-        
-        if (!result.IsSuccess)
-        {
-            return BadRequest(new { errors = result.Errors });
-        }
-
-        return CreatedAtAction(nameof(GetUserById), new { id = result.Data!.Id }, result.Data);
+        return result.ToCreatedAtActionResult(this, nameof(GetUserById), new { id = result.Data?.Id }, result.Data);
     }
 
     /// <summary>
@@ -96,13 +79,7 @@ public class UsersController : ControllerBase
     public async Task<IActionResult> UpdateUser(Guid id, [FromBody] UpdateUserRequestDto request)
     {
         var result = await _mediator.Send(new UpdateUserCommand(id, request));
-        
-        if (!result.IsSuccess)
-        {
-            return NotFound(new { message = result.Errors.FirstOrDefault() });
-        }
-
-        return Ok(result.Data);
+        return result.ToNotFoundActionResult(this);
     }
 
     /// <summary>
@@ -116,13 +93,7 @@ public class UsersController : ControllerBase
     public async Task<IActionResult> DeleteUser(Guid id)
     {
         var result = await _mediator.Send(new DeleteUserCommand(id));
-        
-        if (!result.IsSuccess)
-        {
-            return NotFound(new { message = result.Errors.FirstOrDefault() });
-        }
-
-        return NoContent();
+        return result.ToNoContentActionResult(this);
     }
 
     /// <summary>
@@ -134,13 +105,8 @@ public class UsersController : ControllerBase
     public async Task<IActionResult> DisableUser(Guid id)
     {
         var result = await _mediator.Send(new DisableUserCommand(id));
-        
-        if (!result.IsSuccess)
-        {
-            return NotFound(new { message = result.Errors.FirstOrDefault() });
-        }
-
-        return Ok(new { message = result.Data });
+        return result.ToActionResultWithErrorHandler(this, errors => 
+            NotFound(new { message = errors.FirstOrDefault() }));
     }
 
     /// <summary>
@@ -152,13 +118,8 @@ public class UsersController : ControllerBase
     public async Task<IActionResult> EnableUser(Guid id)
     {
         var result = await _mediator.Send(new EnableUserCommand(id));
-        
-        if (!result.IsSuccess)
-        {
-            return NotFound(new { message = result.Errors.FirstOrDefault() });
-        }
-
-        return Ok(new { message = result.Data });
+        return result.ToActionResultWithErrorHandler(this, errors => 
+            NotFound(new { message = errors.FirstOrDefault() }));
     }
 
     /// <summary>
@@ -170,13 +131,8 @@ public class UsersController : ControllerBase
     public async Task<IActionResult> ResetPassword(Guid id)
     {
         var result = await _mediator.Send(new ResetPasswordCommand(id));
-        
-        if (!result.IsSuccess)
-        {
-            return NotFound(new { message = result.Errors.FirstOrDefault() });
-        }
-
-        return Ok(result.Data);
+        return result.ToActionResultWithErrorHandler(this, errors => 
+            NotFound(new { message = errors.FirstOrDefault() }));
     }
 
     /// <summary>
@@ -190,20 +146,6 @@ public class UsersController : ControllerBase
     public async Task<IActionResult> ChangeUserRole(Guid id, [FromBody] ChangeUserRoleRequestDto request)
     {
         var result = await _mediator.Send(new ChangeUserRoleCommand(id, request.Role));
-        
-        if (!result.IsSuccess)
-        {
-            return NotFound(new { message = result.Errors.FirstOrDefault() });
-        }
-
-        return Ok(result.Data);
+        return result.ToNotFoundActionResult(this);
     }
-}
-
-/// <summary>
-/// DTO for changing user role.
-/// </summary>
-public class ChangeUserRoleRequestDto
-{
-    public UserRole Role { get; set; }
 }

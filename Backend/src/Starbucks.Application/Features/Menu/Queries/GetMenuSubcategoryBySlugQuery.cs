@@ -18,7 +18,7 @@ public class GetMenuSubcategoryBySlugQueryHandler : CachedQueryHandler<GetMenuSu
 {
     private readonly IApplicationDbContext _context;
 
-    public GetMenuSubcategoryBySlugQueryHandler(IApplicationDbContext context, ICacheService cacheService)
+    public GetMenuSubcategoryBySlugQueryHandler(IApplicationDbContext context, IDistributedCacheService cacheService)
         : base(cacheService)
     {
         _context = context;

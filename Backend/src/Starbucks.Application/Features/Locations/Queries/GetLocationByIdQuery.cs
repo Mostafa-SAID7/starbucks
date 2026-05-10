@@ -20,7 +20,7 @@ public class GetLocationByIdQueryHandler : CachedQueryHandler<GetLocationByIdQue
 
     public GetLocationByIdQueryHandler(
         IUnitOfWork unitOfWork,
-        ICacheService cacheService,
+        IDistributedCacheService cacheService,
         ILogger<GetLocationByIdQueryHandler> logger)
         : base(cacheService)
     {

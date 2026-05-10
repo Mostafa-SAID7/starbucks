@@ -1,22 +1,14 @@
 using Microsoft.Extensions.Logging;
 using Starbucks.Application.Common.Interfaces.Repositories;
+using Starbucks.Application.Common.Interfaces.Services;
 using Starbucks.Application.Common.Specifications;
+using Starbucks.Application.Common.Utilities;
 
 namespace Starbucks.Infrastructure.Services;
 
 /// <summary>
-/// Service for warming up cache with frequently accessed data on application startup
-/// </summary>
-public interface ICacheWarmingService
-{
-    /// <summary>
-    /// Warms up cache with frequently accessed data
-    /// </summary>
-    Task WarmupAsync();
-}
-
-/// <summary>
 /// Implementation of cache warming service
+/// Preloads frequently accessed data into cache on startup
 /// </summary>
 public class CacheWarmingService : ICacheWarmingService
 {
@@ -46,13 +38,8 @@ public class CacheWarmingService : ICacheWarmingService
         {
             _logger.LogInformation("Starting cache warmup");
 
-            // Warm up menu categories
             await WarmupMenuCategoriesAsync();
-
-            // Warm up active locations
             await WarmupLocationsAsync();
-
-            // Warm up featured menu items
             await WarmupFeaturedMenuItemsAsync();
 
             _logger.LogInformation("Cache warmup completed successfully");
@@ -77,7 +64,7 @@ public class CacheWarmingService : ICacheWarmingService
 
             if (categories.Any())
             {
-                var cacheKey = CacheService.GetMenuCategoriesCacheKey();
+                var cacheKey = CacheKeys.MenuCategories();
                 await _cacheService.SetAsync(cacheKey, categories, TimeSpan.FromHours(1));
                 var count = categories.Count();
                 _logger.LogInformation($"Warmed up {count} menu categories");
@@ -103,7 +90,7 @@ public class CacheWarmingService : ICacheWarmingService
 
             if (locations.Any())
             {
-                var cacheKey = CacheService.GetLocationsCacheKey();
+                var cacheKey = CacheKeys.Locations();
                 await _cacheService.SetAsync(cacheKey, locations, TimeSpan.FromHours(2));
                 var count = locations.Count();
                 _logger.LogInformation($"Warmed up {count} locations");
@@ -131,7 +118,7 @@ public class CacheWarmingService : ICacheWarmingService
             {
                 foreach (var item in items)
                 {
-                    var cacheKey = CacheService.GetMenuItemCacheKey(item.Id);
+                    var cacheKey = CacheKeys.MenuItem(item.Id);
                     await _cacheService.SetAsync(cacheKey, item, TimeSpan.FromHours(1));
                 }
                 var count = items.Count();

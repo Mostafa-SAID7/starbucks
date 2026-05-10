@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Versioning;
+using Starbucks.API.Extensions;
 using Starbucks.Application.Features.Locations.Queries;
 
 namespace Starbucks.API.Controllers;
@@ -34,13 +35,7 @@ public class LocationsController : ControllerBase
         [FromQuery] int pageSize = 50)
     {
         var result = await _mediator.Send(new GetLocationsQuery(city, governorate, pageNumber, pageSize));
-        
-        if (!result.IsSuccess)
-        {
-            return BadRequest(new { errors = result.Errors });
-        }
-
-        return Ok(result.Data);
+        return result.ToActionResult(this);
     }
 
     /// <summary>
@@ -52,13 +47,7 @@ public class LocationsController : ControllerBase
     public async Task<IActionResult> GetLocation(Guid id)
     {
         var result = await _mediator.Send(new GetLocationByIdQuery(id));
-        
-        if (!result.IsSuccess)
-        {
-            return NotFound(new { errors = result.Errors });
-        }
-
-        return Ok(result.Data);
+        return result.ToNotFoundActionResult(this);
     }
 
     /// <summary>
@@ -75,13 +64,7 @@ public class LocationsController : ControllerBase
         [FromQuery] int pageSize = 50)
     {
         var result = await _mediator.Send(new GetLocationsQuery(city, null, pageNumber, pageSize));
-        
-        if (!result.IsSuccess)
-        {
-            return BadRequest(new { errors = result.Errors });
-        }
-
-        return Ok(result.Data);
+        return result.ToActionResult(this);
     }
 
     /// <summary>
@@ -92,13 +75,7 @@ public class LocationsController : ControllerBase
     public async Task<IActionResult> GetCities()
     {
         var result = await _mediator.Send(new GetCitiesQuery());
-        
-        if (!result.IsSuccess)
-        {
-            return BadRequest(new { errors = result.Errors });
-        }
-
-        return Ok(result.Data);
+        return result.ToActionResult(this);
     }
 
     /// <summary>
@@ -112,12 +89,6 @@ public class LocationsController : ControllerBase
     public async Task<IActionResult> GetNearbyLocations([FromQuery] double latitude, [FromQuery] double longitude, [FromQuery] double radius = 10)
     {
         var result = await _mediator.Send(new GetNearbyLocationsQuery(latitude, longitude, radius));
-        
-        if (!result.IsSuccess)
-        {
-            return BadRequest(new { errors = result.Errors });
-        }
-
-        return Ok(result.Data);
+        return result.ToActionResult(this);
     }
 }

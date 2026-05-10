@@ -14,9 +14,9 @@ public abstract class CachedQueryHandler<TQuery, TResult> : IRequestHandler<TQue
     where TQuery : IRequest<Result<TResult>>
     where TResult : class
 {
-    protected readonly ICacheService CacheService;
+    protected readonly IDistributedCacheService CacheService;
 
-    protected CachedQueryHandler(ICacheService cacheService)
+    protected CachedQueryHandler(IDistributedCacheService cacheService)
     {
         CacheService = cacheService;
     }
@@ -27,7 +27,7 @@ public abstract class CachedQueryHandler<TQuery, TResult> : IRequestHandler<TQue
         var cacheDuration = GetCacheDuration();
 
         // Try to get from cache
-        var cachedResult = await CacheService.GetAsync<TResult>(cacheKey, cancellationToken);
+        var cachedResult = await CacheService.GetAsync<TResult>(cacheKey);
         if (cachedResult != null)
         {
             return Result<TResult>.Success(cachedResult);
@@ -39,7 +39,7 @@ public abstract class CachedQueryHandler<TQuery, TResult> : IRequestHandler<TQue
         // Cache the result if successful
         if (result.IsSuccess && result.Data != null)
         {
-            await CacheService.SetAsync(cacheKey, result.Data, cacheDuration, cancellationToken);
+            await CacheService.SetAsync(cacheKey, result.Data, cacheDuration);
         }
 
         return result;
@@ -72,9 +72,9 @@ public abstract class CachedPagedQueryHandler<TQuery, TResult> : IRequestHandler
     where TQuery : IRequest<Result<PagedResult<TResult>>>
     where TResult : class
 {
-    protected readonly ICacheService CacheService;
+    protected readonly IDistributedCacheService CacheService;
 
-    protected CachedPagedQueryHandler(ICacheService cacheService)
+    protected CachedPagedQueryHandler(IDistributedCacheService cacheService)
     {
         CacheService = cacheService;
     }
@@ -85,7 +85,7 @@ public abstract class CachedPagedQueryHandler<TQuery, TResult> : IRequestHandler
         var cacheDuration = GetCacheDuration();
 
         // Try to get from cache
-        var cachedResult = await CacheService.GetAsync<PagedResult<TResult>>(cacheKey, cancellationToken);
+        var cachedResult = await CacheService.GetAsync<PagedResult<TResult>>(cacheKey);
         if (cachedResult != null)
         {
             return Result<PagedResult<TResult>>.Success(cachedResult);
@@ -97,7 +97,7 @@ public abstract class CachedPagedQueryHandler<TQuery, TResult> : IRequestHandler
         // Cache the result if successful
         if (result.IsSuccess && result.Data != null)
         {
-            await CacheService.SetAsync(cacheKey, result.Data, cacheDuration, cancellationToken);
+            await CacheService.SetAsync(cacheKey, result.Data, cacheDuration);
         }
 
         return result;

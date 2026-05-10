@@ -20,7 +20,7 @@ public class GetMenuCategoryBySlugQueryHandler : CachedQueryHandler<GetMenuCateg
 
     public GetMenuCategoryBySlugQueryHandler(
         IUnitOfWork unitOfWork,
-        ICacheService cacheService,
+        IDistributedCacheService cacheService,
         ILogger<GetMenuCategoryBySlugQueryHandler> logger)
         : base(cacheService)
     {

@@ -17,7 +17,7 @@ public class GetMenuItemQueryHandler : CachedQueryHandler<GetMenuItemQuery, Menu
 {
     private readonly IApplicationDbContext _context;
 
-    public GetMenuItemQueryHandler(IApplicationDbContext context, ICacheService cacheService)
+    public GetMenuItemQueryHandler(IApplicationDbContext context, IDistributedCacheService cacheService)
         : base(cacheService)
     {
         _context = context;

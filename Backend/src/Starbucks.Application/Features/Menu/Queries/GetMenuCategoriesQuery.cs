@@ -21,7 +21,7 @@ public class GetMenuCategoriesQueryHandler : CachedPagedQueryHandler<GetMenuCate
 
     public GetMenuCategoriesQueryHandler(
         IUnitOfWork unitOfWork,
-        ICacheService cacheService,
+        IDistributedCacheService cacheService,
         ILogger<GetMenuCategoriesQueryHandler> logger)
         : base(cacheService)
     {

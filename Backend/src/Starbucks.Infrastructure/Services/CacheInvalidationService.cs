@@ -1,53 +1,12 @@
 using Microsoft.Extensions.Logging;
-using Starbucks.Domain.Common;
-using Starbucks.Domain.Entities;
+using Starbucks.Application.Common.Interfaces.Services;
+using Starbucks.Application.Common.Utilities;
 
 namespace Starbucks.Infrastructure.Services;
 
 /// <summary>
-/// Service for managing cache invalidation based on entity changes
-/// Implements cascade invalidation for related entities
-/// </summary>
-public interface ICacheInvalidationService
-{
-    /// <summary>
-    /// Invalidates cache when a user is updated
-    /// </summary>
-    Task InvalidateUserCacheAsync(Guid userId);
-
-    /// <summary>
-    /// Invalidates cache when a user profile is updated
-    /// </summary>
-    Task InvalidateUserProfileCacheAsync(Guid userId);
-
-    /// <summary>
-    /// Invalidates cache when an order is updated
-    /// </summary>
-    Task InvalidateOrderCacheAsync(Guid orderId, Guid userId);
-
-    /// <summary>
-    /// Invalidates cache when a menu item is updated
-    /// </summary>
-    Task InvalidateMenuItemCacheAsync(Guid itemId, Guid categoryId);
-
-    /// <summary>
-    /// Invalidates cache when a menu category is updated
-    /// </summary>
-    Task InvalidateMenuCategoryCacheAsync(Guid categoryId);
-
-    /// <summary>
-    /// Invalidates cache when a location is updated
-    /// </summary>
-    Task InvalidateLocationCacheAsync(Guid locationId);
-
-    /// <summary>
-    /// Invalidates all cache
-    /// </summary>
-    Task InvalidateAllCacheAsync();
-}
-
-/// <summary>
 /// Implementation of cache invalidation service
+/// Handles cascade invalidation for related entities
 /// </summary>
 public class CacheInvalidationService : ICacheInvalidationService
 {
@@ -67,19 +26,16 @@ public class CacheInvalidationService : ICacheInvalidationService
     {
         try
         {
-            // Invalidate user cache
-            await _cacheService.RemoveAsync(CacheService.GetUserCacheKey(userId));
-            await _cacheService.RemoveAsync(CacheService.GetUserProfileCacheKey(userId));
-            
-            // Invalidate user's orders cache
-            await _cacheService.RemoveAsync(CacheService.GetUserOrdersCacheKey(userId));
-            await _cacheService.RemoveAsync(CacheService.GetRecentOrdersCacheKey(userId));
+            await _cacheService.RemoveAsync(CacheKeys.User(userId));
+            await _cacheService.RemoveAsync(CacheKeys.UserProfile(userId));
+            await _cacheService.RemoveAsync(CacheKeys.UserOrders(userId));
+            await _cacheService.RemoveAsync(CacheKeys.UserRecentOrders(userId));
 
-            _logger.LogInformation("User cache invalidated for user: {UserId}", userId);
+            _logger.LogInformation($"User cache invalidated for user: {userId}");
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error invalidating user cache for user: {UserId}", userId);
+            _logger.LogError(ex, $"Error invalidating user cache for user: {userId}");
         }
     }
 
@@ -90,12 +46,12 @@ public class CacheInvalidationService : ICacheInvalidationService
     {
         try
         {
-            await _cacheService.RemoveAsync(CacheService.GetUserProfileCacheKey(userId));
-            _logger.LogInformation("User profile cache invalidated for user: {UserId}", userId);
+            await _cacheService.RemoveAsync(CacheKeys.UserProfile(userId));
+            _logger.LogInformation($"User profile cache invalidated for user: {userId}");
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error invalidating user profile cache for user: {UserId}", userId);
+            _logger.LogError(ex, $"Error invalidating user profile cache for user: {userId}");
         }
     }
 
@@ -106,18 +62,15 @@ public class CacheInvalidationService : ICacheInvalidationService
     {
         try
         {
-            // Invalidate specific order cache
-            await _cacheService.RemoveAsync(CacheService.GetOrderCacheKey(orderId));
-            
-            // Invalidate user's orders cache (cascade invalidation)
-            await _cacheService.RemoveAsync(CacheService.GetUserOrdersCacheKey(userId));
-            await _cacheService.RemoveAsync(CacheService.GetRecentOrdersCacheKey(userId));
+            await _cacheService.RemoveAsync(CacheKeys.Order(orderId));
+            await _cacheService.RemoveAsync(CacheKeys.UserOrders(userId));
+            await _cacheService.RemoveAsync(CacheKeys.UserRecentOrders(userId));
 
-            _logger.LogInformation("Order cache invalidated for order: {OrderId}, user: {UserId}", orderId, userId);
+            _logger.LogInformation($"Order cache invalidated for order: {orderId}, user: {userId}");
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error invalidating order cache for order: {OrderId}", orderId);
+            _logger.LogError(ex, $"Error invalidating order cache for order: {orderId}");
         }
     }
 
@@ -128,20 +81,15 @@ public class CacheInvalidationService : ICacheInvalidationService
     {
         try
         {
-            // Invalidate specific item cache
-            await _cacheService.RemoveAsync(CacheService.GetMenuItemCacheKey(itemId));
-            
-            // Invalidate category items cache (cascade invalidation)
-            await _cacheService.RemoveAsync(CacheService.GetMenuItemsCacheKey(categoryId));
-            
-            // Invalidate menu categories cache
-            await _cacheService.RemoveAsync(CacheService.GetMenuCategoriesCacheKey());
+            await _cacheService.RemoveAsync(CacheKeys.MenuItem(itemId));
+            await _cacheService.RemoveAsync(CacheKeys.MenuItems(categoryId));
+            await _cacheService.RemoveAsync(CacheKeys.MenuCategories());
 
-            _logger.LogInformation("Menu item cache invalidated for item: {ItemId}, category: {CategoryId}", itemId, categoryId);
+            _logger.LogInformation($"Menu item cache invalidated for item: {itemId}, category: {categoryId}");
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error invalidating menu item cache for item: {ItemId}", itemId);
+            _logger.LogError(ex, $"Error invalidating menu item cache for item: {itemId}");
         }
     }
 
@@ -152,17 +100,14 @@ public class CacheInvalidationService : ICacheInvalidationService
     {
         try
         {
-            // Invalidate category items cache
-            await _cacheService.RemoveAsync(CacheService.GetMenuItemsCacheKey(categoryId));
-            
-            // Invalidate all menu categories cache
-            await _cacheService.RemoveAsync(CacheService.GetMenuCategoriesCacheKey());
+            await _cacheService.RemoveAsync(CacheKeys.MenuItems(categoryId));
+            await _cacheService.RemoveAsync(CacheKeys.MenuCategories());
 
-            _logger.LogInformation("Menu category cache invalidated for category: {CategoryId}", categoryId);
+            _logger.LogInformation($"Menu category cache invalidated for category: {categoryId}");
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error invalidating menu category cache for category: {CategoryId}", categoryId);
+            _logger.LogError(ex, $"Error invalidating menu category cache for category: {categoryId}");
         }
     }
 
@@ -173,20 +118,15 @@ public class CacheInvalidationService : ICacheInvalidationService
     {
         try
         {
-            // Invalidate specific location cache
-            await _cacheService.RemoveAsync(CacheService.GetLocationCacheKey(locationId));
-            
-            // Invalidate all locations cache
-            await _cacheService.RemoveAsync(CacheService.GetLocationsCacheKey());
-            
-            // Invalidate locations by city cache (cascade invalidation)
-            await _cacheService.RemoveByPatternAsync($"{CacheService.GetLocationsByCityCacheKey("*")}*");
+            await _cacheService.RemoveAsync(CacheKeys.Location(locationId));
+            await _cacheService.RemoveAsync(CacheKeys.Locations());
+            await _cacheService.RemoveByPatternAsync(CacheKeys.LocationPattern());
 
-            _logger.LogInformation("Location cache invalidated for location: {LocationId}", locationId);
+            _logger.LogInformation($"Location cache invalidated for location: {locationId}");
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error invalidating location cache for location: {LocationId}", locationId);
+            _logger.LogError(ex, $"Error invalidating location cache for location: {locationId}");
         }
     }
 

@@ -26,7 +26,7 @@ public class GetNearbyLocationsQueryHandler : CachedPagedQueryHandler<GetNearbyL
 
     public GetNearbyLocationsQueryHandler(
         IUnitOfWork unitOfWork,
-        ICacheService cacheService,
+        IDistributedCacheService cacheService,
         ILogger<GetNearbyLocationsQueryHandler> logger)
         : base(cacheService)
     {

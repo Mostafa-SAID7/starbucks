@@ -1,21 +1,40 @@
+using Starbucks.Application.Common.Models;
+
 namespace Starbucks.Application.Common.Interfaces.Services;
 
-public interface ICacheService
+/// <summary>
+/// Service for managing distributed caching with Redis
+/// Provides core cache operations with type safety and error handling
+/// </summary>
+public interface IDistributedCacheService
 {
-    // Basic CRUD operations
-    Task<T?> GetAsync<T>(string key, CancellationToken cancellationToken = default) where T : class;
-    
-    Task SetAsync<T>(string key, T value, TimeSpan? expiration = null, CancellationToken cancellationToken = default) where T : class;
-    
-    Task RemoveAsync(string key, CancellationToken cancellationToken = default);
-    
-    // Pattern-based invalidation
-    Task RemoveByPatternAsync(string pattern, CancellationToken cancellationToken = default);
-    
-    Task InvalidateManyAsync(IEnumerable<string> keys, CancellationToken cancellationToken = default);
-    
-    // Domain-specific cache invalidation
-    Task InvalidateMenuCacheAsync(CancellationToken cancellationToken = default);
-    
-    Task InvalidateLocationCacheAsync(CancellationToken cancellationToken = default);
+    /// <summary>
+    /// Gets a value from cache
+    /// </summary>
+    Task<T?> GetAsync<T>(string key);
+
+    /// <summary>
+    /// Sets a value in cache with expiration
+    /// </summary>
+    Task SetAsync<T>(string key, T value, TimeSpan? expiration = null);
+
+    /// <summary>
+    /// Removes a value from cache
+    /// </summary>
+    Task RemoveAsync(string key);
+
+    /// <summary>
+    /// Removes multiple values from cache by pattern
+    /// </summary>
+    Task RemoveByPatternAsync(string pattern);
+
+    /// <summary>
+    /// Checks if a key exists in cache
+    /// </summary>
+    Task<bool> ExistsAsync(string key);
+
+    /// <summary>
+    /// Gets cache statistics
+    /// </summary>
+    Task<CacheStatistics> GetStatisticsAsync();
 }

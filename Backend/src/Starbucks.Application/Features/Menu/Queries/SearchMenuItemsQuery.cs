@@ -27,7 +27,7 @@ public class SearchMenuItemsQueryHandler : CachedPagedQueryHandler<SearchMenuIte
 
     public SearchMenuItemsQueryHandler(
         IUnitOfWork unitOfWork,
-        ICacheService cacheService,
+        IDistributedCacheService cacheService,
         ILogger<SearchMenuItemsQueryHandler> logger)
         : base(cacheService)
     {

@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Versioning;
+using Starbucks.API.Extensions;
 using Starbucks.Application.DTOs.Auth;
 using Starbucks.Application.Features.Auth.Commands;
 using System.Security.Claims;
@@ -29,13 +30,7 @@ public class AuthController : ControllerBase
     public async Task<IActionResult> Login([FromBody] LoginRequest request)
     {
         var result = await _mediator.Send(new LoginCommand(request));
-        
-        if (!result.IsSuccess)
-        {
-            return BadRequest(new { errors = result.Errors });
-        }
-
-        return Ok(result.Data);
+        return result.ToActionResult(this);
     }
 
     /// <summary>
@@ -47,13 +42,7 @@ public class AuthController : ControllerBase
     public async Task<IActionResult> Register([FromBody] RegisterRequest request)
     {
         var result = await _mediator.Send(new RegisterCommand(request));
-        
-        if (!result.IsSuccess)
-        {
-            return BadRequest(new { errors = result.Errors });
-        }
-
-        return Ok(result.Data);
+        return result.ToActionResult(this);
     }
 
     /// <summary>
@@ -65,13 +54,7 @@ public class AuthController : ControllerBase
     public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequest request)
     {
         var result = await _mediator.Send(new RefreshTokenCommand(request.RefreshToken));
-        
-        if (!result.IsSuccess)
-        {
-            return BadRequest(new { errors = result.Errors });
-        }
-
-        return Ok(result.Data);
+        return result.ToActionResult(this);
     }
 
     /// <summary>
