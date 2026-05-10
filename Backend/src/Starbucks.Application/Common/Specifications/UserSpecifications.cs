@@ -39,6 +39,18 @@ public class UserByPhoneSpecification : BaseSpecification<User>
 }
 
 /// <summary>
+/// Specification for getting user by refresh token
+/// </summary>
+public class UserByRefreshTokenSpecification : BaseSpecification<User>
+{
+    public UserByRefreshTokenSpecification(string refreshToken)
+    {
+        Criteria = u => u.RefreshToken == refreshToken;
+        AddInclude(u => u.Profile);
+    }
+}
+
+/// <summary>
 /// Specification for getting all verified users (email verified)
 /// </summary>
 public class VerifiedUsersSpecification : BaseSpecification<User>
