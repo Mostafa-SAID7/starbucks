@@ -1,5 +1,4 @@
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Starbucks.Application.Common.Abstractions;
 using Starbucks.Application.Common.Extensions;
@@ -17,16 +16,16 @@ public record GetLocationsQuery(string? City = null, string? Governorate = null,
 
 public class GetLocationsQueryHandler : CachedPagedQueryHandler<GetLocationsQuery, LocationDto>
 {
-    private readonly IApplicationDbContext _context;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly ILogger<GetLocationsQueryHandler> _logger;
 
     public GetLocationsQueryHandler(
-        IApplicationDbContext context,
+        IUnitOfWork unitOfWork,
         ICacheService cacheService,
         ILogger<GetLocationsQueryHandler> logger)
         : base(cacheService)
     {
-        _context = context;
+        _unitOfWork = unitOfWork;
         _logger = logger;
     }
 
@@ -58,36 +57,39 @@ public class GetLocationsQueryHandler : CachedPagedQueryHandler<GetLocationsQuer
             var sanitizedCity = cityValidation.Data;
             var sanitizedGovernorate = governorateValidation.Data;
 
-            // STEP 3: Build query for active locations
-            var baseQuery = _context.Locations
-                .AsNoTracking()
-                .Where(l => l.IsActive && !l.IsDeleted);
+            // STEP 3: Get all active locations using repository
+            var allLocations = await _unitOfWork.Locations.GetActiveAsync(cancellationToken);
+            var locationList = allLocations.ToList();
 
             // STEP 4: Apply city filter if provided
             if (!string.IsNullOrEmpty(sanitizedCity))
             {
-                baseQuery = baseQuery.Where(l => EF.Functions.Like(l.City, $"%{sanitizedCity}%"));
+                locationList = locationList
+                    .Where(l => l.City.Contains(sanitizedCity, StringComparison.OrdinalIgnoreCase))
+                    .ToList();
             }
 
             // STEP 5: Apply governorate filter if provided
             if (!string.IsNullOrEmpty(sanitizedGovernorate))
             {
-                baseQuery = baseQuery.Where(l => EF.Functions.Like(l.Governorate, $"%{sanitizedGovernorate}%"));
+                locationList = locationList
+                    .Where(l => l.Governorate.Contains(sanitizedGovernorate, StringComparison.OrdinalIgnoreCase))
+                    .ToList();
             }
 
             // STEP 6: Get total count
-            var totalCount = await baseQuery.CountAsync(cancellationToken);
+            var totalCount = locationList.Count;
 
             // STEP 7: Apply ordering and pagination
-            var locations = await baseQuery
+            var paginatedLocations = locationList
                 .OrderBy(l => l.SortOrder)
                 .ThenBy(l => l.Name)
                 .Skip((request.PageNumber - 1) * request.PageSize)
                 .Take(request.PageSize)
-                .ToListAsync(cancellationToken);
+                .ToList();
 
             // STEP 8: Map to DTOs
-            var locationDtos = locations.Adapt<List<LocationDto>>();
+            var locationDtos = paginatedLocations.Adapt<List<LocationDto>>();
 
             // STEP 9: Create paged result
             var pagedResult = PagedResult<LocationDto>.Create(

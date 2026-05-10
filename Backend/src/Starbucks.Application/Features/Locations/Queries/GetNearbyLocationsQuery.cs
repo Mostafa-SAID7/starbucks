@@ -1,10 +1,9 @@
 using MediatR;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Starbucks.Application.Common.Abstractions;
 using Starbucks.Application.Common.Extensions;
-using Starbucks.Application.Common.Interfaces.Repositories;
-using Starbucks.Application.Common.Interfaces.Services;
 using Starbucks.Application.Common.Interfaces.Data;
+using Starbucks.Application.Common.Interfaces.Services;
 using Starbucks.Application.Common.Models;
 using Starbucks.Application.Common.Utilities;
 using Starbucks.Application.DTOs.Locations;
@@ -22,93 +21,102 @@ public record GetNearbyLocationsQuery(
 
 public class GetNearbyLocationsQueryHandler : CachedPagedQueryHandler<GetNearbyLocationsQuery, LocationDto>
 {
-    private readonly IApplicationDbContext _context;
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly ILogger<GetNearbyLocationsQueryHandler> _logger;
 
-    public GetNearbyLocationsQueryHandler(IApplicationDbContext context, ICacheService cacheService)
+    public GetNearbyLocationsQueryHandler(
+        IUnitOfWork unitOfWork,
+        ICacheService cacheService,
+        ILogger<GetNearbyLocationsQueryHandler> logger)
         : base(cacheService)
     {
-        _context = context;
+        _unitOfWork = unitOfWork;
+        _logger = logger;
     }
 
     protected override string GenerateCacheKey(GetNearbyLocationsQuery request)
         => CacheKeyGenerator.NearbyLocations(request.Latitude, request.Longitude, request.Radius, request.PageNumber, request.PageSize);
 
-    protected override TimeSpan GetCacheDuration() => TimeSpan.FromMinutes(30); // Location data doesn't change frequently
+    protected override TimeSpan GetCacheDuration() => TimeSpan.FromMinutes(30);
 
-    protected override async Task<Result<PagedResult<LocationDto>>> ExecuteQueryAsync(GetNearbyLocationsQuery request, CancellationToken cancellationToken)
+    protected override async Task<Result<PagedResult<LocationDto>>> ExecuteQueryAsync(
+        GetNearbyLocationsQuery request,
+        CancellationToken cancellationToken)
     {
-        // Validate coordinates
-        var coordinatesValidation = ValidationExtensions.ValidateCoordinates(request.Latitude, request.Longitude);
-        if (!coordinatesValidation.IsSuccess)
-            return Result<PagedResult<LocationDto>>.Failure(coordinatesValidation.Errors.First());
-
-        // Validate radius
-        var radiusValidation = ValidationExtensions.ValidateRadiusParameter(request.Radius);
-        if (!radiusValidation.IsSuccess)
-            return Result<PagedResult<LocationDto>>.Failure(radiusValidation.Errors.First());
-
-        // Validate pagination parameters
-        var paginationValidation = ValidationExtensions.ValidatePaginationParameters(request.PageNumber, request.PageSize);
-        if (!paginationValidation.IsSuccess)
-            return Result<PagedResult<LocationDto>>.Failure(paginationValidation.Errors.First());
-
-        // Get all active locations with coordinates
-        var allLocations = await _context.Locations
-            .AsNoTracking()
-            .Where(l => l.IsActive && !l.IsDeleted && l.Latitude.HasValue && l.Longitude.HasValue)
-            .ToListAsync(cancellationToken);
-
-        // Calculate distance using Haversine formula and filter by radius
-        var nearbyLocations = allLocations
-            .Select(l => new
-            {
-                Location = l,
-                Distance = CalculateDistance(request.Latitude, request.Longitude, l.Latitude!.Value, l.Longitude!.Value)
-            })
-            .Where(x => x.Distance <= request.Radius)
-            .OrderBy(x => x.Distance)
-            .ToList();
-
-        var totalCount = nearbyLocations.Count;
-
-        // Apply pagination
-        var paginatedLocations = nearbyLocations
-            .Skip((request.PageNumber - 1) * request.PageSize)
-            .Take(request.PageSize)
-            .Select(x => x.Location)
-            .ToList();
-
-        if (!paginatedLocations.Any())
+        try
         {
-            return Result<PagedResult<LocationDto>>.Failure($"No locations found within {request.Radius} km of the specified coordinates.");
+            // STEP 1: Validate coordinates
+            var coordinatesValidation = ValidationExtensions.ValidateCoordinates(request.Latitude, request.Longitude);
+            if (!coordinatesValidation.IsSuccess)
+                return Result<PagedResult<LocationDto>>.Failure(coordinatesValidation.Errors.First());
+
+            // STEP 2: Validate radius
+            var radiusValidation = ValidationExtensions.ValidateRadiusParameter(request.Radius);
+            if (!radiusValidation.IsSuccess)
+                return Result<PagedResult<LocationDto>>.Failure(radiusValidation.Errors.First());
+
+            // STEP 3: Validate pagination parameters
+            var paginationValidation = ValidationExtensions.ValidatePaginationParameters(request.PageNumber, request.PageSize);
+            if (!paginationValidation.IsSuccess)
+                return Result<PagedResult<LocationDto>>.Failure(paginationValidation.Errors.First());
+
+            // STEP 4: Get nearby locations using repository method
+            var nearbyLocations = await _unitOfWork.Locations.GetNearbyAsync(
+                request.Latitude,
+                request.Longitude,
+                request.Radius,
+                cancellationToken
+            );
+
+            var locationList = nearbyLocations.ToList();
+
+            if (!locationList.Any())
+            {
+                _logger.LogWarning(
+                    "No locations found within {Radius} km of coordinates ({Latitude}, {Longitude})",
+                    request.Radius,
+                    request.Latitude,
+                    request.Longitude
+                );
+                return Result<PagedResult<LocationDto>>.Failure(
+                    $"No locations found within {request.Radius} km of the specified coordinates"
+                );
+            }
+
+            // STEP 5: Get total count
+            var totalCount = locationList.Count;
+
+            // STEP 6: Apply pagination
+            var paginatedLocations = locationList
+                .Skip((request.PageNumber - 1) * request.PageSize)
+                .Take(request.PageSize)
+                .ToList();
+
+            // STEP 7: Map to DTOs
+            var locationDtos = paginatedLocations.Adapt<List<LocationDto>>();
+
+            // STEP 8: Create paged result
+            var pagedResult = PagedResult<LocationDto>.Create(
+                locationDtos,
+                totalCount,
+                request.PageNumber,
+                request.PageSize
+            );
+
+            _logger.LogInformation(
+                "Nearby locations retrieved successfully: {Count} locations within {Radius} km, Page {PageNumber}/{TotalPages}",
+                locationDtos.Count,
+                request.Radius,
+                request.PageNumber,
+                pagedResult.TotalPages
+            );
+
+            return Result<PagedResult<LocationDto>>.Success(pagedResult);
         }
-
-        var locationDtos = paginatedLocations.Adapt<List<LocationDto>>();
-        var result = PagedResult<LocationDto>.Create(locationDtos, totalCount, request.PageNumber, request.PageSize);
-
-        return Result<PagedResult<LocationDto>>.Success(result);
-    }
-
-    /// <summary>
-    /// Calculate distance between two coordinates using Haversine formula (in kilometers)
-    /// </summary>
-    private static double CalculateDistance(double lat1, double lon1, double lat2, double lon2)
-    {
-        const double earthRadiusKm = 6371;
-
-        var dLat = DegreesToRadians(lat2 - lat1);
-        var dLon = DegreesToRadians(lon2 - lon1);
-
-        var a = Math.Sin(dLat / 2) * Math.Sin(dLat / 2) +
-                Math.Cos(DegreesToRadians(lat1)) * Math.Cos(DegreesToRadians(lat2)) *
-                Math.Sin(dLon / 2) * Math.Sin(dLon / 2);
-
-        var c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
-        return earthRadiusKm * c;
-    }
-
-    private static double DegreesToRadians(double degrees)
-    {
-        return degrees * Math.PI / 180;
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error in GetNearbyLocationsQueryHandler");
+            return Result<PagedResult<LocationDto>>.Failure("An error occurred while retrieving nearby locations");
+        }
     }
 }
