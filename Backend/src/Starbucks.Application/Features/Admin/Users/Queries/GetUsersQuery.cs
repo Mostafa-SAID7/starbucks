@@ -1,8 +1,9 @@
 using MediatR;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Starbucks.Application.Common.Interfaces.Data;
 using Starbucks.Application.Common.Interfaces.Services;
 using Starbucks.Application.Common.Models;
+using Starbucks.Application.Common.Specifications;
 using Starbucks.Application.DTOs.Admin;
 using Starbucks.Domain.Enums;
 using Mapster;
@@ -22,83 +23,90 @@ public record GetUsersQuery(
 
 public class GetUsersQueryHandler : IRequestHandler<GetUsersQuery, Result<PagedResult<UserManagementDto>>>
 {
-    private readonly IApplicationDbContext _context;
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly ILogger<GetUsersQueryHandler> _logger;
 
-    public GetUsersQueryHandler(IApplicationDbContext context)
+    public GetUsersQueryHandler(
+        IUnitOfWork unitOfWork,
+        ILogger<GetUsersQueryHandler> logger)
     {
-        _context = context;
+        _unitOfWork = unitOfWork;
+        _logger = logger;
     }
 
-    public async Task<Result<PagedResult<UserManagementDto>>> Handle(GetUsersQuery request, CancellationToken cancellationToken)
+    public async Task<Result<PagedResult<UserManagementDto>>> Handle(
+        GetUsersQuery request,
+        CancellationToken cancellationToken)
     {
-        var query = _context.Users.AsNoTracking().Where(u => !u.IsDeleted);
-
-        // Apply filters
-        if (!string.IsNullOrWhiteSpace(request.SearchTerm))
+        try
         {
-            var searchTerm = request.SearchTerm.ToLower();
-            query = query.Where(u =>
-                u.FirstName.ToLower().Contains(searchTerm) ||
-                u.LastName.ToLower().Contains(searchTerm) ||
-                u.Email.ToLower().Contains(searchTerm) ||
-                u.PhoneNumber.Contains(searchTerm)
+            // STEP 1: Validate pagination parameters
+            if (request.PageNumber < 1)
+                return Result<PagedResult<UserManagementDto>>.Failure("Page number must be greater than 0");
+
+            if (request.PageSize < 1 || request.PageSize > 100)
+                return Result<PagedResult<UserManagementDto>>.Failure("Page size must be between 1 and 100");
+
+            // STEP 2: Create specification with all filters and pagination
+            var spec = new UserSearchSpecification(
+                searchTerm: request.SearchTerm,
+                role: request.Role,
+                isEmailVerified: request.IsEmailVerified,
+                isLocked: request.IsLocked,
+                createdAfter: request.CreatedAfter,
+                createdBefore: request.CreatedBefore,
+                pageNumber: request.PageNumber,
+                pageSize: request.PageSize
             );
-        }
 
-        if (request.Role.HasValue)
-        {
-            query = query.Where(u => u.Role == request.Role.Value);
-        }
+            // STEP 3: Get users using repository with specification
+            var users = await _unitOfWork.Users.GetAsync(spec, cancellationToken);
+            var userList = users.ToList();
 
-        if (request.IsEmailVerified.HasValue)
-        {
-            query = query.Where(u => u.IsEmailVerified == request.IsEmailVerified.Value);
-        }
+            // STEP 4: Get total count
+            var totalCount = await _unitOfWork.Users.CountAsync(
+                new UserSearchSpecification(
+                    searchTerm: request.SearchTerm,
+                    role: request.Role,
+                    isEmailVerified: request.IsEmailVerified,
+                    isLocked: request.IsLocked,
+                    createdAfter: request.CreatedAfter,
+                    createdBefore: request.CreatedBefore
+                ),
+                cancellationToken
+            );
 
-        if (request.IsLocked.HasValue)
-        {
-            if (request.IsLocked.Value)
+            // STEP 5: Map to DTOs and enrich with additional data
+            var userDtos = userList.Adapt<List<UserManagementDto>>();
+
+            foreach (var userDto in userDtos)
             {
-                query = query.Where(u => u.LockoutEnd.HasValue && u.LockoutEnd.Value > DateTime.UtcNow);
+                var user = userList.First(u => u.Id == userDto.Id);
+                userDto.IsLocked = user.LockoutEnd.HasValue && user.LockoutEnd.Value > DateTime.UtcNow;
+                userDto.LockoutEnd = user.LockoutEnd;
             }
-            else
-            {
-                query = query.Where(u => !u.LockoutEnd.HasValue || u.LockoutEnd.Value <= DateTime.UtcNow);
-            }
-        }
 
-        if (request.CreatedAfter.HasValue)
+            // STEP 6: Create paged result
+            var result = PagedResult<UserManagementDto>.Create(
+                userDtos,
+                totalCount,
+                request.PageNumber,
+                request.PageSize
+            );
+
+            _logger.LogInformation(
+                "Users retrieved successfully: {Count} users, Page {PageNumber}/{TotalPages}",
+                userDtos.Count,
+                request.PageNumber,
+                result.TotalPages
+            );
+
+            return Result<PagedResult<UserManagementDto>>.Success(result);
+        }
+        catch (Exception ex)
         {
-            query = query.Where(u => u.CreatedAt >= request.CreatedAfter.Value);
+            _logger.LogError(ex, "Error in GetUsersQueryHandler");
+            return Result<PagedResult<UserManagementDto>>.Failure("An error occurred while retrieving users");
         }
-
-        if (request.CreatedBefore.HasValue)
-        {
-            query = query.Where(u => u.CreatedAt <= request.CreatedBefore.Value);
-        }
-
-        // Get total count
-        var totalCount = await query.CountAsync(cancellationToken);
-
-        // Apply pagination
-        var users = await query
-            .OrderByDescending(u => u.CreatedAt)
-            .Skip((request.PageNumber - 1) * request.PageSize)
-            .Take(request.PageSize)
-            .ToListAsync(cancellationToken);
-
-        // Map to DTOs
-        var userDtos = users.Adapt<List<UserManagementDto>>();
-
-        // Enrich DTOs with additional data
-        foreach (var userDto in userDtos)
-        {
-            var user = users.First(u => u.Id == userDto.Id);
-            userDto.IsLocked = user.LockoutEnd.HasValue && user.LockoutEnd.Value > DateTime.UtcNow;
-            userDto.LockoutEnd = user.LockoutEnd;
-        }
-
-        var result = PagedResult<UserManagementDto>.Create(userDtos, totalCount, request.PageNumber, request.PageSize);
-        return Result<PagedResult<UserManagementDto>>.Success(result);
     }
 }

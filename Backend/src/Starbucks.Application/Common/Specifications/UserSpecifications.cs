@@ -1,5 +1,6 @@
 using Starbucks.Domain.Entities;
 using Starbucks.Domain.Enums;
+using System.Linq.Expressions;
 
 namespace Starbucks.Application.Common.Specifications;
 
@@ -146,5 +147,108 @@ public class UsersWithUnverifiedPhoneSpecification : BaseSpecification<User>
     {
         Criteria = u => !u.IsPhoneVerified;
         ApplyOrderBy(u => u.CreatedAt);
+    }
+}
+
+/// <summary>
+/// Specification for searching and filtering users with pagination
+/// </summary>
+public class UserSearchSpecification : BaseSpecification<User>
+{
+    public UserSearchSpecification(
+        string? searchTerm = null,
+        UserRole? role = null,
+        bool? isEmailVerified = null,
+        bool? isLocked = null,
+        DateTime? createdAfter = null,
+        DateTime? createdBefore = null,
+        int pageNumber = 1,
+        int pageSize = 20)
+    {
+        // Build criteria dynamically based on filters
+        Criteria = BuildCriteria(searchTerm, role, isEmailVerified, isLocked, createdAfter, createdBefore);
+
+        // Apply ordering and pagination
+        ApplyOrderByDescending(u => u.CreatedAt);
+        ApplyPaging((pageNumber - 1) * pageSize, pageSize);
+        ApplyTotalCount();
+    }
+
+    private static Expression<Func<User, bool>> BuildCriteria(
+        string? searchTerm,
+        UserRole? role,
+        bool? isEmailVerified,
+        bool? isLocked,
+        DateTime? createdAfter,
+        DateTime? createdBefore)
+    {
+        // Start with base criteria: not deleted
+        Expression<Func<User, bool>> criteria = u => !u.IsDeleted;
+
+        // Apply search term filter
+        if (!string.IsNullOrWhiteSpace(searchTerm))
+        {
+            var lowerSearchTerm = searchTerm.ToLower();
+            criteria = CombineExpressions(criteria, u =>
+                u.FirstName.ToLower().Contains(lowerSearchTerm) ||
+                u.LastName.ToLower().Contains(lowerSearchTerm) ||
+                u.Email.ToLower().Contains(lowerSearchTerm) ||
+                u.PhoneNumber.Contains(lowerSearchTerm)
+            );
+        }
+
+        // Apply role filter
+        if (role.HasValue)
+        {
+            criteria = CombineExpressions(criteria, u => u.Role == role.Value);
+        }
+
+        // Apply email verification filter
+        if (isEmailVerified.HasValue)
+        {
+            criteria = CombineExpressions(criteria, u => u.IsEmailVerified == isEmailVerified.Value);
+        }
+
+        // Apply lockout filter
+        if (isLocked.HasValue)
+        {
+            if (isLocked.Value)
+            {
+                criteria = CombineExpressions(criteria, u => u.LockoutEnd.HasValue && u.LockoutEnd.Value > DateTime.UtcNow);
+            }
+            else
+            {
+                criteria = CombineExpressions(criteria, u => !u.LockoutEnd.HasValue || u.LockoutEnd.Value <= DateTime.UtcNow);
+            }
+        }
+
+        // Apply date range filters
+        if (createdAfter.HasValue)
+        {
+            criteria = CombineExpressions(criteria, u => u.CreatedAt >= createdAfter.Value);
+        }
+
+        if (createdBefore.HasValue)
+        {
+            criteria = CombineExpressions(criteria, u => u.CreatedAt <= createdBefore.Value);
+        }
+
+        return criteria;
+    }
+
+    private static Expression<Func<User, bool>> CombineExpressions(
+        Expression<Func<User, bool>> expr1,
+        Expression<Func<User, bool>> expr2)
+    {
+        var parameter = Expression.Parameter(typeof(User), "u");
+        var invokedExpr = Expression.Invoke(expr2, parameter);
+        var lambdaExpr = Expression.Lambda<Func<User, bool>>(
+            Expression.AndAlso(
+                Expression.Invoke(expr1, parameter),
+                invokedExpr
+            ),
+            parameter
+        );
+        return lambdaExpr;
     }
 }

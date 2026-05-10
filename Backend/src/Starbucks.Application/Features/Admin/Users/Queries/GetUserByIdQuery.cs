@@ -1,8 +1,9 @@
 using MediatR;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Starbucks.Application.Common.Interfaces.Data;
 using Starbucks.Application.Common.Interfaces.Services;
 using Starbucks.Application.Common.Models;
+using Starbucks.Application.Common.Specifications;
 using Starbucks.Application.DTOs.Admin;
 using Mapster;
 
@@ -12,29 +13,50 @@ public record GetUserByIdQuery(Guid UserId) : IRequest<Result<UserManagementDto>
 
 public class GetUserByIdQueryHandler : IRequestHandler<GetUserByIdQuery, Result<UserManagementDto>>
 {
-    private readonly IApplicationDbContext _context;
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly ILogger<GetUserByIdQueryHandler> _logger;
 
-    public GetUserByIdQueryHandler(IApplicationDbContext context)
+    public GetUserByIdQueryHandler(
+        IUnitOfWork unitOfWork,
+        ILogger<GetUserByIdQueryHandler> logger)
     {
-        _context = context;
+        _unitOfWork = unitOfWork;
+        _logger = logger;
     }
 
-    public async Task<Result<UserManagementDto>> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
+    public async Task<Result<UserManagementDto>> Handle(
+        GetUserByIdQuery request,
+        CancellationToken cancellationToken)
     {
-        var user = await _context.Users
-            .AsNoTracking()
-            .Include(u => u.Profile)
-            .FirstOrDefaultAsync(u => u.Id == request.UserId && !u.IsDeleted, cancellationToken);
-
-        if (user == null)
+        try
         {
-            return Result<UserManagementDto>.Failure("User not found.");
+            // STEP 1: Validate input
+            if (request.UserId == Guid.Empty)
+                return Result<UserManagementDto>.Failure("User ID is required");
+
+            // STEP 2: Use repository with specification (no duplicate code)
+            var spec = new UserByIdWithProfileSpecification(request.UserId);
+            var user = await _unitOfWork.Users.GetSingleAsync(spec, cancellationToken);
+
+            if (user == null)
+            {
+                _logger.LogWarning("User not found: {UserId}", request.UserId);
+                return Result<UserManagementDto>.Failure("User not found");
+            }
+
+            // STEP 3: Map and enrich DTO
+            var userDto = user.Adapt<UserManagementDto>();
+            userDto.IsLocked = user.LockoutEnd.HasValue && user.LockoutEnd.Value > DateTime.UtcNow;
+            userDto.LockoutEnd = user.LockoutEnd;
+
+            _logger.LogInformation("User retrieved successfully: {UserId}", request.UserId);
+
+            return Result<UserManagementDto>.Success(userDto);
         }
-
-        var userDto = user.Adapt<UserManagementDto>();
-        userDto.IsLocked = user.LockoutEnd.HasValue && user.LockoutEnd.Value > DateTime.UtcNow;
-        userDto.LockoutEnd = user.LockoutEnd;
-
-        return Result<UserManagementDto>.Success(userDto);
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error in GetUserByIdQueryHandler for user: {UserId}", request.UserId);
+            return Result<UserManagementDto>.Failure("An error occurred while retrieving user");
+        }
     }
 }
