@@ -23,7 +23,9 @@ public static class DomainServicesExtensions
         services.AddSingleton<IDateTimeService, DateTimeService>();
 
         // Scoped: one instance per HTTP request
-        services.AddScoped<ICacheService, CacheService>();
+        services.AddScoped<IDistributedCacheService, CacheService>();
+        services.AddScoped<ICacheInvalidationService, CacheInvalidationService>();
+        services.AddScoped<ICacheWarmingService, CacheWarmingService>();
         services.AddScoped<ITokenService, TokenService>();
         services.AddScoped<ICurrentUserService, CurrentUserService>();
         services.AddScoped<IPasswordService, PasswordService>();
