@@ -29,18 +29,51 @@ public class MenuItemsBySubcategorySpecification : BaseSpecification<MenuItem>
 }
 
 /// <summary>
-/// Specification for searching menu items by name
+/// Specification for searching menu items by name with optional category filter and pagination
 /// </summary>
 public class MenuItemsSearchSpecification : BaseSpecification<MenuItem>
 {
-    public MenuItemsSearchSpecification(string searchTerm)
+    public MenuItemsSearchSpecification(
+        string searchTerm,
+        string? category = null,
+        int pageNumber = 1,
+        int pageSize = 20)
     {
         var lowerSearchTerm = searchTerm.ToLower();
-        Criteria = i => i.IsActive && i.IsAvailable &&
-                   (i.Name.English.ToLower().Contains(lowerSearchTerm) ||
-                    i.Name.Arabic.ToLower().Contains(lowerSearchTerm));
+        
+        // Build criteria based on filters
+        if (string.IsNullOrEmpty(category))
+        {
+            // No category filter - search all active items
+            Criteria = i => i.IsActive && !i.IsDeleted &&
+                       (i.Name.English.ToLower().Contains(lowerSearchTerm) ||
+                        i.Name.Arabic.ToLower().Contains(lowerSearchTerm) ||
+                        (i.Description != null && (
+                            i.Description.English.ToLower().Contains(lowerSearchTerm) ||
+                            i.Description.Arabic.ToLower().Contains(lowerSearchTerm)
+                        )));
+        }
+        else
+        {
+            // With category filter
+            Criteria = i => i.IsActive && !i.IsDeleted &&
+                       i.Subcategory.Category.Slug == category &&
+                       (i.Name.English.ToLower().Contains(lowerSearchTerm) ||
+                        i.Name.Arabic.ToLower().Contains(lowerSearchTerm) ||
+                        (i.Description != null && (
+                            i.Description.English.ToLower().Contains(lowerSearchTerm) ||
+                            i.Description.Arabic.ToLower().Contains(lowerSearchTerm)
+                        )));
+        }
+
+        // Include variants and subcategory
         AddInclude(i => i.Variants);
+        AddInclude(i => i.Subcategory);
+
+        // Apply ordering and pagination
         ApplyOrderBy(i => i.SortOrder);
+        ApplyPaging((pageNumber - 1) * pageSize, pageSize);
+        ApplyTotalCount();
     }
 }
 
