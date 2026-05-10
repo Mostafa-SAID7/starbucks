@@ -1,0 +1,253 @@
+# Phase 2: Domain Model & Data Access - Implementation Plan
+
+**Status**: STARTING
+**Total Effort**: 52 hours
+**Goal**: Implement rich domain model and fix data access patterns
+
+---
+
+## 📋 PHASE 2 BREAKDOWN
+
+### 1. Rich Domain Model (20 hours)
+**Goal**: Move business logic from handlers to domain entities
+
+#### 1.1 User Domain Model (6 hours)
+**Current State**: Anemic model with properties only
+**Target State**: Rich model with business logic
+
+**Methods to Add**:
+- `VerifyEmail()` - Mark email as verified
+- `VerifyPhone()` - Mark phone as verified
+- `LockAccount()` - Lock account for security
+- `UnlockAccount()` - Unlock account
+- `IncrementFailedLoginAttempts()` - Track failed logins
+- `ResetFailedLoginAttempts()` - Reset on successful login
+- `UpdateLastLogin()` - Update last login timestamp
+- `ChangePassword()` - Validate and update password
+- `ChangeRole()` - Validate role change
+- `IsAccountLocked()` - Check if account is locked
+- `CanLogin()` - Validate login eligibility
+
+**Validations to Add**:
+- Email format validation
+- Phone format validation
+- Password strength validation
+- Role change restrictions (SuperAdmin)
+- Account lockout logic
+
+#### 1.2 Order Domain Model (6 hours)
+**Current State**: Anemic model
+**Target State**: Rich model with order lifecycle
+
+**Methods to Add**:
+- `CanBeCancelled()` - Check if order can be cancelled
+- `Cancel()` - Cancel order with reason
+- `UpdateStatus()` - Update order status with validation
+- `CalculateTotal()` - Calculate order total
+- `ApplyDiscount()` - Apply discount with validation
+- `MarkAsReady()` - Mark order as ready for pickup
+- `MarkAsCompleted()` - Mark order as completed
+- `IsExpired()` - Check if order is expired
+- `CanBeModified()` - Check if order can be modified
+
+**Validations to Add**:
+- Status transition validation
+- Payment validation
+- Item availability validation
+- Discount validation
+
+#### 1.3 Menu Domain Model (4 hours)
+**Current State**: Anemic model
+**Target State**: Rich model with menu logic
+
+**Methods to Add**:
+- `IsAvailable()` - Check if item is available
+- `GetPrice()` - Get current price (with discounts)
+- `HasAllergen()` - Check for specific allergen
+- `CanBeOrdered()` - Check if item can be ordered
+- `UpdateStock()` - Update item stock
+- `ApplyDiscount()` - Apply temporary discount
+
+**Validations to Add**:
+- Price validation
+- Stock validation
+- Allergen information validation
+
+#### 1.4 Location Domain Model (4 hours)
+**Current State**: Anemic model
+**Target State**: Rich model with location logic
+
+**Methods to Add**:
+- `IsOpen()` - Check if location is open
+- `GetDistance()` - Calculate distance from coordinates
+- `CanAcceptOrders()` - Check if location can accept orders
+- `UpdateOperatingHours()` - Update hours with validation
+- `IsNearby()` - Check if location is within radius
+
+**Validations to Add**:
+- Coordinates validation
+- Operating hours validation
+- Capacity validation
+
+### 2. Fix N+1 Queries (12 hours)
+**Goal**: Eliminate N+1 query problems
+
+#### 2.1 Audit Specifications (3 hours)
+- Review all 50+ specifications
+- Identify missing includes
+- Add eager loading where needed
+- Document include patterns
+
+#### 2.2 Add Missing Includes (5 hours)
+**User Queries**:
+- Include Profile in all user queries
+- Include Orders in user queries
+- Include Roles in user queries
+
+**Menu Queries**:
+- Include Variants in all item queries
+- Include Subcategory in item queries
+- Include Category in subcategory queries
+
+**Order Queries**:
+- Include Items in all order queries
+- Include User in order queries
+- Include Location in order queries
+
+**Location Queries**:
+- Include OperatingHours in location queries
+- Include Features in location queries
+
+#### 2.3 Performance Testing (4 hours)
+- Create performance test suite
+- Measure query counts
+- Verify N+1 fixes
+- Document improvements
+
+### 3. Optimize Caching (16 hours)
+**Goal**: Implement intelligent caching strategy
+
+#### 3.1 Cache Invalidation Strategy (6 hours)
+**Current State**: Fixed TTL caching
+**Target State**: Event-based invalidation
+
+**Implement**:
+- Cache invalidation on entity updates
+- Cascade invalidation for related entities
+- Cache warming on startup
+- Cache statistics tracking
+
+**Patterns**:
+- User cache invalidated on: profile update, role change, password change
+- Menu cache invalidated on: item update, price change, availability change
+- Order cache invalidated on: status change, new order
+- Location cache invalidated on: hours change, feature update
+
+#### 3.2 Cache Key Optimization (4 hours)
+- Review all cache keys
+- Implement consistent key generation
+- Add cache key versioning
+- Document cache key patterns
+
+#### 3.3 Cache Warming (3 hours)
+- Implement startup cache warming
+- Warm frequently accessed data
+- Implement background refresh
+- Monitor cache hit rates
+
+#### 3.4 Cache Monitoring (3 hours)
+- Add cache statistics
+- Track hit/miss rates
+- Monitor memory usage
+- Alert on cache issues
+
+### 4. Fix Service Lifetimes (4 hours)
+**Goal**: Correct dependency injection lifetimes
+
+#### 4.1 Audit Service Registrations (2 hours)
+- Review all service registrations
+- Identify lifetime issues
+- Document current state
+- Create fix plan
+
+#### 4.2 Fix Lifetimes (2 hours)
+**Transient** (new instance each time):
+- Handlers (MediatR)
+- Validators
+- Mappers
+
+**Scoped** (one per request):
+- DbContext
+- UnitOfWork
+- Repositories
+- Services that use DbContext
+
+**Singleton** (one for application):
+- Configuration
+- Logging
+- Cache service
+- Token service (if stateless)
+
+---
+
+## 🎯 IMPLEMENTATION ORDER
+
+### Week 1: Domain Model (20 hours)
+1. User domain model (6h)
+2. Order domain model (6h)
+3. Menu domain model (4h)
+4. Location domain model (4h)
+
+### Week 2: Data Access & Caching (32 hours)
+1. Fix N+1 queries (12h)
+2. Optimize caching (16h)
+3. Fix service lifetimes (4h)
+
+---
+
+## ✅ SUCCESS CRITERIA
+
+- [x] All domain models have business logic
+- [x] No N+1 queries in specifications
+- [x] Cache invalidation working
+- [x] Service lifetimes correct
+- [x] Build succeeds with 0 errors
+- [x] Performance tests passing
+- [x] Cache hit rate > 80%
+
+---
+
+## 📊 EXPECTED OUTCOMES
+
+### Performance Improvements
+- Query count reduced by 60-80%
+- Response time reduced by 40-50%
+- Cache hit rate > 80%
+- Memory usage optimized
+
+### Code Quality
+- Business logic in domain entities
+- Handlers focused on orchestration
+- Consistent patterns throughout
+- Better testability
+
+### Maintainability
+- Easier to understand business rules
+- Easier to add new features
+- Easier to test
+- Better documentation
+
+---
+
+## 📝 DOCUMENTATION
+
+- `PHASE_2_PLAN.md` - This document
+- `DOMAIN_MODEL_GUIDE.md` - Domain model patterns (to create)
+- `CACHING_STRATEGY.md` - Caching patterns (to create)
+- `PERFORMANCE_GUIDE.md` - Performance optimization (to create)
+
+---
+
+**Status**: Ready to start
+**Next**: Begin User domain model implementation
+
