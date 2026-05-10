@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using Starbucks.Domain.Common;
+using Starbucks.Domain.Enums;
 
 namespace Starbucks.Domain.Entities;
 
@@ -43,60 +44,4 @@ public class SystemMetric : BaseEntity
     /// </summary>
     [MaxLength(500)]
     public string? Description { get; set; }
-}
-
-/// <summary>
-/// Enum for common metric types.
-/// </summary>
-public enum MetricType
-{
-    /// <summary>
-    /// API response time in milliseconds.
-    /// </summary>
-    ApiResponseTime,
-
-    /// <summary>
-    /// Database query execution time in milliseconds.
-    /// </summary>
-    DatabaseQueryTime,
-
-    /// <summary>
-    /// Cache hit rate as a percentage.
-    /// </summary>
-    CacheHitRate,
-
-    /// <summary>
-    /// Error rate as a percentage.
-    /// </summary>
-    ErrorRate,
-
-    /// <summary>
-    /// Active user count.
-    /// </summary>
-    ActiveUserCount,
-
-    /// <summary>
-    /// Request count.
-    /// </summary>
-    RequestCount,
-
-    /// <summary>
-    /// Memory usage in MB.
-    /// </summary>
-    MemoryUsage,
-
-    /// <summary>
-    /// CPU usage as a percentage.
-    /// </summary>
-    CpuUsage,
-
-    /// <summary>
-    /// Disk usage as a percentage.
-    /// </summary>
-    DiskUsage,
-
-    /// <summary>
-    /// Database connection count.
-    /// </summary>
-    DatabaseConnectionCount
 }
