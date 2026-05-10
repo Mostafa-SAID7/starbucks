@@ -1,6 +1,7 @@
+/// <reference types="vite/client" />
 import { http, HttpResponse } from 'msw';
 
-const API_BASE_URL = process.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
 
 export const handlers = [
   // Auth endpoints
@@ -154,7 +155,7 @@ export const handlers = [
         userId: '1',
         items: [],
         total: 0,
-        status: 'Pending',
+        status: 'pending',
         createdAt: new Date().toISOString(),
       },
     });
@@ -168,7 +169,7 @@ export const handlers = [
         userId: '1',
         items: [],
         total: 0,
-        status: 'Pending',
+        status: 'pending',
         createdAt: new Date().toISOString(),
       },
     });

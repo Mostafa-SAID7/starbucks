@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Link, useParams } from "react-router-dom";
 import { motion, useInView } from "framer-motion";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/ui";
 
 export interface BannerProps {
   title: string;
@@ -203,3 +203,5 @@ export const Banner = React.forwardRef<HTMLDivElement, BannerProps>(
 );
 
 Banner.displayName = "Banner";
+
+

@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
-import { queryKeys } from "@/lib/queryKeys";
-import { locationFetchers } from "@/lib/fetchers";
-import { CACHE_TIMES } from "@/lib/constants";
+import { queryKeys } from "@/lib/api/queryKeys";
+import { locationFetchers } from "@/lib/api";
+import { CACHE_TIMES } from "@/lib/core/constants";
 
 /**
  * Hook to fetch all locations
@@ -31,3 +31,4 @@ export function useLocationsByRegion(region: string) {
     enabled: !!region,
   });
 }
+

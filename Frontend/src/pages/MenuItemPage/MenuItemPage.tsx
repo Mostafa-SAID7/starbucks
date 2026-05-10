@@ -1,7 +1,7 @@
 import { useParams, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/ui";
 import {
   SEO,
   AllergyInfo,
@@ -178,4 +178,6 @@ export const MenuItemPage = () => {
 };
 
 export default MenuItemPage;
+
+
 

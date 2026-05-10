@@ -1,9 +1,18 @@
+import type { 
+  Location, 
+  MenuItem,
+  GenericPageData
+} from '@/lib/schemas';
+
 export interface SchemaConfig {
   '@context': string;
   '@type': string;
   [key: string]: any;
 }
 
+/**
+ * Standard Organization Schema
+ */
 export function generateOrganizationSchema(): SchemaConfig {
   return {
     '@context': 'https://schema.org',
@@ -26,33 +35,9 @@ export function generateOrganizationSchema(): SchemaConfig {
   };
 }
 
-export function generateRestaurantSchema(): SchemaConfig {
-  return {
-    '@context': 'https://schema.org',
-    '@type': 'Restaurant',
-    name: 'Starbucks Egypt',
-    image: 'https://starbucks.eg/restaurant.jpg',
-    description: 'Premium coffee and drinks',
-    url: 'https://starbucks.eg',
-    telephone: '+20-100-123-4567',
-    priceRange: '$$',
-    servesCuisine: ['Coffee', 'Tea', 'Desserts'],
-    address: {
-      '@type': 'PostalAddress',
-      streetAddress: 'Multiple Locations',
-      addressLocality: 'Cairo',
-      addressRegion: 'Cairo Governorate',
-      postalCode: '11511',
-      addressCountry: 'EG',
-    },
-    aggregateRating: {
-      '@type': 'AggregateRating',
-      ratingValue: '4.5',
-      reviewCount: '1000',
-    },
-  };
-}
-
+/**
+ * Breadcrumb Schema from page items
+ */
 export function generateBreadcrumbSchema(items: Array<{ name: string; url: string }>): SchemaConfig {
   return {
     '@context': 'https://schema.org',
@@ -66,95 +51,50 @@ export function generateBreadcrumbSchema(items: Array<{ name: string; url: strin
   };
 }
 
-export function generateProductSchema(product: {
-  name: string;
-  description: string;
-  image: string;
-  price: number;
-  currency: string;
-  rating?: number;
-  reviewCount?: number;
-}): SchemaConfig {
+/**
+ * Product Schema using MenuItem domain object
+ */
+export function generateProductSchema(product: MenuItem & { price?: number; currency?: string }): SchemaConfig {
   return {
     '@context': 'https://schema.org',
     '@type': 'Product',
-    name: product.name,
-    description: product.description,
+    name: product.id, // Fallback to ID if name is missing in raw item
     image: product.image,
     offers: {
       '@type': 'Offer',
-      price: product.price,
-      priceCurrency: product.currency,
+      price: product.price || 0,
+      priceCurrency: product.currency || 'EGP',
       availability: 'https://schema.org/InStock',
     },
-    ...(product.rating && {
-      aggregateRating: {
-        '@type': 'AggregateRating',
-        ratingValue: product.rating,
-        reviewCount: product.reviewCount || 0,
-      },
-    }),
   };
 }
 
-export function generateLocalBusinessSchema(location: {
-  name: string;
-  address: string;
-  latitude: number;
-  longitude: number;
-  phone: string;
-  hours?: string;
-}): SchemaConfig {
+/**
+ * LocalBusiness Schema using Location domain object
+ */
+export function generateLocalBusinessSchema(location: Location): SchemaConfig {
   return {
     '@context': 'https://schema.org',
     '@type': 'LocalBusiness',
-    name: location.name,
+    name: `Starbucks ${location.name}`,
     address: {
       '@type': 'PostalAddress',
-      streetAddress: location.address,
-      addressLocality: 'Cairo',
+      streetAddress: location.address || location.city || 'Egypt',
+      addressLocality: location.city || 'Cairo',
       addressCountry: 'EG',
     },
-    geo: {
+    geo: location.coordinates ? {
       '@type': 'GeoCoordinates',
-      latitude: location.latitude,
-      longitude: location.longitude,
-    },
+      latitude: location.coordinates.lat,
+      longitude: location.coordinates.lng,
+    } : undefined,
     telephone: location.phone,
-    ...(location.hours && {
-      openingHoursSpecification: {
-        '@type': 'OpeningHoursSpecification',
-        dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
-        opens: location.hours.split('-')[0],
-        closes: location.hours.split('-')[1],
-      },
-    }),
   };
 }
 
-export function generateArticleSchema(article: {
-  headline: string;
-  description: string;
-  image: string;
-  datePublished: string;
-  dateModified?: string;
-  author: string;
-}): SchemaConfig {
-  return {
-    '@context': 'https://schema.org',
-    '@type': 'Article',
-    headline: article.headline,
-    description: article.description,
-    image: article.image,
-    datePublished: article.datePublished,
-    dateModified: article.dateModified || article.datePublished,
-    author: {
-      '@type': 'Person',
-      name: article.author,
-    },
-  };
-}
-
+/**
+ * FAQ Schema for pages with accordion/FAQ content
+ */
 export function generateFAQSchema(faqs: Array<{ question: string; answer: string }>): SchemaConfig {
   return {
     '@context': 'https://schema.org',

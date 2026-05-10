@@ -4,9 +4,8 @@
  * Eliminates 200+ lines of duplicate code
  */
 
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { usePagination } from '@/hooks/common/usePagination';
 import { PagedResult } from '@/types/common/pagination';
 
 export interface UseAdminCRUDOptions {
@@ -14,29 +13,38 @@ export interface UseAdminCRUDOptions {
   refetchInterval?: number;
 }
 
+export interface PaginationInfo {
+  pageNumber: number;
+  pageSize: number;
+  totalCount: number;
+  totalPages: number;
+  hasNextPage: boolean;
+  hasPreviousPage: boolean;
+}
+
 export interface UseAdminCRUDReturn<T, CreateDto, UpdateDto> {
   // Data
   items: T[];
   selectedItem: T | null;
-  
+
   // Pagination
-  pagination: any;
+  pagination: PaginationInfo;
   goToPage: (pageNumber: number) => void;
   setPageSize: (pageSize: number) => void;
-  
+
   // Loading & Error States
   isLoading: boolean;
   isLoadingDetails: boolean;
   error: string | null;
-  
+
   // Mutations
   createMutation: any;
   updateMutation: any;
   deleteMutation: any;
-  
+
   // Actions
   selectItem: (item: T | null) => void;
-  loadItems: (pageNumber?: number, pageSize?: number) => Promise<void>;
+  loadItems: (pageNumber?: number, pageSize?: number) => void;
   loadItemDetails: (id: string) => Promise<void>;
   createItem: (data: CreateDto) => Promise<void>;
   updateItem: (id: string, data: UpdateDto) => Promise<void>;
@@ -64,28 +72,43 @@ export function useAdminCRUD<T extends { id: string }, CreateDto, UpdateDto>(
   options: UseAdminCRUDOptions = {}
 ): UseAdminCRUDReturn<T, CreateDto, UpdateDto> {
   const { pageSize: initialPageSize = 20, refetchInterval } = options;
-  
+
   const queryClient = useQueryClient();
-  const pagination = usePagination(initialPageSize);
-  
+
+  // Own pagination state — no external hook needed since React Query handles fetching
+  const [pageNumber, setPageNumber] = useState(1);
+  const [pageSize, setPageSizeState] = useState(initialPageSize);
+  const [totalCount, setTotalCount] = useState(0);
+
+  // Derived pagination info
+  const totalPages = Math.max(1, Math.ceil(totalCount / pageSize));
+  const pagination: PaginationInfo = {
+    pageNumber,
+    pageSize,
+    totalCount,
+    totalPages,
+    hasNextPage: pageNumber < totalPages,
+    hasPreviousPage: pageNumber > 1,
+  };
+
   // State
   const [items, setItems] = useState<T[]>([]);
   const [selectedItem, setSelectedItem] = useState<T | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isLoadingDetails, setIsLoadingDetails] = useState(false);
 
-  // Queries
+  // React Query drives fetching — pagination state is just numbers
   const { data: listData, isLoading } = useQuery({
-    queryKey: ['admin-items', pagination.pageNumber, pagination.pageSize],
-    queryFn: () => fetchList(pagination.pageNumber, pagination.pageSize),
+    queryKey: ['admin-items', pageNumber, pageSize],
+    queryFn: () => fetchList(pageNumber, pageSize),
     refetchInterval,
   });
 
   // Update items when list data changes
-  useMemo(() => {
+  useEffect(() => {
     if (listData) {
       setItems(listData.items);
-      pagination.setTotalCount(listData.totalCount);
+      setTotalCount(listData.totalCount);
     }
   }, [listData]);
 
@@ -96,8 +119,8 @@ export function useAdminCRUD<T extends { id: string }, CreateDto, UpdateDto>(
       queryClient.invalidateQueries({ queryKey: ['admin-items'] });
       setError(null);
     },
-    onError: (err: any) => {
-      setError(err.message || 'Failed to create item');
+    onError: (err: unknown) => {
+      setError(err instanceof Error ? err.message : 'Failed to create item');
     },
   });
 
@@ -109,8 +132,8 @@ export function useAdminCRUD<T extends { id: string }, CreateDto, UpdateDto>(
       setSelectedItem(null);
       setError(null);
     },
-    onError: (err: any) => {
-      setError(err.message || 'Failed to update item');
+    onError: (err: unknown) => {
+      setError(err instanceof Error ? err.message : 'Failed to update item');
     },
   });
 
@@ -121,8 +144,8 @@ export function useAdminCRUD<T extends { id: string }, CreateDto, UpdateDto>(
       setSelectedItem(null);
       setError(null);
     },
-    onError: (err: any) => {
-      setError(err.message || 'Failed to delete item');
+    onError: (err: unknown) => {
+      setError(err instanceof Error ? err.message : 'Failed to delete item');
     },
   });
 
@@ -131,17 +154,27 @@ export function useAdminCRUD<T extends { id: string }, CreateDto, UpdateDto>(
     setSelectedItem(item);
   }, []);
 
-  const loadItems = useCallback(
-    async (pageNumber: number = 1, pageSize: number = initialPageSize) => {
-      try {
-        pagination.goToPage(pageNumber);
-        pagination.setPageSize(pageSize);
-        setError(null);
-      } catch (err: any) {
-        setError(err.message || 'Failed to load items');
+  const goToPage = useCallback(
+    (newPage: number) => {
+      if (newPage >= 1 && newPage <= totalPages) {
+        setPageNumber(newPage);
       }
     },
-    [pagination, initialPageSize]
+    [totalPages]
+  );
+
+  const setPageSize = useCallback((newSize: number) => {
+    setPageSizeState(newSize);
+    setPageNumber(1); // Reset to first page on size change
+  }, []);
+
+  const loadItems = useCallback(
+    (pg: number = 1, ps: number = initialPageSize) => {
+      setPageNumber(pg);
+      setPageSizeState(ps);
+      setError(null);
+    },
+    [initialPageSize]
   );
 
   const loadItemDetails = useCallback(
@@ -151,8 +184,8 @@ export function useAdminCRUD<T extends { id: string }, CreateDto, UpdateDto>(
         const details = await fetchDetails(id);
         setSelectedItem(details);
         setError(null);
-      } catch (err: any) {
-        setError(err.message || 'Failed to load item details');
+      } catch (err: unknown) {
+        setError(err instanceof Error ? err.message : 'Failed to load item details');
       } finally {
         setIsLoadingDetails(false);
       }
@@ -164,8 +197,8 @@ export function useAdminCRUD<T extends { id: string }, CreateDto, UpdateDto>(
     async (data: CreateDto) => {
       try {
         await createMutation.mutateAsync(data);
-      } catch (err: any) {
-        setError(err.message || 'Failed to create item');
+      } catch (err: unknown) {
+        setError(err instanceof Error ? err.message : 'Failed to create item');
         throw err;
       }
     },
@@ -176,8 +209,8 @@ export function useAdminCRUD<T extends { id: string }, CreateDto, UpdateDto>(
     async (id: string, data: UpdateDto) => {
       try {
         await updateMutation.mutateAsync({ id, data });
-      } catch (err: any) {
-        setError(err.message || 'Failed to update item');
+      } catch (err: unknown) {
+        setError(err instanceof Error ? err.message : 'Failed to update item');
         throw err;
       }
     },
@@ -188,8 +221,8 @@ export function useAdminCRUD<T extends { id: string }, CreateDto, UpdateDto>(
     async (id: string) => {
       try {
         await deleteMutation.mutateAsync(id);
-      } catch (err: any) {
-        setError(err.message || 'Failed to delete item');
+      } catch (err: unknown) {
+        setError(err instanceof Error ? err.message : 'Failed to delete item');
         throw err;
       }
     },
@@ -200,8 +233,8 @@ export function useAdminCRUD<T extends { id: string }, CreateDto, UpdateDto>(
     items,
     selectedItem,
     pagination,
-    goToPage: pagination.goToPage,
-    setPageSize: pagination.setPageSize,
+    goToPage,
+    setPageSize,
     isLoading,
     isLoadingDetails,
     error,

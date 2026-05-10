@@ -84,7 +84,7 @@ function ErrorFallback({ error, onReset }: ErrorFallbackProps) {
           {t('errors.boundary.message', 'We apologize for the inconvenience. Our team has been notified.')}
         </p>
 
-        {process.env.NODE_ENV === 'development' && error && (
+        {import.meta.env.DEV && error && (
           <div className="bg-gray-100 rounded p-4 mb-6 max-h-40 overflow-auto">
             <p className="text-xs font-mono text-gray-700 break-words">
               {error.toString()}

@@ -1,6 +1,6 @@
 import * as React from "react"
-import { cn } from "@/lib/utils"
-import { ANIMATION_CONFIG } from "@/lib/constants"
+import { cn } from "@/lib/ui"
+import { ANIMATION_CONFIG } from "@/lib/core/constants"
 import { X } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import { DialogProps } from "@/types/components";
@@ -112,3 +112,5 @@ const DialogDescription = React.forwardRef<
 DialogDescription.displayName = "DialogDescription"
 
 export { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription }
+
+

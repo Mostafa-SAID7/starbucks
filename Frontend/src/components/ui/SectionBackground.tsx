@@ -1,5 +1,5 @@
 import React from "react";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/ui";
 import { SectionBackgroundProps } from "@/types/components";
 
 export const SectionBackground: React.FC<SectionBackgroundProps> = ({ 
@@ -50,3 +50,5 @@ export const SectionBackground: React.FC<SectionBackgroundProps> = ({
     </div>
   );
 };
+
+

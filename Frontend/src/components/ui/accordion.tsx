@@ -1,7 +1,7 @@
 import * as React from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { cn } from "@/lib/utils"
-import { ANIMATION_CONFIG } from "@/lib/constants"
+import { cn } from "@/lib/ui"
+import { ANIMATION_CONFIG } from "@/lib/core/constants"
 
 export interface AccordionItem {
   title: string
@@ -145,3 +145,4 @@ export const Accordion = React.forwardRef<HTMLDivElement, AccordionProps>(
 )
 
 Accordion.displayName = "Accordion"
+

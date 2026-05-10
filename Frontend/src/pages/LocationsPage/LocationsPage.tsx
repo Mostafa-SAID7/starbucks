@@ -2,7 +2,7 @@ import React, { useState, useCallback, useMemo, memo } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Search, Navigation } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/ui";
 import { SEO, QueryErrorBoundary } from "@/components";
 import { useLocations, useLanguage } from "@/hooks";
 import { TALABAT_URL } from "./constants";
@@ -292,3 +292,5 @@ export const LocationsPage: React.FC = () => {
 };
 
 export default LocationsPage;
+
+

@@ -1,5 +1,5 @@
 import React, { memo, CSSProperties } from 'react';
-import { cn } from '@/lib/utils';
+import {} from '@/lib/ui';
 
 interface VirtualizedListProps<T> {
   items: T[];
@@ -207,3 +207,5 @@ const VirtualizedGridComponent = React.forwardRef<
 VirtualizedGridComponent.displayName = 'VirtualizedGrid';
 
 export const VirtualizedGrid = memo(VirtualizedGridComponent) as typeof VirtualizedGridComponent;
+
+

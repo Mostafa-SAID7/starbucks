@@ -1,8 +1,8 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { authService } from '@/services/api/authService';
-import { logError } from '@/lib/errorUtils';
-import { errorMonitor } from '@/lib/errorMonitoring';
+import { logError } from '@/lib/error';
+import { errorMonitor } from '@/lib/error/errorMonitoring';
 import { AuthStore } from '@/types/auth';
 
 export const useAuthStore = create<AuthStore>()(
@@ -142,7 +142,7 @@ export const useAuthStore = create<AuthStore>()(
  * Hook for authentication functionality
  */
 export const useAuth = () => {
-  const store = useAuthStore();
+  const store = useAuthStore((s) => s);
   
   return {
     // State

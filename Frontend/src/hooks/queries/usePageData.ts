@@ -1,8 +1,8 @@
 import { useQuery, type UseQueryResult } from "@tanstack/react-query";
-import { queryKeys } from "@/lib/queryKeys";
-import { pageFetchers } from "@/lib/fetchers";
+import { queryKeys } from "@/lib/api/queryKeys";
+import { pageFetchers } from "@/lib/api";
 import type { GenericPageData } from "@/types";
-import { CACHE_TIMES } from "@/lib/constants";
+import { CACHE_TIMES } from "@/lib/core/constants";
 
 /**
  * Hook to fetch generic page data by slug
@@ -37,3 +37,4 @@ export function usePageData(
     enabled: !!slug,
   });
 }
+

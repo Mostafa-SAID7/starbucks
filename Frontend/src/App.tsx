@@ -12,9 +12,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import * as Sentry from "@sentry/react";
-import { queryClient } from "@/lib/queryClient";
-import { initializeErrorMonitoring } from "@/lib/errorMonitoring";
-import { ANIMATION_CONFIG } from "@/lib/constants";
+import { queryClient } from "@/lib/api/queryClient";
+import { initializeErrorMonitoring } from "@/lib/error/errorMonitoring";
+import { ANIMATION_CONFIG } from "@/lib/core/constants";
 
 // Layout & Components
 import { MainLayout, SkipNav, ErrorBoundary } from "@/components";
@@ -182,3 +182,4 @@ function App() {
 }
 
 export default App;
+

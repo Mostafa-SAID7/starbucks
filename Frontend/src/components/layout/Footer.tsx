@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { Globe, ChevronDown } from "lucide-react";
 import { useNavigation, useLanguage } from "@/hooks";
 import { motion, AnimatePresence } from "framer-motion";
-import { ANIMATION_CONFIG } from "@/lib/constants";
+import { ANIMATION_CONFIG } from "@/lib/core/constants";
 
 import { FooterLink, FooterSection, Country, Social } from "@/types";
 
@@ -412,3 +412,4 @@ export function Footer() {
     </footer>
   );
 }
+

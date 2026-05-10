@@ -5,7 +5,7 @@ import { ShoppingCart, X, Plus, Minus, Trash2 } from 'lucide-react';
 import { useCartStore } from '@/stores/cartStore';
 import { useLanguage } from '@/hooks';
 import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
+import {} from '@/lib/ui';
 
 interface CartDrawerProps {
   isOpen?: boolean;
@@ -266,3 +266,5 @@ export function CartDrawer({ isOpen: controlledIsOpen, onClose: controlledOnClos
     </>
   );
 }
+
+

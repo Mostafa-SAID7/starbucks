@@ -4,11 +4,11 @@ import { useTranslation } from "react-i18next";
 import { useTheme } from "@/hooks";
 import { useNavigation } from "@/hooks/queries";
 import { motion, AnimatePresence } from "framer-motion";
-import { ANIMATION_CONFIG } from "@/lib/constants";
+import { ANIMATION_CONFIG } from "@/lib/core/constants";
 import { Menu as MenuIcon, X } from "lucide-react";
 import { Button } from "@/components/ui";
 import { lazy, Suspense } from "react";
-import { useLanguage, usePrefetchPage, usePrevious } from "@/hooks";
+import { useLanguage, usePrefetch, usePrevious } from "@/hooks";
 import { NavbarHeader } from "./Navbar/NavbarHeader";
 import { NavbarDesktopMenu } from "./Navbar/NavbarDesktopMenu";
 import { NavbarUtilities } from "./Navbar/NavbarUtilities";
@@ -33,7 +33,7 @@ export function Navbar() {
   const location = useLocation();
   const { lang, isRTL } = useLanguage();
   const { data } = useNavigation();
-  const prefetchPage = usePrefetchPage();
+  const { prefetchPage } = usePrefetch();
 
   // State management
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -200,3 +200,4 @@ export function Navbar() {
     </>
   );
 }
+

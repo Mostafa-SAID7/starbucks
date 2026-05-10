@@ -1,7 +1,7 @@
 import { NavLink, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
-import { ANIMATION_CONFIG } from "@/lib/constants";
+import { ANIMATION_CONFIG } from "@/lib/core/constants";
 import { NavItem } from "@/types";
 import { Language } from "@/hooks";
 
@@ -65,3 +65,4 @@ export function NavbarDesktopMenu({
     </div>
   );
 }
+

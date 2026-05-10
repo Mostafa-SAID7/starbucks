@@ -1,5 +1,5 @@
-import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
+
 import { SEO } from "@/components";
 import { StaticPageSkeleton } from "@/components/skeletons";
 import { SectionRenderer } from "@/components/sections/generic/SectionRenderer";

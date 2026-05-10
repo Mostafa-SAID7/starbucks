@@ -5,4 +5,4 @@ export {
   SuccessAnnouncement,
 } from "./LiveRegion";
 
-export { useAnnounce } from "@/hooks/useAnnounce";
+export { useAnnounce } from "@/hooks/accessibility/useAnnounce";

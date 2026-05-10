@@ -1,5 +1,5 @@
 import * as React from "react"
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/ui"
 
 export interface HeaderProps {
   title: string
@@ -42,3 +42,4 @@ export const Header = React.forwardRef<HTMLDivElement, HeaderProps>(
 )
 
 Header.displayName = "Header"
+

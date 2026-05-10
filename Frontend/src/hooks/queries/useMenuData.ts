@@ -1,8 +1,8 @@
 import { useQuery, type UseQueryResult } from "@tanstack/react-query";
-import { queryKeys } from "@/lib/queryKeys";
-import { menuFetchers } from "@/lib/fetchers";
+import { queryKeys } from "@/lib/api/queryKeys";
+import { menuFetchers } from "@/lib/api";
 import type { MenuData } from "@/types";
-import { CACHE_TIMES } from "@/lib/constants";
+import { CACHE_TIMES } from "@/lib/core/constants";
 
 /**
  * Hook to fetch all menu data (structural)
@@ -64,3 +64,4 @@ export function useMenuItem(categoryId: string, itemId: string) {
     enabled: !!categoryId && !!itemId,
   });
 }
+

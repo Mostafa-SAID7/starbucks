@@ -7,7 +7,7 @@ import {
   getContextualErrorMessage,
   logError,
   createFetchError,
-} from '../errorUtils';
+} from '@/lib/error';
 
 // Mock fetch for logError tests
 global.fetch = vi.fn();

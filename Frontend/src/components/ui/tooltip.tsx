@@ -1,6 +1,6 @@
 import * as React from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/ui";
 
 export interface TooltipProps {
   content: string;
@@ -102,3 +102,5 @@ export const Tooltip = React.forwardRef<HTMLDivElement, TooltipProps>(
 );
 
 Tooltip.displayName = "Tooltip";
+
+

@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
-import { queryKeys } from "@/lib/queryKeys";
-import { featuredFetchers } from "@/lib/fetchers";
-import { CACHE_TIMES } from "@/lib/constants";
+import { queryKeys } from "@/lib/api/queryKeys";
+import { featuredFetchers } from "@/lib/api";
+import { CACHE_TIMES } from "@/lib/core/constants";
 
 /**
  * Hook to fetch featured cards
@@ -42,3 +42,4 @@ export function useStatement() {
     gcTime: CACHE_TIMES.FEATURED_GC,
   });
 }
+

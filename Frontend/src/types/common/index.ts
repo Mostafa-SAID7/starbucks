@@ -1,9 +1,19 @@
 /**
  * Shared Global Types
+ * Re-exported from centralized Zod schemas for consistency
  */
 
+import { 
+  Language as LanguageType,
+  Theme as ThemeType,
+  Status as StatusType,
+  LocalizedText as LocalizedTextType,
+  User as UserType,
+  UserRoleSchema
+} from '@/lib/schemas';
+
 /** Language identifiers */
-export type Language = "ar" | "en";
+export type Language = LanguageType;
 
 /** User Role Types */
 export enum UserRole {
@@ -13,26 +23,10 @@ export enum UserRole {
 }
 
 /** User Types */
-export interface User {
-  id: string;
-  email: string;
-  firstName: string;
-  lastName: string;
-  role: UserRole | string;
-  phone?: string;
-  dateOfBirth?: string;
-  loyaltyPoints?: number;
-  preferences?: {
-    language: Language;
-    notifications: boolean;
-    theme: Theme;
-  };
-  createdAt?: string;
-  updatedAt?: string;
-}
+export type User = UserType;
 
 /** UI Theme modes */
-export type Theme = "light" | "dark";
+export type Theme = ThemeType;
 
 export interface ThemeContextType {
   theme: Theme;
@@ -40,7 +34,7 @@ export interface ThemeContextType {
 }
 
 /** The universal bilingual string used throughout all pages */
-export type LocalizedText = { ar: string; en: string };
+export type LocalizedText = LocalizedTextType;
 
 /** I18n Types */
 export type LocalizedValue = string | string[] | Record<string, unknown>;
@@ -53,9 +47,9 @@ export interface TranslationData {
 }
 
 /** Generic status types */
-export type Status = "idle" | "loading" | "success" | "error";
+export type Status = StatusType;
 
-/** Performance monitoring types */
+/** Performance monitoring types (UI only) */
 export interface PerformanceMetric {
   name: string;
   value: number;

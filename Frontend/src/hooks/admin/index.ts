@@ -10,7 +10,6 @@ export { useAdminModeration } from './useAdminModeration';
 export { useAdminMonitoring } from './useAdminMonitoring';
 
 export type { UseAdminUsersReturn } from './useAdminUsers';
-export type { UseAdminAnalyticsReturn } from './useAdminAnalytics';
-export type { UseAdminCategoriesReturn } from './useAdminCategories';
+// Return types are inferred from the hooks; no separate type exports needed
 export type { UseAdminModerationReturn } from './useAdminModeration';
 export type { UseAdminMonitoringReturn } from './useAdminMonitoring';

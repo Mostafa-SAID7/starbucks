@@ -5,7 +5,7 @@ import { Mail, Phone, Send, CheckCircle } from "lucide-react";
 import { SEO, Button, Input, Select, Textarea, QueryErrorBoundary } from "@/components";
 import { useContactInfo, useLanguage } from "@/hooks";
 import { ContactUsData as ContactData } from "@/types/pages";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/ui";
 
 const ContactUsPageContent: React.FC<{ data: ContactData }> = ({ data }) => {
   const { t } = useTranslation(["pages", "common"]);
@@ -276,3 +276,5 @@ export const ContactUsPage: React.FC = () => {
 };
 
 export default ContactUsPage;
+
+

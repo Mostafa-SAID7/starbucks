@@ -1,7 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/ui";
 
 interface FeaturedCardProps {
   id: string;
@@ -116,3 +116,5 @@ export const FeaturedCard: React.FC<FeaturedCardProps> = ({
     </motion.div>
   );
 };
+
+

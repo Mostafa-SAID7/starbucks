@@ -3,8 +3,8 @@ import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
 import { MapPin, Search, Moon, Sun, User } from "lucide-react";
 import { Button, Tooltip } from "@/components/ui";
-import { Language, useLanguageToggle } from "@/hooks";
-import { ANIMATION_CONFIG } from "@/lib/constants";
+import { Language, useLanguage } from "@/hooks";
+import { ANIMATION_CONFIG } from "@/lib/core/constants";
 import { Theme } from "@/types";
 
 interface NavbarUtilitiesProps {
@@ -28,7 +28,7 @@ export function NavbarUtilities({
   onAuthOpen,
 }: NavbarUtilitiesProps) {
   const { t } = useTranslation();
-  const toggleLanguage = useLanguageToggle();
+  const { toggleLanguage } = useLanguage();
 
   return (
     <div className="flex items-center gap-1 sm:gap-2 lg:gap-3">
@@ -134,3 +134,4 @@ export function NavbarUtilities({
     </div>
   );
 }
+

@@ -3,7 +3,7 @@
  */
 
 import { AxiosInstance, AxiosRequestConfig, AxiosError, InternalAxiosRequestConfig } from 'axios';
-import { logError } from '@/lib/errorUtils';
+import { logError } from '@/lib/error';
 import { ServiceError } from '@/types/services';
 
 // Extend Axios types to include custom metadata

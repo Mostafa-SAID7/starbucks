@@ -5,7 +5,7 @@ import { useMenuData, useMenuCategory, useMenuItem } from '../useMenuData';
 import { createTestQueryClient, mockMenuData } from '@/test/utils/test-utils';
 
 // Mock the fetchers
-vi.mock('@/lib/fetchers', () => ({
+vi.mock('@/lib/api', () => ({
   menuFetchers: {
     fetchMenuData: vi.fn(),
     fetchMenuCategory: vi.fn(),
@@ -13,7 +13,7 @@ vi.mock('@/lib/fetchers', () => ({
   },
 }));
 
-import { menuFetchers } from '@/lib/fetchers';
+import { menuFetchers } from '@/lib/api';
 
 describe('useMenuData', () => {
   let queryClient: QueryClient;

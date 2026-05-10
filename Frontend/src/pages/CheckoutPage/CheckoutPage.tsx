@@ -2,13 +2,13 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, MapPin, Phone, Clock } from 'lucide-react';
+import { ArrowLeft, MapPin, Clock } from 'lucide-react';
 import { useCartStore } from '@/stores/cartStore';
-import { useOptimisticOrder } from '@/hooks/useOptimisticOrder';
+import { useOptimisticOrder } from '@/hooks/business/useOptimisticOrder';
 import { useLanguage } from '@/hooks';
 import { Button } from '@/components/ui/button';
 import { SEO } from '@/components';
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/ui';
 
 interface DeliveryForm {
   address: string;
@@ -25,11 +25,11 @@ export function CheckoutPage() {
 
   const { items, total, discount } = useCartStore();
   const { createOrder, isLoading, optimisticOrder } = useOptimisticOrder({
-    onSuccess: (order) => {
+    onSuccess: (order: { id: string }) => {
       // Navigate to order confirmation
       navigate(`/order/${order.id}`);
     },
-    onError: (error) => {
+    onError: (error: Error) => {
       console.error('Order creation failed:', error);
     },
   });
@@ -80,9 +80,15 @@ export function CheckoutPage() {
     if (!validateForm()) return;
 
     await createOrder({
-      items: items,
+      items: items.map(item => ({
+        id: item.id,
+        menuItemId: item.id,
+        name: item.name,
+        quantity: item.quantity,
+        price: item.price
+      })),
       total: total,
-      status: 'Pending',
+      status: 'pending',
       createdAt: new Date().toISOString(),
     });
   };
@@ -283,3 +289,4 @@ export function CheckoutPage() {
 }
 
 export default CheckoutPage;
+

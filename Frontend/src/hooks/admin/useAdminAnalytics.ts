@@ -6,7 +6,7 @@
 
 import { useState, useCallback } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { queryKeys } from '@/lib/queryKeys';
+import { queryKeys } from '@/lib/api/queryKeys';
 import {
   getDashboardStats,
   getSalesAnalytics,
@@ -151,71 +151,4 @@ export function useAdminAnalytics(options: UseAdminAnalyticsOptions = {}) {
   };
 }
 
-  useEffect(() => {
-    if (locationPerformanceData) {
-      setLocationPerformance(locationPerformanceData);
-    }
-  }, [locationPerformanceData]);
 
-  // Menu item popularity
-  const loadMenuItemPopularity = useCallback(async () => {
-    try {
-      const data = await getMenuItemPopularity();
-      setMenuItemPopularity(data);
-    } catch (error) {
-      console.error('Failed to load menu item popularity:', error);
-    }
-  }, []);
-
-  const {
-    data: menuItemPopularityData,
-    isLoading: isLoadingMenuItemPopularity,
-    error: menuItemPopularityError,
-  } = useQuery({
-    queryKey: queryKeys.admin.menuItemPopularity(),
-    queryFn: getMenuItemPopularity,
-    refetchInterval,
-  });
-
-  useEffect(() => {
-    if (menuItemPopularityData) {
-      setMenuItemPopularity(menuItemPopularityData);
-    }
-  }, [menuItemPopularityData]);
-
-  const setDateRange = useCallback((startDate: string, endDate: string) => {
-    setDateRangeState({ startDate, endDate });
-  }, []);
-
-  return {
-    dashboardStats: dashboardStats || null,
-    isLoadingDashboard,
-    dashboardError: dashboardError ? (dashboardError as Error).message : null,
-    salesAnalytics,
-    isLoadingSalesAnalytics,
-    salesAnalyticsError: salesAnalyticsError ? (salesAnalyticsError as Error).message : null,
-    loadSalesAnalytics,
-    userAnalytics,
-    isLoadingUserAnalytics,
-    userAnalyticsError: userAnalyticsError ? (userAnalyticsError as Error).message : null,
-    loadUserAnalytics,
-    orderAnalytics,
-    isLoadingOrderAnalytics,
-    orderAnalyticsError: orderAnalyticsError ? (orderAnalyticsError as Error).message : null,
-    loadOrderAnalytics,
-    locationPerformance,
-    isLoadingLocationPerformance,
-    locationPerformanceError: locationPerformanceError
-      ? (locationPerformanceError as Error).message
-      : null,
-    loadLocationPerformance,
-    menuItemPopularity,
-    isLoadingMenuItemPopularity,
-    menuItemPopularityError: menuItemPopularityError
-      ? (menuItemPopularityError as Error).message
-      : null,
-    loadMenuItemPopularity,
-    dateRange,
-    setDateRange,
-  };
-}

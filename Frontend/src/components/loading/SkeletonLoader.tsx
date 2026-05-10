@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import { cn } from '@/lib/utils';
+import {} from '@/lib/ui';
 
 interface SkeletonProps extends React.HTMLAttributes<HTMLDivElement> {
   variant?: 'text' | 'circular' | 'rectangular';
@@ -163,3 +163,5 @@ export const ListSkeleton: React.FC<ListSkeletonProps> = ({
     ))}
   </div>
 );
+
+

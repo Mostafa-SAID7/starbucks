@@ -5,8 +5,8 @@ import { useTranslation } from "react-i18next";
 import { ErrorBoundary as ReactErrorBoundary, FallbackProps } from "react-error-boundary";
 import { Button, SectionBackground } from "@/components/ui";
 import { LiveRegion } from "@/components/accessibility";
-import { logError, getErrorMessages } from "@/lib/errorUtils";
-import { cn } from "@/lib/utils";
+import { logError, getErrorMessages } from "@/lib/error";
+import { cn } from "@/lib/ui";
 import { useLanguage } from "@/hooks";
 
 interface ErrorFallbackProps extends FallbackProps {
@@ -162,3 +162,5 @@ export const ErrorBoundary: React.FC<ErrorBoundaryProps> = ({
 };
 
 export default ErrorBoundary;
+
+

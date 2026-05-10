@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/ui";
 import { WifiOff, Wifi } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "@/hooks";
-import { ANIMATION_CONFIG } from "@/lib/constants";
+import { ANIMATION_CONFIG } from "@/lib/core/constants";
 
 /**
  * Offline Indicator Component
@@ -101,3 +101,5 @@ export function OfflineIndicator() {
 }
 
 export default OfflineIndicator;
+
+

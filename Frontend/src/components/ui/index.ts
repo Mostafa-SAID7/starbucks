@@ -21,4 +21,4 @@ export * from "./vertical-card";
 export {
   useOnlineStatus,
   useStaleDataDetection,
-} from "../../hooks/useOnlineStatus";
+} from "../../hooks/common/useOnlineStatus";

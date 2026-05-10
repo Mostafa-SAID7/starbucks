@@ -1,5 +1,5 @@
 import React, { forwardRef } from "react";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/ui";
 import { Button } from "@/components/ui";
 import { VerticalCardAction as Action, VerticalCardProps } from "@/types/components";
 
@@ -69,3 +69,5 @@ export const VerticalCard = forwardRef<HTMLDivElement, VerticalCardProps>(
 );
 
 VerticalCard.displayName = "VerticalCard";
+
+

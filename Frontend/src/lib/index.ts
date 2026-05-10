@@ -1,10 +1,31 @@
-export * from "./constants";
-export * from "./utils";
-export * from "./errorUtils";
+/**
+ * Consolidated Library Index
+ * Re-exports utilities from categorized subdirectories
+ */
+
+// Core Utilities
+export * from "./core";
+
+// API & Query
+export * from "./api";
+
+// Error Handling
+export * from "./error";
+
+// Forms & Validation
+export * from "./forms";
+
+// Performance
 export * from "./performance";
-export * from "./queryClient";
-export * from "./queryKeys";
-export * from "./fetchers";
-export * from "./cacheInvalidation";
-export * from "./performanceMonitor";
-export * from "./bundleOptimization";
+
+// PWA
+export * from "./pwa";
+
+// UI
+export * from "./ui";
+
+// SEO
+export * from "./seo";
+
+// Schemas
+export * from "./schemas";

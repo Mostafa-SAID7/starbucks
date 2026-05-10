@@ -20,6 +20,7 @@ export interface UsePaginationReturn<T> {
   goToNextPage: () => void;
   goToPreviousPage: () => void;
   setPageSize: (pageSize: number) => void;
+  setTotalCount: (totalCount: number) => void;
   reset: () => void;
   setData: (data: PagedResult<T>) => void;
 }
@@ -118,6 +119,12 @@ export function usePagination<T>(
     goToNextPage,
     goToPreviousPage,
     setPageSize,
+    setTotalCount: (count: number) =>
+      setPagination((prev) => ({
+        ...prev,
+        totalCount: count,
+        totalPages: Math.max(1, Math.ceil(count / prev.pageSize)),
+      })),
     reset,
     setData,
   };

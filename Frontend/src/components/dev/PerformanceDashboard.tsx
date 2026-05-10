@@ -1,9 +1,9 @@
 import {
   performanceMonitor,
   checkPerformanceTargets,
-} from "@/lib/performanceMonitor";
-import { checkBundleTargets } from "@/lib/bundleOptimization";
-import { PERFORMANCE_CONFIG, BUNDLE_TARGETS } from "@/lib/constants";
+} from "@/lib/performance";
+import { checkBundleTargets } from "@/lib/performance/bundleOptimization";
+import { PERFORMANCE_CONFIG, BUNDLE_TARGETS } from "@/lib/core/constants";
 import { useEffect, useState } from "react";
 
 /**
@@ -230,3 +230,4 @@ export function PerformanceDashboard() {
 }
 
 export default PerformanceDashboard;
+

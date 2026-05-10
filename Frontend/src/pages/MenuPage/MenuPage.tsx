@@ -3,17 +3,17 @@ import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useQueryClient } from "@tanstack/react-query";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/ui";
 import { AllergyInfo, SEO, QueryErrorBoundary } from "@/components";
 import { MenuSkeleton } from "@/components/skeletons";
 import { useLanguage } from "@/hooks";
 import { useMenuData } from "@/hooks/queries";
-import { queryKeys } from "@/lib/queryKeys";
-import { menuFetchers } from "@/lib/fetchers";
-import { getTextAlignClass } from "@/lib/classUtils";
-import type { MenuCategory, SidebarAction } from "@/types";
+import { queryKeys } from "@/lib/api/queryKeys";
+import { menuFetchers } from "@/lib/api";
+import { getTextAlignClass } from "@/lib/ui";
+import type { MenuCategory, MenuData, SidebarAction } from "@/types";
 
-const MenuPageContent: React.FC<{ menuData: any }> = ({ menuData }) => {
+const MenuPageContent: React.FC<{ menuData: MenuData }> = ({ menuData }) => {
   const { lang, isRTL } = useLanguage();
   const { t } = useTranslation(["pages", "common"]);
   const textAlignClass = getTextAlignClass(isRTL);
@@ -173,7 +173,7 @@ export const MenuPage = () => {
           i18n.addResourceBundle(lang, "pages", { menu: translations.default }, true, true);
           setIsTranslationLoaded(true);
         }
-      } catch (err) {
+      } catch (_err) {
         if (isMounted) setIsTranslationLoaded(true);
       }
     };
@@ -195,3 +195,5 @@ export const MenuPage = () => {
 };
 
 export default MenuPage;
+
+

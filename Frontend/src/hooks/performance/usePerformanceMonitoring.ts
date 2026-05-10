@@ -201,9 +201,4 @@ export const monitorLongTasks = (threshold = 50) => {
   }
 };
 
-// Extend window interface for Sentry
-declare global {
-  interface Window {
-    __SENTRY__?: { captureMessage: (msg: string, opts: unknown) => void };
-  }
-}
+// Sentry is accessed via (window as any).__SENTRY__ — no declaration needed

@@ -1,5 +1,5 @@
 import * as React from "react"
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/ui"
 
 export interface SpinnerProps {
   size?: "sm" | "md" | "lg"
@@ -32,3 +32,4 @@ export const Spinner = React.forwardRef<HTMLDivElement, SpinnerProps>(
 )
 
 Spinner.displayName = "Spinner"
+

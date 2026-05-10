@@ -6,7 +6,14 @@ import { HomeSkeleton } from "@/components/skeletons";
 import { useLanguage } from "@/hooks";
 import { useHero } from "@/hooks/queries";
 
-const HomePageContent: React.FC<{ heroData: any }> = ({ heroData }) => {
+interface HeroData {
+  ctaLink: string;
+  imageUrl: string;
+  secondaryImageUrls?: { ar?: string; en?: string };
+  [key: string]: unknown;
+}
+
+const HomePageContent: React.FC<{ heroData: HeroData }> = ({ heroData }) => {
   const { lang } = useLanguage();
   const { t } = useTranslation(["common", "errors", "pages"]);
   const pageTitle = lang === "ar" ? "ستاربكس مصر" : "Starbucks Egypt";
@@ -59,7 +66,7 @@ export const HomePage = () => {
           i18n.addResourceBundle(lang, "pages", { home: translations.default }, true, true);
           setIsTranslationLoaded(true);
         }
-      } catch (err) {
+      } catch (_err) {
         if (isMounted) setIsTranslationLoaded(true);
       }
     };

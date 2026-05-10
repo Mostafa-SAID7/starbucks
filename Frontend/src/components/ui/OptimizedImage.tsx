@@ -1,5 +1,5 @@
 import React, { memo, useState, useCallback } from 'react';
-import { cn } from '@/lib/utils';
+import {} from '@/lib/ui';
 
 interface OptimizedImageProps {
   src: string;
@@ -113,3 +113,5 @@ const OptimizedImageComponent: React.FC<OptimizedImageProps> = ({
 };
 
 export const OptimizedImage = memo(OptimizedImageComponent);
+
+

@@ -1,8 +1,8 @@
 import * as React from "react"
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/ui"
 import { X } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
-import { ANIMATION_CONFIG } from "@/lib/constants"
+import { ANIMATION_CONFIG } from "@/lib/core/constants"
 import { SheetProps } from "@/types/components";
 
 const Sheet = ({ open, onOpenChange, children }: SheetProps) => {
@@ -160,3 +160,5 @@ const SheetTitle = React.forwardRef<
 SheetTitle.displayName = "SheetTitle"
 
 export { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle }
+
+
