@@ -28,46 +28,39 @@ public class ChangeUserRoleCommandHandler : IRequestHandler<ChangeUserRoleComman
 
     public async Task<Result<UserManagementDto>> Handle(ChangeUserRoleCommand request, CancellationToken cancellationToken)
     {
-        try
+        var user = await _context.Users
+            .FirstOrDefaultAsync(u => u.Id == request.UserId && !u.IsDeleted, cancellationToken);
+
+        if (user == null)
         {
-            var user = await _context.Users
-                .FirstOrDefaultAsync(u => u.Id == request.UserId && !u.IsDeleted, cancellationToken);
-
-            if (user == null)
-            {
-                return Result<UserManagementDto>.Failure("User not found.");
-            }
-
-            // Prevent changing SuperAdmin role
-            if (user.Role == UserRole.SuperAdmin && request.NewRole != UserRole.SuperAdmin)
-            {
-                return Result<UserManagementDto>.Failure("Cannot change SuperAdmin role.");
-            }
-
-            var oldRole = user.Role;
-            user.Role = request.NewRole;
-            user.UpdatedAt = _dateTime.UtcNow;
-
-            _context.Users.Update(user);
-            await _context.SaveChangesAsync(cancellationToken);
-
-            // Create audit log
-            await _auditService.LogActionAsync(
-                userId: Guid.Empty,
-                action: "CHANGE_ROLE",
-                entityType: "User",
-                entityId: user.Id,
-                oldValues: new { Role = oldRole },
-                newValues: new { Role = request.NewRole },
-                cancellationToken: cancellationToken
-            );
-
-            var userDto = user.Adapt<UserManagementDto>();
-            return Result<UserManagementDto>.Success(userDto);
+            return Result<UserManagementDto>.Failure("User not found.");
         }
-        catch (Exception ex)
+
+        // Prevent changing SuperAdmin role
+        if (user.Role == UserRole.SuperAdmin && request.NewRole != UserRole.SuperAdmin)
         {
-            return Result<UserManagementDto>.Failure($"Failed to change user role: {ex.Message}");
+            return Result<UserManagementDto>.Failure("Cannot change SuperAdmin role.");
         }
+
+        var oldRole = user.Role;
+        user.Role = request.NewRole;
+        user.UpdatedAt = _dateTime.UtcNow;
+
+        _context.Users.Update(user);
+        await _context.SaveChangesAsync(cancellationToken);
+
+        // Create audit log
+        await _auditService.LogActionAsync(
+            userId: Guid.Empty,
+            action: "CHANGE_ROLE",
+            entityType: "User",
+            entityId: user.Id,
+            oldValues: new { Role = oldRole },
+            newValues: new { Role = request.NewRole },
+            cancellationToken: cancellationToken
+        );
+
+        var userDto = user.Adapt<UserManagementDto>();
+        return Result<UserManagementDto>.Success(userDto);
     }
 }

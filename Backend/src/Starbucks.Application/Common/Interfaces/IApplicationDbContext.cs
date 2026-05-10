@@ -4,6 +4,10 @@ using Starbucks.Domain.Entities;
 
 namespace Starbucks.Application.Common.Interfaces;
 
+/// <summary>
+/// Abstraction for the application database context.
+/// Kept in Application layer since it's EF-specific and only used by Application/Infrastructure.
+/// </summary>
 public interface IApplicationDbContext
 {
     DbSet<User> Users { get; }

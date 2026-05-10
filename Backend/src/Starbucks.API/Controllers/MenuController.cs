@@ -53,8 +53,14 @@ public class MenuController : ControllerBase
     [Cache(CacheAttribute.Durations.Long)]
     public async Task<IActionResult> GetCategoryBySlug(string slug, [FromQuery] string? language = null)
     {
-        // TODO: Implement GetMenuCategoryBySlugQuery
-        return Ok();
+        var result = await _mediator.Send(new GetMenuCategoryBySlugQuery(slug, language));
+        
+        if (!result.IsSuccess)
+        {
+            return NotFound(new { errors = result.Errors });
+        }
+
+        return Ok(result.Data);
     }
 
     /// <summary>
@@ -68,8 +74,14 @@ public class MenuController : ControllerBase
     [Cache(CacheAttribute.Durations.Long)]
     public async Task<IActionResult> GetSubcategoryBySlug(string categorySlug, string subcategorySlug, [FromQuery] string? language = null)
     {
-        // TODO: Implement GetMenuSubcategoryBySlugQuery
-        return Ok();
+        var result = await _mediator.Send(new GetMenuSubcategoryBySlugQuery(categorySlug, subcategorySlug, language));
+        
+        if (!result.IsSuccess)
+        {
+            return NotFound(new { errors = result.Errors });
+        }
+
+        return Ok(result.Data);
     }
 
     /// <summary>
@@ -102,7 +114,18 @@ public class MenuController : ControllerBase
     [Cache(CacheAttribute.Durations.Short)] // Cache for 1 minute (search results change frequently)
     public async Task<IActionResult> SearchMenuItems([FromQuery] string query, [FromQuery] string? category = null, [FromQuery] string? language = null)
     {
-        // TODO: Implement SearchMenuItemsQuery
-        return Ok();
+        if (string.IsNullOrWhiteSpace(query))
+        {
+            return BadRequest(new { errors = new[] { "Search query is required." } });
+        }
+
+        var result = await _mediator.Send(new SearchMenuItemsQuery(query, category, language));
+        
+        if (!result.IsSuccess)
+        {
+            return BadRequest(new { errors = result.Errors });
+        }
+
+        return Ok(result.Data);
     }
 }

@@ -44,18 +44,22 @@ public class RefreshTokenCommandHandler : IRequestHandler<RefreshTokenCommand, R
             return Result<LoginResponse>.Failure("Refresh token has expired.");
         }
 
+        // Verify token was issued (security check)
+        if (!user.RefreshTokenIssuedAt.HasValue)
+        {
+            return Result<LoginResponse>.Failure("Invalid refresh token state.");
+        }
+
         // Attach user for update
         _context.Users.Attach(user);
 
-        // Generate new tokens
+        // Generate new access token
         var newAccessToken = _tokenService.GenerateAccessToken(user);
-        var newRefreshToken = _tokenService.GenerateRefreshToken();
 
-        // Update user with new refresh token (token rotation)
-        user.RefreshToken = newRefreshToken;
-        user.RefreshTokenExpiry = _dateTimeService.UtcNow.AddDays(7);
+        // Rotate refresh token (invalidates old token by incrementing version)
+        await _tokenService.RotateRefreshTokenAsync(user, cancellationToken);
+
         user.LastLoginAt = _dateTimeService.UtcNow;
-
         await _context.SaveChangesAsync(cancellationToken);
 
         var userDto = new UserDto
@@ -73,7 +77,7 @@ public class RefreshTokenCommandHandler : IRequestHandler<RefreshTokenCommand, R
         var response = new LoginResponse
         {
             AccessToken = newAccessToken,
-            RefreshToken = newRefreshToken,
+            RefreshToken = user.RefreshToken ?? string.Empty,
             ExpiresAt = _dateTimeService.UtcNow.AddHours(1),
             User = userDto
         };

@@ -25,39 +25,32 @@ public class DisableUserCommandHandler : IRequestHandler<DisableUserCommand, Res
 
     public async Task<Result<string>> Handle(DisableUserCommand request, CancellationToken cancellationToken)
     {
-        try
+        var user = await _context.Users
+            .FirstOrDefaultAsync(u => u.Id == request.UserId && !u.IsDeleted, cancellationToken);
+
+        if (user == null)
         {
-            var user = await _context.Users
-                .FirstOrDefaultAsync(u => u.Id == request.UserId && !u.IsDeleted, cancellationToken);
-
-            if (user == null)
-            {
-                return Result<string>.Failure("User not found.");
-            }
-
-            // Lock the account indefinitely
-            user.LockoutEnd = DateTime.MaxValue;
-            user.UpdatedAt = _dateTime.UtcNow;
-
-            _context.Users.Update(user);
-            await _context.SaveChangesAsync(cancellationToken);
-
-            // Create audit log
-            await _auditService.LogActionAsync(
-                userId: Guid.Empty,
-                action: "DISABLE",
-                entityType: "User",
-                entityId: user.Id,
-                oldValues: null,
-                newValues: new { user.LockoutEnd },
-                cancellationToken: cancellationToken
-            );
-
-            return Result<string>.Success("User account disabled successfully.");
+            return Result<string>.Failure("User not found.");
         }
-        catch (Exception ex)
-        {
-            return Result<string>.Failure($"Failed to disable user: {ex.Message}");
-        }
+
+        // Lock the account indefinitely
+        user.LockoutEnd = DateTime.MaxValue;
+        user.UpdatedAt = _dateTime.UtcNow;
+
+        _context.Users.Update(user);
+        await _context.SaveChangesAsync(cancellationToken);
+
+        // Create audit log
+        await _auditService.LogActionAsync(
+            userId: Guid.Empty,
+            action: "DISABLE",
+            entityType: "User",
+            entityId: user.Id,
+            oldValues: null,
+            newValues: new { user.LockoutEnd },
+            cancellationToken: cancellationToken
+        );
+
+        return Result<string>.Success("User account disabled successfully.");
     }
 }

@@ -1,7 +1,10 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Starbucks.Application.Common.Abstractions;
+using Starbucks.Application.Common.Extensions;
 using Starbucks.Application.Common.Interfaces;
 using Starbucks.Application.Common.Models;
+using Starbucks.Application.Common.Utilities;
 using Starbucks.Application.DTOs.Menu;
 using Mapster;
 
@@ -10,53 +13,39 @@ namespace Starbucks.Application.Features.Menu.Queries;
 public record GetMenuCategoriesQuery(string? Language = null, int PageNumber = 1, int PageSize = 20) 
     : IRequest<Result<PagedResult<MenuCategoryDto>>>;
 
-public class GetMenuCategoriesQueryHandler : IRequestHandler<GetMenuCategoriesQuery, Result<PagedResult<MenuCategoryDto>>>
+public class GetMenuCategoriesQueryHandler : CachedPagedQueryHandler<GetMenuCategoriesQuery, MenuCategoryDto>
 {
     private readonly IApplicationDbContext _context;
-    private readonly ICacheService _cacheService;
 
     public GetMenuCategoriesQueryHandler(IApplicationDbContext context, ICacheService cacheService)
+        : base(cacheService)
     {
         _context = context;
-        _cacheService = cacheService;
     }
 
-    public async Task<Result<PagedResult<MenuCategoryDto>>> Handle(GetMenuCategoriesQuery request, CancellationToken cancellationToken)
-    {
-        var cacheKey = $"menu_categories_{request.Language ?? "all"}_page{request.PageNumber}_size{request.PageSize}";
-        
-        var cachedResult = await _cacheService.GetAsync<PagedResult<MenuCategoryDto>>(cacheKey, cancellationToken);
-        if (cachedResult != null)
-        {
-            return Result<PagedResult<MenuCategoryDto>>.Success(cachedResult);
-        }
+    protected override string GenerateCacheKey(GetMenuCategoriesQuery request)
+        => CacheKeyGenerator.MenuCategories(request.Language, request.PageNumber, request.PageSize);
 
-        // Single query with pagination - avoid duplicate query for count
+    protected override TimeSpan GetCacheDuration() => TimeSpan.FromHours(1);
+
+    protected override async Task<Result<PagedResult<MenuCategoryDto>>> ExecuteQueryAsync(GetMenuCategoriesQuery request, CancellationToken cancellationToken)
+    {
         var baseQuery = _context.MenuCategories
             .AsNoTracking()
-            .Where(c => c.IsActive && !c.IsDeleted);
-
-        // Get total count from base query
-        var totalCount = await baseQuery.CountAsync(cancellationToken);
-
-        // Get paginated data with includes
-        // Note: AsSplitQuery() prevents Cartesian explosion but requires EF Core 5+
-        var categories = await baseQuery
+            .Where(c => c.IsActive && !c.IsDeleted)
             .Include(c => c.Subcategories.Where(s => s.IsActive && !s.IsDeleted))
             .ThenInclude(s => s.Items.Where(i => i.IsActive && !i.IsDeleted))
-            .ThenInclude(i => i.Variants.Where(v => v.IsAvailable && !v.IsDeleted))
+            .ThenInclude(i => i.Variants.Where(v => v.IsAvailable && !v.IsDeleted));
+
+        // Apply ordering and pagination using extension
+        var result = await baseQuery
             .OrderBy(c => c.SortOrder)
             .ThenBy(c => c.Name.English)
-            .Skip((request.PageNumber - 1) * request.PageSize)
-            .Take(request.PageSize)
-            .ToListAsync(cancellationToken);
+            .PaginateAsync(request.PageNumber, request.PageSize, cancellationToken);
 
-        var items = categories.Adapt<List<MenuCategoryDto>>();
-        var result = PagedResult<MenuCategoryDto>.Create(items, totalCount, request.PageNumber, request.PageSize);
+        var items = result.Items.Adapt<List<MenuCategoryDto>>();
+        var pagedResult = PagedResult<MenuCategoryDto>.Create(items, result.TotalCount, result.PageNumber, result.PageSize);
 
-        // Cache for 1 hour
-        await _cacheService.SetAsync(cacheKey, result, TimeSpan.FromHours(1), cancellationToken);
-
-        return Result<PagedResult<MenuCategoryDto>>.Success(result);
+        return Result<PagedResult<MenuCategoryDto>>.Success(pagedResult);
     }
 }

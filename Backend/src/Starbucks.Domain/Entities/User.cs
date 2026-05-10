@@ -55,6 +55,11 @@ public class User : BaseEntity
     
     public DateTime? RefreshTokenExpiry { get; set; }
     
+    // Token rotation tracking for enhanced security
+    public int RefreshTokenVersion { get; set; } = 0;
+    
+    public DateTime? RefreshTokenIssuedAt { get; set; }
+    
     // Navigation properties
     public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
     public virtual UserProfile? Profile { get; set; }

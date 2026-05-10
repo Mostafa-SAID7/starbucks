@@ -28,74 +28,67 @@ public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, Resul
 
     public async Task<Result<UserManagementDto>> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
     {
-        try
+        var user = await _context.Users
+            .FirstOrDefaultAsync(u => u.Id == request.UserId && !u.IsDeleted, cancellationToken);
+
+        if (user == null)
         {
-            var user = await _context.Users
-                .FirstOrDefaultAsync(u => u.Id == request.UserId && !u.IsDeleted, cancellationToken);
-
-            if (user == null)
-            {
-                return Result<UserManagementDto>.Failure("User not found.");
-            }
-
-            // Capture old values for audit log
-            var oldValues = new
-            {
-                user.FirstName,
-                user.LastName,
-                user.PhoneNumber,
-                user.Role,
-                user.DateOfBirth
-            };
-
-            // Update fields
-            if (!string.IsNullOrWhiteSpace(request.Request.FirstName))
-            {
-                user.FirstName = request.Request.FirstName;
-            }
-
-            if (!string.IsNullOrWhiteSpace(request.Request.LastName))
-            {
-                user.LastName = request.Request.LastName;
-            }
-
-            if (!string.IsNullOrWhiteSpace(request.Request.PhoneNumber))
-            {
-                user.PhoneNumber = request.Request.PhoneNumber;
-            }
-
-            if (request.Request.Role.HasValue)
-            {
-                user.Role = request.Request.Role.Value;
-            }
-
-            if (request.Request.DateOfBirth.HasValue)
-            {
-                user.DateOfBirth = request.Request.DateOfBirth.Value;
-            }
-
-            user.UpdatedAt = _dateTime.UtcNow;
-
-            _context.Users.Update(user);
-            await _context.SaveChangesAsync(cancellationToken);
-
-            // Create audit log
-            await _auditService.LogActionAsync(
-                userId: Guid.Empty, // System user
-                action: "UPDATE",
-                entityType: "User",
-                entityId: user.Id,
-                oldValues: oldValues,
-                newValues: new { user.FirstName, user.LastName, user.PhoneNumber, user.Role, user.DateOfBirth },
-                cancellationToken: cancellationToken
-            );
-
-            var userDto = user.Adapt<UserManagementDto>();
-            return Result<UserManagementDto>.Success(userDto);
+            return Result<UserManagementDto>.Failure("User not found.");
         }
-        catch (Exception ex)
+
+        // Capture old values for audit log
+        var oldValues = new
         {
-            return Result<UserManagementDto>.Failure($"Failed to update user: {ex.Message}");
+            user.FirstName,
+            user.LastName,
+            user.PhoneNumber,
+            user.Role,
+            user.DateOfBirth
+        };
+
+        // Update fields
+        if (!string.IsNullOrWhiteSpace(request.Request.FirstName))
+        {
+            user.FirstName = request.Request.FirstName;
         }
+
+        if (!string.IsNullOrWhiteSpace(request.Request.LastName))
+        {
+            user.LastName = request.Request.LastName;
+        }
+
+        if (!string.IsNullOrWhiteSpace(request.Request.PhoneNumber))
+        {
+            user.PhoneNumber = request.Request.PhoneNumber;
+        }
+
+        if (request.Request.Role.HasValue)
+        {
+            user.Role = request.Request.Role.Value;
+        }
+
+        if (request.Request.DateOfBirth.HasValue)
+        {
+            user.DateOfBirth = request.Request.DateOfBirth.Value;
+        }
+
+        user.UpdatedAt = _dateTime.UtcNow;
+
+        _context.Users.Update(user);
+        await _context.SaveChangesAsync(cancellationToken);
+
+        // Create audit log
+        await _auditService.LogActionAsync(
+            userId: Guid.Empty, // System user
+            action: "UPDATE",
+            entityType: "User",
+            entityId: user.Id,
+            oldValues: oldValues,
+            newValues: new { user.FirstName, user.LastName, user.PhoneNumber, user.Role, user.DateOfBirth },
+            cancellationToken: cancellationToken
+        );
+
+        var userDto = user.Adapt<UserManagementDto>();
+        return Result<UserManagementDto>.Success(userDto);
     }
 }

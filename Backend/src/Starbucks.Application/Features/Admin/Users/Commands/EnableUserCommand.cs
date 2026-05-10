@@ -25,40 +25,33 @@ public class EnableUserCommandHandler : IRequestHandler<EnableUserCommand, Resul
 
     public async Task<Result<string>> Handle(EnableUserCommand request, CancellationToken cancellationToken)
     {
-        try
+        var user = await _context.Users
+            .FirstOrDefaultAsync(u => u.Id == request.UserId && !u.IsDeleted, cancellationToken);
+
+        if (user == null)
         {
-            var user = await _context.Users
-                .FirstOrDefaultAsync(u => u.Id == request.UserId && !u.IsDeleted, cancellationToken);
-
-            if (user == null)
-            {
-                return Result<string>.Failure("User not found.");
-            }
-
-            // Remove lockout
-            user.LockoutEnd = null;
-            user.FailedLoginAttempts = 0;
-            user.UpdatedAt = _dateTime.UtcNow;
-
-            _context.Users.Update(user);
-            await _context.SaveChangesAsync(cancellationToken);
-
-            // Create audit log
-            await _auditService.LogActionAsync(
-                userId: Guid.Empty,
-                action: "ENABLE",
-                entityType: "User",
-                entityId: user.Id,
-                oldValues: null,
-                newValues: new { user.LockoutEnd, user.FailedLoginAttempts },
-                cancellationToken: cancellationToken
-            );
-
-            return Result<string>.Success("User account enabled successfully.");
+            return Result<string>.Failure("User not found.");
         }
-        catch (Exception ex)
-        {
-            return Result<string>.Failure($"Failed to enable user: {ex.Message}");
-        }
+
+        // Remove lockout
+        user.LockoutEnd = null;
+        user.FailedLoginAttempts = 0;
+        user.UpdatedAt = _dateTime.UtcNow;
+
+        _context.Users.Update(user);
+        await _context.SaveChangesAsync(cancellationToken);
+
+        // Create audit log
+        await _auditService.LogActionAsync(
+            userId: Guid.Empty,
+            action: "ENABLE",
+            entityType: "User",
+            entityId: user.Id,
+            oldValues: null,
+            newValues: new { user.LockoutEnd, user.FailedLoginAttempts },
+            cancellationToken: cancellationToken
+        );
+
+        return Result<string>.Success("User account enabled successfully.");
     }
 }

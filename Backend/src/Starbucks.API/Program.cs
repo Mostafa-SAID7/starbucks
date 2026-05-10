@@ -4,6 +4,8 @@ using Starbucks.API.Middleware;
 using AspNetCoreRateLimit;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using System.Text.Json;
+using Azure.Identity;
+using Azure.Security.KeyVault.Secrets;
 
 // ── Bootstrap logger (before host builds, so startup errors are captured) ────
 Log.Logger = new LoggerConfiguration()
@@ -13,6 +15,27 @@ Log.Logger = new LoggerConfiguration()
 try
 {
     var builder = WebApplication.CreateBuilder(args);
+
+    // ── Configure Key Vault for production ────────────────────────────────────
+    if (!builder.Environment.IsDevelopment())
+    {
+        var keyVaultUrl = builder.Configuration["KeyVault:Url"];
+        if (!string.IsNullOrEmpty(keyVaultUrl))
+        {
+            try
+            {
+                var credential = new DefaultAzureCredential();
+                builder.Configuration.AddAzureKeyVault(
+                    new Uri(keyVaultUrl),
+                    credential);
+                Log.Information("Key Vault configured successfully from {KeyVaultUrl}", keyVaultUrl);
+            }
+            catch (Exception ex)
+            {
+                Log.Warning(ex, "Failed to configure Key Vault. Falling back to configuration files.");
+            }
+        }
+    }
 
     // ── Serilog reads full config from appsettings.json / environment ─────────
     builder.Host.UseSerilog((ctx, services, config) =>

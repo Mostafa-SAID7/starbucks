@@ -86,7 +86,8 @@ public sealed class TokenService : ITokenService
 
         return user is not null
             && user.RefreshToken == refreshToken
-            && user.RefreshTokenExpiry > _dateTime.UtcNow;
+            && user.RefreshTokenExpiry > _dateTime.UtcNow
+            && user.RefreshTokenIssuedAt.HasValue;
     }
 
     public async Task RevokeRefreshTokenAsync(
@@ -94,16 +95,29 @@ public sealed class TokenService : ITokenService
         CancellationToken cancellationToken = default)
     {
         var user = await _context.Users
-            .AsNoTracking()
             .FirstOrDefaultAsync(u => u.Id == userId && !u.IsDeleted, cancellationToken);
 
         if (user is null) return;
 
-        // Attach for update
-        _context.Users.Attach(user);
-
-        user.RefreshToken       = null;
+        // Invalidate current token by incrementing version
+        user.RefreshToken = null;
         user.RefreshTokenExpiry = null;
+        user.RefreshTokenVersion++;
+        user.RefreshTokenIssuedAt = null;
+        
+        await _context.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task RotateRefreshTokenAsync(
+        User user,
+        CancellationToken cancellationToken = default)
+    {
+        // Increment version to invalidate old tokens
+        user.RefreshTokenVersion++;
+        user.RefreshToken = GenerateRefreshToken();
+        user.RefreshTokenExpiry = _dateTime.UtcNow.AddDays(7);
+        user.RefreshTokenIssuedAt = _dateTime.UtcNow;
+        
         await _context.SaveChangesAsync(cancellationToken);
     }
 }

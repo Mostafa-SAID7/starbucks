@@ -51,8 +51,14 @@ public class LocationsController : ControllerBase
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetLocation(Guid id)
     {
-        // TODO: Implement GetLocationByIdQuery
-        return Ok();
+        var result = await _mediator.Send(new GetLocationByIdQuery(id));
+        
+        if (!result.IsSuccess)
+        {
+            return NotFound(new { errors = result.Errors });
+        }
+
+        return Ok(result.Data);
     }
 
     /// <summary>
@@ -85,8 +91,14 @@ public class LocationsController : ControllerBase
     [HttpGet("cities")]
     public async Task<IActionResult> GetCities()
     {
-        // TODO: Implement GetCitiesQuery
-        return Ok();
+        var result = await _mediator.Send(new GetCitiesQuery());
+        
+        if (!result.IsSuccess)
+        {
+            return BadRequest(new { errors = result.Errors });
+        }
+
+        return Ok(result.Data);
     }
 
     /// <summary>
@@ -99,7 +111,13 @@ public class LocationsController : ControllerBase
     [HttpGet("nearby")]
     public async Task<IActionResult> GetNearbyLocations([FromQuery] double latitude, [FromQuery] double longitude, [FromQuery] double radius = 10)
     {
-        // TODO: Implement GetNearbyLocationsQuery
-        return Ok();
+        var result = await _mediator.Send(new GetNearbyLocationsQuery(latitude, longitude, radius));
+        
+        if (!result.IsSuccess)
+        {
+            return BadRequest(new { errors = result.Errors });
+        }
+
+        return Ok(result.Data);
     }
 }

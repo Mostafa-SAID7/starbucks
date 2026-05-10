@@ -17,39 +17,35 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, Result<Lo
     private readonly ITokenService         _tokenService;
     private readonly IPasswordService      _passwordService;
     private readonly IDateTimeService      _dateTime;
+    private readonly IUserValidationService _userValidationService;
 
     public RegisterCommandHandler(
         IApplicationDbContext context,
         ITokenService tokenService,
         IPasswordService passwordService,
-        IDateTimeService dateTime)
+        IDateTimeService dateTime,
+        IUserValidationService userValidationService)
     {
         _context         = context;
         _tokenService    = tokenService;
         _passwordService = passwordService;
         _dateTime        = dateTime;
+        _userValidationService = userValidationService;
     }
 
     public async Task<Result<LoginResponse>> Handle(
         RegisterCommand request,
         CancellationToken cancellationToken)
     {
-        // Combined duplicate check (single query instead of two)
-        var duplicateExists = await _context.Users
-            .AsNoTracking()
-            .AnyAsync(u => u.Email == request.Request.Email || u.PhoneNumber == request.Request.PhoneNumber, 
-                cancellationToken);
+        // Validate email and phone uniqueness using centralized service
+        var validationError = await _userValidationService.ValidateEmailAndPhoneUniquenessAsync(
+            request.Request.Email,
+            request.Request.PhoneNumber,
+            cancellationToken);
 
-        if (duplicateExists)
+        if (validationError != null)
         {
-            // Detailed check to provide specific error message
-            var emailExists = await _context.Users
-                .AsNoTracking()
-                .AnyAsync(u => u.Email == request.Request.Email, cancellationToken);
-            
-            return emailExists 
-                ? Result<LoginResponse>.Failure("User with this email already exists.")
-                : Result<LoginResponse>.Failure("User with this phone number already exists.");
+            return Result<LoginResponse>.Failure(validationError);
         }
 
         var now          = _dateTime.UtcNow;
@@ -57,16 +53,18 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, Result<Lo
 
         var user = new User
         {
-            FirstName           = request.Request.FirstName,
-            LastName            = request.Request.LastName,
-            Email               = request.Request.Email,
-            PhoneNumber         = request.Request.PhoneNumber,
-            PasswordHash        = _passwordService.Hash(request.Request.Password),
-            DateOfBirth         = request.Request.DateOfBirth,
-            Role                = UserRole.Customer,
-            RefreshToken        = refreshToken,
-            RefreshTokenExpiry  = now.AddDays(7),
-            LastLoginAt         = now,
+            FirstName              = request.Request.FirstName,
+            LastName               = request.Request.LastName,
+            Email                  = request.Request.Email,
+            PhoneNumber            = request.Request.PhoneNumber,
+            PasswordHash           = _passwordService.Hash(request.Request.Password),
+            DateOfBirth            = request.Request.DateOfBirth,
+            Role                   = UserRole.Customer,
+            RefreshToken           = refreshToken,
+            RefreshTokenExpiry     = now.AddDays(7),
+            RefreshTokenIssuedAt   = now,
+            RefreshTokenVersion    = 0,
+            LastLoginAt            = now,
         };
 
         var profile = new UserProfile

@@ -20,27 +20,20 @@ public class GetUserByIdQueryHandler : IRequestHandler<GetUserByIdQuery, Result<
 
     public async Task<Result<UserManagementDto>> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
     {
-        try
+        var user = await _context.Users
+            .AsNoTracking()
+            .Include(u => u.Profile)
+            .FirstOrDefaultAsync(u => u.Id == request.UserId && !u.IsDeleted, cancellationToken);
+
+        if (user == null)
         {
-            var user = await _context.Users
-                .AsNoTracking()
-                .Include(u => u.Profile)
-                .FirstOrDefaultAsync(u => u.Id == request.UserId && !u.IsDeleted, cancellationToken);
-
-            if (user == null)
-            {
-                return Result<UserManagementDto>.Failure("User not found.");
-            }
-
-            var userDto = user.Adapt<UserManagementDto>();
-            userDto.IsLocked = user.LockoutEnd.HasValue && user.LockoutEnd.Value > DateTime.UtcNow;
-            userDto.LockoutEnd = user.LockoutEnd;
-
-            return Result<UserManagementDto>.Success(userDto);
+            return Result<UserManagementDto>.Failure("User not found.");
         }
-        catch (Exception ex)
-        {
-            return Result<UserManagementDto>.Failure($"Failed to retrieve user: {ex.Message}");
-        }
+
+        var userDto = user.Adapt<UserManagementDto>();
+        userDto.IsLocked = user.LockoutEnd.HasValue && user.LockoutEnd.Value > DateTime.UtcNow;
+        userDto.LockoutEnd = user.LockoutEnd;
+
+        return Result<UserManagementDto>.Success(userDto);
     }
 }

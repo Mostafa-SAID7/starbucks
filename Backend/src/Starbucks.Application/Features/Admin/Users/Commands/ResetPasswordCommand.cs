@@ -34,49 +34,42 @@ public class ResetPasswordCommandHandler : IRequestHandler<ResetPasswordCommand,
 
     public async Task<Result<ResetPasswordResponse>> Handle(ResetPasswordCommand request, CancellationToken cancellationToken)
     {
-        try
+        var user = await _context.Users
+            .FirstOrDefaultAsync(u => u.Id == request.UserId && !u.IsDeleted, cancellationToken);
+
+        if (user == null)
         {
-            var user = await _context.Users
-                .FirstOrDefaultAsync(u => u.Id == request.UserId && !u.IsDeleted, cancellationToken);
-
-            if (user == null)
-            {
-                return Result<ResetPasswordResponse>.Failure("User not found.");
-            }
-
-            // Generate temporary password
-            var temporaryPassword = GenerateTemporaryPassword();
-            var hashedPassword = _passwordService.Hash(temporaryPassword);
-
-            user.PasswordHash = hashedPassword;
-            user.PasswordResetToken = null;
-            user.PasswordResetTokenExpiry = null;
-            user.UpdatedAt = _dateTime.UtcNow;
-
-            _context.Users.Update(user);
-            await _context.SaveChangesAsync(cancellationToken);
-
-            // Create audit log
-            await _auditService.LogActionAsync(
-                userId: Guid.Empty,
-                action: "RESET_PASSWORD",
-                entityType: "User",
-                entityId: user.Id,
-                oldValues: null,
-                newValues: new { Message = "Password reset by admin" },
-                cancellationToken: cancellationToken
-            );
-
-            return Result<ResetPasswordResponse>.Success(new ResetPasswordResponse
-            {
-                TemporaryPassword = temporaryPassword,
-                Message = $"Password reset successfully. Temporary password: {temporaryPassword}. User should change it on next login."
-            });
+            return Result<ResetPasswordResponse>.Failure("User not found.");
         }
-        catch (Exception ex)
+
+        // Generate temporary password
+        var temporaryPassword = GenerateTemporaryPassword();
+        var hashedPassword = _passwordService.Hash(temporaryPassword);
+
+        user.PasswordHash = hashedPassword;
+        user.PasswordResetToken = null;
+        user.PasswordResetTokenExpiry = null;
+        user.UpdatedAt = _dateTime.UtcNow;
+
+        _context.Users.Update(user);
+        await _context.SaveChangesAsync(cancellationToken);
+
+        // Create audit log
+        await _auditService.LogActionAsync(
+            userId: Guid.Empty,
+            action: "RESET_PASSWORD",
+            entityType: "User",
+            entityId: user.Id,
+            oldValues: null,
+            newValues: new { Message = "Password reset by admin" },
+            cancellationToken: cancellationToken
+        );
+
+        return Result<ResetPasswordResponse>.Success(new ResetPasswordResponse
         {
-            return Result<ResetPasswordResponse>.Failure($"Failed to reset password: {ex.Message}");
-        }
+            TemporaryPassword = temporaryPassword,
+            Message = $"Password reset successfully. Temporary password: {temporaryPassword}. User should change it on next login."
+        });
     }
 
     private static string GenerateTemporaryPassword()

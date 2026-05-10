@@ -84,9 +84,11 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, Result<LoginRes
         var refreshToken = _tokenService.GenerateRefreshToken();
 
         // Update user login info
-        user.LastLoginAt        = _dateTime.UtcNow;
-        user.RefreshToken       = refreshToken;
-        user.RefreshTokenExpiry = _dateTime.UtcNow.AddDays(7);
+        user.LastLoginAt           = _dateTime.UtcNow;
+        user.RefreshToken          = refreshToken;
+        user.RefreshTokenExpiry    = _dateTime.UtcNow.AddDays(7);
+        user.RefreshTokenIssuedAt  = _dateTime.UtcNow;
+        user.RefreshTokenVersion   = 0;
 
         await _context.SaveChangesAsync(cancellationToken);
 
