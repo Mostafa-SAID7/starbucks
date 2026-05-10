@@ -26,6 +26,8 @@ public static class DomainServicesConfiguration
         // Domain Services: scoped, one instance per HTTP request
         services.AddScoped<OrderDomainService>();
         services.AddScoped<LocationDomainService>();
+        services.AddScoped<UserDomainService>();
+        services.AddScoped<MenuItemDomainService>();
 
         // Scoped: one instance per HTTP request
         services.AddScoped<IDistributedCacheService, CacheService>();
