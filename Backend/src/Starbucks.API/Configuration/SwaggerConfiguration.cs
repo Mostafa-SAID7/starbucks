@@ -1,9 +1,9 @@
-namespace Starbucks.API.Extensions;
+namespace Starbucks.API.Configuration;
 
 /// <summary>
 /// Extension methods for configuring Swagger documentation
 /// </summary>
-public static class SwaggerExtensions
+public static class SwaggerConfiguration
 {
     /// <summary>
     /// Adds Swagger with JWT authentication and API versioning support

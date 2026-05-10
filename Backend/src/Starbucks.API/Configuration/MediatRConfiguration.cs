@@ -1,9 +1,9 @@
-namespace Starbucks.API.Extensions;
+namespace Starbucks.API.Configuration;
 
 /// <summary>
 /// Extension methods for configuring MediatR
 /// </summary>
-public static class MediatRExtensions
+public static class MediatRConfiguration
 {
     /// <summary>
     /// Adds MediatR with automatic handler discovery from Application assembly

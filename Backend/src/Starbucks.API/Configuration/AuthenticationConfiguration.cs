@@ -2,12 +2,12 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
-namespace Starbucks.API.Extensions;
+namespace Starbucks.API.Configuration;
 
 /// <summary>
 /// Extension methods for configuring JWT authentication and authorization
 /// </summary>
-public static class AuthenticationExtensions
+public static class AuthenticationConfiguration
 {
     /// <summary>
     /// Adds JWT Bearer authentication with configuration from appsettings

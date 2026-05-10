@@ -2,12 +2,12 @@ using Microsoft.EntityFrameworkCore;
 using Starbucks.Application.Common.Interfaces.Data;
 using Starbucks.Infrastructure.Data;
 
-namespace Starbucks.API.Extensions;
+namespace Starbucks.API.Configuration;
 
 /// <summary>
 /// Extension methods for configuring database services
 /// </summary>
-public static class DatabaseExtensions
+public static class DatabaseConfiguration
 {
     /// <summary>
     /// Adds database context with SQL Server provider and retry policies

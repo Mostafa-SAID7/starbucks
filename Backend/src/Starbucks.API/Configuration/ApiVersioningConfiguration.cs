@@ -1,9 +1,9 @@
-namespace Starbucks.API.Extensions;
+namespace Starbucks.API.Configuration;
 
 /// <summary>
 /// Extension methods for configuring API versioning
 /// </summary>
-public static class ApiVersioningExtensions
+public static class ApiVersioningConfiguration
 {
     /// <summary>
     /// Adds API versioning with URL segment and header support

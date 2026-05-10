@@ -1,11 +1,11 @@
 using AspNetCoreRateLimit;
 
-namespace Starbucks.API.Extensions;
+namespace Starbucks.API.Configuration;
 
 /// <summary>
 /// Extension methods for configuring rate limiting
 /// </summary>
-public static class RateLimitingExtensions
+public static class RateLimitingConfiguration
 {
     /// <summary>
     /// Adds IP-based rate limiting with configuration from appsettings

@@ -1,11 +1,11 @@
 using Starbucks.Infrastructure.Data;
 
-namespace Starbucks.API.Extensions;
+namespace Starbucks.API.Configuration;
 
 /// <summary>
 /// Extension methods for configuring health checks
 /// </summary>
-public static class HealthCheckExtensions
+public static class HealthCheckConfiguration
 {
     /// <summary>
     /// Adds health checks for database and Redis

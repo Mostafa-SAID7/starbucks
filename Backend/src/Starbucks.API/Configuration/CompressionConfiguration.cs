@@ -1,12 +1,12 @@
 using Microsoft.AspNetCore.ResponseCompression;
 using System.IO.Compression;
 
-namespace Starbucks.API.Extensions;
+namespace Starbucks.API.Configuration;
 
 /// <summary>
 /// Extension methods for configuring response compression and caching
 /// </summary>
-public static class CompressionExtensions
+public static class CompressionConfiguration
 {
     /// <summary>
     /// Adds response compression with Gzip and Brotli support, plus response caching

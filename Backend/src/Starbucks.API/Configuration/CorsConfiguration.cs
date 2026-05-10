@@ -1,9 +1,9 @@
-namespace Starbucks.API.Extensions;
+namespace Starbucks.API.Configuration;
 
 /// <summary>
 /// Extension methods for configuring CORS policies
 /// </summary>
-public static class CorsExtensions
+public static class CorsConfiguration
 {
     public const string AllowFrontendPolicy = "AllowFrontend";
 

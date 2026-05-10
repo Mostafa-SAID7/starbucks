@@ -6,13 +6,13 @@ using Starbucks.Infrastructure.Repositories;
 using Starbucks.Infrastructure.Data;
 using Starbucks.API.Services;
 
-namespace Starbucks.API.Extensions;
+namespace Starbucks.API.Configuration;
 
 /// <summary>
 /// Extension methods for registering domain and application services
 /// Consolidates all service lifetime registrations in one place
 /// </summary>
-public static class DomainServicesExtensions
+public static class DomainServicesConfiguration
 {
     /// <summary>
     /// Registers all domain and application services with appropriate lifetimes

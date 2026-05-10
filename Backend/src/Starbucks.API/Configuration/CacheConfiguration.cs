@@ -1,11 +1,11 @@
 using StackExchange.Redis;
 
-namespace Starbucks.API.Extensions;
+namespace Starbucks.API.Configuration;
 
 /// <summary>
 /// Extension methods for configuring Redis caching with resilience
 /// </summary>
-public static class CacheExtensions
+public static class CacheConfiguration
 {
     /// <summary>
     /// Adds Redis connection multiplexer with retry policies and resilience

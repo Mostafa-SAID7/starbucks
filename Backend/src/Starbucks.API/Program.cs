@@ -1,11 +1,7 @@
 using Serilog;
+using Starbucks.API.Configuration;
 using Starbucks.API.Extensions;
-using Starbucks.API.Middleware;
 using AspNetCoreRateLimit;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using System.Text.Json;
-using Azure.Identity;
-using Azure.Security.KeyVault.Secrets;
 
 // ── Bootstrap logger (before host builds, so startup errors are captured) ────
 Log.Logger = new LoggerConfiguration()
@@ -17,33 +13,10 @@ try
     var builder = WebApplication.CreateBuilder(args);
 
     // ── Configure Key Vault for production ────────────────────────────────────
-    if (!builder.Environment.IsDevelopment())
-    {
-        var keyVaultUrl = builder.Configuration["KeyVault:Url"];
-        if (!string.IsNullOrEmpty(keyVaultUrl))
-        {
-            try
-            {
-                var credential = new DefaultAzureCredential();
-                builder.Configuration.AddAzureKeyVault(
-                    new Uri(keyVaultUrl),
-                    credential);
-                Log.Information("Key Vault configured successfully from {KeyVaultUrl}", keyVaultUrl);
-            }
-            catch (Exception ex)
-            {
-                Log.Warning(ex, "Failed to configure Key Vault. Falling back to configuration files.");
-            }
-        }
-    }
+    builder.Configuration.AddKeyVaultConfiguration(builder.Environment);
 
     // ── Serilog reads full config from appsettings.json / environment ─────────
-    builder.Host.UseSerilog((ctx, services, config) =>
-        config.ReadFrom.Configuration(ctx.Configuration)
-              .ReadFrom.Services(services)
-              .Enrich.FromLogContext()
-              .Enrich.WithProperty("Application", "StarbucksEgyptAPI")
-              .Enrich.WithProperty("Environment", ctx.HostingEnvironment.EnvironmentName));
+    builder.AddSerilogConfiguration();
 
     // ── Service registration (grouped by concern) ─────────────────────────────
     builder.Services.AddApplicationServices(builder.Configuration);
@@ -59,7 +32,7 @@ try
     app.UseGlobalExceptionHandler();        // must be early — catches everything below
     app.UseSecurityHeaders();
     app.UseHttpsRedirection();
-    app.UseCors(CorsExtensions.AllowFrontendPolicy);
+    app.UseCors(CorsConfiguration.AllowFrontendPolicy);
     AspNetCoreRateLimit.StartupExtensions.UseIpRateLimiting(app);
     app.UseSerilogRequestLogging();         // structured request logs
     app.UseAuthentication();
@@ -67,43 +40,8 @@ try
 
     // ── Routes ────────────────────────────────────────────────────────────────
     app.MapControllers();
-
-    // Separate liveness and readiness probes for Kubernetes
-    app.MapHealthChecks("/health/live", new HealthCheckOptions
-    {
-        Predicate = _ => false   // liveness: just confirms the process is up
-    });
-
-    app.MapHealthChecks("/health/ready", new HealthCheckOptions
-    {
-        Predicate = check => check.Tags.Contains("ready"),  // readiness: DB + Redis
-        ResponseWriter = async (context, report) =>
-        {
-            context.Response.ContentType = "application/json";
-            var result = JsonSerializer.Serialize(new
-            {
-                status  = report.Status.ToString(),
-                checks  = report.Entries.Select(e => new
-                {
-                    name    = e.Key,
-                    status  = e.Value.Status.ToString(),
-                    duration = e.Value.Duration.TotalMilliseconds
-                })
-            });
-            await context.Response.WriteAsync(result);
-        }
-    });
-
-    // ── Swagger (development only) ────────────────────────────────────────────
-    if (app.Environment.IsDevelopment())
-    {
-        app.UseSwagger();
-        app.UseSwaggerUI(c =>
-        {
-            c.SwaggerEndpoint("/swagger/v1/swagger.json", "Starbucks Egypt API V1");
-            c.RoutePrefix = string.Empty;
-        });
-    }
+    app.MapHealthCheckEndpoints();
+    app.UseSwaggerUI();
 
     Log.Information("Starting Starbucks Egypt API in {Environment}", app.Environment.EnvironmentName);
     app.Run();

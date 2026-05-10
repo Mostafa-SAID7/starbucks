@@ -1,6 +1,6 @@
 using Starbucks.Infrastructure.Extensions;
 
-namespace Starbucks.API.Extensions;
+namespace Starbucks.API.Configuration;
 
 /// <summary>
 /// Orchestrator extension methods that compose focused service registrations

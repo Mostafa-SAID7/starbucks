@@ -1,12 +1,12 @@
 using FluentValidation;
 using FluentValidation.AspNetCore;
 
-namespace Starbucks.API.Extensions;
+namespace Starbucks.API.Configuration;
 
 /// <summary>
 /// Extension methods for configuring FluentValidation
 /// </summary>
-public static class ValidationExtensions
+public static class ValidationConfiguration
 {
     /// <summary>
     /// Adds FluentValidation with automatic validator discovery from Application assembly
