@@ -5,6 +5,7 @@ using Starbucks.Infrastructure.Services;
 using Starbucks.Infrastructure.Repositories;
 using Starbucks.Infrastructure.Data;
 using Starbucks.API.Services;
+using Starbucks.Domain.Services;
 
 namespace Starbucks.API.Configuration;
 
@@ -21,6 +22,10 @@ public static class DomainServicesConfiguration
     {
         // Singleton: stateless, safe to share across requests
         services.AddSingleton<IDateTimeService, DateTimeService>();
+
+        // Domain Services: scoped, one instance per HTTP request
+        services.AddScoped<OrderDomainService>();
+        services.AddScoped<LocationDomainService>();
 
         // Scoped: one instance per HTTP request
         services.AddScoped<IDistributedCacheService, CacheService>();
