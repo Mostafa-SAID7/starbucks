@@ -3,7 +3,7 @@
  * Handles all system monitoring API calls
  */
 
-import { api } from '@/lib/api';
+import { apiService } from '@/services/api';
 import { PagedResult } from '@/types/common/pagination';
 import {
   SystemHealthDto,
@@ -19,7 +19,7 @@ import {
  * Get system health status
  */
 export const getSystemHealth = async (): Promise<SystemHealthDto> => {
-  return api.get('/admin/monitoring/health');
+  return apiService.get('/admin/monitoring/health');
 };
 
 /**
@@ -42,7 +42,7 @@ export const getErrorLogs = async (
     if (filters.statusCode) params.append('statusCode', filters.statusCode.toString());
   }
 
-  return api.get(`/admin/monitoring/errors?${params.toString()}`);
+  return apiService.get(`/admin/monitoring/errors?${params.toString()}`);
 };
 
 /**
@@ -66,7 +66,7 @@ export const getAuditLogs = async (
     if (filters.searchTerm) params.append('searchTerm', filters.searchTerm);
   }
 
-  return api.get(`/admin/monitoring/audit?${params.toString()}`);
+  return apiService.get(`/admin/monitoring/audit?${params.toString()}`);
 };
 
 /**
@@ -80,7 +80,7 @@ export const getPerformanceMetrics = async (
   params.append('startDate', startDate);
   params.append('endDate', endDate);
 
-  return api.get(`/admin/monitoring/performance?${params.toString()}`);
+  return apiService.get(`/admin/monitoring/performance?${params.toString()}`);
 };
 
 /**
@@ -94,21 +94,21 @@ export const getPerformanceMetricsSummary = async (
   params.append('startDate', startDate);
   params.append('endDate', endDate);
 
-  return api.get(`/admin/monitoring/performance/summary?${params.toString()}`);
+  return apiService.get(`/admin/monitoring/performance/summary?${params.toString()}`);
 };
 
 /**
  * Get error log details
  */
 export const getErrorLogDetails = async (id: string): Promise<ErrorLogDto> => {
-  return api.get(`/admin/monitoring/errors/${id}`);
+  return apiService.get(`/admin/monitoring/errors/${id}`);
 };
 
 /**
  * Get audit log details
  */
 export const getAuditLogDetails = async (id: string): Promise<AuditLogDto> => {
-  return api.get(`/admin/monitoring/audit/${id}`);
+  return apiService.get(`/admin/monitoring/audit/${id}`);
 };
 
 export const adminMonitoringService = {

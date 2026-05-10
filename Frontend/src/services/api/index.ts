@@ -8,6 +8,13 @@ export { ApiCache } from './cache';
 export { ApiRetry } from './retry';
 export { ApiInterceptors } from './interceptors';
 
+// Domain-specific API services
+export * from './authService';
+export * from './menuService';
+export * from './locationsService';
+export * from './userService';
+export * from './healthService';
+
 import { ApiService } from './ApiService';
 import { ApiConfig } from '@/types/services';
 

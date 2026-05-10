@@ -124,6 +124,12 @@ export function getErrorMessages(error: unknown, t: (key: string) => string) {
       retry: t("common:sign_in"),
       help: t("errors.unauthorized.help"),
     },
+    [ErrorType.VALIDATION]: {
+      title: t("errors.validation.title"),
+      message: t("errors.validation.message"),
+      retry: t("common:retry"),
+      help: t("errors.validation.help"),
+    },
     [ErrorType.GENERAL]: {
       title: t("errors.general.title"),
       message: t("errors.general.message"),
@@ -245,5 +251,188 @@ export function createFetchError(
     : `Request failed: ${response.status} ${response.statusText}`;
 
   return new AppError(message, errorType, response.status);
+}
+
+/**
+ * Backend error response format
+ */
+export interface BackendErrorResponse {
+  message: string;
+  statusCode?: number;
+  errorType?: string;
+  errors?: Record<string, string[]>;
+  timestamp?: string;
+  traceId?: string;
+}
+
+/**
+ * Maps backend error type string to frontend ErrorType enum
+ */
+export function mapErrorType(backendErrorType?: string): ErrorType {
+  if (!backendErrorType) {
+    return ErrorType.GENERAL;
+  }
+
+  const typeMap: Record<string, ErrorType> = {
+    Validation: ErrorType.VALIDATION,
+    NotFound: ErrorType.NOT_FOUND,
+    Unauthorized: ErrorType.UNAUTHORIZED,
+    Forbidden: ErrorType.UNAUTHORIZED,
+    Conflict: ErrorType.GENERAL,
+    Server: ErrorType.SERVER,
+    Timeout: ErrorType.TIMEOUT,
+    Network: ErrorType.NETWORK,
+    General: ErrorType.GENERAL,
+  };
+
+  return typeMap[backendErrorType] || ErrorType.GENERAL;
+}
+
+/**
+ * Maps HTTP status code to ErrorType
+ */
+export function mapStatusCodeToErrorType(statusCode?: number): ErrorType {
+  if (!statusCode) {
+    return ErrorType.GENERAL;
+  }
+
+  switch (statusCode) {
+    case 400:
+      return ErrorType.VALIDATION;
+    case 401:
+      return ErrorType.UNAUTHORIZED;
+    case 403:
+      return ErrorType.UNAUTHORIZED;
+    case 404:
+      return ErrorType.NOT_FOUND;
+    case 408:
+      return ErrorType.TIMEOUT;
+    case 409:
+      return ErrorType.GENERAL;
+    case 500:
+    case 502:
+    case 503:
+    case 504:
+      return ErrorType.SERVER;
+    default:
+      return ErrorType.GENERAL;
+  }
+}
+
+/**
+ * Converts backend error response to AppError
+ */
+export function mapBackendErrorToAppError(
+  error: BackendErrorResponse | unknown,
+  statusCode?: number
+): AppError {
+  if (error instanceof AppError) {
+    return error;
+  }
+
+  if (typeof error === 'object' && error !== null) {
+    const backendError = error as BackendErrorResponse;
+
+    let errorType = ErrorType.GENERAL;
+    if (backendError.errorType) {
+      errorType = mapErrorType(backendError.errorType);
+    } else if (statusCode) {
+      errorType = mapStatusCodeToErrorType(statusCode);
+    }
+
+    const appError = new AppError(
+      backendError.message || 'An error occurred',
+      errorType,
+      statusCode || backendError.statusCode
+    );
+
+    if (backendError.errors) {
+      appError.context = {
+        validationErrors: backendError.errors,
+      };
+    }
+
+    if (backendError.traceId) {
+      appError.context = {
+        ...appError.context,
+        traceId: backendError.traceId,
+      };
+    }
+
+    return appError;
+  }
+
+  return new AppError(
+    'An unexpected error occurred',
+    ErrorType.GENERAL,
+    statusCode
+  );
+}
+
+/**
+ * Extracts validation errors from backend response
+ */
+export function extractValidationErrors(
+  error: BackendErrorResponse
+): Record<string, string> {
+  if (!error.errors) {
+    return {};
+  }
+
+  const validationErrors: Record<string, string> = {};
+
+  Object.entries(error.errors).forEach(([field, messages]) => {
+    validationErrors[field] = Array.isArray(messages)
+      ? messages[0]
+      : messages;
+  });
+
+  return validationErrors;
+}
+
+/**
+ * Checks if error is retryable
+ */
+export function isRetryableError(error: AppError): boolean {
+  return (
+    error.type === ErrorType.TIMEOUT ||
+    error.type === ErrorType.NETWORK ||
+    error.type === ErrorType.SERVER
+  );
+}
+
+/**
+ * Checks if error is validation error
+ */
+export function isValidationError(error: AppError): boolean {
+  return error.type === ErrorType.VALIDATION;
+}
+
+/**
+ * Checks if error is authentication error
+ */
+export function isAuthenticationError(error: AppError): boolean {
+  return error.type === ErrorType.UNAUTHORIZED;
+}
+
+/**
+ * Checks if error is not found error
+ */
+export function isNotFoundError(error: AppError): boolean {
+  return error.type === ErrorType.NOT_FOUND;
+}
+
+/**
+ * Checks if error is server error
+ */
+export function isServerError(error: AppError): boolean {
+  return error.type === ErrorType.SERVER;
+}
+
+/**
+ * Checks if error is network error
+ */
+export function isNetworkError(error: AppError): boolean {
+  return error.type === ErrorType.NETWORK;
 }
 

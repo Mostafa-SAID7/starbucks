@@ -5,13 +5,20 @@
 /** Language identifiers */
 export type Language = "ar" | "en";
 
+/** User Role Types */
+export enum UserRole {
+  Customer = "Customer",
+  Admin = "Admin",
+  SuperAdmin = "SuperAdmin"
+}
+
 /** User Types */
 export interface User {
   id: string;
   email: string;
   firstName: string;
   lastName: string;
-  role: string;
+  role: UserRole | string;
   phone?: string;
   dateOfBirth?: string;
   loyaltyPoints?: number;

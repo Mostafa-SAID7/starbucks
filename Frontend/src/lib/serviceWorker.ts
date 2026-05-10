@@ -203,7 +203,10 @@ export const registerMutation = async (
 
     // Register background sync
     const registration = await navigator.serviceWorker.ready;
-    await registration.sync.register('sync-mutations');
+    const syncManager = registration as any;
+    if (syncManager.sync) {
+      await syncManager.sync.register('sync-mutations');
+    }
 
     console.log('Mutation registered for background sync:', mutation);
   } catch (error) {

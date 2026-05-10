@@ -181,6 +181,72 @@ public class MenuItemBuilder
         return this;
     }
 
+    public MenuItemBuilder WithIsActive(bool isActive)
+    {
+        _isActive = isActive;
+        return this;
+    }
+
+    public MenuItemBuilder WithIsAvailable(bool isAvailable)
+    {
+        _isAvailable = isAvailable;
+        return this;
+    }
+
+    public MenuItemBuilder WithContainsMilk(bool containsMilk)
+    {
+        _containsMilk = containsMilk;
+        return this;
+    }
+
+    public MenuItemBuilder WithContainsEggs(bool containsEggs)
+    {
+        _containsEggs = containsEggs;
+        return this;
+    }
+
+    public MenuItemBuilder WithContainsNuts(bool containsNuts)
+    {
+        _containsNuts = containsNuts;
+        return this;
+    }
+
+    public MenuItemBuilder WithContainsGluten(bool containsGluten)
+    {
+        _containsGluten = containsGluten;
+        return this;
+    }
+
+    public MenuItemBuilder WithContainsSoy(bool containsSoy)
+    {
+        _containsSoy = containsSoy;
+        return this;
+    }
+
+    public MenuItemBuilder WithIsVegan(bool isVegan)
+    {
+        _isVegan = isVegan;
+        return this;
+    }
+
+    public MenuItemBuilder WithIsVegetarian(bool isVegetarian)
+    {
+        _isVegetarian = isVegetarian;
+        return this;
+    }
+
+    public MenuItemBuilder WithIsFeatured(bool isFeatured)
+    {
+        _isFeatured = isFeatured;
+        return this;
+    }
+
+    public MenuItemBuilder WithIsNew(bool isNew)
+    {
+        _isNew = isNew;
+        return this;
+    }
+
     public MenuItem Build()
     {
         var menuItem = new MenuItem

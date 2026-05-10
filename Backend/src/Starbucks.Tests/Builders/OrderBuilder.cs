@@ -124,12 +124,6 @@ public class OrderBuilder
         return this;
     }
 
-    public OrderBuilder WithPreparedAt(DateTime preparedAt)
-    {
-        _preparedAt = preparedAt;
-        return this;
-    }
-
     public OrderBuilder WithCompletedAt(DateTime completedAt)
     {
         _completedAt = completedAt;
@@ -194,6 +188,18 @@ public class OrderBuilder
     public OrderBuilder WithCreatedAt(DateTime createdAt)
     {
         _createdAt = createdAt;
+        return this;
+    }
+
+    public OrderBuilder WithItems(List<OrderItem> items)
+    {
+        // This will be set in the Build method
+        return this;
+    }
+
+    public OrderBuilder WithPreparedAt(DateTime? preparedAt)
+    {
+        _preparedAt = preparedAt;
         return this;
     }
 

@@ -1,4 +1,5 @@
 import { QueryClient, DefaultOptions } from '@tanstack/react-query';
+import { queryKeys } from './queryKeys';
 
 /**
  * React Query Configuration
@@ -38,58 +39,17 @@ export const queryClient = new QueryClient({
 });
 
 /**
- * Query Key Factory
- * Centralized query key management for consistency and refactoring
+ * Export queryKeys for use throughout the app
  */
-export const queryKeys = {
-  all: ['queries'] as const,
-  
-  // Menu queries
-  menu: {
-    all: [...queryKeys.all, 'menu'] as const,
-    categories: () => [...queryKeys.menu.all, 'categories'] as const,
-    category: (id: string) => [...queryKeys.menu.categories(), id] as const,
-    items: () => [...queryKeys.menu.all, 'items'] as const,
-    item: (id: string) => [...queryKeys.menu.items(), id] as const,
-    search: (query: string) => [...queryKeys.menu.all, 'search', query] as const,
-  },
-  
-  // Locations queries
-  locations: {
-    all: [...queryKeys.all, 'locations'] as const,
-    list: () => [...queryKeys.locations.all, 'list'] as const,
-    detail: (id: string) => [...queryKeys.locations.all, 'detail', id] as const,
-    byCity: (city: string) => [...queryKeys.locations.all, 'byCity', city] as const,
-    nearby: (lat: number, lng: number) => [...queryKeys.locations.all, 'nearby', lat, lng] as const,
-  },
-  
-  // User queries
-  user: {
-    all: [...queryKeys.all, 'user'] as const,
-    profile: () => [...queryKeys.user.all, 'profile'] as const,
-    preferences: () => [...queryKeys.user.all, 'preferences'] as const,
-  },
-  
-  // Page data queries
-  pages: {
-    all: [...queryKeys.all, 'pages'] as const,
-    detail: (slug: string) => [...queryKeys.pages.all, 'detail', slug] as const,
-  },
-  
-  // Auth queries
-  auth: {
-    all: [...queryKeys.all, 'auth'] as const,
-    status: () => [...queryKeys.auth.all, 'status'] as const,
-  },
-};
+export { queryKeys };
 
 /**
  * Cache invalidation helpers
  */
 export const invalidateQueries = {
-  menu: () => queryClient.invalidateQueries({ queryKey: queryKeys.menu.all }),
-  locations: () => queryClient.invalidateQueries({ queryKey: queryKeys.locations.all }),
-  user: () => queryClient.invalidateQueries({ queryKey: queryKeys.user.all }),
-  pages: () => queryClient.invalidateQueries({ queryKey: queryKeys.pages.all }),
+  menu: () => queryClient.invalidateQueries({ queryKey: queryKeys.menu.all() }),
+  locations: () => queryClient.invalidateQueries({ queryKey: queryKeys.locations.all() }),
+  user: () => queryClient.invalidateQueries({ queryKey: queryKeys.user.all() }),
+  pages: () => queryClient.invalidateQueries({ queryKey: queryKeys.pages.all() }),
   all: () => queryClient.invalidateQueries(),
 };

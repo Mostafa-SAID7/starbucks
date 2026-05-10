@@ -47,6 +47,8 @@ export function useLanguage(): UseLanguageReturn {
     lang,
     isRTL,
     i18n,
-    changeLanguage: (newLang: Language) => i18n.changeLanguage(newLang),
+    changeLanguage: async (newLang: Language) => {
+      await i18n.changeLanguage(newLang);
+    },
   };
 }

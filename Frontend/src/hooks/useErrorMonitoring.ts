@@ -24,7 +24,8 @@ export function useErrorMonitoring() {
   // Set user context when user changes
   useEffect(() => {
     if (user) {
-      errorMonitor.setUser(user.id, user.email, user.username);
+      const userName = `${user.firstName} ${user.lastName}`.trim();
+      errorMonitor.setUser(user.id, user.email, userName);
     } else {
       errorMonitor.clearUser();
     }

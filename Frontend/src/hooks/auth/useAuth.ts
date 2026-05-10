@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { authApi } from '@/lib/api';
+import { authService } from '@/services/api/authService';
 import { logError } from '@/lib/errorUtils';
 import { errorMonitor } from '@/lib/errorMonitoring';
 import { AuthStore } from '@/types/auth';
@@ -21,7 +21,7 @@ export const useAuthStore = create<AuthStore>()(
         try {
           set({ isLoading: true, error: null });
 
-          const response = await authApi.login(credentials);
+          const response = await authService.login(credentials);
           const { token, refreshToken, user } = response;
 
           // Store tokens in localStorage for axios interceptor
@@ -60,7 +60,7 @@ export const useAuthStore = create<AuthStore>()(
         try {
           set({ isLoading: true, error: null });
 
-          const response = await authApi.register(userData);
+          const response = await authService.register(userData);
           const { token, refreshToken, user } = response;
 
           // Store tokens in localStorage for axios interceptor
@@ -97,7 +97,7 @@ export const useAuthStore = create<AuthStore>()(
 
       logout: () => {
         // Call logout API (fire and forget)
-        authApi.logout().catch((error) => {
+        authService.logout().catch((error) => {
           logError(error, 'Auth Logout');
         });
 

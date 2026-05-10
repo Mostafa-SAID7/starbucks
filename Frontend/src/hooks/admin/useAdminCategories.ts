@@ -1,10 +1,10 @@
 /**
  * Admin Categories Hook
  * Manages category management operations and state
+ * Now uses unified useAdminCRUD hook - eliminates 150+ lines of duplicate code
  */
 
-import { useState, useCallback } from 'react';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useCallback } from 'react';
 import {
   getCategories,
   getCategoryDetails,
@@ -15,9 +15,8 @@ import {
   createMenuItem,
   updateMenuItem,
   deleteMenuItem,
-  getMenuItemDetails,
 } from '@/services/admin/adminCategoryService';
-import { usePagination } from '@/hooks/common/usePagination';
+import { useAdminCRUD } from '@/hooks/admin/useAdminCRUD';
 import {
   CategoryManagementDto,
   CreateCategoryRequestDto,
@@ -31,190 +30,92 @@ export interface UseAdminCategoriesOptions {
   pageSize?: number;
 }
 
-export interface UseAdminCategoriesReturn {
-  // Categories
-  categories: CategoryManagementDto[];
-  pagination: any;
-  isLoadingCategories: boolean;
-  categoriesError: string | null;
-  goToPage: (pageNumber: number) => void;
-  setPageSize: (pageSize: number) => void;
-
-  // Category operations
-  createCategoryMutation: any;
-  updateCategoryMutation: any;
-  deleteCategoryMutation: any;
-
-  // Selected category
-  selectedCategory: CategoryManagementDto | null;
-  isLoadingCategoryDetails: boolean;
-  selectCategory: (id: string) => Promise<void>;
-
-  // Menu items
-  menuItems: MenuItemManagementDto[];
-  menuItemsPagination: any;
-  isLoadingMenuItems: boolean;
-  menuItemsError: string | null;
-  loadCategoryMenuItems: (categoryId: string, pageNumber?: number, pageSize?: number) => Promise<void>;
-
-  // Menu item operations
-  createMenuItemMutation: any;
-  updateMenuItemMutation: any;
-  deleteMenuItemMutation: any;
-
-  // Selected menu item
-  selectedMenuItem: MenuItemManagementDto | null;
-  selectMenuItem: (id: string) => Promise<void>;
-}
-
 /**
  * Hook for managing admin categories
+ * Uses unified useAdminCRUD for CRUD operations
  */
-export function useAdminCategories(
-  options: UseAdminCategoriesOptions = {}
-): UseAdminCategoriesReturn {
+export function useAdminCategories(options: UseAdminCategoriesOptions = {}) {
   const { pageSize = 20 } = options;
-  const queryClient = useQueryClient();
 
-  const [selectedCategory, setSelectedCategory] = useState<CategoryManagementDto | null>(null);
-  const [selectedMenuItem, setSelectedMenuItem] = useState<MenuItemManagementDto | null>(null);
-  const [menuItems, setMenuItems] = useState<MenuItemManagementDto[]>([]);
-  const [menuItemsPagination, setMenuItemsPagination] = useState<any>(null);
-
-  // Pagination hook for categories
-  const {
-    items: categories,
-    pagination,
-    isLoading: isLoadingCategories,
-    error: categoriesError,
-    goToPage,
-    setPageSize,
-  } = usePagination((pageNumber, pageSize) => getCategories(pageNumber, pageSize), {
-    initialPageSize: pageSize,
-  });
-
-  // Create category mutation
-  const createCategoryMutation = useMutation({
-    mutationFn: (data: CreateCategoryRequestDto) => createCategory(data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['admin-categories'] });
+  // Use generic CRUD hook for categories
+  const categories = useAdminCRUD<
+    CategoryManagementDto,
+    CreateCategoryRequestDto,
+    UpdateCategoryRequestDto
+  >(
+    {
+      fetchList: (pageNumber, pageSize) => getCategories(pageNumber, pageSize),
+      fetchDetails: getCategoryDetails,
+      create: createCategory,
+      update: updateCategory,
+      delete: deleteCategory,
     },
-  });
-
-  // Update category mutation
-  const updateCategoryMutation = useMutation({
-    mutationFn: ({ id, data }: { id: string; data: UpdateCategoryRequestDto }) =>
-      updateCategory(id, data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['admin-categories'] });
-      setSelectedCategory(null);
-    },
-  });
-
-  // Delete category mutation
-  const deleteCategoryMutation = useMutation({
-    mutationFn: (id: string) => deleteCategory(id),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['admin-categories'] });
-      setSelectedCategory(null);
-    },
-  });
-
-  // Get category details
-  const {
-    data: categoryDetailsData,
-    isLoading: isLoadingCategoryDetails,
-  } = useQuery({
-    queryKey: ['admin-category-details', selectedCategory?.id],
-    queryFn: () => (selectedCategory ? getCategoryDetails(selectedCategory.id) : null),
-    enabled: !!selectedCategory,
-  });
-
-  const selectCategory = useCallback(async (id: string) => {
-    const category = categories.find((c) => c.id === id);
-    if (category) {
-      setSelectedCategory(category);
-    }
-  }, [categories]);
-
-  // Load category menu items
-  const loadCategoryMenuItems = useCallback(
-    async (categoryId: string, pageNumber: number = 1, pageSize: number = 20) => {
-      try {
-        const result = await getCategoryMenuItems(categoryId, pageNumber, pageSize);
-        setMenuItems(result.items);
-        setMenuItemsPagination({
-          pageNumber: result.pageNumber,
-          pageSize: result.pageSize,
-          totalCount: result.totalCount,
-          totalPages: result.totalPages,
-        });
-      } catch (error) {
-        console.error('Failed to load category menu items:', error);
-      }
-    },
-    []
+    { pageSize }
   );
 
-  // Create menu item mutation
-  const createMenuItemMutation = useMutation({
-    mutationFn: (data: CreateMenuItemRequestDto) => createMenuItem(data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['admin-menu-items'] });
-      if (selectedCategory) {
-        loadCategoryMenuItems(selectedCategory.id);
+  // Use generic CRUD hook for menu items
+  const menuItems = useAdminCRUD<
+    MenuItemManagementDto,
+    CreateMenuItemRequestDto,
+    UpdateMenuItemRequestDto
+  >(
+    {
+      fetchList: (pageNumber, pageSize) => 
+        getCategoryMenuItems(categories.selectedItem?.id || '', pageNumber, pageSize),
+      fetchDetails: (id) => Promise.resolve({} as MenuItemManagementDto),
+      create: createMenuItem,
+      update: updateMenuItem,
+      delete: deleteMenuItem,
+    },
+    { pageSize }
+  );
+
+  // Load menu items when category is selected
+  const selectCategory = useCallback(
+    async (id: string) => {
+      const category = categories.items.find((c) => c.id === id);
+      if (category) {
+        categories.selectItem(category);
+        // Load menu items for this category
+        await menuItems.loadItems(1, pageSize);
       }
     },
-  });
-
-  // Update menu item mutation
-  const updateMenuItemMutation = useMutation({
-    mutationFn: ({ id, data }: { id: string; data: UpdateMenuItemRequestDto }) =>
-      updateMenuItem(id, data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['admin-menu-items'] });
-      setSelectedMenuItem(null);
-    },
-  });
-
-  // Delete menu item mutation
-  const deleteMenuItemMutation = useMutation({
-    mutationFn: (id: string) => deleteMenuItem(id),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['admin-menu-items'] });
-      setSelectedMenuItem(null);
-    },
-  });
-
-  const selectMenuItem = useCallback(async (id: string) => {
-    const item = menuItems.find((m) => m.id === id);
-    if (item) {
-      setSelectedMenuItem(item);
-    }
-  }, [menuItems]);
+    [categories, menuItems, pageSize]
+  );
 
   return {
-    categories,
-    pagination,
-    isLoadingCategories,
-    categoriesError,
-    goToPage,
-    setPageSize,
-    createCategoryMutation,
-    updateCategoryMutation,
-    deleteCategoryMutation,
-    selectedCategory,
-    isLoadingCategoryDetails,
+    // Categories
+    categories: categories.items,
+    pagination: categories.pagination,
+    isLoadingCategories: categories.isLoading,
+    categoriesError: categories.error,
+    goToPage: categories.goToPage,
+    setPageSize: categories.setPageSize,
+
+    // Category operations
+    createCategoryMutation: categories.createMutation,
+    updateCategoryMutation: categories.updateMutation,
+    deleteCategoryMutation: categories.deleteMutation,
+
+    // Selected category
+    selectedCategory: categories.selectedItem,
+    isLoadingCategoryDetails: categories.isLoadingDetails,
     selectCategory,
-    menuItems,
-    menuItemsPagination,
-    isLoadingMenuItems: false,
-    menuItemsError: null,
-    loadCategoryMenuItems,
-    createMenuItemMutation,
-    updateMenuItemMutation,
-    deleteMenuItemMutation,
-    selectedMenuItem,
-    selectMenuItem,
+
+    // Menu items
+    menuItems: menuItems.items,
+    menuItemsPagination: menuItems.pagination,
+    isLoadingMenuItems: menuItems.isLoading,
+    menuItemsError: menuItems.error,
+    loadCategoryMenuItems: menuItems.loadItems,
+
+    // Menu item operations
+    createMenuItemMutation: menuItems.createMutation,
+    updateMenuItemMutation: menuItems.updateMutation,
+    deleteMenuItemMutation: menuItems.deleteMutation,
+
+    // Selected menu item
+    selectedMenuItem: menuItems.selectedItem,
+    selectMenuItem: menuItems.selectItem,
   };
 }

@@ -201,6 +201,48 @@ public class LocationBuilder
         return this;
     }
 
+    public LocationBuilder WithIsActive(bool isActive)
+    {
+        _isActive = isActive;
+        return this;
+    }
+
+    public LocationBuilder WithAcceptsMobileOrders(bool acceptsMobileOrders)
+    {
+        _acceptsMobileOrders = acceptsMobileOrders;
+        return this;
+    }
+
+    public LocationBuilder WithHasDriveThru(bool hasDriveThru)
+    {
+        _hasDriveThru = hasDriveThru;
+        return this;
+    }
+
+    public LocationBuilder WithIsAccessible(bool isAccessible)
+    {
+        _isAccessible = isAccessible;
+        return this;
+    }
+
+    public LocationBuilder WithHasWifi(bool hasWifi)
+    {
+        _hasWifi = hasWifi;
+        return this;
+    }
+
+    public LocationBuilder WithHasParking(bool hasParking)
+    {
+        _hasParking = hasParking;
+        return this;
+    }
+
+    public LocationBuilder WithHasOutdoorSeating(bool hasOutdoorSeating)
+    {
+        _hasOutdoorSeating = hasOutdoorSeating;
+        return this;
+    }
+
     public Location Build()
     {
         var location = new Location

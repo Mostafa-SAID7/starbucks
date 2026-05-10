@@ -3,7 +3,7 @@
  * Handles all user management API calls
  */
 
-import { api } from '@/lib/api';
+import { apiService } from '@/services/api';
 import { PagedResult } from '@/types/common/pagination';
 import {
   UserManagementDto,
@@ -29,21 +29,21 @@ export const getUsers = async (
   if (searchTerm) params.append('searchTerm', searchTerm);
   if (role) params.append('role', role);
 
-  return api.get(`/admin/users?${params.toString()}`);
+  return apiService.get(`/admin/users?${params.toString()}`);
 };
 
 /**
  * Get user by ID
  */
 export const getUserById = async (id: string): Promise<UserManagementDto> => {
-  return api.get(`/admin/users/${id}`);
+  return apiService.get(`/admin/users/${id}`);
 };
 
 /**
  * Create a new user
  */
 export const createUser = async (data: CreateUserRequestDto): Promise<UserManagementDto> => {
-  return api.post('/admin/users', data);
+  return apiService.post('/admin/users', data);
 };
 
 /**
@@ -53,28 +53,28 @@ export const updateUser = async (
   id: string,
   data: UpdateUserRequestDto
 ): Promise<UserManagementDto> => {
-  return api.put(`/admin/users/${id}`, data);
+  return apiService.put(`/admin/users/${id}`, data);
 };
 
 /**
  * Delete a user (soft delete)
  */
 export const deleteUser = async (id: string): Promise<void> => {
-  return api.delete(`/admin/users/${id}`);
+  return apiService.delete(`/admin/users/${id}`);
 };
 
 /**
  * Disable user account
  */
 export const disableUser = async (id: string): Promise<{ message: string }> => {
-  return api.post(`/admin/users/${id}/disable`);
+  return apiService.post(`/admin/users/${id}/disable`);
 };
 
 /**
  * Enable user account
  */
 export const enableUser = async (id: string): Promise<{ message: string }> => {
-  return api.post(`/admin/users/${id}/enable`);
+  return apiService.post(`/admin/users/${id}/enable`);
 };
 
 /**
@@ -83,14 +83,14 @@ export const enableUser = async (id: string): Promise<{ message: string }> => {
 export const resetPassword = async (
   id: string
 ): Promise<{ temporaryPassword: string }> => {
-  return api.post(`/admin/users/${id}/reset-password`);
+  return apiService.post(`/admin/users/${id}/reset-password`);
 };
 
 /**
  * Change user role
  */
 export const changeUserRole = async (id: string, role: UserRole): Promise<UserManagementDto> => {
-  return api.post(`/admin/users/${id}/role`, { role });
+  return apiService.post(`/admin/users/${id}/role`, { role });
 };
 
 /**
@@ -105,7 +105,7 @@ export const getUserActivity = async (
   params.append('pageNumber', pageNumber.toString());
   params.append('pageSize', pageSize.toString());
 
-  return api.get(`/admin/users/${id}/activity?${params.toString()}`);
+  return apiService.get(`/admin/users/${id}/activity?${params.toString()}`);
 };
 
 /**
@@ -120,7 +120,7 @@ export const getUserLoginHistory = async (
   params.append('pageNumber', pageNumber.toString());
   params.append('pageSize', pageSize.toString());
 
-  return api.get(`/admin/users/${id}/login-history?${params.toString()}`);
+  return apiService.get(`/admin/users/${id}/login-history?${params.toString()}`);
 };
 
 export const adminUserService = {

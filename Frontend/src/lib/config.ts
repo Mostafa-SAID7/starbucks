@@ -109,7 +109,7 @@ export function validateConfig() {
  * Get configuration for specific environment
  */
 export function getEnvironmentConfig() {
-  return {
+  const envConfigs = {
     development: {
       logLevel: 'debug',
       enableDevTools: true,
@@ -125,7 +125,10 @@ export function getEnvironmentConfig() {
       enableDevTools: false,
       mockDelay: 0,
     },
-  }[config.env.nodeEnv] || {};
+  };
+  
+  const nodeEnv = config.env.nodeEnv as keyof typeof envConfigs;
+  return envConfigs[nodeEnv] || {};
 }
 
 export default config;

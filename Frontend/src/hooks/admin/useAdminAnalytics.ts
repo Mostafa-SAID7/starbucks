@@ -1,10 +1,12 @@
 /**
  * Admin Analytics Hook
  * Manages analytics data fetching and state
+ * Simplified to use unified hooks and remove duplicate date range logic
  */
 
 import { useState, useCallback } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { queryKeys } from '@/lib/queryKeys';
 import {
   getDashboardStats,
   getSalesAnalytics,
@@ -26,65 +28,23 @@ export interface UseAdminAnalyticsOptions {
   refetchInterval?: number;
 }
 
-export interface UseAdminAnalyticsReturn {
-  // Dashboard
-  dashboardStats: DashboardStatsDto | null;
-  isLoadingDashboard: boolean;
-  dashboardError: string | null;
-
-  // Sales analytics
-  salesAnalytics: SalesAnalyticsDto[];
-  isLoadingSalesAnalytics: boolean;
-  salesAnalyticsError: string | null;
-  loadSalesAnalytics: (startDate: string, endDate: string) => Promise<void>;
-
-  // User analytics
-  userAnalytics: UserAnalyticsDto[];
-  isLoadingUserAnalytics: boolean;
-  userAnalyticsError: string | null;
-  loadUserAnalytics: (startDate: string, endDate: string) => Promise<void>;
-
-  // Order analytics
-  orderAnalytics: OrderAnalyticsDto[];
-  isLoadingOrderAnalytics: boolean;
-  orderAnalyticsError: string | null;
-  loadOrderAnalytics: (startDate: string, endDate: string) => Promise<void>;
-
-  // Location performance
-  locationPerformance: LocationPerformanceDto[];
-  isLoadingLocationPerformance: boolean;
-  locationPerformanceError: string | null;
-  loadLocationPerformance: () => Promise<void>;
-
-  // Menu item popularity
-  menuItemPopularity: MenuItemPopularityDto[];
-  isLoadingMenuItemPopularity: boolean;
-  menuItemPopularityError: string | null;
-  loadMenuItemPopularity: () => Promise<void>;
-
-  // Date range
-  dateRange: { startDate: string; endDate: string };
-  setDateRange: (startDate: string, endDate: string) => void;
-}
-
 /**
  * Hook for managing admin analytics
  */
-export function useAdminAnalytics(
-  options: UseAdminAnalyticsOptions = {}
-): UseAdminAnalyticsReturn {
+export function useAdminAnalytics(options: UseAdminAnalyticsOptions = {}) {
   const { refetchInterval = 60000 } = options; // 1 minute default
 
-  const [dateRange, setDateRangeState] = useState({
-    startDate: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-    endDate: new Date().toISOString().split('T')[0],
-  });
+  // Get default date range (last 30 days)
+  const getDefaultDateRange = useCallback(() => {
+    const endDate = new Date();
+    const startDate = new Date(endDate.getTime() - 30 * 24 * 60 * 60 * 1000);
+    return {
+      startDate: startDate.toISOString().split('T')[0],
+      endDate: endDate.toISOString().split('T')[0],
+    };
+  }, []);
 
-  const [salesAnalytics, setSalesAnalytics] = useState<SalesAnalyticsDto[]>([]);
-  const [userAnalytics, setUserAnalytics] = useState<UserAnalyticsDto[]>([]);
-  const [orderAnalytics, setOrderAnalytics] = useState<OrderAnalyticsDto[]>([]);
-  const [locationPerformance, setLocationPerformance] = useState<LocationPerformanceDto[]>([]);
-  const [menuItemPopularity, setMenuItemPopularity] = useState<MenuItemPopularityDto[]>([]);
+  const [dateRange, setDateRange] = useState(getDefaultDateRange());
 
   // Dashboard stats query
   const {
@@ -92,87 +52,110 @@ export function useAdminAnalytics(
     isLoading: isLoadingDashboard,
     error: dashboardError,
   } = useQuery({
-    queryKey: ['admin-dashboard-stats'],
+    queryKey: queryKeys.admin.dashboardStats(),
     queryFn: getDashboardStats,
     refetchInterval,
   });
 
-  // Sales analytics
-  const loadSalesAnalytics = useCallback(async (startDate: string, endDate: string) => {
-    try {
-      const data = await getSalesAnalytics(startDate, endDate);
-      setSalesAnalytics(data);
-    } catch (error) {
-      console.error('Failed to load sales analytics:', error);
-    }
-  }, []);
-
+  // Sales analytics query
   const {
+    data: salesAnalytics = [],
     isLoading: isLoadingSalesAnalytics,
     error: salesAnalyticsError,
   } = useQuery({
-    queryKey: ['admin-sales-analytics', dateRange.startDate, dateRange.endDate],
+    queryKey: queryKeys.admin.salesAnalytics(dateRange.startDate, dateRange.endDate),
     queryFn: () => getSalesAnalytics(dateRange.startDate, dateRange.endDate),
-    onSuccess: setSalesAnalytics,
   });
 
-  // User analytics
-  const loadUserAnalytics = useCallback(async (startDate: string, endDate: string) => {
-    try {
-      const data = await getUserAnalytics(startDate, endDate);
-      setUserAnalytics(data);
-    } catch (error) {
-      console.error('Failed to load user analytics:', error);
-    }
-  }, []);
-
+  // User analytics query
   const {
+    data: userAnalytics = [],
     isLoading: isLoadingUserAnalytics,
     error: userAnalyticsError,
   } = useQuery({
-    queryKey: ['admin-user-analytics', dateRange.startDate, dateRange.endDate],
+    queryKey: queryKeys.admin.userAnalytics(dateRange.startDate, dateRange.endDate),
     queryFn: () => getUserAnalytics(dateRange.startDate, dateRange.endDate),
-    onSuccess: setUserAnalytics,
   });
 
-  // Order analytics
-  const loadOrderAnalytics = useCallback(async (startDate: string, endDate: string) => {
-    try {
-      const data = await getOrderAnalytics(startDate, endDate);
-      setOrderAnalytics(data);
-    } catch (error) {
-      console.error('Failed to load order analytics:', error);
-    }
-  }, []);
-
+  // Order analytics query
   const {
+    data: orderAnalytics = [],
     isLoading: isLoadingOrderAnalytics,
     error: orderAnalyticsError,
   } = useQuery({
-    queryKey: ['admin-order-analytics', dateRange.startDate, dateRange.endDate],
+    queryKey: queryKeys.admin.orderAnalytics(dateRange.startDate, dateRange.endDate),
     queryFn: () => getOrderAnalytics(dateRange.startDate, dateRange.endDate),
-    onSuccess: setOrderAnalytics,
   });
 
-  // Location performance
-  const loadLocationPerformance = useCallback(async () => {
-    try {
-      const data = await getLocationPerformance();
-      setLocationPerformance(data);
-    } catch (error) {
-      console.error('Failed to load location performance:', error);
-    }
-  }, []);
-
+  // Location performance query
   const {
+    data: locationPerformance = [],
     isLoading: isLoadingLocationPerformance,
     error: locationPerformanceError,
   } = useQuery({
-    queryKey: ['admin-location-performance'],
+    queryKey: queryKeys.admin.locationPerformance(),
     queryFn: getLocationPerformance,
-    onSuccess: setLocationPerformance,
     refetchInterval,
   });
+
+  // Menu item popularity query
+  const {
+    data: menuItemPopularity = [],
+    isLoading: isLoadingMenuItemPopularity,
+    error: menuItemPopularityError,
+  } = useQuery({
+    queryKey: queryKeys.admin.menuItemPopularity(),
+    queryFn: getMenuItemPopularity,
+    refetchInterval,
+  });
+
+  // Update date range and refetch analytics
+  const setDateRangeAndRefetch = useCallback((startDate: string, endDate: string) => {
+    setDateRange({ startDate, endDate });
+  }, []);
+
+  return {
+    // Dashboard
+    dashboardStats,
+    isLoadingDashboard,
+    dashboardError: dashboardError?.message || null,
+
+    // Sales analytics
+    salesAnalytics,
+    isLoadingSalesAnalytics,
+    salesAnalyticsError: salesAnalyticsError?.message || null,
+
+    // User analytics
+    userAnalytics,
+    isLoadingUserAnalytics,
+    userAnalyticsError: userAnalyticsError?.message || null,
+
+    // Order analytics
+    orderAnalytics,
+    isLoadingOrderAnalytics,
+    orderAnalyticsError: orderAnalyticsError?.message || null,
+
+    // Location performance
+    locationPerformance,
+    isLoadingLocationPerformance,
+    locationPerformanceError: locationPerformanceError?.message || null,
+
+    // Menu item popularity
+    menuItemPopularity,
+    isLoadingMenuItemPopularity,
+    menuItemPopularityError: menuItemPopularityError?.message || null,
+
+    // Date range
+    dateRange,
+    setDateRange: setDateRangeAndRefetch,
+  };
+}
+
+  useEffect(() => {
+    if (locationPerformanceData) {
+      setLocationPerformance(locationPerformanceData);
+    }
+  }, [locationPerformanceData]);
 
   // Menu item popularity
   const loadMenuItemPopularity = useCallback(async () => {
@@ -185,14 +168,20 @@ export function useAdminAnalytics(
   }, []);
 
   const {
+    data: menuItemPopularityData,
     isLoading: isLoadingMenuItemPopularity,
     error: menuItemPopularityError,
   } = useQuery({
-    queryKey: ['admin-menu-item-popularity'],
+    queryKey: queryKeys.admin.menuItemPopularity(),
     queryFn: getMenuItemPopularity,
-    onSuccess: setMenuItemPopularity,
     refetchInterval,
   });
+
+  useEffect(() => {
+    if (menuItemPopularityData) {
+      setMenuItemPopularity(menuItemPopularityData);
+    }
+  }, [menuItemPopularityData]);
 
   const setDateRange = useCallback((startDate: string, endDate: string) => {
     setDateRangeState({ startDate, endDate });

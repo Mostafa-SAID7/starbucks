@@ -1,6 +1,19 @@
 import '@testing-library/jest-dom';
 import { cleanup } from '@testing-library/react';
-import { afterEach, beforeAll, afterAll } from 'vitest';
+import { afterEach, beforeAll, afterAll, beforeEach } from 'vitest';
+import { server } from './mocks/server';
+
+// Start MSW server
+beforeAll(() => server.listen({ onUnhandledRequest: 'error' }));
+
+// Reset handlers after each test
+afterEach(() => {
+  server.resetHandlers();
+  cleanup();
+});
+
+// Clean up after all tests
+afterAll(() => server.close());
 
 // Mock IntersectionObserver
 global.IntersectionObserver = class IntersectionObserver {
@@ -8,7 +21,8 @@ global.IntersectionObserver = class IntersectionObserver {
   disconnect() {}
   observe() {}
   unobserve() {}
-};
+  takeRecords() { return []; }
+} as any;
 
 // Mock ResizeObserver
 global.ResizeObserver = class ResizeObserver {

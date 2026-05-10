@@ -38,7 +38,7 @@ export function useFormValidation<T>(
       } catch (error) {
         if (error instanceof ZodError) {
           const fieldErrors: ValidationError = {};
-          error.errors.forEach((err) => {
+          error.issues.forEach((err: any) => {
             const path = err.path.join('.');
             if (fieldErrors[path]) {
               if (Array.isArray(fieldErrors[path])) {
@@ -97,7 +97,7 @@ export function useFieldValidation(schema: ZodSchema) {
         return null;
       } catch (error) {
         if (error instanceof ZodError) {
-          return error.errors[0]?.message || 'Validation error';
+          return error.issues[0]?.message || 'Validation error';
         }
         return 'Validation error';
       }
@@ -143,7 +143,7 @@ export function useAsyncFormValidation<T>(
       } catch (error) {
         if (error instanceof ZodError) {
           const fieldErrors: ValidationError = {};
-          error.errors.forEach((err) => {
+          error.issues.forEach((err: any) => {
             const path = err.path.join('.');
             fieldErrors[path] = err.message;
           });

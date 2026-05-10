@@ -43,5 +43,14 @@ export { useErrorMonitoring } from "./useErrorMonitoring";
 // Form handling hooks
 export { useFormHandler } from "./useFormHandler";
 
-// Theme hooks (if exists)
-// export { useTheme } from "./useTheme";
+// Theme hooks
+export { useTheme } from "./useTheme";
+
+// Initial load & data fetching hooks
+export {
+  useInitialLoad,
+  useStaleWhileRevalidate,
+  useOptimisticUpdate,
+  useRetryWithBackoff,
+  type InitialLoadOptions,
+} from "./useInitialLoad";

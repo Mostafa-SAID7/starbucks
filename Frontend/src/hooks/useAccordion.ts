@@ -31,8 +31,8 @@ export function useAccordion(defaultOpen?: string, allowMultiple: boolean = fals
    * Toggle a section open/closed
    */
   const toggleSection = useCallback((sectionId: string) => {
-    setOpenSections((prev) => {
-      const newSet = new Set(prev);
+    setOpenSections((prev: Set<string>) => {
+      const newSet = new Set<string>(prev);
 
       if (allowMultiple) {
         // Multiple mode: toggle individual section
@@ -68,8 +68,8 @@ export function useAccordion(defaultOpen?: string, allowMultiple: boolean = fals
    */
   const openSection = useCallback(
     (sectionId: string) => {
-      setOpenSections((prev) => {
-        const newSet = allowMultiple ? new Set(prev) : new Set();
+      setOpenSections((prev: Set<string>) => {
+        const newSet = allowMultiple ? new Set<string>(prev) : new Set<string>();
         newSet.add(sectionId);
         return newSet;
       });

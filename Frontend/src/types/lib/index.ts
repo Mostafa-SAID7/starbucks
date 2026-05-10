@@ -4,6 +4,7 @@ export enum ErrorType {
   SERVER = "server",
   NOT_FOUND = "not_found",
   UNAUTHORIZED = "unauthorized",
+  VALIDATION = "validation",
   GENERAL = "general",
 }
 
