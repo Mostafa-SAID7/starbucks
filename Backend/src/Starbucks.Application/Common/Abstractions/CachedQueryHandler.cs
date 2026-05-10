@@ -1,5 +1,5 @@
 using MediatR;
-using Starbucks.Application.Common.Interfaces;
+using Starbucks.Application.Common.Interfaces.Services;
 using Starbucks.Application.Common.Models;
 
 namespace Starbucks.Application.Common.Abstractions;

@@ -1,36 +1,37 @@
-using Starbucks.Application.Common.Specifications;
+using System.Linq.Expressions;
 using Starbucks.Domain.Common;
+using Starbucks.Application.Common.Specifications;
 
-namespace Starbucks.Application.Common.Interfaces;
+namespace Starbucks.Application.Common.Interfaces.Repositories;
 
 /// <summary>
-/// Generic repository interface for data access abstraction
-/// Provides CRUD operations and query capabilities
+/// Generic repository interface for all entities
+/// Provides abstraction over data access operations
 /// </summary>
 public interface IRepository<T> where T : BaseEntity
 {
     /// <summary>
-    /// Gets an entity by its ID
+    /// Gets entity by ID
     /// </summary>
     Task<T?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Gets all entities matching the specification
+    /// Gets entities using specification pattern
     /// </summary>
     Task<IEnumerable<T>> GetAsync(ISpecification<T> specification, CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Gets a single entity matching the specification
+    /// Gets single entity using specification pattern
     /// </summary>
     Task<T?> GetSingleAsync(ISpecification<T> specification, CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Gets all entities (use with caution - consider pagination)
+    /// Gets all entities
     /// </summary>
     Task<IEnumerable<T>> GetAllAsync(CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Gets paginated results
+    /// Gets paginated entities
     /// </summary>
     Task<(IEnumerable<T> Items, int TotalCount)> GetPagedAsync(
         ISpecification<T> specification,
@@ -39,17 +40,17 @@ public interface IRepository<T> where T : BaseEntity
         CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Counts entities matching the specification
+    /// Counts entities matching specification
     /// </summary>
     Task<int> CountAsync(ISpecification<T> specification, CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Checks if any entity matches the specification
+    /// Checks if any entity matches specification
     /// </summary>
     Task<bool> AnyAsync(ISpecification<T> specification, CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Adds a new entity
+    /// Adds entity
     /// </summary>
     Task AddAsync(T entity, CancellationToken cancellationToken = default);
 
@@ -59,7 +60,7 @@ public interface IRepository<T> where T : BaseEntity
     Task AddRangeAsync(IEnumerable<T> entities, CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Updates an existing entity
+    /// Updates entity
     /// </summary>
     Task UpdateAsync(T entity, CancellationToken cancellationToken = default);
 
@@ -69,22 +70,22 @@ public interface IRepository<T> where T : BaseEntity
     Task UpdateRangeAsync(IEnumerable<T> entities, CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Deletes an entity (soft delete if supported)
+    /// Soft deletes entity (marks as deleted)
     /// </summary>
     Task DeleteAsync(T entity, CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Deletes multiple entities (soft delete if supported)
+    /// Soft deletes multiple entities
     /// </summary>
     Task DeleteRangeAsync(IEnumerable<T> entities, CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Permanently deletes an entity (hard delete)
+    /// Hard deletes entity (permanent deletion)
     /// </summary>
     Task HardDeleteAsync(T entity, CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Permanently deletes multiple entities (hard delete)
+    /// Hard deletes multiple entities
     /// </summary>
     Task HardDeleteRangeAsync(IEnumerable<T> entities, CancellationToken cancellationToken = default);
 }

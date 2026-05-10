@@ -1,4 +1,4 @@
-using Starbucks.Application.Common.Interfaces;
+using Starbucks.Application.Common.Interfaces.Services;
 
 namespace Starbucks.Infrastructure.Services;
 

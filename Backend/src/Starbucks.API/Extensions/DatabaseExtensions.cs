@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using Starbucks.Application.Common.Interfaces;
+using Starbucks.Application.Common.Interfaces.Data;
 using Starbucks.Infrastructure.Data;
 
 namespace Starbucks.API.Extensions;

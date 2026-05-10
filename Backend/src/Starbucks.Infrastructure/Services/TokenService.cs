@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using Starbucks.Application.Common.Interfaces;
+using Starbucks.Application.Common.Interfaces.Services;
+using Starbucks.Application.Common.Interfaces.Data;
 using Starbucks.Application.Common.Settings;
 using Starbucks.Domain.Entities;
 using System.IdentityModel.Tokens.Jwt;

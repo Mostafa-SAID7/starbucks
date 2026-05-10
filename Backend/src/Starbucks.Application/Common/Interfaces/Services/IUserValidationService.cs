@@ -1,4 +1,4 @@
-namespace Starbucks.Application.Common.Interfaces;
+namespace Starbucks.Application.Common.Interfaces.Services;
 
 /// <summary>
 /// Service for validating user-related operations.

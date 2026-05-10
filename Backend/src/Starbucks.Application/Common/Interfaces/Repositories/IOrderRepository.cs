@@ -1,7 +1,7 @@
 using Starbucks.Domain.Entities;
 using Starbucks.Domain.Enums;
 
-namespace Starbucks.Application.Common.Interfaces;
+namespace Starbucks.Application.Common.Interfaces.Repositories;
 
 /// <summary>
 /// Order-specific repository interface

@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using Starbucks.Application.Common.Interfaces;
+using Starbucks.Application.Common.Interfaces.Repositories;
 using Starbucks.Domain.Entities;
 using Starbucks.Domain.Enums;
 using Starbucks.Infrastructure.Data;

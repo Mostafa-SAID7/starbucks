@@ -1,4 +1,4 @@
-namespace Starbucks.Application.Common.Interfaces;
+namespace Starbucks.Application.Common.Interfaces.Services;
 
 /// <summary>
 /// Abstracts DateTime.UtcNow so handlers are fully testable without time-travel hacks.

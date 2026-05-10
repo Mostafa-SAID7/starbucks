@@ -1,6 +1,6 @@
 using Starbucks.Domain.Entities;
 
-namespace Starbucks.Application.Common.Interfaces;
+namespace Starbucks.Application.Common.Interfaces.Repositories;
 
 /// <summary>
 /// Menu-specific repository interface

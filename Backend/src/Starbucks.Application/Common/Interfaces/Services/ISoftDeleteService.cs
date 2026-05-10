@@ -1,7 +1,7 @@
 using Starbucks.Application.Common.Models;
 using Starbucks.Domain.Common;
 
-namespace Starbucks.Application.Common.Interfaces;
+namespace Starbucks.Application.Common.Interfaces.Services;
 
 /// <summary>
 /// Centralized soft delete service for all entities inheriting BaseEntity.

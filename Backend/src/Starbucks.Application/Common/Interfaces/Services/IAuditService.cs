@@ -1,4 +1,4 @@
-namespace Starbucks.Application.Common.Interfaces;
+namespace Starbucks.Application.Common.Interfaces.Services;
 
 /// <summary>
 /// Service for logging audit trail events for administrative actions.

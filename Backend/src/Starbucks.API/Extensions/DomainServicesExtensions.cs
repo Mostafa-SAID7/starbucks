@@ -1,6 +1,9 @@
-using Starbucks.Application.Common.Interfaces;
+using Starbucks.Application.Common.Interfaces.Services;
+using Starbucks.Application.Common.Interfaces.Repositories;
+using Starbucks.Application.Common.Interfaces.Data;
 using Starbucks.Infrastructure.Services;
 using Starbucks.Infrastructure.Repositories;
+using Starbucks.Infrastructure.Data;
 using Starbucks.API.Services;
 
 namespace Starbucks.API.Extensions;
@@ -37,6 +40,9 @@ public static class DomainServicesExtensions
         services.AddScoped<IOrderRepository, OrderRepository>();
         services.AddScoped<IMenuRepository, MenuRepository>();
         services.AddScoped<ILocationRepository, LocationRepository>();
+
+        // Unit of Work: scoped, coordinates repositories and transactions
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         services.AddHttpContextAccessor();
 

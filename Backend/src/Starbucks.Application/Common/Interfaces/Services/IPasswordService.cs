@@ -1,4 +1,4 @@
-namespace Starbucks.Application.Common.Interfaces;
+namespace Starbucks.Application.Common.Interfaces.Services;
 
 /// <summary>
 /// Abstracts password hashing and verification.

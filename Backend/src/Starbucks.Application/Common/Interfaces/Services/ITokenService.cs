@@ -1,6 +1,6 @@
 using Starbucks.Domain.Entities;
 
-namespace Starbucks.Application.Common.Interfaces;
+namespace Starbucks.Application.Common.Interfaces.Services;
 
 public interface ITokenService
 {

@@ -1,6 +1,6 @@
 using Microsoft.Extensions.Logging;
 using StackExchange.Redis;
-using Starbucks.Application.Common.Interfaces;
+using Starbucks.Application.Common.Interfaces.Services;
 using System.Text.Json;
 
 namespace Starbucks.Infrastructure.Services;

@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Http;
-using Starbucks.Application.Common.Interfaces;
+using Starbucks.Application.Common.Interfaces.Services;
 using System.Security.Claims;
 
 namespace Starbucks.API.Services;

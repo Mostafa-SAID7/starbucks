@@ -1,4 +1,4 @@
-using Starbucks.Application.Common.Interfaces;
+using Starbucks.Application.Common.Interfaces.Services;
 using System.Text.Json;
 
 namespace Starbucks.Infrastructure.Services;

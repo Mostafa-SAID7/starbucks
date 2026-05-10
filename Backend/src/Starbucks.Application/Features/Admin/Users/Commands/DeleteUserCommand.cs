@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Starbucks.Application.Common.Interfaces;
+using Starbucks.Application.Common.Interfaces.Data;
+using Starbucks.Application.Common.Interfaces.Services;
 using Starbucks.Application.Common.Models;
 
 namespace Starbucks.Application.Features.Admin.Users.Commands;
