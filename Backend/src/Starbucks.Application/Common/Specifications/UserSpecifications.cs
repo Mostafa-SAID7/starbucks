@@ -13,6 +13,8 @@ public class UserByEmailSpecification : BaseSpecification<User>
     {
         Criteria = u => u.Email == email;
         AddInclude(u => u.Profile);
+        // Note: Orders not included by default to avoid large result sets
+        // Use UserByEmailWithOrdersSpecification if orders are needed
     }
 }
 
@@ -72,6 +74,7 @@ public class VerifiedUsersPagedSpecification : BaseSpecification<User>
     public VerifiedUsersPagedSpecification(int pageNumber, int pageSize)
     {
         Criteria = u => u.IsEmailVerified;
+        AddInclude(u => u.Profile);
         ApplyOrderBy(u => u.CreatedAt);
         ApplyPaging((pageNumber - 1) * pageSize, pageSize);
         ApplyTotalCount();
@@ -86,6 +89,7 @@ public class UsersByRoleSpecification : BaseSpecification<User>
     public UsersByRoleSpecification(UserRole role)
     {
         Criteria = u => u.Role == role;
+        AddInclude(u => u.Profile);
         ApplyOrderBy(u => u.LastName);
     }
 }
@@ -98,6 +102,7 @@ public class UsersWithFailedLoginsSpecification : BaseSpecification<User>
     public UsersWithFailedLoginsSpecification(int minAttempts)
     {
         Criteria = u => u.FailedLoginAttempts >= minAttempts;
+        AddInclude(u => u.Profile);
         ApplyOrderByDescending(u => u.FailedLoginAttempts);
     }
 }
@@ -110,6 +115,7 @@ public class LockedOutUsersSpecification : BaseSpecification<User>
     public LockedOutUsersSpecification()
     {
         Criteria = u => u.LockoutEnd.HasValue && u.LockoutEnd.Value > DateTime.UtcNow;
+        AddInclude(u => u.Profile);
         ApplyOrderByDescending(u => u.LockoutEnd);
     }
 }
@@ -122,6 +128,7 @@ public class UsersCreatedAfterSpecification : BaseSpecification<User>
     public UsersCreatedAfterSpecification(DateTime date)
     {
         Criteria = u => u.CreatedAt >= date;
+        AddInclude(u => u.Profile);
         ApplyOrderByDescending(u => u.CreatedAt);
     }
 }
@@ -134,6 +141,7 @@ public class UsersWithUnverifiedEmailSpecification : BaseSpecification<User>
     public UsersWithUnverifiedEmailSpecification()
     {
         Criteria = u => !u.IsEmailVerified;
+        AddInclude(u => u.Profile);
         ApplyOrderBy(u => u.CreatedAt);
     }
 }
@@ -146,6 +154,7 @@ public class UsersWithUnverifiedPhoneSpecification : BaseSpecification<User>
     public UsersWithUnverifiedPhoneSpecification()
     {
         Criteria = u => !u.IsPhoneVerified;
+        AddInclude(u => u.Profile);
         ApplyOrderBy(u => u.CreatedAt);
     }
 }
@@ -167,6 +176,9 @@ public class UserSearchSpecification : BaseSpecification<User>
     {
         // Build criteria dynamically based on filters
         Criteria = BuildCriteria(searchTerm, role, isEmailVerified, isLocked, createdAfter, createdBefore);
+
+        // Include related data
+        AddInclude(u => u.Profile);
 
         // Apply ordering and pagination
         ApplyOrderByDescending(u => u.CreatedAt);

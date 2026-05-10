@@ -11,6 +11,7 @@ public class MenuItemsByCategorySpecification : BaseSpecification<MenuItem>
     {
         Criteria = i => i.Subcategory.CategoryId == categoryId && i.IsActive && i.IsAvailable;
         AddInclude(i => i.Variants);
+        AddInclude(i => i.Subcategory);
         ApplyOrderBy(i => i.SortOrder);
     }
 }
@@ -24,6 +25,7 @@ public class MenuItemsBySubcategorySpecification : BaseSpecification<MenuItem>
     {
         Criteria = i => i.SubcategoryId == subcategoryId && i.IsActive && i.IsAvailable;
         AddInclude(i => i.Variants);
+        AddInclude(i => i.Subcategory);
         ApplyOrderBy(i => i.SortOrder);
     }
 }
