@@ -1,5 +1,6 @@
 using Starbucks.Application.Common.Interfaces;
 using Starbucks.Infrastructure.Services;
+using Starbucks.Infrastructure.Repositories;
 using Starbucks.API.Services;
 
 namespace Starbucks.API.Extensions;
@@ -29,6 +30,13 @@ public static class DomainServicesExtensions
 
         // Transient: new instance per injection (email is stateless, cheap to create)
         services.AddTransient<IEmailService, EmailService>();
+
+        // Repositories: scoped, one per request
+        services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+        services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IOrderRepository, OrderRepository>();
+        services.AddScoped<IMenuRepository, MenuRepository>();
+        services.AddScoped<ILocationRepository, LocationRepository>();
 
         services.AddHttpContextAccessor();
 
