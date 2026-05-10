@@ -263,6 +263,21 @@ public class ActiveMenuCategoriesSpecification : BaseSpecification<MenuCategory>
 }
 
 /// <summary>
+/// Specification for getting all active menu categories with pagination
+/// </summary>
+public class ActiveMenuCategoriesPagedSpecification : BaseSpecification<MenuCategory>
+{
+    public ActiveMenuCategoriesPagedSpecification(int pageNumber, int pageSize)
+    {
+        Criteria = c => c.IsActive;
+        AddInclude(c => c.Subcategories.Where(s => s.IsActive));
+        ApplyOrderBy(c => c.SortOrder);
+        ApplyPaging((pageNumber - 1) * pageSize, pageSize);
+        ApplyTotalCount();
+    }
+}
+
+/// <summary>
 /// Specification for getting menu category by slug
 /// </summary>
 public class MenuCategoryBySlugSpecification : BaseSpecification<MenuCategory>

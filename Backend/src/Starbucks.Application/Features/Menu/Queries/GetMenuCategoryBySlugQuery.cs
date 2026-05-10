@@ -1,5 +1,4 @@
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Starbucks.Application.Common.Abstractions;
 using Starbucks.Application.Common.Interfaces.Data;
@@ -16,18 +15,16 @@ public record GetMenuCategoryBySlugQuery(string Slug, string? Language = null)
 
 public class GetMenuCategoryBySlugQueryHandler : CachedQueryHandler<GetMenuCategoryBySlugQuery, MenuCategoryDto>
 {
-    private readonly IApplicationDbContext _context;
-    private readonly ICacheService _cacheService;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly ILogger<GetMenuCategoryBySlugQueryHandler> _logger;
 
     public GetMenuCategoryBySlugQueryHandler(
-        IApplicationDbContext context,
+        IUnitOfWork unitOfWork,
         ICacheService cacheService,
         ILogger<GetMenuCategoryBySlugQueryHandler> logger)
         : base(cacheService)
     {
-        _context = context;
-        _cacheService = cacheService;
+        _unitOfWork = unitOfWork;
         _logger = logger;
     }
 
@@ -46,14 +43,8 @@ public class GetMenuCategoryBySlugQueryHandler : CachedQueryHandler<GetMenuCateg
             if (string.IsNullOrWhiteSpace(request.Slug))
                 return Result<MenuCategoryDto>.Failure("Category slug is required");
 
-            // STEP 2: Query using context (MenuCategory is not in IUnitOfWork yet)
-            var category = await _context.MenuCategories
-                .AsNoTracking()
-                .Where(c => c.Slug == request.Slug && c.IsActive && !c.IsDeleted)
-                .Include(c => c.Subcategories.Where(s => s.IsActive && !s.IsDeleted))
-                .ThenInclude(s => s.Items.Where(i => i.IsActive && !i.IsDeleted))
-                .ThenInclude(i => i.Variants.Where(v => v.IsAvailable && !v.IsDeleted))
-                .FirstOrDefaultAsync(cancellationToken);
+            // STEP 2: Get menu category by slug using repository method
+            var category = await _unitOfWork.Menu.GetCategoryBySlugAsync(request.Slug, cancellationToken);
 
             if (category == null)
             {

@@ -1,5 +1,4 @@
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Starbucks.Application.Common.Abstractions;
 using Starbucks.Application.Common.Extensions;
@@ -17,18 +16,16 @@ public record GetMenuCategoriesQuery(string? Language = null, int PageNumber = 1
 
 public class GetMenuCategoriesQueryHandler : CachedPagedQueryHandler<GetMenuCategoriesQuery, MenuCategoryDto>
 {
-    private readonly IApplicationDbContext _context;
-    private readonly ICacheService _cacheService;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly ILogger<GetMenuCategoriesQueryHandler> _logger;
 
     public GetMenuCategoriesQueryHandler(
-        IApplicationDbContext context,
+        IUnitOfWork unitOfWork,
         ICacheService cacheService,
         ILogger<GetMenuCategoriesQueryHandler> logger)
         : base(cacheService)
     {
-        _context = context;
-        _cacheService = cacheService;
+        _unitOfWork = unitOfWork;
         _logger = logger;
     }
 
@@ -50,27 +47,21 @@ public class GetMenuCategoriesQueryHandler : CachedPagedQueryHandler<GetMenuCate
             if (request.PageSize < 1 || request.PageSize > 100)
                 return Result<PagedResult<MenuCategoryDto>>.Failure("Page size must be between 1 and 100");
 
-            // STEP 2: Build query for active menu categories
-            var query = _context.MenuCategories
-                .AsNoTracking()
-                .Where(c => c.IsActive && !c.IsDeleted)
-                .Include(c => c.Subcategories.Where(s => s.IsActive && !s.IsDeleted))
-                .ThenInclude(s => s.Items.Where(i => i.IsActive && !i.IsDeleted))
-                .ThenInclude(i => i.Variants.Where(v => v.IsAvailable && !v.IsDeleted));
+            // STEP 2: Get all active menu categories using repository method
+            var allCategories = await _unitOfWork.Menu.GetCategoriesAsync(cancellationToken);
+            var categoryList = allCategories.ToList();
 
             // STEP 3: Get total count
-            var totalCount = await query.CountAsync(cancellationToken);
+            var totalCount = categoryList.Count;
 
             // STEP 4: Apply pagination
-            var categories = await query
-                .OrderBy(c => c.SortOrder)
-                .ThenBy(c => c.Name.English)
+            var paginatedCategories = categoryList
                 .Skip((request.PageNumber - 1) * request.PageSize)
                 .Take(request.PageSize)
-                .ToListAsync(cancellationToken);
+                .ToList();
 
             // STEP 5: Map to DTOs
-            var categoryDtos = categories.Adapt<List<MenuCategoryDto>>();
+            var categoryDtos = paginatedCategories.Adapt<List<MenuCategoryDto>>();
 
             // STEP 6: Create paged result
             var pagedResult = PagedResult<MenuCategoryDto>.Create(
