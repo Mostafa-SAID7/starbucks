@@ -216,15 +216,17 @@
 
 | Enum | Purpose | Status |
 |------|---------|--------|
+| `ErrorSeverity.cs` | Error severity levels | ✅ Correct |
 | `ErrorType.cs` | Error classification | ✅ Correct |
 | `Gender.cs` | User gender | ✅ Correct |
+| `MetricType.cs` | System metric types | ✅ Correct |
 | `OrderStatus.cs` | Order lifecycle states | ✅ Correct |
 | `OrderType.cs` | Delivery vs Pickup | ✅ Correct |
 | `PaymentMethod.cs` | Payment types | ✅ Correct |
 | `PaymentStatus.cs` | Payment states | ✅ Correct |
 | `UserRole.cs` | User authorization roles | ✅ Correct |
 
-**Result**: ✅ All 7 enums properly organized, no duplicates found
+**Result**: ✅ All 9 enums properly organized, no duplicates found, no enums in entity files
 
 ---
 
@@ -418,16 +420,18 @@ Backend/src/Starbucks.Domain/
 │   ├── MenuSubcategory.cs (clean)
 │   ├── MenuItemVariant.cs (clean)
 │   ├── AuditLog.cs (clean)
-│   ├── ErrorLog.cs (clean)
-│   └── SystemMetric.cs (clean)
+│   ├── ErrorLog.cs (clean - enum moved)
+│   └── SystemMetric.cs (clean - enum moved)
 ├── Services/
 │   ├── OrderDomainService.cs (13 methods)
 │   ├── LocationDomainService.cs (11 methods)
 │   ├── UserDomainService.cs (16 methods)
 │   └── MenuItemDomainService.cs (12 methods)
 ├── Enums/
+│   ├── ErrorSeverity.cs (moved from ErrorLog)
 │   ├── ErrorType.cs
 │   ├── Gender.cs
+│   ├── MetricType.cs (moved from SystemMetric)
 │   ├── OrderStatus.cs
 │   ├── OrderType.cs
 │   ├── PaymentMethod.cs
