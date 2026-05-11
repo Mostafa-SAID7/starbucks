@@ -1,7 +1,7 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 import { Skeleton } from '@/components/ui'
-import { itemVariants } from './SidebarSkeletonTemplate'
+import { itemVariants } from './variants'
 
 export const ContentBlockSkeleton: React.FC = () => {
   return (

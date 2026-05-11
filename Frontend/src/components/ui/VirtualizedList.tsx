@@ -1,5 +1,6 @@
-import React, { memo, CSSProperties } from 'react';
+import React, { memo } from 'react';
 import { cn } from '@/lib/ui';
+
 interface VirtualizedListProps<T> {
   items: T[];
   itemHeight: number;
@@ -15,17 +16,10 @@ interface VirtualizedListProps<T> {
  * 
  * Renders only visible items in a scrollable container
  * Dramatically improves performance for large lists (100+ items)
- * 
- * Features:
- * - Only renders visible items
- * - Smooth scrolling
- * - Configurable overscan for smoother scrolling
- * - Keyboard accessible
- * - Memory efficient
  */
 const VirtualizedListComponent = React.forwardRef<
   HTMLDivElement,
-  VirtualizedListProps<any>
+  VirtualizedListProps<unknown>
 >(
   (
     {
@@ -71,7 +65,7 @@ const VirtualizedListComponent = React.forwardRef<
         {visibleItems.map((item, index) => {
           const actualIndex = startIndex + index;
           const key = keyExtractor
-            ? keyExtractor(item, actualIndex)
+            ? keyExtractor(item as any, actualIndex)
             : actualIndex;
 
           return (
@@ -82,7 +76,7 @@ const VirtualizedListComponent = React.forwardRef<
                 height: itemHeight,
               }}
             >
-              {renderItem(item, actualIndex)}
+              {renderItem(item as any, actualIndex)}
             </div>
           );
         })}
@@ -116,7 +110,7 @@ interface VirtualizedGridProps<T> {
 
 const VirtualizedGridComponent = React.forwardRef<
   HTMLDivElement,
-  VirtualizedGridProps<any>
+  VirtualizedGridProps<unknown>
 >(
   (
     {
@@ -178,12 +172,12 @@ const VirtualizedGridComponent = React.forwardRef<
           {visibleItems.map((item, index) => {
             const actualIndex = startIndex + index;
             const key = keyExtractor
-              ? keyExtractor(item, actualIndex)
+              ? keyExtractor(item as any, actualIndex)
               : actualIndex;
 
             return (
               <div key={key} role="gridcell">
-                {renderItem(item, actualIndex)}
+                {renderItem(item as any, actualIndex)}
               </div>
             );
           })}
@@ -206,5 +200,3 @@ const VirtualizedGridComponent = React.forwardRef<
 VirtualizedGridComponent.displayName = 'VirtualizedGrid';
 
 export const VirtualizedGrid = memo(VirtualizedGridComponent) as typeof VirtualizedGridComponent;
-
-

@@ -47,7 +47,7 @@ export function CartDrawer({
   onClose: controlledOnClose,
   variant = 'global'
 }: CartDrawerProps) {
-  const { isOpen: storeIsOpen, setIsOpen: setStoreIsOpen, toggleCart } = useCartStore();
+  const { isOpen: storeIsOpen, setIsOpen: setStoreIsOpen } = useCartStore();
   const isOpen = controlledIsOpen !== undefined ? controlledIsOpen : storeIsOpen;
   const onClose = controlledOnClose || (() => setStoreIsOpen(false));
   const navigate = useNavigate();

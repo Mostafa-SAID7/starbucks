@@ -1,7 +1,7 @@
 import React, { forwardRef } from "react";
 import { cn } from "@/lib/ui";
 import { Button } from "@/components/ui";
-import { VerticalCardAction as Action, VerticalCardProps } from "@/types/components";
+import { VerticalCardProps } from "@/types/components";
 
 export const VerticalCard = forwardRef<HTMLDivElement, VerticalCardProps>(
   ({ title, description, image, href, actions, className, ...props }, ref) => {

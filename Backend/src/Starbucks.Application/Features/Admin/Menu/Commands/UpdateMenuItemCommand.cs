@@ -1,6 +1,5 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
 using Starbucks.Application.Common.Interfaces.Data;
 using Starbucks.Application.Common.Interfaces.Services;
 using Starbucks.Application.Common.Models;
@@ -46,9 +45,16 @@ public class UpdateMenuItemCommandHandler : IRequestHandler<UpdateMenuItemComman
         // Update basic properties if provided
         if (request.Request.NameEn != null) menuItem.Name.En = request.Request.NameEn;
         if (request.Request.NameAr != null) menuItem.Name.Ar = request.Request.NameAr;
-        if (request.Request.DescriptionEn != null) menuItem.Description = menuItem.Description ?? new LocalizedContent();
-        if (request.Request.DescriptionEn != null) menuItem.Description.En = request.Request.DescriptionEn;
-        if (request.Request.DescriptionAr != null) menuItem.Description.Ar = request.Request.DescriptionAr;
+        if (request.Request.DescriptionEn != null)
+        {
+            menuItem.Description ??= new LocalizedContent();
+            menuItem.Description.En = request.Request.DescriptionEn;
+        }
+        if (request.Request.DescriptionAr != null)
+        {
+            menuItem.Description ??= new LocalizedContent();
+            menuItem.Description.Ar = request.Request.DescriptionAr;
+        }
         
         if (request.Request.Price.HasValue) menuItem.Price = request.Request.Price.Value;
         if (request.Request.Image != null) menuItem.ImageUrl = request.Request.Image;

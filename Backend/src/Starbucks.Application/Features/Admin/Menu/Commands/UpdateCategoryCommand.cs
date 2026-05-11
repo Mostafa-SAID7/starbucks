@@ -1,9 +1,9 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
 using Starbucks.Application.Common.Interfaces.Data;
 using Starbucks.Application.Common.Models;
 using Starbucks.Application.DTOs.Admin;
+using Starbucks.Domain.Common;
 using Mapster;
 
 namespace Starbucks.Application.Features.Admin.Menu.Commands;
@@ -28,8 +28,19 @@ public class UpdateCategoryCommandHandler : IRequestHandler<UpdateCategoryComman
 
         if (request.Request.NameEn != null) category.Name.En = request.Request.NameEn;
         if (request.Request.NameAr != null) category.Name.Ar = request.Request.NameAr;
-        if (request.Request.DescriptionEn != null) category.Description.En = request.Request.DescriptionEn;
-        if (request.Request.DescriptionAr != null) category.Description.Ar = request.Request.DescriptionAr;
+        
+        if (request.Request.DescriptionEn != null)
+        {
+            category.Description ??= new LocalizedContent();
+            category.Description.En = request.Request.DescriptionEn;
+        }
+        
+        if (request.Request.DescriptionAr != null)
+        {
+            category.Description ??= new LocalizedContent();
+            category.Description.Ar = request.Request.DescriptionAr;
+        }
+
         if (request.Request.Image != null) category.ImageUrl = request.Request.Image;
         if (request.Request.DisplayOrder.HasValue) category.SortOrder = request.Request.DisplayOrder.Value;
         if (request.Request.IsActive.HasValue) category.IsActive = request.Request.IsActive.Value;

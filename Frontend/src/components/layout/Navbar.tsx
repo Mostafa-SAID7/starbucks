@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useTheme } from "@/hooks";
 import { useNavigation } from "@/hooks/queries";
@@ -60,7 +60,9 @@ export function Navbar() {
   // Close mobile menu on route change
   useEffect(() => {
     if (prevPathname && prevPathname !== location.pathname && isMobileMenuOpen) {
-      setIsMobileMenuOpen(false);
+      // Use setTimeout to avoid synchronous setState during render/effect cascade
+      const timer = setTimeout(() => setIsMobileMenuOpen(false), 0);
+      return () => clearTimeout(timer);
     }
   }, [location.pathname, prevPathname, isMobileMenuOpen]);
 

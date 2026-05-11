@@ -53,7 +53,7 @@ public class CreateMenuItemCommandHandler : IRequestHandler<CreateMenuItemComman
             
             Slug = slug,
             Name = new LocalizedContent { En = request.Request.NameEn, Ar = request.Request.NameAr },
-            Description = new LocalizedContent { En = request.Request.DescriptionEn, Ar = request.Request.DescriptionAr },
+            Description = new LocalizedContent { En = request.Request.DescriptionEn ?? "", Ar = request.Request.DescriptionAr ?? "" },
             Price = request.Request.Price,
             ImageUrl = request.Request.Image,
             Calories = request.Request.Calories ?? 0,

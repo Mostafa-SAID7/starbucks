@@ -16,7 +16,7 @@ export interface AccordionProps {
 }
 
 export const Accordion = React.forwardRef<HTMLDivElement, AccordionProps>(
-  ({ items, className, variant = 'default', defaultIndex = null }, ref) => {
+  ({ items, className, variant = 'default', defaultIndex = null }, _ref) => {
     const [openIndex, setOpenIndex] = React.useState<number | null>(defaultIndex)
     const [focusedIndex, setFocusedIndex] = React.useState<number>(-1)
     const containerRef = React.useRef<HTMLDivElement>(null)
@@ -32,37 +32,42 @@ export const Accordion = React.forwardRef<HTMLDivElement, AccordionProps>(
         if (focusedIndex < 0) return
 
         switch (e.key) {
-          case 'ArrowDown':
+          case 'ArrowDown': {
             e.preventDefault()
             const nextIndex = focusedIndex < items.length - 1 ? focusedIndex + 1 : 0
             setFocusedIndex(nextIndex)
             buttonRefs.current[nextIndex]?.focus()
             break
-          case 'ArrowUp':
+          }
+          case 'ArrowUp': {
             e.preventDefault()
             const prevIndex = focusedIndex > 0 ? focusedIndex - 1 : items.length - 1
             setFocusedIndex(prevIndex)
             buttonRefs.current[prevIndex]?.focus()
             break
-          case 'Home':
+          }
+          case 'Home': {
             e.preventDefault()
             setFocusedIndex(0)
             buttonRefs.current[0]?.focus()
             break
-          case 'End':
+          }
+          case 'End': {
             e.preventDefault()
             const lastIndex = items.length - 1
             setFocusedIndex(lastIndex)
             buttonRefs.current[lastIndex]?.focus()
             break
+          }
           default:
             break
         }
       }
 
-      if (containerRef.current) {
-        containerRef.current.addEventListener('keydown', handleKeyDown)
-        return () => containerRef.current?.removeEventListener('keydown', handleKeyDown)
+      const container = containerRef.current
+      if (container) {
+        container.addEventListener('keydown', handleKeyDown)
+        return () => container.removeEventListener('keydown', handleKeyDown)
       }
     }, [focusedIndex, items.length])
 
@@ -145,4 +150,3 @@ export const Accordion = React.forwardRef<HTMLDivElement, AccordionProps>(
 )
 
 Accordion.displayName = "Accordion"
-

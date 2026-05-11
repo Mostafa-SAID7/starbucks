@@ -2,21 +2,7 @@ import React from 'react'
 import { motion } from 'framer-motion'
 import { Skeleton } from '@/components/ui'
 
-export const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-      duration: 0.5
-    }
-  }
-}
-
-export const itemVariants = {
-  hidden: { opacity: 0, y: 10 },
-  visible: { opacity: 1, y: 0 }
-}
+import { containerVariants, itemVariants } from './variants'
 
 interface SidebarSkeletonTemplateProps {
   children: React.ReactNode
@@ -41,7 +27,7 @@ export const SidebarSkeletonTemplate: React.FC<SidebarSkeletonTemplateProps> = (
           <motion.div variants={itemVariants} className={`lg:w-[42%] xl:w-[40%] ${sidebarHeight} lg:sticky lg:top-28`}>
             <Skeleton className="h-full w-full rounded-[2.5rem] shadow-2xl" />
           </motion.div>
-
+ 
           {/* Side 2: Content Column Skeleton (60%) */}
           <div className="lg:w-[60%]">
             {children}
@@ -52,3 +38,5 @@ export const SidebarSkeletonTemplate: React.FC<SidebarSkeletonTemplateProps> = (
     </motion.div>
   )
 }
+
+export default SidebarSkeletonTemplate;

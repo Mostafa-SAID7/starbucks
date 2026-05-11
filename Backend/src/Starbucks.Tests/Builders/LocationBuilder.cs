@@ -74,7 +74,7 @@ public class LocationBuilder
         return this;
     }
 
-    public LocationBuilder WithPostalCode(string postalCode)
+    public LocationBuilder WithPostalCode(string? postalCode)
     {
         _postalCode = postalCode;
         return this;
@@ -87,19 +87,19 @@ public class LocationBuilder
         return this;
     }
 
-    public LocationBuilder WithPhoneNumber(string phoneNumber)
+    public LocationBuilder WithPhoneNumber(string? phoneNumber)
     {
         _phoneNumber = phoneNumber;
         return this;
     }
 
-    public LocationBuilder WithEmail(string email)
+    public LocationBuilder WithEmail(string? email)
     {
         _email = email;
         return this;
     }
 
-    public LocationBuilder WithOperatingHours(string operatingHours)
+    public LocationBuilder WithOperatingHours(string? operatingHours)
     {
         _operatingHours = operatingHours;
         return this;

@@ -1,8 +1,9 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 import { Skeleton } from '@/components/ui'
-import { SidebarSkeletonTemplate, itemVariants } from './SidebarSkeletonTemplate'
-import { ContentBlockSkeleton, GridSkeletonTemplate } from './SkeletonParts'
+import { SidebarSkeletonTemplate } from './SidebarSkeletonTemplate'
+import { itemVariants } from './variants'
+import { ContentBlockSkeleton } from './SkeletonParts'
 
 export const LocationsSkeleton: React.FC = () => {
   return (
@@ -25,3 +26,5 @@ export const LocationsSkeleton: React.FC = () => {
     </SidebarSkeletonTemplate>
   )
 }
+
+export default LocationsSkeleton;

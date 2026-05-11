@@ -22,7 +22,7 @@ export const ErrorFallback: React.FC<ErrorFallbackProps> = ({
   variant = "full" 
 }) => {
   const { t } = useTranslation("common");
-  const { isRTL, lang } = useLanguage();
+  const { lang } = useLanguage();
   
   // Log error for debugging and monitoring
   logError(error, "ErrorBoundary");

@@ -46,4 +46,4 @@ apiClient.interceptors.response.use(
  * Simulated delay for development (mimics network latency)
  */
 export const simulateDelay = (ms: number = API_CONFIG.SIMULATED_DELAY) =>
-  new Promise((resolve) => setTimeout(resolve, ms));
+  new Promise((_resolve) => setTimeout(_resolve, ms));

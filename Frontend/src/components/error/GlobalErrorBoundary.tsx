@@ -23,7 +23,7 @@ export class GlobalErrorBoundary extends React.Component<Props, State> {
     };
   }
 
-  static getDerivedStateFromError(error: Error): Partial<State> {
+  static getDerivedStateFromError(_error: Error): Partial<State> {
     return { hasError: true };
   }
 
@@ -120,6 +120,8 @@ function ErrorFallback({ error, onReset }: ErrorFallbackProps) {
 // Extend window interface for Sentry
 declare global {
   interface Window {
-    __SENTRY__?: any;
+    __SENTRY__?: {
+      captureException: (error: Error, options?: { contexts: { react: ErrorInfo } }) => void;
+    };
   }
 }
