@@ -5,6 +5,7 @@ import { Search, Navigation } from "lucide-react";
 import { cn } from "@/lib/ui";
 import { SEO, QueryErrorBoundary } from "@/components";
 import { useLocations, useLanguage } from "@/hooks";
+import { LocationsSkeleton } from "@/components/skeletons";
 import { TALABAT_URL } from "./constants";
 import type { Location } from "@/types";
 
@@ -13,27 +14,30 @@ import type { Location } from "@/types";
  * Prevents unnecessary re-renders when parent list updates
  */
 const LocationCard = memo(
-  ({ city, isRTL }: { city: Location; isRTL: boolean }) => (
-    <motion.a
-      href={`https://locations.starbucks.eg/directory/${city.slug}`}
-      target="_blank"
-      rel="noopener noreferrer"
-      whileHover={{ x: isRTL ? -8 : 8 }}
-      className="flex items-center justify-between p-6 bg-gray-50 dark:bg-white/5 rounded-2xl border border-gray-100 dark:border-white/10 group transition-all hover:bg-starbucks-green/5 hover:border-starbucks-green/30 shadow-sm"
-    >
-      <div className="flex items-center gap-4">
-        <div className="w-10 h-10 rounded-full bg-starbucks-green/10 flex items-center justify-center text-starbucks-green group-hover:bg-starbucks-green group-hover:text-white transition-colors">
-          <Navigation className="h-5 w-5" />
+  ({ city, isRTL }: { city: Location; isRTL: boolean }) => {
+    const c = city as Location & { nameAr: string; count: number };
+    return (
+      <motion.a
+        href={`https://locations.starbucks.eg/directory/${city.slug}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        whileHover={{ x: isRTL ? -8 : 8 }}
+        className="flex items-center justify-between p-6 bg-gray-50 dark:bg-white/5 rounded-2xl border border-gray-100 dark:border-white/10 group transition-all hover:bg-starbucks-green/5 hover:border-starbucks-green/30 shadow-sm"
+      >
+        <div className="flex items-center gap-4">
+          <div className="w-10 h-10 rounded-full bg-starbucks-green/10 flex items-center justify-center text-starbucks-green group-hover:bg-starbucks-green group-hover:text-white transition-colors">
+            <Navigation className="h-5 w-5" />
+          </div>
+          <span className="text-lg font-black text-gray-900 dark:text-white group-hover:text-starbucks-green transition-colors">
+            {isRTL ? c.nameAr : String(c.name)}
+          </span>
         </div>
-        <span className="text-lg font-black text-gray-900 dark:text-white group-hover:text-starbucks-green transition-colors">
-          {isRTL ? city.nameAr : city.name}
+        <span className="text-sm font-bold text-gray-400 dark:text-gray-500 bg-white dark:bg-black/20 px-3 py-1 rounded-full border border-gray-100 dark:border-white/5">
+          {c.count} {isRTL ? "فرع" : "stores"}
         </span>
-      </div>
-      <span className="text-sm font-bold text-gray-400 dark:text-gray-500 bg-white dark:bg-black/20 px-3 py-1 rounded-full border border-gray-100 dark:border-white/5">
-        {city.count} {isRTL ? "فرع" : "stores"}
-      </span>
-    </motion.a>
-  ),
+      </motion.a>
+    );
+  },
   (prevProps, nextProps) => {
     // Custom comparison: only re-render if city data or RTL changes
     return (
@@ -94,19 +98,25 @@ export const LocationsPage: React.FC = () => {
   }, []);
 
   // Fetch locations using TanStack Query
-  const { data: cities } = useLocations() as { data: Location[] | undefined };
+  const { data: cities, isLoading: isLocationsLoading } = useLocations() as { data: Location[] | undefined; isLoading: boolean };
 
   // Memoize filtered cities - only recalculate when cities or search changes
   const filteredCities = useMemo(() => {
     return (
       cities?.filter(
-        (c: Location) =>
-          search === "" ||
-          c.name.toLowerCase().includes(search.toLowerCase()) ||
-          c.nameAr.includes(search),
+        (city: Location) => {
+          const c = city as Location & { nameAr: string };
+          return search === "" ||
+            String(c.name).toLowerCase().includes(search.toLowerCase()) ||
+            (c.nameAr && c.nameAr.includes(search));
+        }
       ) || []
     );
   }, [cities, search]);
+
+  if (isLocationsLoading) {
+    return <LocationsSkeleton />;
+  }
 
   return (
     <div className={`min-h-screen bg-white dark:bg-zinc-950 transition-colors duration-300`} dir={isRTL ? "rtl" : "ltr"}>
@@ -122,7 +132,7 @@ export const LocationsPage: React.FC = () => {
         <div className={cn("flex flex-col lg:flex-row gap-12 lg:gap-16", isRTL && "lg:flex-row-reverse")}>
           
           {/* Side 1: Sticky Hero / Search (40%) */}
-          <div className="lg:w-[40%] lg:sticky lg:top-24 lg:h-[calc(100vh-8rem)] group">
+          <div className="lg:w-[40%] lg:sticky lg:top-8 lg:h-[calc(100vh-4rem)] group">
             <div className="relative h-full rounded-[2.5rem] overflow-hidden shadow-2xl bg-starbucks-dark flex flex-col items-center justify-center p-8 text-center text-white">
               {/* Bg image overlay */}
               <div className="absolute inset-0 z-0">
@@ -214,8 +224,8 @@ export const LocationsPage: React.FC = () => {
                 <div className="group bg-gray-50 dark:bg-white/5 rounded-2xl overflow-hidden border border-gray-100 dark:border-white/10 shadow-sm hover:shadow-xl transition-all duration-500 flex flex-col h-full">
                   <div className="aspect-4/3 overflow-hidden">
                     <img
-                      src="https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=800&q=80"
-                      alt="The Joy of Starbucks Coffee"
+                      src="https://images.unsplash.com/photo-1559496417-e7f25cb247f3?auto=format&fit=crop&q=80&w=800"
+                      alt={isRTL ? "متعة القهوة" : "Joy of Coffee"}
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                     />
                   </div>
@@ -270,17 +280,38 @@ export const LocationsPage: React.FC = () => {
                 </h3>
                 
                 <QueryErrorBoundary variant="compact">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <motion.div 
+                    initial="hidden"
+                    animate="visible"
+                    variants={{
+                      hidden: { opacity: 0 },
+                      visible: {
+                        opacity: 1,
+                        transition: {
+                          staggerChildren: 0.1
+                        }
+                      }
+                    }}
+                    className="grid grid-cols-1 sm:grid-cols-2 gap-4"
+                  >
                     {filteredCities.length === 0 ? (
                       <p className="col-span-full py-8 text-gray-400 font-bold text-center italic">
                         {isRTL ? "لم يتم العثور على نتائج" : "No locations found"}
                       </p>
                     ) : (
                       filteredCities.map((city: Location) => (
-                        <LocationCard key={city.id} city={city} isRTL={isRTL} />
+                        <motion.div
+                          key={city.slug}
+                          variants={{
+                            hidden: { opacity: 0, y: 20 },
+                            visible: { opacity: 1, y: 0 }
+                          }}
+                        >
+                          <LocationCard city={city} isRTL={isRTL} />
+                        </motion.div>
                       ))
                     )}
-                  </div>
+                  </motion.div>
                 </QueryErrorBoundary>
               </div>
             </div>

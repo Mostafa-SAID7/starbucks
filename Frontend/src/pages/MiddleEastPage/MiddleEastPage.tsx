@@ -49,7 +49,7 @@ const MiddleEastPageContent: React.FC<{ data: GenericPageData }> = ({ data }) =>
         <div
           className={`flex flex-col lg:flex-row gap-12 ${isRTL ? "lg:flex-row-reverse" : ""}`}
         >
-          <div className="lg:w-[40%] lg:sticky lg:top-24 lg:h-[calc(100vh-8rem)] group">
+          <div className="lg:w-[40%] lg:sticky lg:top-8 lg:h-[calc(100vh-4rem)] group">
             <motion.div
               initial={{ opacity: 0, x: isRTL ? 50 : -50 }}
               animate={{ opacity: 1, x: 0 }}

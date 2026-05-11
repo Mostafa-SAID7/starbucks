@@ -34,7 +34,7 @@ export const StaticPageLayout: React.FC<StaticPageLayoutProps> = ({
         <div className={`flex flex-col gap-10 ${sidebar ? 'lg:flex-row' : ''}`}>
           {sidebar && (
             <aside className="lg:w-64 flex-shrink-0">
-              <div className="sticky top-24">
+              <div className="sticky top-8">
                 {sidebar}
               </div>
             </aside>

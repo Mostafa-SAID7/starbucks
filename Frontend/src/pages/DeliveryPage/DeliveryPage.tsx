@@ -1,113 +1,86 @@
-import { motion, AnimatePresence } from "framer-motion";
-import { SEO, QueryErrorBoundary } from "@/components";
+import { useTranslation } from "react-i18next";
+import { SEO, QueryErrorBoundary, SidebarTemplate } from "@/components";
 import { StaticPageSkeleton } from "@/components/skeletons";
 import { useLanguage, useAccordion } from "@/hooks";
 import { usePageData } from "@/hooks/queries";
-import { type GenericPageData, type LocalizedText } from "@/types";
+import { type GenericPageData } from "@/types";
+import { motion, AnimatePresence } from "framer-motion";
 import { Plus, Minus, ExternalLink } from "lucide-react";
 
 const DeliveryPageContent: React.FC<{ data: GenericPageData }> = ({ data }) => {
-  const { lang, isRTL } = useLanguage();
+  const { isRTL } = useLanguage();
+  const { t } = useTranslation(["pages", "common"]);
   const { toggleSection, isOpen } = useAccordion("intro");
 
-  const t = (obj: LocalizedText | string | null | undefined) => {
-    if (!obj) return "";
-    if (typeof obj === "string") return obj;
-    return (obj as LocalizedText)[lang] || "";
-  };
-
-  const sidebarMedia = t(data.sidebarImage);
-  const isVideo =
-    sidebarMedia?.includes("player.cloudinary.com") ||
-    sidebarMedia?.includes("embed");
-
   const textAlignClass = isRTL ? "text-right" : "text-left";
-  const itemsAlignClass = "items-start";
+  const itemsAlignClass = isRTL ? "items-end" : "items-start";
+
+  // ── Derived values from structural data ──────────────────────────────────
+  const sidebarMedia =
+    typeof data.sidebarImage === "string"
+      ? data.sidebarImage
+      : (data.sidebarImage as { en?: string; ar?: string } | null)?.en ?? "";
+
+  const isVideo =
+    sidebarMedia.includes("player.cloudinary.com") ||
+    sidebarMedia.includes("embed");
+
+  const pageTitle = t("pages:delivery.title");
+
+  // Intro paragraphs from i18n
+  const introParagraphs = t("pages:delivery.intro.paragraphs", {
+    returnObjects: true,
+    defaultValue: [],
+  }) as string[];
+
+  // Accordion from i18n
+  const accordionTitle = t("pages:delivery.accordion.title", {
+    defaultValue: "",
+  });
 
   return (
     <div
       className="bg-white dark:bg-background-dark min-h-screen"
       dir={isRTL ? "rtl" : "ltr"}
     >
-      <SEO title={t(data.title)} />
+      <SEO title={pageTitle} />
 
-      <div className="container mx-auto px-4 py-8 lg:py-12">
-        <div
-          className={`flex flex-col lg:flex-row gap-12 ${isRTL ? "lg:flex-row-reverse" : ""}`}
-        >
-          <div className="lg:w-[40%] lg:sticky lg:top-24 lg:h-[calc(100vh-8rem)]">
-            <motion.div
-              initial={{ opacity: 0, x: isRTL ? 50 : -50 }}
-              animate={{ opacity: 1, x: 0 }}
-              className="h-full rounded-3xl overflow-hidden shadow-2xl bg-black relative"
-            >
-              {isVideo ? (
-                <div className="w-full h-full relative pointer-events-none">
-                  <div className="absolute inset-0 z-10 bg-transparent" />
-                  <iframe
-                    src={sidebarMedia}
-                    className="w-full h-full absolute inset-0 border-0"
-                    allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
-                    allowFullScreen
-                    title="Starbucks Delivery Promo"
-                  />
-                </div>
-              ) : (
-                <img
-                  src={sidebarMedia}
-                  alt={t(data.title)}
-                  className="w-full h-full object-cover"
-                />
-              )}
-            </motion.div>
-          </div>
-
-          <div className="lg:w-[60%]">
-            <div className="max-w-4xl">
+      <div className="container mx-auto px-4 py-8 lg:py-16 max-w-7xl">
+        <SidebarTemplate image={sidebarMedia} title={pageTitle} isVideo={isVideo}>
+          <div className="max-w-4xl">
+            {/* Page title (shown when hideMainTitle is false) */}
+            {!data.hideMainTitle && (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className={`mb-8 ${textAlignClass}`}
+                className={`mb-12 ${textAlignClass}`}
               >
-                <h1 className="text-4xl lg:text-5xl font-black text-starbucks-dark dark:text-white">
-                  {t(data.title)}
+                <h1 className="text-4xl lg:text-7xl font-black text-gray-900 dark:text-white leading-tight tracking-tight">
+                  {pageTitle}
                 </h1>
               </motion.div>
+            )}
 
-              <div className="border-b border-gray-100 dark:border-gray-800 pb-12 mb-12">
-                {data.intro?.image && (
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.98 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    className="mb-8 rounded-3xl overflow-hidden shadow-lg aspect-video lg:aspect-21/9"
-                  >
-                    <img
-                      src={t(data.intro.image)}
-                      alt={t(data.title)}
-                      className="w-full h-full object-cover"
-                    />
-                  </motion.div>
-                )}
-
+            <div className="space-y-12">
+              {/* ── Intro accordion ── */}
+              <div className="border-b border-gray-100 dark:border-white/10 pb-16 mb-4">
                 <button
                   onClick={() => toggleSection("intro")}
                   className={`w-full flex items-center justify-between group gap-6 ${textAlignClass}`}
                 >
                   <div className={`flex flex-col ${itemsAlignClass} grow`}>
-                    <span className="text-starbucks-green font-bold text-sm uppercase tracking-widest mb-1 opacity-80">
-                      {lang === "ar" ? "نظرة عامة" : "Overview"}
+                    <span className="text-starbucks-green font-black text-xs uppercase tracking-widest mb-3 opacity-80">
+                      {t("common:overview")}
                     </span>
-                    <h3 className="text-2xl lg:text-4xl font-black text-starbucks-dark dark:text-white group-hover:text-starbucks-green transition-colors leading-tight">
-                      {lang === "ar"
-                        ? "تجربة ستاربكس في منزلك"
-                        : "Starbucks Experience At Home"}
+                    <h3 className="text-2xl lg:text-4xl font-black text-starbucks-dark dark:text-white group-hover:text-starbucks-green transition-colors leading-tight tracking-tight">
+                      {pageTitle}
                     </h3>
                   </div>
-                  <div className="text-starbucks-green bg-gray-50 dark:bg-white/5 p-3 rounded-full shrink-0">
+                  <div className="text-starbucks-green bg-starbucks-green/5 dark:bg-white/5 p-4 rounded-full shrink-0 group-hover:scale-110 transition-transform">
                     {isOpen("intro") ? (
-                      <Minus size={24} />
+                      <Minus size={24} strokeWidth={3} />
                     ) : (
-                      <Plus size={24} />
+                      <Plus size={24} strokeWidth={3} />
                     )}
                   </div>
                 </button>
@@ -121,155 +94,211 @@ const DeliveryPageContent: React.FC<{ data: GenericPageData }> = ({ data }) => {
                       className="overflow-hidden"
                     >
                       <div
-                        className={`pt-8 space-y-8 text-xl text-gray-600 dark:text-gray-300 leading-relaxed ${textAlignClass}`}
+                        className={`pt-10 space-y-8 text-xl text-gray-600 dark:text-gray-300 leading-relaxed ${textAlignClass}`}
                       >
-                        {data.intro?.paragraphs?.map((p, idx) => (
-                          <p key={idx} className="font-medium">
-                            {t(p)}
-                          </p>
-                        ))}
+                        {Array.isArray(introParagraphs) &&
+                          introParagraphs.map((p, idx) => (
+                            <p key={idx} className="font-medium opacity-90">
+                              {p}
+                            </p>
+                          ))}
                       </div>
                     </motion.div>
                   )}
                 </AnimatePresence>
               </div>
 
-              <div className="space-y-16">
-                {data.sections.map((section, index) => (
-                  <div
-                    key={section.id}
-                    className={`pb-12 ${index !== data.sections.length - 1 ? "border-b border-gray-100 dark:border-gray-800" : ""}`}
-                  >
-                    {section.image && (
-                      <div className="mb-8 rounded-3xl overflow-hidden shadow-lg aspect-video lg:aspect-21/9">
-                        <img
-                          src={t(section.image)}
-                          alt={t(section.title)}
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                    )}
+              {/* ── Sections (partners, how-it-works, …) ── */}
+              <div className="space-y-20">
+                {data.sections.map((section, index) => {
+                  const sTitle = t(
+                    `pages:delivery.sections.${section.id}.title`,
+                    { defaultValue: "" }
+                  );
+                  const sSubtitle = t(
+                    `pages:delivery.sections.${section.id}.subtitle`,
+                    { defaultValue: "" }
+                  );
+                  const sParagraphs = t(
+                    `pages:delivery.sections.${section.id}.paragraphs`,
+                    { returnObjects: true, defaultValue: [] }
+                  ) as string[];
+                  const sList = t(
+                    `pages:delivery.sections.${section.id}.list`,
+                    { returnObjects: true, defaultValue: [] }
+                  ) as string[];
+                  const sCta = t(
+                    `pages:delivery.sections.${section.id}.cta`,
+                    { defaultValue: "" }
+                  );
 
-                    <button
-                      onClick={() => toggleSection(section.id)}
-                      className={`w-full flex items-center justify-between group gap-6 ${textAlignClass}`}
+                  const sectionImage =
+                    typeof section.image === "string" ? section.image : "";
+                  const ctaLink =
+                    typeof section.ctaLink === "string" ? section.ctaLink : "";
+
+                  return (
+                    <div
+                      key={section.id}
+                      className={`pb-12 ${
+                        index !== data.sections.length - 1
+                          ? "border-b border-gray-100 dark:border-white/10"
+                          : ""
+                      }`}
                     >
-                      <div
-                        className={`flex flex-col ${itemsAlignClass} grow`}
-                      >
-                        <span className="text-starbucks-green font-bold text-sm uppercase tracking-widest mb-1 opacity-80">
-                          {t(section.subtitle)}
-                        </span>
-                        <h3 className="text-2xl lg:text-4xl font-black text-starbucks-dark dark:text-white group-hover:text-starbucks-green transition-colors leading-tight">
-                          {t(section.title)}
-                        </h3>
-                      </div>
-                      <div className="text-starbucks-green bg-gray-50 dark:bg-white/5 p-3 rounded-full shrink-0">
-                        {isOpen(section.id) ? (
-                          <Minus size={24} />
-                        ) : (
-                          <Plus size={24} />
-                        )}
-                      </div>
-                    </button>
-
-                    <AnimatePresence>
-                      {isOpen(section.id) && (
-                        <motion.div
-                          initial={{ height: 0, opacity: 0 }}
-                          animate={{ height: "auto", opacity: 1 }}
-                          exit={{ height: 0, opacity: 0 }}
-                          className="overflow-hidden"
-                        >
-                          <div
-                            className={`pt-8 space-y-8 text-xl text-gray-600 dark:text-gray-300 leading-relaxed ${textAlignClass}`}
-                          >
-                            {section.paragraphs?.map((p, pIdx) => (
-                              <p key={pIdx}>{t(p)}</p>
-                            ))}
-
-                            {section.list && (
-                              <ul
-                                className={`space-y-4 ${isRTL ? "border-r-4 pr-6" : "border-l-4 pl-6"} border-starbucks-green/20 font-medium`}
-                              >
-                                {section.list.map((item, lIdx) => (
-                                  <li key={lIdx}>{t(item)}</li>
-                                ))}
-                              </ul>
-                            )}
-
-                            {section.cta && section.ctaLink && (
-                              <div className="pt-4">
-                                <a
-                                  href={section.ctaLink}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="inline-flex items-center gap-3 bg-starbucks-green text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-starbucks-green-dark transition-all transform hover:scale-105 shadow-lg"
-                                >
-                                  {t(section.cta)}
-                                  <ExternalLink size={20} />
-                                </a>
-                              </div>
-                            )}
-                          </div>
-                        </motion.div>
+                      {sectionImage && (
+                        <div className="mb-12 rounded-[2.5rem] overflow-hidden shadow-2xl aspect-video lg:aspect-[21/9] border border-gray-100 dark:border-white/5">
+                          <img
+                            src={sectionImage}
+                            alt={sTitle}
+                            className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+                          />
+                        </div>
                       )}
-                    </AnimatePresence>
-                  </div>
-                ))}
+
+                      <button
+                        onClick={() => toggleSection(section.id)}
+                        className={`w-full flex items-center justify-between group gap-6 ${textAlignClass}`}
+                      >
+                        <div className={`flex flex-col ${itemsAlignClass} grow`}>
+                          {sSubtitle && (
+                            <span className="text-starbucks-green font-black text-xs uppercase tracking-widest mb-3 opacity-80">
+                              {sSubtitle}
+                            </span>
+                          )}
+                          <h3 className="text-2xl lg:text-4xl font-black text-starbucks-dark dark:text-white group-hover:text-starbucks-green transition-colors leading-tight tracking-tight">
+                            {sTitle}
+                          </h3>
+                        </div>
+                        <div className="text-starbucks-green bg-starbucks-green/5 dark:bg-white/5 p-4 rounded-full shrink-0 group-hover:scale-110 transition-transform">
+                          {isOpen(section.id) ? (
+                            <Minus size={24} strokeWidth={3} />
+                          ) : (
+                            <Plus size={24} strokeWidth={3} />
+                          )}
+                        </div>
+                      </button>
+
+                      <AnimatePresence>
+                        {isOpen(section.id) && (
+                          <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: "auto", opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            className="overflow-hidden"
+                          >
+                            <div
+                              className={`pt-10 space-y-10 text-xl text-gray-600 dark:text-gray-300 leading-relaxed ${textAlignClass}`}
+                            >
+                              {Array.isArray(sParagraphs) &&
+                                sParagraphs.map((p, pIdx) => (
+                                  <p key={pIdx} className="opacity-90">
+                                    {p}
+                                  </p>
+                                ))}
+
+                              {Array.isArray(sList) && sList.length > 0 && (
+                                <ul
+                                  className={`space-y-6 ${
+                                    isRTL
+                                      ? "border-r-4 pr-8"
+                                      : "border-l-4 pl-8"
+                                  } border-starbucks-green/20 font-medium`}
+                                >
+                                  {sList.map((item, lIdx) => (
+                                    <li key={lIdx} className="opacity-90">
+                                      {item}
+                                    </li>
+                                  ))}
+                                </ul>
+                              )}
+
+                              {sCta && ctaLink && (
+                                <div className="pt-6">
+                                  <a
+                                    href={ctaLink}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="inline-flex items-center gap-4 bg-starbucks-green text-white px-10 py-5 rounded-full font-black text-xl hover:bg-white hover:text-starbucks-green border-2 border-starbucks-green transition-all transform hover:scale-105 shadow-2xl"
+                                  >
+                                    {sCta}
+                                    <ExternalLink size={24} strokeWidth={3} />
+                                  </a>
+                                </div>
+                              )}
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
+                  );
+                })}
               </div>
 
+              {/* ── FAQ Accordion ── */}
               {data.accordion && (
-                <div className="mt-8 pt-16 border-t-4 border-starbucks-green/10">
+                <div className="mt-12 pt-20 border-t-4 border-starbucks-green/10">
                   <h2
-                    className={`text-3xl lg:text-4xl font-black text-starbucks-dark dark:text-white mb-12 ${textAlignClass}`}
+                    className={`text-3xl lg:text-5xl font-black text-starbucks-dark dark:text-white mb-16 tracking-tight ${textAlignClass}`}
                   >
-                    {t(data.accordion.title)}
+                    {accordionTitle}
                   </h2>
-                  <div className="space-y-6">
-                    {data.accordion.items?.map((item, idx) => (
-                      <div
-                        key={idx}
-                        className="bg-gray-50 dark:bg-white/5 rounded-3xl overflow-hidden"
-                      >
-                        <button
-                          onClick={() => toggleSection(`faq-${idx}`)}
-                          className={`w-full p-8 flex items-center justify-between text-left group ${isRTL ? "text-right" : ""}`}
+                  <div className="space-y-8">
+                    {data.accordion.items?.map((_item, idx) => {
+                      const itemTitle = t(
+                        `pages:delivery.accordion.items.${idx}.title`,
+                        { defaultValue: "" }
+                      );
+                      const itemContent = t(
+                        `pages:delivery.accordion.items.${idx}.content`,
+                        { defaultValue: "" }
+                      );
+                      return (
+                        <div
+                          key={idx}
+                          className="bg-gray-50 dark:bg-white/5 rounded-[2rem] overflow-hidden border border-gray-100 dark:border-white/5"
                         >
-                          <span className="text-xl font-bold text-starbucks-dark dark:text-white group-hover:text-starbucks-green transition-colors">
-                            {t(item.title)}
-                          </span>
-                          <div className="text-starbucks-green">
-                            {isOpen(`faq-${idx}`) ? (
-                              <Minus size={20} />
-                            ) : (
-                              <Plus size={20} />
-                            )}
-                          </div>
-                        </button>
-                        <AnimatePresence>
-                          {isOpen(`faq-${idx}`) && (
-                            <motion.div
-                              initial={{ height: 0, opacity: 0 }}
-                              animate={{ height: "auto", opacity: 1 }}
-                              exit={{ height: 0, opacity: 0 }}
-                            >
-                              <div
-                                className={`px-8 pb-8 text-lg text-gray-600 dark:text-gray-300 leading-relaxed ${textAlignClass}`}
+                          <button
+                            onClick={() => toggleSection(`faq-${idx}`)}
+                            className={`w-full p-10 flex items-center justify-between text-left group ${
+                              isRTL ? "text-right" : ""
+                            }`}
+                          >
+                            <span className="text-2xl font-black text-starbucks-dark dark:text-white group-hover:text-starbucks-green transition-colors tracking-tight">
+                              {itemTitle}
+                            </span>
+                            <div className="text-starbucks-green group-hover:scale-125 transition-transform shrink-0">
+                              {isOpen(`faq-${idx}`) ? (
+                                <Minus size={24} strokeWidth={3} />
+                              ) : (
+                                <Plus size={24} strokeWidth={3} />
+                              )}
+                            </div>
+                          </button>
+                          <AnimatePresence>
+                            {isOpen(`faq-${idx}`) && (
+                              <motion.div
+                                initial={{ height: 0, opacity: 0 }}
+                                animate={{ height: "auto", opacity: 1 }}
+                                exit={{ height: 0, opacity: 0 }}
                               >
-                                {t(item.content)}
-                              </div>
-                            </motion.div>
-                          )}
-                        </AnimatePresence>
-                      </div>
-                    ))}
+                                <div
+                                  className={`px-10 pb-10 text-xl text-gray-600 dark:text-gray-300 leading-relaxed opacity-90 ${textAlignClass}`}
+                                >
+                                  {itemContent}
+                                </div>
+                              </motion.div>
+                            )}
+                          </AnimatePresence>
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
               )}
             </div>
           </div>
-        </div>
+        </SidebarTemplate>
       </div>
     </div>
   );

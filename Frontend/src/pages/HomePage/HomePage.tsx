@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+
 import { Banner, StatementSection, FeaturedCards, SEO, QueryErrorBoundary } from "@/components";
 import { LoadingAnnouncement } from "@/components/accessibility";
 import { HomeSkeleton } from "@/components/skeletons";
@@ -52,31 +52,9 @@ const HomePageContent: React.FC<{ heroData: HeroData }> = ({ heroData }) => {
 };
 
 export const HomePage = () => {
-  const { lang } = useLanguage();
-  const { i18n } = useTranslation();
-  const [isTranslationLoaded, setIsTranslationLoaded] = useState(false);
-
-  useEffect(() => {
-    let isMounted = true;
-    const loadTranslations = async () => {
-      setIsTranslationLoaded(false);
-      try {
-        const translations = await import(`../../locales/${lang}/pages/home.json`);
-        if (isMounted) {
-          i18n.addResourceBundle(lang, "pages", { home: translations.default }, true, true);
-          setIsTranslationLoaded(true);
-        }
-      } catch (_err) {
-        if (isMounted) setIsTranslationLoaded(true);
-      }
-    };
-    loadTranslations();
-    return () => { isMounted = false; };
-  }, [lang, i18n]);
-
   const { data: heroData, isLoading } = useHero();
 
-  if (isLoading || !isTranslationLoaded) {
+  if (isLoading) {
     return (
       <>
         <LoadingAnnouncement isLoading={true} />
@@ -87,7 +65,7 @@ export const HomePage = () => {
 
   return (
     <QueryErrorBoundary>
-      {heroData && <HomePageContent heroData={heroData} />}
+      {heroData && <HomePageContent heroData={heroData as HeroData} />}
     </QueryErrorBoundary>
   );
 };

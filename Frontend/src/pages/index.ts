@@ -10,3 +10,5 @@ export * from "./GenericPageWrapper";
 export * from "./SustainabilityPage/SustainabilityPage";
 export * from "./DeliveryPage/DeliveryPage";
 export * from "./MiddleEastPage/MiddleEastPage";
+export * from "./CheckoutPage/CheckoutPage";
+export * from "./OrderConfirmationPage/OrderConfirmationPage";

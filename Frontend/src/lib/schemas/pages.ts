@@ -42,6 +42,12 @@ export const GenericGroupSchema = z.object({
   paragraphs: z.array(LocalizedTextSchema),
 });
 
+export const GenericImageGridSchema = z.object({
+  images: z.array(z.string()),
+  columns: z.number().optional(),
+  aspectRatio: z.string().optional(),
+});
+
 export const GenericSectionSchema = z.object({
   id: z.string(),
   title: LocalizedOrString.optional(),
@@ -55,10 +61,7 @@ export const GenericSectionSchema = z.object({
   ctaLink: z.string().optional(),
   note: LocalizedOrString.optional(),
   videoUrl: z.string().optional(),
-  imageGrid: z.object({
-    images: z.array(z.string()),
-    columns: z.number().optional(),
-  }).optional(),
+  imageGrid: GenericImageGridSchema.optional(),
   contactInfo: GenericContactInfoSchema.optional(),
   subsections: z.array(GenericSubsectionSchema).optional(),
   types: z.array(GenericTypeItemSchema).optional(),
@@ -106,3 +109,4 @@ export type GenericSubsection = z.infer<typeof GenericSubsectionSchema>;
 export type GenericTypeItem = z.infer<typeof GenericTypeItemSchema>;
 export type GenericDefinition = z.infer<typeof GenericDefinitionSchema>;
 export type GenericGroup = z.infer<typeof GenericGroupSchema>;
+export type GenericImageGrid = z.infer<typeof GenericImageGridSchema>;

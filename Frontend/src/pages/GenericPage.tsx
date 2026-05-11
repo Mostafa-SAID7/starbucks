@@ -5,7 +5,8 @@ import {
   StaticPageLayout, 
   Accordion, 
   SEO,
-  Button
+  Button,
+  SidebarTemplate
 } from "@/components";
 import { useLanguage } from "@/hooks";
 import type { GenericPageProps } from "@/types";
@@ -207,44 +208,19 @@ export const GenericPage: React.FC<GenericPageProps> = ({
 
       {/* Main Page Layout Wrapper */}
       {data.layoutType === "sidebar" && data.sidebarImage ? (
-        <div className="container mx-auto px-4 py-8 lg:py-16">
-          <div dir={isRTL ? "rtl" : "ltr"} className="flex flex-col lg:flex-row gap-12 lg:gap-16 items-start">
-            
-            {/* Side 1: Sticky Sidebar Image or Video */}
-            <div className="lg:w-[40%] lg:sticky lg:top-24 group">
-              <div className="rounded-3xl overflow-hidden shadow-2xl relative bg-black aspect-[3/4] lg:aspect-auto lg:h-[calc(100vh-8rem)]">
-                {(() => {
-                  const mediaUrl = typeof data.sidebarImage === 'string' ? data.sidebarImage : data.sidebarImage?.[lang];
-                  const isVideo = mediaUrl?.includes("player.cloudinary.com") || mediaUrl?.includes("embed");
-                  
-                  if (isVideo) {
-                    return (
-                      <div className="w-full h-full relative pointer-events-none">
-                        <div className="absolute inset-0 z-10 bg-transparent" />
-                        <iframe
-                          src={mediaUrl}
-                          className="w-full h-full absolute inset-0 border-0"
-                          allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
-                          allowFullScreen
-                          title={localizedTitle}
-                        />
-                      </div>
-                    );
-                  }
-                  
-                  return (
-                    <img
-                      src={mediaUrl}
-                      alt={localizedTitle}
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                    />
-                  );
-                })()}
-              </div>
-            </div>
-
-            {/* Side 2: Content Column */}
-            <div className="lg:w-[60%] space-y-16">
+        <div className="container mx-auto px-4 py-8 lg:py-16 max-w-7xl">
+          <SidebarTemplate
+            image={typeof data.sidebarImage === 'string' ? data.sidebarImage : data.sidebarImage?.[lang]}
+            title={localizedTitle}
+            overlay={
+              localizedLastUpdated && (
+                <span className="inline-block px-4 py-2 bg-white/10 text-white text-xs font-black rounded-full uppercase tracking-widest backdrop-blur-md border border-white/20">
+                  {localizedLastUpdated}
+                </span>
+              )
+            }
+          >
+            <div className="space-y-16">
               <div className="max-w-4xl">
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
@@ -252,70 +228,73 @@ export const GenericPage: React.FC<GenericPageProps> = ({
                   className="mb-12"
                 >
                   {!data.hideMainTitle && (
-                    <h1 className="text-4xl lg:text-6xl font-black text-gray-900 dark:text-white leading-tight mb-6">
+                    <h1 className="text-4xl lg:text-7xl font-black text-gray-900 dark:text-white leading-tight mb-6 tracking-tight">
                       {localizedTitle}
                     </h1>
-                  )}
-                  {localizedLastUpdated && (
-                    <span className="inline-block mb-4 px-3 py-1 bg-gray-100 dark:bg-white/5 text-gray-500 dark:text-gray-400 text-xs font-bold rounded-full uppercase tracking-widest">
-                      {localizedLastUpdated}
-                    </span>
                   )}
                 </motion.div>
 
                 {/* Intro */}
                 {(introData.title || (Array.isArray(introData.paragraphs) && introData.paragraphs.length > 0) || data.intro?.image) && (
-                  <div className="space-y-6 mb-12 text-xl text-gray-600 dark:text-gray-400 leading-relaxed">
+                  <div className="space-y-8 mb-16 text-xl text-gray-600 dark:text-gray-300 leading-relaxed">
                     {data.intro?.image && (
-                      <div className="mb-8 rounded-3xl overflow-hidden shadow-lg aspect-video lg:aspect-[21/9]">
+                      <motion.div 
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        className="mb-10 rounded-[2.5rem] overflow-hidden shadow-2xl aspect-video lg:aspect-[21/9] border border-gray-100 dark:border-white/10"
+                      >
                         <img
                           src={typeof data.intro.image === 'string' ? data.intro.image : data.intro.image[lang]}
                           alt={introData.title || localizedTitle}
-                          className="w-full h-full object-cover"
+                          className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
                         />
-                      </div>
+                      </motion.div>
                     )}
                     {introData.title && (
-                      <h2 className="text-2xl lg:text-3xl font-black text-starbucks-dark dark:text-white mb-6">
+                      <h2 className="text-3xl lg:text-4xl font-black text-starbucks-dark dark:text-white mb-8">
                         {introData.title}
                       </h2>
                     )}
                     {Array.isArray(introData.paragraphs) && introData.paragraphs.map((p, i) => (
-                      <p key={i} className="font-medium">{typeof p === 'string' ? p : p[lang]}</p>
+                      <p key={i} className="font-medium opacity-90">{typeof p === 'string' ? p : p[lang]}</p>
                     ))}
                   </div>
                 )}
 
-                {renderSections()}
+                <div className="space-y-20">
+                  {renderSections()}
+                </div>
 
                 {/* Data-level Accordion (e.g. for Delivery FAQ, Our Coffees brewing guides) */}
                 {data.accordion && (
-                  <div className="mt-16 space-y-8">
+                  <div className="mt-20 space-y-10">
                     {(data.accordion.title || slug) && (() => {
                       const accordionTitle = slug
                         ? t(`pages:${slug}.accordion.title`, { defaultValue: typeof data.accordion!.title === 'string' ? data.accordion!.title : '' })
                         : (typeof data.accordion!.title === 'string' ? data.accordion!.title : '');
                       return accordionTitle ? (
-                        <h2 className="text-3xl font-black text-starbucks-dark dark:text-white mb-8">
+                        <h2 className="text-4xl font-black text-starbucks-dark dark:text-white mb-10 tracking-tight">
                           {accordionTitle}
                         </h2>
                       ) : null;
                     })()}
-                    <Accordion
-                      items={data.accordion.items?.map((item, i) => ({
-                        title: slug ? t(`pages:${slug}.accordion.items.${i}.title`, { defaultValue: typeof item.title === 'string' ? item.title : item.title?.[lang] || '' }) : (typeof item.title === 'string' ? item.title : item.title?.[lang] || ''),
-                        content: (
-                          <div className="pt-4 text-lg text-gray-600 dark:text-gray-400 leading-relaxed font-medium whitespace-pre-line">
-                            {slug ? t(`pages:${slug}.accordion.items.${i}.content`, { defaultValue: typeof item.content === 'string' ? item.content : item.content?.[lang] || '' }) : (typeof item.content === 'string' ? item.content : item.content?.[lang] || '')}
-                          </div>
-                        ),
-                      })) || []}
-                    />
+                    <div className="bg-white dark:bg-zinc-900/50 rounded-[2.5rem] p-4 md:p-8 shadow-sm border border-gray-100 dark:border-zinc-800">
+                      <Accordion
+                        items={data.accordion.items?.map((item, i) => ({
+                          title: slug ? t(`pages:${slug}.accordion.items.${i}.title`, { defaultValue: typeof item.title === 'string' ? item.title : item.title?.[lang] || '' }) : (typeof item.title === 'string' ? item.title : item.title?.[lang] || ''),
+                          content: (
+                            <div className="pt-6 text-lg text-gray-600 dark:text-gray-400 leading-relaxed font-medium whitespace-pre-line">
+                              {slug ? t(`pages:${slug}.accordion.items.${i}.content`, { defaultValue: typeof item.content === 'string' ? item.content : item.content?.[lang] || '' }) : (typeof item.content === 'string' ? item.content : item.content?.[lang] || '')}
+                            </div>
+                          ),
+                        })) || []}
+                      />
+                    </div>
                   </div>
                 )}
               </div>
             </div>
-          </div>
+          </SidebarTemplate>
         </div>
       ) : data.layoutType === "alternating" ? (
         <div className="overflow-hidden">

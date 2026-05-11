@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
 import { MapPin, Search, Moon, Sun, User } from "lucide-react";
 import { Button, Tooltip } from "@/components/ui";
+import { CartTrigger } from "@/components";
 import { Language, useLanguage } from "@/hooks";
 import { ANIMATION_CONFIG } from "@/lib/core/constants";
 import { Theme } from "@/types";
@@ -130,6 +131,16 @@ export function NavbarUtilities({
         >
           <User className="h-5 w-5" />
         </Button>
+      </Tooltip>
+
+      {/* Cart Drawer */}
+      <Tooltip
+        content={t("common:cart")}
+        className="w-11 h-11"
+      >
+        <div className="flex items-center justify-center">
+          <CartTrigger />
+        </div>
       </Tooltip>
     </div>
   );

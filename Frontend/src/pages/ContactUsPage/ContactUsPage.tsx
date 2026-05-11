@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { motion, AnimatePresence } from "framer-motion";
 import { Mail, Phone, Send, CheckCircle } from "lucide-react";
 import { SEO, Button, Input, Select, Textarea, QueryErrorBoundary } from "@/components";
+import { ContactSkeleton } from "@/components/skeletons";
 import { useContactInfo, useLanguage } from "@/hooks";
 import { ContactUsData as ContactData } from "@/types/pages";
 import { cn } from "@/lib/ui";
@@ -259,13 +260,7 @@ export const ContactUsPage: React.FC = () => {
   const { data: contactData, isLoading } = useContactInfo();
 
   if (isLoading) {
-    return (
-      <div className="min-h-screen bg-white dark:bg-black flex items-center justify-center">
-        <div className="text-center">
-          <div className="h-12 w-12 animate-spin rounded-full border-4 border-starbucks-green border-t-transparent mx-auto mb-4" />
-        </div>
-      </div>
-    );
+    return <ContactSkeleton />;
   }
 
   return (

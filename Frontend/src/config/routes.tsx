@@ -1,7 +1,7 @@
 import { lazy, ComponentType } from 'react';
 import MiddleEastPage from '@/pages/MiddleEastPage/MiddleEastPage';
 import { DeliveryPage } from '@/pages/DeliveryPage/DeliveryPage';
-import { HomeSkeleton, MenuSkeleton, StaticPageSkeleton, ContactSkeleton } from '@/components/skeletons';
+import { HomeSkeleton, MenuSkeleton, StaticPageSkeleton, ContactSkeleton, LocationsSkeleton } from '@/components/skeletons';
 
 /**
  * Route configuration type
@@ -65,6 +65,14 @@ const SustainabilityPage = lazy(() =>
 // eslint-disable-next-line react-refresh/only-export-components
 const GenericPageWrapper = lazy(() =>
   import('@/pages').then((module) => ({ default: module.GenericPageWrapper }))
+);
+
+const CheckoutPage = lazy(() =>
+  import('@/pages').then((module) => ({ default: module.CheckoutPage }))
+);
+
+const OrderConfirmationPage = lazy(() =>
+  import('@/pages').then((module) => ({ default: module.OrderConfirmationPage }))
 );
 
 // eslint-disable-next-line react-refresh/only-export-components
@@ -132,7 +140,7 @@ export const PAGE_ROUTES: PageRoute[] = [
   {
     path: 'locations',
     component: LocationsPage,
-    skeleton: StaticPageSkeleton,
+    skeleton: LocationsSkeleton,
     name: 'locations',
   },
   {
@@ -239,6 +247,18 @@ export const PAGE_ROUTES: PageRoute[] = [
       seoTitle: 'Cookie Notice - Starbucks Egypt',
       useAccordionLayout: true,
     },
+  },
+  {
+    path: 'checkout',
+    component: CheckoutPage,
+    skeleton: StaticPageSkeleton,
+    name: 'checkout',
+  },
+  {
+    path: 'order/:orderId',
+    component: OrderConfirmationPage,
+    skeleton: StaticPageSkeleton,
+    name: 'order-confirmation',
   },
   {
     path: '*',

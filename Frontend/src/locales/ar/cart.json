@@ -1,12 +1,24 @@
 {
   "empty": "سلتك فارغة",
-  "discountCode": "أدخل رمز الخصم",
+  "empty_title": "حقيبتك فارغة",
+  "empty_description": "يبدو أنك لم تضف أي شيء بعد. ابدأ في استكشاف قائمتنا للعثور على مفضلاتك!",
+  "start_ordering": "ابدأ الطلب",
+  "item": "منتج",
+  "items": "منتجات",
+  "discountCode": "رمز ترويجي",
   "apply": "تطبيق",
   "discountApplied": "تم تطبيق الخصم",
   "off": "خصم",
   "subtotal": "المجموع الفرعي",
   "discount": "الخصم",
   "total": "الإجمالي",
-  "checkout": "المتابعة إلى الدفع",
-  "clear": "مسح السلة"
+  "checkout": "إتمام الطلب",
+  "clear": "مسح الحقيبة",
+  "delivery_to": "التوصيل إلى",
+  "pickup_from": "الاستلام من",
+  "change": "تغيير",
+  "select_location": "اختر الموقع",
+  "currency": "ج.م",
+  "regular": "حجم عادي",
+  "order_total": "إجمالي الطلب"
 }

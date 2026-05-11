@@ -21,7 +21,7 @@ export const DeliverySidebar: React.FC<DeliverySidebarProps> = ({
     sidebarMedia?.includes("embed");
 
   return (
-    <div className="lg:w-[40%] lg:sticky lg:top-24 lg:h-[calc(100vh-8rem)]">
+    <div className="lg:w-[40%] lg:sticky lg:top-8 lg:h-[calc(100vh-4rem)]">
       <motion.div
         initial={{ opacity: 0, x: isRTL ? 50 : -50 }}
         animate={{ opacity: 1, x: 0 }}

@@ -12,6 +12,12 @@ import {
   MenuItem as MenuItemSchemaType,
   GenericPageData as GenericPageDataSchemaType,
   GenericSection as GenericSectionSchemaType,
+  GenericTypeItem as GenericTypeItemSchemaType,
+  GenericDefinition as GenericDefinitionSchemaType,
+  GenericSubsection as GenericSubsectionSchemaType,
+  GenericGroup as GenericGroupSchemaType,
+  GenericContactInfo as GenericContactInfoSchemaType,
+  GenericImageGrid as GenericImageGridSchemaType,
   Location as LocationSchemaType,
   Order as OrderSchemaType,
   OrderItem as OrderItemSchemaType,
@@ -36,6 +42,12 @@ export type MenuItem = MenuItemSchemaType;
 
 export type GenericPageData = GenericPageDataSchemaType;
 export type GenericSection = GenericSectionSchemaType;
+export type GenericTypeItem = GenericTypeItemSchemaType;
+export type GenericDefinition = GenericDefinitionSchemaType;
+export type GenericSubsection = GenericSubsectionSchemaType;
+export type GenericGroup = GenericGroupSchemaType;
+export type GenericContactInfo = GenericContactInfoSchemaType;
+export type GenericImageGrid = GenericImageGridSchemaType;
 
 export interface GenericPageProps {
   slug?: string;
@@ -73,4 +85,15 @@ export interface SidebarAction {
 export interface SidebarData {
   image: string;
   actions: SidebarAction[];
+}
+
+export interface Social {
+  name: string;
+  href: string;
+  icon?: string;
+}
+
+export interface Country {
+  name: string;
+  href: string;
 }

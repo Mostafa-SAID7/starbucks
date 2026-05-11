@@ -1,6 +1,5 @@
 import React, { memo, useState, useCallback } from 'react';
-import {} from '@/lib/ui';
-
+import { cn } from '@/lib/ui';
 interface OptimizedImageProps {
   src: string;
   alt: string;

@@ -1,6 +1,5 @@
 import React, { memo, CSSProperties } from 'react';
-import {} from '@/lib/ui';
-
+import { cn } from '@/lib/ui';
 interface VirtualizedListProps<T> {
   items: T[];
   itemHeight: number;

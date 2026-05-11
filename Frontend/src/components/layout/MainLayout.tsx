@@ -3,7 +3,7 @@ import { Outlet } from "react-router-dom";
 import { Navbar } from "./Navbar";
 import { MobileTabBar } from "./MobileTabBar";
 import { Toaster } from "../ui/toaster";
-import { ErrorBoundary } from "@/components";
+import { ErrorBoundary, CartDrawer } from "@/components";
 
 // Lazy load non-critical components to optimize first paint
 const Footer = lazy(() => import("./Footer").then(m => ({ default: m.Footer })));
@@ -16,17 +16,23 @@ export const MainLayout = () => {
     <ErrorBoundary>
       <div className="flex min-h-screen flex-col bg-background text-foreground transition-colors duration-300">
         <Navbar />
-        <main className="flex-1 overflow-visible">
-          <Outlet />
-        </main>
+       
+        <div className="flex-1 relative flex flex-col overflow-x-hidden">
+          <main className="flex-1 scroll-smooth">
+            <Outlet />
+            <Suspense fallback={null}>
+              <Footer />
+              <ScrollToTop />
+            </Suspense>
+          </main>
+          <CartDrawer variant="inner" />
+        </div>
         
         <Suspense fallback={null}>
-          <Footer />
           <MobileTabBar />
           <CookieConsent />
           <Toaster />
           <ChatWidget />
-          <ScrollToTop />
         </Suspense>
       </div>
     </ErrorBoundary>

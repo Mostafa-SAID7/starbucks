@@ -95,6 +95,12 @@
     15% { transform: translateX(400px) translateY(-400px) scaleX(0); opacity: 0; width: 0; }
     100% { transform: translateX(400px) translateY(-400px) scaleX(0); opacity: 0; width: 0; }
   }
+
+  --animate-shimmer: shimmer 2.5s linear infinite;
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
 }
 
 :root {

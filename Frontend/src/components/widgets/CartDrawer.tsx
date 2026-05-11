@@ -1,28 +1,70 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ShoppingCart, X, Plus, Minus, Trash2 } from 'lucide-react';
+import { ShoppingBag, X, Plus, Minus, Trash2, Ticket, MapPin, ChevronRight } from 'lucide-react';
 import { useCartStore } from '@/stores/cartStore';
 import { useLanguage } from '@/hooks';
 import { Button } from '@/components/ui/button';
-import {} from '@/lib/ui';
+import { cn } from '@/lib/ui';
 
 interface CartDrawerProps {
   isOpen?: boolean;
   onClose?: () => void;
+  variant?: 'global' | 'inner';
 }
 
-export function CartDrawer({ isOpen: controlledIsOpen, onClose: controlledOnClose }: CartDrawerProps) {
-  const [internalIsOpen, setInternalIsOpen] = useState(false);
-  const isOpen = controlledIsOpen !== undefined ? controlledIsOpen : internalIsOpen;
-  const onClose = controlledOnClose || (() => setInternalIsOpen(false));
+export function CartTrigger() {
+  const { t } = useTranslation(['common']);
+  const { items, toggleCart } = useCartStore();
 
-  const { t } = useTranslation(['common', 'cart']);
-  const { isRTL } = useLanguage();
+  return (
+    <button
+      onClick={toggleCart}
+      className="relative p-2.5 hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-full transition-all group active:scale-90"
+      aria-label={t('common:cart')}
+    >
+      <ShoppingBag className="w-6 h-6 text-gray-700 dark:text-gray-300 group-hover:text-starbucks-green transition-colors" />
+      <AnimatePresence>
+        {items.length > 0 && (
+          <motion.span
+            initial={{ scale: 0.5, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.5, opacity: 0 }}
+            key={items.length}
+            className="absolute -top-1 -right-1 bg-starbucks-green text-white text-[10px] font-black rounded-full min-w-[20px] h-5 px-1 flex items-center justify-center shadow-lg shadow-starbucks-green/20 border-2 border-white dark:border-zinc-900"
+          >
+            {items.length}
+          </motion.span>
+        )}
+      </AnimatePresence>
+    </button>
+  );
+}
+
+export function CartDrawer({ 
+  isOpen: controlledIsOpen, 
+  onClose: controlledOnClose,
+  variant = 'global'
+}: CartDrawerProps) {
+  const { isOpen: storeIsOpen, setIsOpen: setStoreIsOpen, toggleCart } = useCartStore();
+  const isOpen = controlledIsOpen !== undefined ? controlledIsOpen : storeIsOpen;
+  const onClose = controlledOnClose || (() => setStoreIsOpen(false));
+  const navigate = useNavigate();
+
+  const { t, i18n } = useTranslation(['common', 'cart']);
+  const { isRTL, lang } = useLanguage();
   const { items, total, removeItem, updateQuantity, applyDiscount, removeDiscount, discount, clearCart } = useCartStore();
 
   const [discountCode, setDiscountCode] = useState('');
   const [isApplyingDiscount, setIsApplyingDiscount] = useState(false);
+
+  // Mock location state - in a real app this would come from a locationStore
+  const [currentLocation] = useState({
+    type: 'delivery',
+    address: 'Cairo, Egypt',
+    store: 'Starbucks - Mall of Arabia'
+  });
 
   const handleApplyDiscount = async () => {
     if (!discountCode.trim()) return;
@@ -30,15 +72,15 @@ export function CartDrawer({ isOpen: controlledIsOpen, onClose: controlledOnClos
     setIsApplyingDiscount(true);
     try {
       // Simulate API call to validate discount code
-      await new Promise(resolve => setTimeout(resolve, 500));
+      await new Promise(resolve => setTimeout(resolve, 800));
 
       // Mock discount validation
-      if (discountCode.toUpperCase() === 'SAVE10') {
-        applyDiscount(discountCode, 10);
-      } else if (discountCode.toUpperCase() === 'SAVE20') {
-        applyDiscount(discountCode, 20);
+      const code = discountCode.toUpperCase();
+      if (code === 'SAVE10') {
+        applyDiscount(code, 10);
+      } else if (code === 'SAVE20') {
+        applyDiscount(code, 20);
       } else {
-        // Invalid code - could show error
         console.warn('Invalid discount code');
       }
     } finally {
@@ -48,222 +90,327 @@ export function CartDrawer({ isOpen: controlledIsOpen, onClose: controlledOnClos
   };
 
   const handleCheckout = () => {
-    // Navigate to checkout
-    window.location.href = '/checkout';
+    onClose();
+    navigate(`/${i18n.language}/checkout`);
   };
 
   const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const discountAmount = discount?.amount || 0;
 
+  const isInner = variant === 'inner';
+
   return (
-    <>
-      {/* Cart Button */}
-      <button
-        onClick={() => setInternalIsOpen(true)}
-        className="relative p-2 hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-lg transition-colors"
-        aria-label={t('common:cart')}
-      >
-        <ShoppingCart className="w-6 h-6" />
-        {items.length > 0 && (
-          <span className="absolute top-0 right-0 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
-            {items.length}
-          </span>
-        )}
-      </button>
+    <AnimatePresence>
+      {isOpen && (
+        <>
+          {/* Backdrop */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={onClose}
+            className={cn(
+              "bg-black/60 backdrop-blur-sm z-[200]",
+              isInner ? "absolute inset-0" : "fixed inset-0"
+            )}
+          />
 
-      {/* Cart Drawer */}
-      <AnimatePresence>
-        {isOpen && (
-          <>
-            {/* Backdrop */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={onClose}
-              className="fixed inset-0 bg-black/50 z-40"
-            />
-
-            {/* Drawer */}
-            <motion.div
-              initial={{ x: isRTL ? -400 : 400 }}
-              animate={{ x: 0 }}
-              exit={{ x: isRTL ? -400 : 400 }}
-              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className={cn(
-                'fixed top-0 w-full max-w-md h-full bg-white dark:bg-zinc-900 shadow-2xl z-50 flex flex-col',
-                isRTL ? 'left-0' : 'right-0'
-              )}
-              dir={isRTL ? 'rtl' : 'ltr'}
-            >
-              {/* Header */}
-              <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-zinc-800">
-                <h2 className="text-2xl font-bold">{t('common:cart')}</h2>
+          {/* Drawer */}
+          <motion.div
+            initial={{ x: isRTL ? -400 : 400 }}
+            animate={{ x: 0 }}
+            exit={{ x: isRTL ? -400 : 400 }}
+            transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+            className={cn(
+              'w-full max-w-md h-full bg-white dark:bg-zinc-950 shadow-2xl z-[210] flex flex-col',
+              isInner ? 'absolute top-0' : 'fixed top-0',
+              isRTL ? 'left-0 border-r dark:border-zinc-800' : 'right-0 border-l dark:border-zinc-800'
+            )}
+            dir={isRTL ? 'rtl' : 'ltr'}
+          >
+            {/* Header */}
+            <div className="relative z-20 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-md border-b border-gray-100 dark:border-zinc-800">
+              <div className="flex items-center justify-between p-7 pb-4">
+                <div>
+                  <h2 className="text-3xl font-black tracking-tighter text-gray-900 dark:text-white uppercase leading-none">{t('common:cart')}</h2>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1.5 font-bold uppercase tracking-widest">
+                    {items.length} {items.length === 1 ? t('cart:item') : t('cart:items')}
+                  </p>
+                </div>
                 <button
                   onClick={onClose}
-                  className="p-2 hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-lg transition-colors"
+                  className="p-3 hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-full transition-all active:scale-90 text-gray-400 hover:text-gray-900 dark:hover:text-white"
                   aria-label={t('common:close')}
                 >
                   <X className="w-6 h-6" />
                 </button>
               </div>
 
-              {/* Content */}
-              <div className="flex-1 overflow-y-auto p-6">
-                {items.length === 0 ? (
-                  <div className="flex flex-col items-center justify-center h-full text-center">
-                    <ShoppingCart className="w-16 h-16 text-gray-300 dark:text-zinc-700 mb-4" />
-                    <p className="text-gray-600 dark:text-gray-400">{t('cart:empty')}</p>
+              {/* Location Selection Bar - Premium Style */}
+              <div className="px-7 pb-7">
+                <motion.button 
+                  whileHover={{ y: -2 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => {
+                    onClose();
+                    navigate('/' + lang + '/locations');
+                  }}
+                  className="w-full flex items-center justify-between p-4 bg-gray-50 dark:bg-zinc-900 rounded-[1.5rem] border border-gray-100 dark:border-zinc-800/50 hover:bg-white dark:hover:bg-zinc-800 hover:shadow-xl hover:shadow-black/5 dark:hover:shadow-none transition-all group overflow-hidden relative"
+                >
+                  <div className="absolute inset-0 bg-linear-to-br from-starbucks-green/[0.03] to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <div className="flex items-center gap-4 relative z-10">
+                    <div className="w-12 h-12 bg-white dark:bg-zinc-800 rounded-2xl flex items-center justify-center shadow-sm border border-gray-100 dark:border-zinc-700 group-hover:border-starbucks-green/30 group-hover:bg-starbucks-green/5 transition-all">
+                      <MapPin className="w-6 h-6 text-starbucks-green" />
+                    </div>
+                    <div className="text-left rtl:text-right">
+                      <p className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 dark:text-zinc-500 leading-none mb-1.5">
+                        {currentLocation.type === 'delivery' ? t('cart:delivery_to') : t('cart:pickup_from')}
+                      </p>
+                      <p className="text-base font-black text-gray-900 dark:text-white line-clamp-1 tracking-tight">
+                        {currentLocation.type === 'delivery' ? currentLocation.address : currentLocation.store}
+                      </p>
+                    </div>
                   </div>
-                ) : (
-                  <div className="space-y-4">
-                    {items.map((item) => (
+                  <div className="flex items-center gap-2 text-starbucks-green group-hover:translate-x-1 rtl:group-hover:-translate-x-1 transition-transform relative z-10">
+                    <span className="text-[10px] font-black uppercase tracking-widest">{t('cart:change')}</span>
+                    <ChevronRight className="w-4 h-4" />
+                  </div>
+                </motion.button>
+              </div>
+            </div>
+
+            {/* Content */}
+            <div className="flex-1 overflow-y-auto px-7 py-4 scroll-smooth custom-scrollbar bg-gray-50/30 dark:bg-transparent">
+              {items.length === 0 ? (
+                <div className="flex flex-col items-center justify-center h-full text-center space-y-6">
+                  <motion.div 
+                    initial={{ scale: 0.8, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    className="w-32 h-32 bg-white dark:bg-zinc-900 rounded-[2.5rem] flex items-center justify-center shadow-2xl shadow-black/5"
+                  >
+                    <ShoppingBag className="w-12 h-12 text-gray-200 dark:text-zinc-800" />
+                  </motion.div>
+                  <div className="max-w-[280px]">
+                    <h3 className="text-2xl font-black text-gray-900 dark:text-white mb-2 tracking-tight">{t('cart:empty_title')}</h3>
+                    <p className="text-gray-500 dark:text-gray-400 font-medium leading-relaxed">{t('cart:empty_description')}</p>
+                  </div>
+                  <Button 
+                    onClick={onClose}
+                    className="bg-starbucks-green hover:bg-starbucks-green-dark text-white rounded-full px-10 py-7 text-lg font-black shadow-2xl shadow-starbucks-green/30 active:scale-95 transition-all mt-4"
+                  >
+                    {t('cart:start_ordering')}
+                  </Button>
+                </div>
+              ) : (
+                <motion.div 
+                  layout
+                  className="space-y-4 py-4"
+                >
+                  <AnimatePresence mode="popLayout">
+                    {items.map((item, index) => (
                       <motion.div
                         key={item.id}
                         layout
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -20 }}
-                        className="flex gap-4 p-4 bg-gray-50 dark:bg-zinc-800 rounded-lg"
+                        initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.9, x: isRTL ? 50 : -50 }}
+                        transition={{ 
+                          type: 'spring', 
+                          damping: 25, 
+                          stiffness: 200,
+                          delay: index * 0.05 
+                        }}
+                        className="flex gap-5 p-5 bg-white dark:bg-zinc-900/50 rounded-[2.5rem] border border-gray-100 dark:border-zinc-800/50 shadow-sm hover:shadow-xl hover:shadow-black/5 transition-all group relative overflow-hidden"
                       >
                         {/* Item Image */}
-                        {item.image && (
-                          <img
-                            src={item.image}
-                            alt={item.name}
-                            className="w-20 h-20 object-cover rounded-lg"
-                          />
-                        )}
-
-                        {/* Item Details */}
-                        <div className="flex-1">
-                          <h3 className="font-bold text-gray-900 dark:text-white">{item.name}</h3>
-                          <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
-                            {t('common:price')}: ${item.price.toFixed(2)}
-                          </p>
-
-                          {/* Quantity Controls */}
-                          <div className="flex items-center gap-2">
-                            <button
-                              onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                              className="p-1 hover:bg-gray-200 dark:hover:bg-zinc-700 rounded transition-colors"
-                              aria-label={t('common:decrease')}
-                            >
-                              <Minus className="w-4 h-4" />
-                            </button>
-                            <span className="w-8 text-center font-bold">{item.quantity}</span>
-                            <button
-                              onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                              className="p-1 hover:bg-gray-200 dark:hover:bg-zinc-700 rounded transition-colors"
-                              aria-label={t('common:increase')}
-                            >
-                              <Plus className="w-4 h-4" />
-                            </button>
+                        <div className="relative shrink-0">
+                          <div className="w-24 h-24 rounded-[1.5rem] overflow-hidden shadow-md bg-gray-50 dark:bg-zinc-800">
+                            {item.image ? (
+                              <img
+                                src={item.image}
+                                alt={item.name}
+                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                              />
+                            ) : (
+                              <div className="w-full h-full flex items-center justify-center">
+                                <ShoppingBag className="w-8 h-8 text-gray-200 dark:text-zinc-700" />
+                              </div>
+                            )}
                           </div>
                         </div>
 
-                        {/* Remove Button */}
-                        <button
-                          onClick={() => removeItem(item.id)}
-                          className="p-2 hover:bg-red-100 dark:hover:bg-red-900/20 text-red-600 rounded transition-colors"
-                          aria-label={t('common:remove')}
-                        >
-                          <Trash2 className="w-5 h-5" />
-                        </button>
+                        {/* Item Details */}
+                        <div className="flex-1 flex flex-col relative z-10 min-w-0">
+                          <div className="flex justify-between items-start gap-2">
+                            <h3 className="text-lg font-black text-gray-900 dark:text-white truncate group-hover:text-starbucks-green transition-colors tracking-tight">
+                              {item.name}
+                            </h3>
+                            <button
+                              onClick={() => removeItem(item.id)}
+                              className="shrink-0 p-2 text-gray-300 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 rounded-full transition-all active:scale-90"
+                              aria-label={t('common:remove')}
+                            >
+                              <X className="w-4 h-4" />
+                            </button>
+                          </div>
+                          
+                          <p className="text-[10px] font-black text-gray-400 dark:text-zinc-500 mt-1 uppercase tracking-[0.2em]">
+                            {t('cart:regular')}
+                          </p>
+
+                          <div className="flex items-center justify-between mt-auto pt-4">
+                            <div className="flex items-baseline gap-1">
+                              <span className="text-lg font-black text-starbucks-green dark:text-starbucks-light tracking-tighter">
+                                {item.price.toFixed(2)}
+                              </span>
+                              <span className="text-[10px] font-black text-gray-400 uppercase">{t('cart:currency')}</span>
+                            </div>
+
+                            {/* Quantity Controls - Premium Style */}
+                            <div className="flex items-center bg-gray-50 dark:bg-zinc-900 rounded-full p-1 border border-gray-100 dark:border-zinc-800 shadow-inner">
+                              <button
+                                onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                                className="w-9 h-9 flex items-center justify-center text-gray-400 hover:text-starbucks-green hover:bg-white dark:hover:bg-zinc-800 rounded-full transition-all active:scale-90"
+                                aria-label={t('common:decrease')}
+                              >
+                                <Minus className="w-4 h-4" />
+                              </button>
+                              <span className="w-8 text-center text-sm font-black text-gray-900 dark:text-white">{item.quantity}</span>
+                              <button
+                                onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                                className="w-9 h-9 flex items-center justify-center text-gray-400 hover:text-starbucks-green hover:bg-white dark:hover:bg-zinc-800 rounded-full transition-all active:scale-90"
+                                aria-label={t('common:increase')}
+                              >
+                                <Plus className="w-4 h-4" />
+                              </button>
+                            </div>
+                          </div>
+                        </div>
                       </motion.div>
                     ))}
-                  </div>
-                )}
-              </div>
+                  </AnimatePresence>
+                </motion.div>
+              )}
+            </div>
 
-              {/* Discount Section */}
-              {items.length > 0 && (
-                <div className="p-6 border-t border-gray-200 dark:border-zinc-800">
-                  {!discount ? (
-                    <div className="flex gap-2 mb-4">
+            {/* Discount Section */}
+            {items.length > 0 && (
+              <div className="px-7 py-5 bg-white dark:bg-zinc-950 border-t border-gray-100 dark:border-zinc-800">
+                {!discount ? (
+                  <div className="flex gap-3">
+                    <div className="relative flex-1 group">
+                      <Ticket className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-300 group-focus-within:text-starbucks-green transition-colors" />
                       <input
                         type="text"
                         value={discountCode}
                         onChange={(e) => setDiscountCode(e.target.value)}
                         placeholder={t('cart:discountCode')}
-                        className="flex-1 px-3 py-2 border border-gray-300 dark:border-zinc-700 rounded-lg bg-white dark:bg-zinc-800 text-gray-900 dark:text-white"
+                        className="w-full pl-11 pr-4 py-4 rounded-[1.25rem] border border-gray-100 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-900 text-sm font-bold focus:ring-4 focus:ring-starbucks-green/10 focus:border-starbucks-green outline-none transition-all placeholder:text-gray-400"
                       />
-                      <Button
-                        onClick={handleApplyDiscount}
-                        disabled={isApplyingDiscount || !discountCode.trim()}
-                        size="sm"
-                      >
-                        {t('cart:apply')}
-                      </Button>
                     </div>
-                  ) : (
-                    <div className="mb-4 p-3 bg-green-50 dark:bg-green-900/20 rounded-lg flex items-center justify-between">
+                    <Button
+                      onClick={handleApplyDiscount}
+                      disabled={isApplyingDiscount || !discountCode.trim()}
+                      className="bg-gray-900 dark:bg-zinc-100 dark:text-zinc-900 rounded-[1.25rem] px-7 font-black text-[10px] uppercase tracking-widest shadow-xl active:scale-95 transition-all disabled:opacity-50"
+                    >
+                      {isApplyingDiscount ? (
+                        <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      ) : t('cart:apply')}
+                    </Button>
+                  </div>
+                ) : (
+                  <motion.div 
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="p-5 bg-starbucks-green/5 dark:bg-starbucks-green/10 rounded-[1.5rem] border border-starbucks-green/20 flex items-center justify-between group shadow-sm shadow-starbucks-green/5"
+                  >
+                    <div className="flex items-center gap-4">
+                      <div className="w-12 h-12 bg-starbucks-green rounded-2xl flex items-center justify-center shadow-xl shadow-starbucks-green/30 rotate-3">
+                        <Ticket className="w-6 h-6 text-white" />
+                      </div>
                       <div>
-                        <p className="text-sm font-bold text-green-700 dark:text-green-400">
-                          {t('cart:discountApplied')}: {discount.code}
+                        <p className="text-sm font-black text-starbucks-green tracking-tight uppercase">
+                          {discount.code} {t('cart:discountApplied')}
                         </p>
-                        <p className="text-xs text-green-600 dark:text-green-500">
+                        <p className="text-[10px] text-starbucks-green/60 font-black uppercase tracking-[0.2em] mt-1">
                           {discount.percentage}% {t('cart:off')}
                         </p>
                       </div>
-                      <button
-                        onClick={removeDiscount}
-                        className="text-green-700 dark:text-green-400 hover:text-green-900 dark:hover:text-green-300"
-                      >
-                        <X className="w-4 h-4" />
-                      </button>
+                    </div>
+                    <button
+                      onClick={removeDiscount}
+                      className="p-2.5 text-starbucks-green/30 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 rounded-full transition-all active:scale-90"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  </motion.div>
+                )}
+              </div>
+            )}
+
+            {/* Footer */}
+            {items.length > 0 && (
+              <div className="p-8 border-t border-gray-100 dark:border-zinc-800 bg-white dark:bg-zinc-950 shadow-[0_-20px_40px_-20px_rgba(0,0,0,0.05)]">
+                {/* Totals - Premium Presentation */}
+                <div className="space-y-4 mb-8">
+                  <div className="flex justify-between items-center text-gray-500 dark:text-zinc-500">
+                    <span className="font-black text-[10px] uppercase tracking-[0.2em]">{t('cart:subtotal')}</span>
+                    <div className="flex items-baseline gap-1">
+                      <span className="font-black text-gray-900 dark:text-white tracking-tight">{subtotal.toFixed(2)}</span>
+                      <span className="text-[8px] font-black uppercase">{t('cart:currency')}</span>
+                    </div>
+                  </div>
+                  {discount && (
+                    <div className="flex justify-between items-center text-starbucks-green">
+                      <span className="font-black text-[10px] uppercase tracking-[0.2em]">{t('cart:discount')}</span>
+                      <div className="flex items-baseline gap-1">
+                        <span className="font-black tracking-tight">-{discountAmount.toFixed(2)}</span>
+                        <span className="text-[8px] font-black uppercase">{t('cart:currency')}</span>
+                      </div>
                     </div>
                   )}
-                </div>
-              )}
-
-              {/* Footer */}
-              {items.length > 0 && (
-                <div className="p-6 border-t border-gray-200 dark:border-zinc-800 space-y-4">
-                  {/* Totals */}
-                  <div className="space-y-2 text-sm">
-                    <div className="flex justify-between">
-                      <span className="text-gray-600 dark:text-gray-400">{t('cart:subtotal')}</span>
-                      <span className="font-bold">${subtotal.toFixed(2)}</span>
+                  <div className="flex justify-between items-end pt-4 border-t border-gray-100 dark:border-zinc-800/50">
+                    <div className="flex flex-col">
+                      <span className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400 dark:text-zinc-600 mb-1 leading-none">{t('cart:order_total')}</span>
+                      <span className="text-3xl font-black text-gray-900 dark:text-white tracking-tighter leading-none">{total.toFixed(2)}</span>
                     </div>
-                    {discount && (
-                      <div className="flex justify-between text-green-600 dark:text-green-400">
-                        <span>{t('cart:discount')}</span>
-                        <span>-${discountAmount.toFixed(2)}</span>
-                      </div>
-                    )}
-                    <div className="flex justify-between text-lg font-bold pt-2 border-t border-gray-200 dark:border-zinc-800">
-                      <span>{t('cart:total')}</span>
-                      <span>${total.toFixed(2)}</span>
-                    </div>
-                  </div>
-
-                  {/* Buttons */}
-                  <div className="space-y-2">
-                    <Button
-                      onClick={handleCheckout}
-                      className="w-full bg-starbucks-green hover:bg-starbucks-green/90"
-                    >
-                      {t('cart:checkout')}
-                    </Button>
-                    <Button
-                      onClick={() => {
-                        clearCart();
-                        onClose();
-                      }}
-                      variant="outline"
-                      className="w-full"
-                    >
-                      {t('cart:clear')}
-                    </Button>
+                    <span className="text-sm font-black text-starbucks-green uppercase mb-0.5">{t('cart:currency')}</span>
                   </div>
                 </div>
-              )}
-            </motion.div>
-          </>
-        )}
-      </AnimatePresence>
-    </>
+
+                {/* Primary Actions */}
+                <div className="flex gap-4">
+                  <Button
+                    onClick={handleCheckout}
+                    className="flex-1 bg-starbucks-green hover:bg-starbucks-green-dark h-20 rounded-[1.5rem] text-xl font-black shadow-2xl shadow-starbucks-green/30 active:scale-[0.98] transition-all relative overflow-hidden group"
+                  >
+                    <span className="relative z-10">{t('cart:checkout')}</span>
+                    <motion.div 
+                      initial={false}
+                      whileHover={{ x: 10 }}
+                      className="absolute right-6 top-1/2 -translate-y-1/2 opacity-20 group-hover:opacity-40 transition-opacity"
+                    >
+                      <ChevronRight className="w-8 h-8" />
+                    </motion.div>
+                  </Button>
+                  <Button
+                    onClick={() => {
+                      clearCart();
+                      onClose();
+                    }}
+                    variant="outline"
+                    className="w-20 h-20 rounded-[1.5rem] border-gray-100 dark:border-zinc-800 hover:bg-red-50 hover:text-red-500 hover:border-red-100 dark:hover:bg-red-950/30 transition-all active:scale-[0.95] flex items-center justify-center"
+                    title={t('cart:clear')}
+                  >
+                    <Trash2 className="w-6 h-6" />
+                  </Button>
+                </div>
+              </div>
+            )}
+          </motion.div>
+        </>
+      )}
+    </AnimatePresence>
   );
 }
 

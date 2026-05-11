@@ -110,8 +110,15 @@ export default defineConfig({
     ],
   },
   optimizeDeps: {
-    exclude: ["lucide-react"],
-    include: ["react", "react-dom", "react-router-dom", "framer-motion"],
+    include: [
+      "react",
+      "react-dom",
+      "react-router-dom",
+      "framer-motion",
+      "@tanstack/react-query",
+      "react-i18next",
+      "i18next",
+    ],
   },
   build: {
     target: "esnext",

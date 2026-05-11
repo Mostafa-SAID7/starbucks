@@ -1,12 +1,24 @@
 {
   "empty": "Your cart is empty",
-  "discountCode": "Enter discount code",
+  "empty_title": "Your bag is empty",
+  "empty_description": "Looks like you haven't added anything yet. Start exploring our menu to find your favorites!",
+  "start_ordering": "Start Ordering",
+  "item": "item",
+  "items": "items",
+  "discountCode": "Promo code",
   "apply": "Apply",
   "discountApplied": "Discount Applied",
   "off": "off",
   "subtotal": "Subtotal",
   "discount": "Discount",
   "total": "Total",
-  "checkout": "Proceed to Checkout",
-  "clear": "Clear Cart"
+  "checkout": "Checkout",
+  "clear": "Clear Bag",
+  "delivery_to": "Delivery to",
+  "pickup_from": "Pickup from",
+  "change": "Change",
+  "select_location": "Select Location",
+  "currency": "EGP",
+  "regular": "Regular Size",
+  "order_total": "Order Total"
 }

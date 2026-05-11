@@ -7,12 +7,14 @@ export * from './layout/ScrollToTop'
 export * from './layout/SEO'
 export * from './layout/StaticPageLayout'
 export * from './layout/StaticSection'
+export * from './layout/SidebarTemplate'
 
 // Widgets
 export * from './widgets/ChatWidget'
 export * from './widgets/CookieConsent'
 export * from './widgets/AuthModal'
 export * from './widgets/AllergyInfo'
+export * from './widgets/CartDrawer'
 
 // Search
 export * from './search/SearchModal'
