@@ -14,27 +14,35 @@ export const OrderItemSchema = z.object({
 });
 
 export const OrderStatusSchema = z.enum([
-  'pending', 
-  'confirmed', 
-  'preparing', 
-  'ready', 
-  'completed', 
-  'cancelled'
+  'pending', 'Pending',
+  'confirmed', 'Confirmed',
+  'preparing', 'Preparing',
+  'ready', 'Ready',
+  'completed', 'Completed',
+  'cancelled', 'Cancelled',
+  'shipped', 'Shipped',
+  'delivered', 'Delivered'
 ]);
 
 export const OrderSchema = z.object({
   id: z.string(),
+  orderNumber: z.string(),
   userId: z.string(),
   items: z.array(OrderItemSchema),
   status: OrderStatusSchema,
   total: z.number(),
-  locationId: z.string(),
-  orderType: z.enum(['pickup', 'delivery']),
+  subtotal: z.number().optional(),
+  tax: z.number().optional(),
+  deliveryFee: z.number().optional(),
+  discount: z.number().optional(),
+  locationId: z.string().optional(),
+  orderType: z.enum(['pickup', 'delivery']).optional(),
   paymentMethod: z.string(),
-  specialInstructions: z.string().optional(),
+  notes: z.string().optional(),
+  deliveryAddress: z.string().optional(),
   scheduledTime: z.string().optional(),
   createdAt: z.string(),
-  updatedAt: z.string(),
+  updatedAt: z.string().optional(),
 });
 
 export type OrderItem = z.infer<typeof OrderItemSchema>;

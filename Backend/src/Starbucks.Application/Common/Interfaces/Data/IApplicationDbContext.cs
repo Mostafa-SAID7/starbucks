@@ -19,9 +19,16 @@ public interface IApplicationDbContext
     DbSet<Location> Locations { get; }
     DbSet<Order> Orders { get; }
     DbSet<OrderItem> OrderItems { get; }
+    DbSet<SystemSetting> SystemSettings { get; }
+    DbSet<Review> Reviews { get; }
+    DbSet<ContactSubmission> ContactSubmissions { get; }
     DbSet<AuditLog> AuditLogs { get; }
     DbSet<ErrorLog> ErrorLogs { get; }
     DbSet<SystemMetric> SystemMetrics { get; }
+    DbSet<HomeBanner> HomeBanners { get; }
+    DbSet<Favorite> Favorites { get; }
+    DbSet<Notification> Notifications { get; }
+    DbSet<CartItem> CartItems { get; }
     
     DatabaseFacade Database { get; }
     

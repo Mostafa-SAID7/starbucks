@@ -30,9 +30,16 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     public DbSet<Location> Locations => Set<Location>();
     public DbSet<Order> Orders => Set<Order>();
     public DbSet<OrderItem> OrderItems => Set<OrderItem>();
+    public DbSet<SystemSetting> SystemSettings => Set<SystemSetting>();
+    public DbSet<Review> Reviews => Set<Review>();
+    public DbSet<ContactSubmission> ContactSubmissions => Set<ContactSubmission>();
     public DbSet<AuditLog> AuditLogs => Set<AuditLog>();
     public DbSet<ErrorLog> ErrorLogs => Set<ErrorLog>();
     public DbSet<SystemMetric> SystemMetrics => Set<SystemMetric>();
+    public DbSet<HomeBanner> HomeBanners => Set<HomeBanner>();
+    public DbSet<Favorite> Favorites => Set<Favorite>();
+    public DbSet<Notification> Notifications => Set<Notification>();
+    public DbSet<CartItem> CartItems => Set<CartItem>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

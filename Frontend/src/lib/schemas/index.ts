@@ -11,3 +11,8 @@ export * from './navigation';
 export * from './menu';
 export * from './pages';
 export * from './location';
+export * from './banner';
+export * from './review';
+export * from './reward';
+export * from './setting';
+export * from './notification';

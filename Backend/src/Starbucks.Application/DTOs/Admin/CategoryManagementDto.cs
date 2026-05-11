@@ -46,6 +46,46 @@ public class UpdateCategoryRequestDto
 }
 
 /// <summary>
+/// DTO for subcategory management in admin panel.
+/// </summary>
+public class SubcategoryManagementDto
+{
+    public Guid Id { get; set; }
+    public Guid CategoryId { get; set; }
+    public string NameEn { get; set; } = string.Empty;
+    public string NameAr { get; set; } = string.Empty;
+    public string? Image { get; set; }
+    public int DisplayOrder { get; set; }
+    public bool IsActive { get; set; }
+    public int ItemCount { get; set; }
+}
+
+/// <summary>
+/// DTO for creating a subcategory.
+/// </summary>
+public class CreateSubcategoryRequestDto
+{
+    public Guid CategoryId { get; set; }
+    public string NameEn { get; set; } = string.Empty;
+    public string NameAr { get; set; } = string.Empty;
+    public string? Image { get; set; }
+    public int DisplayOrder { get; set; } = 0;
+}
+
+/// <summary>
+/// DTO for updating a subcategory.
+/// </summary>
+public class UpdateSubcategoryRequestDto
+{
+    public Guid? CategoryId { get; set; }
+    public string? NameEn { get; set; }
+    public string? NameAr { get; set; }
+    public string? Image { get; set; }
+    public int? DisplayOrder { get; set; }
+    public bool? IsActive { get; set; }
+}
+
+/// <summary>
 /// DTO for menu item management in admin panel.
 /// </summary>
 public class MenuItemManagementDto

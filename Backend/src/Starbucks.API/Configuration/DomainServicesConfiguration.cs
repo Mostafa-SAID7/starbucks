@@ -39,6 +39,8 @@ public static class DomainServicesConfiguration
         services.AddScoped<ISoftDeleteService, SoftDeleteService>();
         services.AddScoped<IAuditService, AuditService>();
         services.AddScoped<IUserValidationService, UserValidationService>();
+        services.AddScoped<IFileStorageService, LocalFileStorageService>();
+        services.AddScoped<ISettingsService, SettingsService>();
 
         // Transient: new instance per injection (email is stateless, cheap to create)
         services.AddTransient<IEmailService, EmailService>();

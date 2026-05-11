@@ -14,6 +14,13 @@ export * from './menuService';
 export * from './locationsService';
 export * from './userService';
 export * from './healthService';
+export * from './ordersService';
+export * from './bannersService';
+export * from './cartService';
+export * from './favoritesService';
+export * from './notificationsService';
+export * from './rewardsService';
+export * from './reviewsService';
 
 import { ApiService } from './ApiService';
 import { ApiConfig } from '@/types/services';
