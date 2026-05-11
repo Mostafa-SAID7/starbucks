@@ -79,9 +79,17 @@ export function useCRUD<T extends { id: string }, CreateDto, UpdateDto>(
   // Own pagination state — no external hook needed since React Query handles fetching
   const [pageNumber, setPageNumber] = useState(1);
   const [pageSize, setPageSizeState] = useState(initialPageSize);
-  const [totalCount, setTotalCount] = useState(0);
+
+  // React Query drives fetching — pagination state is just numbers
+  const { data: listData, isLoading } = useQuery({
+    queryKey: ['admin-items', pageNumber, pageSize],
+    queryFn: () => fetchList(pageNumber, pageSize),
+    refetchInterval,
+  });
 
   // Derived pagination info
+  const items = listData?.items ?? [];
+  const totalCount = listData?.totalCount ?? 0;
   const totalPages = Math.max(1, Math.ceil(totalCount / pageSize));
   const pagination: PaginationInfo = {
     pageNumber,
@@ -93,25 +101,10 @@ export function useCRUD<T extends { id: string }, CreateDto, UpdateDto>(
   };
 
   // State
-  const [items, setItems] = useState<T[]>([]);
   const [selectedItem, setSelectedItem] = useState<T | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isLoadingDetails, setIsLoadingDetails] = useState(false);
 
-  // React Query drives fetching — pagination state is just numbers
-  const { data: listData, isLoading } = useQuery({
-    queryKey: ['admin-items', pageNumber, pageSize],
-    queryFn: () => fetchList(pageNumber, pageSize),
-    refetchInterval,
-  });
-
-  // Update items when list data changes
-  useEffect(() => {
-    if (listData) {
-      setItems(listData.items);
-      setTotalCount(listData.totalCount);
-    }
-  }, [listData]);
 
   // Mutations
   const createMutation = useMutation({

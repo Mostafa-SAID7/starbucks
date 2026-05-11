@@ -59,10 +59,10 @@ describe('useMenuData', () => {
     it('uses correct cache configuration', () => {
       vi.mocked(menuFetchers.fetchMenuData).mockResolvedValue(mockMenuData);
 
-      const { result } = renderHook(() => useMenuData(), { wrapper });
+      renderHook(() => useMenuData(), { wrapper });
 
       // Verify the query is configured with correct cache times
-      const query = queryClient.getQueryCache().find(['menu']);
+      const query = queryClient.getQueryCache().find({ queryKey: ['menu'] });
       expect(query).toBeDefined();
     });
   });
@@ -91,7 +91,7 @@ describe('useMenuData', () => {
         { wrapper }
       );
 
-      expect(result.current.isIdle).toBe(true);
+      expect(result.current.fetchStatus).toBe('idle');
       expect(menuFetchers.fetchMenuCategory).not.toHaveBeenCalled();
     });
 
@@ -144,8 +144,8 @@ describe('useMenuData', () => {
         { wrapper }
       );
 
-      expect(result1.current.isIdle).toBe(true);
-      expect(result2.current.isIdle).toBe(true);
+      expect(result1.current.fetchStatus).toBe('idle');
+      expect(result2.current.fetchStatus).toBe('idle');
       expect(menuFetchers.fetchMenuItem).not.toHaveBeenCalled();
     });
 

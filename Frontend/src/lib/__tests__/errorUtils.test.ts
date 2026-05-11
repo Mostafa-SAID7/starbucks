@@ -155,7 +155,7 @@ describe('errorUtils', () => {
     beforeEach(() => {
       // Mock environment
       vi.stubGlobal('import.meta', { env: { DEV: false, PROD: true } });
-      vi.mocked(fetch).mockResolvedValue(new Response());
+      (global.fetch as any).mockResolvedValue(new Response());
     });
 
     it('logs to console in development', () => {
@@ -183,7 +183,7 @@ describe('errorUtils', () => {
     });
 
     it('handles fetch failure silently', async () => {
-      vi.mocked(fetch).mockRejectedValue(new Error('Fetch failed'));
+      (global.fetch as any).mockRejectedValue(new Error('Fetch failed'));
 
       const error = new Error('Test error');
       

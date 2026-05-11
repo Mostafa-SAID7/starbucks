@@ -17,10 +17,6 @@ export const useCart = () => {
           // For now, let's assume backend is source of truth if it has items
           if (backendCart.items.length > 0) {
             clearCart();
-            backendCart.items.forEach((_item) => {
-              // Note: need to fetch menu item details if backend only returns IDs
-              // This is a simplified version
-            });
           }
         } catch (error) {
           console.error('Failed to sync cart:', error);

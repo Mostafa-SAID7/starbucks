@@ -1,6 +1,5 @@
 import { AxiosInstance, AxiosRequestConfig } from 'axios';
 import { apiClient } from '@/lib/api/client';
-import { ApiConfig } from '@/types/services';
 
 /**
  * Main API Service class

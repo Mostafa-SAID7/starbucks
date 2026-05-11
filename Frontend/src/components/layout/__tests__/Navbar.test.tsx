@@ -2,6 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { screen, fireEvent, waitFor } from '@testing-library/react';
 import { render } from '@/test/utils/test-utils';
 import { Navbar } from '../Navbar';
+import { useParams, useLocation } from 'react-router-dom';
 
 // Mock the navigation hook
 vi.mock('@/hooks/queries', () => ({
@@ -21,13 +22,13 @@ vi.mock('@/hooks/queries', () => ({
 }));
 
 // Mock react-router-dom
-vi.mock('react-router-dom', async () => {
-  const actual = await vi.importActual('react-router-dom');
+vi.mock('react-router-dom', async (importOriginal) => {
+  const actual = await importOriginal() as any;
   return {
     ...actual,
-    useParams: () => ({ lang: 'en' }),
-    useLocation: () => ({ pathname: '/en' }),
-    useNavigate: () => vi.fn(),
+    useParams: vi.fn(() => ({ lang: 'en' })),
+    useLocation: vi.fn(() => ({ pathname: '/en' })),
+    useNavigate: vi.fn(() => vi.fn()),
   };
 });
 
@@ -42,6 +43,8 @@ vi.mock('framer-motion', () => ({
 describe('Navbar', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    vi.mocked(useParams).mockReturnValue({ lang: 'en' });
+    vi.mocked(useLocation).mockReturnValue({ pathname: '/en' } as any);
   });
 
   it('renders the logo and navigation links', () => {
@@ -82,8 +85,6 @@ describe('Navbar', () => {
     const searchButton = screen.getByLabelText(/search/i);
     fireEvent.click(searchButton);
     
-    // Note: This would require mocking the SearchModal component
-    // For now, we just verify the button exists and is clickable
     expect(searchButton).toBeInTheDocument();
   });
 
@@ -93,22 +94,12 @@ describe('Navbar', () => {
     const accountButton = screen.getByLabelText(/account/i);
     fireEvent.click(accountButton);
     
-    // Note: This would require mocking the AuthModal component
-    // For now, we just verify the button exists and is clickable
     expect(accountButton).toBeInTheDocument();
   });
 
   it('applies correct RTL styling for Arabic language', () => {
-    // Mock Arabic language
-    vi.mock('react-router-dom', async () => {
-      const actual = await vi.importActual('react-router-dom');
-      return {
-        ...actual,
-        useParams: () => ({ lang: 'ar' }),
-        useLocation: () => ({ pathname: '/ar' }),
-        useNavigate: () => vi.fn(),
-      };
-    });
+    vi.mocked(useParams).mockReturnValue({ lang: 'ar' });
+    vi.mocked(useLocation).mockReturnValue({ pathname: '/ar' } as any);
 
     render(<Navbar />);
     

@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { renderHook, waitFor } from '@testing-library/react';
+import { renderHook, waitFor } from '@/test/utils/test-utils';
 import { useInitialLoad } from './useInitialLoad';
 
 describe('useInitialLoad', () => {
@@ -14,7 +14,7 @@ describe('useInitialLoad', () => {
       expect(result.current.isLoading).toBe(false);
     });
 
-    expect(result.current.data).toBeDefined();
+    expect(result.current.menuData).toBeDefined();
   });
 
   it('should handle loading state correctly', () => {

@@ -15,7 +15,7 @@ export function usePrefetch() {
    * Prefetch a generic query
    */
   const prefetchQuery = useCallback(
-    async (queryKey: readonly unknown[], queryFn: () => Promise<any>, staleTime = CACHE_TIMES.DEFAULT_STALE) => {
+    async (queryKey: readonly unknown[], queryFn: () => Promise<unknown>, staleTime = CACHE_TIMES.DEFAULT_STALE) => {
       try {
         await queryClient.prefetchQuery({
           queryKey,

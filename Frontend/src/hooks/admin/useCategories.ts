@@ -70,7 +70,7 @@ export function useCategories(options: UseCategoriesOptions = {}) {
     {
       fetchList: (pageNumber: number, pageSize: number) => 
         getCategoryMenuItems(categories.selectedItem?.id || '', pageNumber, pageSize),
-      fetchDetails: (_id: string) => Promise.resolve({} as MenuItemManagementDto),
+      fetchDetails: () => Promise.resolve({} as MenuItemManagementDto),
       create: createMenuItem,
       update: updateMenuItem,
       delete: deleteMenuItem,

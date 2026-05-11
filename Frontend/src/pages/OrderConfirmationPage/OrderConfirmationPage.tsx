@@ -10,7 +10,6 @@ import { cn } from '@/lib/ui';
 export function OrderConfirmationPage() {
   const { orderId } = useParams<{ orderId: string }>();
   const { t, i18n } = useTranslation(['pages', 'common']);
-  const { isRTL } = useLanguage();
   const navigate = useNavigate();
 
   // In a real app, we would fetch order details by orderId

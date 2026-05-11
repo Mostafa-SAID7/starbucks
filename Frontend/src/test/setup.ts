@@ -55,9 +55,9 @@ Object.defineProperty(window, 'scrollTo', {
 
 // Mock localStorage
 const localStorageMock = {
-  getItem: (_key: string) => null,
-  setItem: (_key: string, _value: string) => {},
-  removeItem: (_key: string) => {},
+  getItem: () => null,
+  setItem: () => {},
+  removeItem: () => {},
   clear: () => {},
 };
 Object.defineProperty(window, 'localStorage', {

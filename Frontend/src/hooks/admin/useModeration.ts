@@ -9,6 +9,7 @@ import {
   moderationService,
 } from '@/services/admin';
 import { usePagination } from '@/hooks/common/usePagination';
+import { UseMutationResult } from '@tanstack/react-query';
 import {
   PendingContentDto,
   FlaggedContentDto,
@@ -19,6 +20,13 @@ import {
   ModerationStatsDto,
 } from '@/types/admin/moderation';
 
+export interface Pagination {
+  pageNumber: number;
+  pageSize: number;
+  totalPages: number;
+  totalCount: number;
+}
+
 export interface UseModerationOptions {
   pageSize?: number;
   refetchInterval?: number;
@@ -27,7 +35,7 @@ export interface UseModerationOptions {
 export interface UseModerationReturn {
   // Pending content
   pendingContent: PendingContentDto[];
-  pendingPagination: any;
+  pendingPagination: Pagination;
   isLoadingPending: boolean;
   pendingError: string | null;
   goToPendingPage: (pageNumber: number) => void;
@@ -35,20 +43,20 @@ export interface UseModerationReturn {
 
   // Flagged content
   flaggedContent: FlaggedContentDto[];
-  flaggedPagination: any;
+  flaggedPagination: Pagination;
   isLoadingFlagged: boolean;
   flaggedError: string | null;
   goToFlaggedPage: (pageNumber: number) => void;
   setFlaggedPageSize: (pageSize: number) => void;
 
   // Moderation operations
-  approveMutation: any;
-  rejectMutation: any;
-  flagMutation: any;
+  approveMutation: UseMutationResult<any, Error, ApproveContentRequestDto>;
+  rejectMutation: UseMutationResult<any, Error, RejectContentRequestDto>;
+  flagMutation: UseMutationResult<any, Error, FlagContentRequestDto>;
 
   // Moderation history
   history: ModerationHistoryDto[];
-  historyPagination: any;
+  historyPagination: Pagination | null;
   isLoadingHistory: boolean;
   historyError: string | null;
   loadHistory: (pageNumber?: number, pageSize?: number) => Promise<void>;
@@ -79,7 +87,7 @@ export function useModeration(
   } = moderationService;
 
   const [history, setHistory] = useState<ModerationHistoryDto[]>([]);
-  const [historyPagination, setHistoryPagination] = useState<any>(null);
+  const [historyPagination, setHistoryPagination] = useState<Pagination | null>(null);
 
   // Pending content pagination
   const {
@@ -146,7 +154,7 @@ export function useModeration(
     } catch (error) {
       console.error('Failed to load moderation history:', error);
     }
-  }, []);
+  }, [getModerationHistory]);
 
   // Get moderation stats
   const {

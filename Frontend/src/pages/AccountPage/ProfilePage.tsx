@@ -27,7 +27,7 @@ import { cn } from '@/lib/ui/cn';
  * Displays user information and provides access to account settings and admin tools
  */
 export const ProfilePage: React.FC = () => {
-  const { t, i18n } = useTranslation(['pages', 'common']);
+  const { t } = useTranslation(['pages', 'common']);
   const { user, logout } = useAuth();
   const [activeTab, setActiveTab] = useState<'profile' | 'orders' | 'admin'>('profile');
 

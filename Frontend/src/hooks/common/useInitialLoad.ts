@@ -92,6 +92,11 @@ export function useInitialLoad(options: InitialLoadOptions = {}) {
     menuData: menuQuery.data,
     locationsData: locationsQuery.data,
     userData: userQuery.data,
+    retry: () => {
+      menuQuery.refetch();
+      locationsQuery.refetch();
+      userQuery.refetch();
+    },
   };
 }
 
@@ -151,7 +156,7 @@ export function useOptimisticUpdate<T>(
     if (previousData) {
       onError(error, previousData);
     }
-  }, [onError]);
+  }, [onError, previousData]);
 
   return {
     handleMutate,

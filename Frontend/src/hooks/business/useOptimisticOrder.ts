@@ -34,6 +34,7 @@ export function useOptimisticOrder(options: OptimisticOrderOptions = {}) {
       // Create optimistic order
       const optimisticData: Order = {
         id: `temp-${Date.now()}`,
+        orderNumber: `TEMP-${Date.now()}`,
         userId: 'current-user',
         items: items.map(item => ({
             id: item.id,
@@ -44,12 +45,12 @@ export function useOptimisticOrder(options: OptimisticOrderOptions = {}) {
         })),
         total: total,
         status: 'pending',
-        locationId: (newOrder as any).locationId || 'default',
-        orderType: (newOrder as any).orderType || 'pickup',
-        paymentMethod: (newOrder as any).paymentMethod || 'cash',
+        locationId: newOrder.locationId || 'default',
+        orderType: newOrder.orderType || 'pickup',
+        paymentMethod: newOrder.paymentMethod || 'cash',
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
-      } as Order;
+      };
 
       setOptimisticOrder(optimisticData);
 
@@ -96,7 +97,7 @@ export function useOptimisticOrder(options: OptimisticOrderOptions = {}) {
           total: total,
           ...orderData,
         });
-      } catch (error) {
+      } catch {
         // Error is handled in mutation onError
       }
     },

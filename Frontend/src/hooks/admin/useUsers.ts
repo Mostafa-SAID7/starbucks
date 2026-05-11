@@ -175,7 +175,6 @@ export function useUsers(options: UseUsersOptions = {}): UseUsersReturn {
 
   // Get user details
   const {
-    data: _userDetailsData,
     isLoading: isLoadingUserDetails,
   } = useQuery({
     queryKey: ['admin-user-details', selectedUser?.id],
