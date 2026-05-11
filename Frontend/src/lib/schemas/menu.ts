@@ -1,5 +1,4 @@
 import { z } from 'zod';
-import { LocalizedTextSchema } from './common';
 
 /**
  * Menu and Product validation schemas

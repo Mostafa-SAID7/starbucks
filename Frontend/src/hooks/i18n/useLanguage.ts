@@ -18,7 +18,7 @@ export interface UseLanguageReturn {
  * Handles language state, RTL detection, and URL-synchronized toggling
  */
 export function useLanguage(): UseLanguageReturn {
-  const { i18n, t } = useTranslation();
+  const { i18n } = useTranslation();
   const { lang: urlLang } = useParams<{ lang: string }>();
   const navigate = useNavigate();
   const location = useLocation();

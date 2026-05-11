@@ -61,7 +61,7 @@ export async function validateFieldAsync(
   try {
     const isValid = await validator(value);
     return isValid ? undefined : `${fieldName} is invalid`;
-  } catch (error) {
+  } catch (_error) {
     return `Error validating ${fieldName}`;
   }
 }

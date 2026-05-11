@@ -10,7 +10,7 @@ export interface ValidationError {
   [key: string]: string | string[];
 }
 
-export interface UseFormValidationReturn<T> {
+export interface UseFormValidationReturn {
   errors: ValidationError;
   isValid: boolean;
   validate: (data: unknown) => boolean;
@@ -24,9 +24,9 @@ export interface UseFormValidationReturn<T> {
  * @param schema - Zod schema for validation
  * @returns Validation state and methods
  */
-export function useFormValidation<T>(
+export function useFormValidation(
   schema: ZodSchema
-): UseFormValidationReturn<T> {
+): UseFormValidationReturn {
   const [errors, setErrors] = useState<ValidationError>({});
 
   const validate = useCallback(
@@ -92,6 +92,7 @@ export function useFieldValidation(schema: ZodSchema) {
   const validateField = useCallback(
     (fieldName: string, value: unknown): string | null => {
       try {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const fieldSchema = (schema as any).pick({ [fieldName]: true });
         fieldSchema.parse({ [fieldName]: value });
         return null;

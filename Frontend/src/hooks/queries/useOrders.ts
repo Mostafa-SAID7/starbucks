@@ -1,6 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { ordersService } from '@/services/api/ordersService';
-import { Order } from '@/lib/schemas';
 
 export const useOrders = () => {
   const queryClient = useQueryClient();

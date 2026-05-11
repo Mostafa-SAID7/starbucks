@@ -1,3 +1,4 @@
+import { TFunction } from "i18next";
 import React, { useState, useCallback, useMemo, memo } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
@@ -9,17 +10,12 @@ import { useLocations, useLanguage } from "@/hooks";
 import { LocationsSkeleton } from "@/components/skeletons";
 import { TALABAT_URL } from "./constants";
 import type { Location } from "@/types";
-
-/**
- * Memoized LocationCard Component
- * Prevents unnecessary re-renders when parent list updates
- */
 const LocationCard = memo(
-  ({ city, isRTL, t }: { city: Location; isRTL: boolean; t: any }) => {
-    const c = city as Location & { nameAr: string; count: number };
+  ({ city, isRTL, t }: { city: Location; isRTL: boolean; t: TFunction }) => {
+    const c = city as Location & { nameAr?: string; count?: number };
     return (
       <motion.a
-        href={`https://locations.starbucks.eg/directory/${city.slug}`}
+        href={`https://locations.starbucks.eg/directory/${city.slug || ""}`}
         target="_blank"
         rel="noopener noreferrer"
         whileHover={{ x: isRTL ? -8 : 8 }}
@@ -39,8 +35,7 @@ const LocationCard = memo(
       </motion.a>
     );
   },
-  (prevProps, nextProps) => {
-    // Custom comparison: only re-render if city data or RTL changes
+  (prevProps: { city: Location; isRTL: boolean }, nextProps: { city: Location; isRTL: boolean }) => {
     return (
       prevProps.city.id === nextProps.city.id &&
       prevProps.isRTL === nextProps.isRTL

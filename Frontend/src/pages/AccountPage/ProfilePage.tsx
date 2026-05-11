@@ -28,7 +28,6 @@ import { cn } from '@/lib/ui/cn';
  */
 export const ProfilePage: React.FC = () => {
   const { t, i18n } = useTranslation(['pages', 'common']);
-  const _isRTL = i18n.language === 'ar';
   const { user, logout } = useAuth();
   const [activeTab, setActiveTab] = useState<'profile' | 'orders' | 'admin'>('profile');
 
@@ -250,7 +249,7 @@ const OrderHistory: React.FC = () => {
   );
 };
 
-const AdminDashboard: React.FC<{ user: unknown }> = ({ user: _user }) => {
+const AdminDashboard: React.FC<{ user: unknown }> = () => {
   const { t } = useTranslation(['pages', 'common']);
   const { dashboardStats, isLoadingDashboard } = useAnalytics();
   

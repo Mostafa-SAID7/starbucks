@@ -3,7 +3,7 @@
  * Manages initial data loading with optimizations for real-world usage
  */
 
-import { useEffect, useRef, useCallback } from 'react';
+import { useEffect, useRef, useCallback, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { queryKeys } from '@/lib/api/queryKeys';
 import { useErrorMonitoring } from '@/hooks/error/useErrorHandling';
@@ -140,23 +140,23 @@ export function useOptimisticUpdate<T>(
   onMutate: (newData: T) => void,
   onError: (error: Error, previousData: T) => void
 ) {
-  const previousDataRef = useRef<T | null>(null);
+  const [previousData, setPreviousData] = useState<T | null>(null);
 
   const handleMutate = useCallback((newData: T) => {
-    previousDataRef.current = newData;
+    setPreviousData(newData);
     onMutate(newData);
   }, [onMutate]);
 
   const handleError = useCallback((error: Error) => {
-    if (previousDataRef.current) {
-      onError(error, previousDataRef.current);
+    if (previousData) {
+      onError(error, previousData);
     }
   }, [onError]);
 
   return {
     handleMutate,
     handleError,
-    previousData: previousDataRef.current,
+    previousData,
   };
 }
 
@@ -179,14 +179,14 @@ export function useRetryWithBackoff(
     onRetry,
   } = options || {};
 
-  const attemptsRef = useRef(0);
+  const [attempts, setAttempts] = useState(0);
 
   const execute = useCallback(async () => {
     let lastError: Error | null = null;
 
     for (let attempt = 0; attempt <= maxRetries; attempt++) {
       try {
-        attemptsRef.current = attempt;
+        setAttempts(attempt);
         return await fn();
       } catch (error) {
         lastError = error as Error;
@@ -207,7 +207,7 @@ export function useRetryWithBackoff(
 
   return {
     execute,
-    attempts: attemptsRef.current,
+    attempts,
   };
 }
 

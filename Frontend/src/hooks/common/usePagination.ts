@@ -65,7 +65,7 @@ export function usePagination<T>(
     [fetchFn]
   );
 
-  // Initial fetch
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => {
     fetchData(initialPageNumber, initialPageSize);
   }, [initialPageNumber, initialPageSize, fetchData]);

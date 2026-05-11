@@ -97,7 +97,7 @@ export async function validateApiResponse<T>(
 export function validateBatch<T>(
   items: unknown[],
   schema: ZodSchema,
-  context?: string
+  _context?: string
 ): { valid: T[]; invalid: Array<{ item: unknown; errors: string[] }> } {
   const valid: T[] = [];
   const invalid: Array<{ item: unknown; errors: string[] }> = [];
