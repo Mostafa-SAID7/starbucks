@@ -10,8 +10,7 @@ export interface TooltipProps {
 }
 
 export const Tooltip = React.forwardRef<HTMLDivElement, TooltipProps>(
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  ({ content, children, side = "bottom", className }, _ref) => {
+  ({ content, children, side = "bottom", className }) => {
     const [isVisible, setIsVisible] = React.useState(false);
     const containerRef = React.useRef<HTMLDivElement>(null);
 

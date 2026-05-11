@@ -1,36 +1,26 @@
 import React, { createContext, useContext, useState, useCallback } from 'react';
 
-export interface AppError {
-  id: string;
-  type: 'error' | 'warning' | 'info';
-  title: string;
-  message: string;
-  action?: {
-    label: string;
-    handler: () => void;
-  };
-  timestamp: number;
-}
+import { ErrorNotification } from '@/types/error';
 
 interface ErrorContextType {
-  errors: AppError[];
-  addError: (error: Omit<AppError, 'id' | 'timestamp'>) => void;
+  errors: ErrorNotification[];
+  addError: (error: Omit<ErrorNotification, 'id' | 'timestamp'>) => void;
   removeError: (id: string) => void;
   clearErrors: () => void;
 }
 
 const ErrorContext = createContext<ErrorContextType | undefined>(undefined);
 
-export function ErrorProvider({ children }: { children: React.ReactNode }) {
-  const [errors, setErrors] = useState<AppError[]>([]);
+export default function ErrorProvider({ children }: { children: React.ReactNode }) {
+  const [errors, setErrors] = useState<ErrorNotification[]>([]);
 
   const removeError = useCallback((id: string) => {
     setErrors((prev) => prev.filter((error) => error.id !== id));
   }, []);
 
-  const addError = useCallback((error: Omit<AppError, 'id' | 'timestamp'>) => {
+  const addError = useCallback((error: Omit<ErrorNotification, 'id' | 'timestamp'>) => {
     const id = `${Date.now()}-${Math.random()}`;
-    const newError: AppError = {
+    const newError: ErrorNotification = {
       ...error,
       id,
       timestamp: Date.now(),
