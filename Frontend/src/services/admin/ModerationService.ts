@@ -26,7 +26,7 @@ export const getPendingContent = async (
   params.append('pageNumber', pageNumber.toString());
   params.append('pageSize', pageSize.toString());
 
-  return apiService.get(`/admin/moderation/pending?${params.toString()}`);
+  return apiService.get(`/api/v1/admin/moderation/pending?${params.toString()}`);
 };
 
 /**
@@ -40,7 +40,7 @@ export const getFlaggedContent = async (
   params.append('pageNumber', pageNumber.toString());
   params.append('pageSize', pageSize.toString());
 
-  return apiService.get(`/admin/moderation/flagged?${params.toString()}`);
+  return apiService.get(`/api/v1/admin/moderation/flagged?${params.toString()}`);
 };
 
 /**
@@ -49,7 +49,7 @@ export const getFlaggedContent = async (
 export const approveContent = async (
   data: ApproveContentRequestDto
 ): Promise<{ message: string }> => {
-  return apiService.post('/admin/moderation/approve', data);
+  return apiService.post('/api/v1/admin/moderation/approve', data);
 };
 
 /**
@@ -58,7 +58,7 @@ export const approveContent = async (
 export const rejectContent = async (
   data: RejectContentRequestDto
 ): Promise<{ message: string }> => {
-  return apiService.post('/admin/moderation/reject', data);
+  return apiService.post('/api/v1/admin/moderation/reject', data);
 };
 
 /**
@@ -67,7 +67,7 @@ export const rejectContent = async (
 export const flagContent = async (
   data: FlagContentRequestDto
 ): Promise<{ message: string }> => {
-  return apiService.post('/admin/moderation/flag', data);
+  return apiService.post('/api/v1/admin/moderation/flag', data);
 };
 
 /**
@@ -81,17 +81,17 @@ export const getModerationHistory = async (
   params.append('pageNumber', pageNumber.toString());
   params.append('pageSize', pageSize.toString());
 
-  return apiService.get(`/admin/moderation/history?${params.toString()}`);
+  return apiService.get(`/api/v1/admin/moderation/history?${params.toString()}`);
 };
 
 /**
  * Get moderation statistics
  */
 export const getModerationStats = async (): Promise<ModerationStatsDto> => {
-  return apiService.get('/admin/moderation/stats');
+  return apiService.get('/api/v1/admin/moderation/stats');
 };
 
-export const adminModerationService = {
+export const moderationService = {
   getPendingContent,
   getFlaggedContent,
   approveContent,

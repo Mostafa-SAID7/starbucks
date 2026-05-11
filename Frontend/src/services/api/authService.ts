@@ -41,28 +41,28 @@ export interface RefreshTokenResponse {
  * Login user with email and password
  */
 export const login = async (credentials: LoginCredentials): Promise<AuthResponse> => {
-  return apiService.post<AuthResponse>('/auth/login', credentials);
+  return apiService.post<AuthResponse>('/api/v1/Auth/login', credentials);
 };
 
 /**
  * Register new user
  */
 export const register = async (userData: RegisterData): Promise<AuthResponse> => {
-  return apiService.post<AuthResponse>('/auth/register', userData);
+  return apiService.post<AuthResponse>('/api/v1/Auth/register', userData);
 };
 
 /**
  * Refresh authentication token
  */
 export const refreshToken = async (refreshToken: string): Promise<RefreshTokenResponse> => {
-  return apiService.post<RefreshTokenResponse>('/auth/refresh', { refreshToken });
+  return apiService.post<RefreshTokenResponse>('/api/v1/Auth/refresh', { refreshToken });
 };
 
 /**
  * Logout user
  */
 export const logout = async (): Promise<void> => {
-  return apiService.post('/auth/logout');
+  return apiService.post('/api/v1/Auth/logout');
 };
 
 /**

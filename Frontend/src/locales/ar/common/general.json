@@ -11,6 +11,16 @@
   "back": "رجوع",
   "home": "الرئيسية",
   "close": "إغلاق",
+  "remove": "إزالة",
+  "decrease": "تقليل الكمية",
+  "increase": "زيادة الكمية",
+  "backToHome": "العودة للرئيسية",
+  "minutes": "دقيقة",
+  "roles": {
+    "user": "عميل",
+    "admin": "مدير",
+    "superadmin": "مدير عام"
+  },
   "search": "بحث",
   "search_placeholder": "ابحث عن قهوتك أو طعامك المفضل...",
   "search_trending": "الأكثر بحثاً الآن",
@@ -33,7 +43,7 @@
   "explore": "اكتشف",
   "discover_more": "اكتشف المزيد",
   "status": {
-    "loading": "جاري التحميل...",
     "error": "حدث خطأ أثناء تحميل البيانات"
-  }
+  },
+  "cart": "سلة التسوق"
 }

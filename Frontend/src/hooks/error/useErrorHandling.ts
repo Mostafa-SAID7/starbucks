@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 import { useAuthStore } from '@/hooks/auth/useAuth';
 import axios, { AxiosError } from 'axios';
-import { monitoringService } from '@/services/monitoring/MonitoringService';
+import { clientMonitoringService as monitoringService } from '@/services/monitoring';
 import { AppError, detectErrorType, getErrorMessages } from '@/lib/error';
 
 export interface ErrorHandlingOptions {

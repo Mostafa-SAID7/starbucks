@@ -11,8 +11,13 @@ public static class MediatRConfiguration
     public static IServiceCollection AddMediatRConfiguration(this IServiceCollection services)
     {
         services.AddMediatR(cfg =>
+        {
             cfg.RegisterServicesFromAssembly(
-                typeof(Starbucks.Application.Features.Auth.Commands.LoginCommand).Assembly));
+                typeof(Starbucks.Application.Features.Auth.Commands.LoginCommand).Assembly);
+            
+            cfg.AddOpenBehavior(typeof(Starbucks.Application.Common.Behaviors.LoggingBehavior<,>));
+            cfg.AddOpenBehavior(typeof(Starbucks.Application.Common.Behaviors.ValidationBehavior<,>));
+        });
 
         return services;
     }

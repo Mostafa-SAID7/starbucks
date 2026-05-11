@@ -6,14 +6,8 @@
 import { useState, useCallback } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
-  getPendingContent,
-  getFlaggedContent,
-  approveContent,
-  rejectContent,
-  flagContent,
-  getModerationHistory,
-  getModerationStats,
-} from '@/services/admin/adminModerationService';
+  moderationService,
+} from '@/services/admin';
 import { usePagination } from '@/hooks/common/usePagination';
 import {
   PendingContentDto,
@@ -25,12 +19,12 @@ import {
   ModerationStatsDto,
 } from '@/types/admin/moderation';
 
-export interface UseAdminModerationOptions {
+export interface UseModerationOptions {
   pageSize?: number;
   refetchInterval?: number;
 }
 
-export interface UseAdminModerationReturn {
+export interface UseModerationReturn {
   // Pending content
   pendingContent: PendingContentDto[];
   pendingPagination: any;
@@ -68,11 +62,21 @@ export interface UseAdminModerationReturn {
 /**
  * Hook for managing admin moderation
  */
-export function useAdminModeration(
-  options: UseAdminModerationOptions = {}
-): UseAdminModerationReturn {
+export function useModeration(
+  options: UseModerationOptions = {}
+): UseModerationReturn {
   const { pageSize = 20, refetchInterval = 30000 } = options; // 30 seconds default
   const queryClient = useQueryClient();
+
+  const {
+    getPendingContent,
+    getFlaggedContent,
+    approveContent,
+    rejectContent,
+    flagContent,
+    getModerationHistory,
+    getModerationStats,
+  } = moderationService;
 
   const [history, setHistory] = useState<ModerationHistoryDto[]>([]);
   const [historyPagination, setHistoryPagination] = useState<any>(null);
@@ -85,7 +89,7 @@ export function useAdminModeration(
     error: pendingError,
     goToPage: goToPendingPage,
     setPageSize: setPendingPageSize,
-  } = usePagination((pageNumber, pageSize) => getPendingContent(pageNumber, pageSize), {
+  } = usePagination((pageNumber: number, pageSize: number) => getPendingContent(pageNumber, pageSize), {
     initialPageSize: pageSize,
   });
 
@@ -97,7 +101,7 @@ export function useAdminModeration(
     error: flaggedError,
     goToPage: goToFlaggedPage,
     setPageSize: setFlaggedPageSize,
-  } = usePagination((pageNumber, pageSize) => getFlaggedContent(pageNumber, pageSize), {
+  } = usePagination((pageNumber: number, pageSize: number) => getFlaggedContent(pageNumber, pageSize), {
     initialPageSize: pageSize,
   });
 

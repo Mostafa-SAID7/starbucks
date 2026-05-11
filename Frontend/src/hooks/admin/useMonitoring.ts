@@ -13,7 +13,7 @@ import {
   getPerformanceMetricsSummary,
   getErrorLogDetails,
   getAuditLogDetails,
-} from '@/services/admin/adminMonitoringService';
+} from '@/services/monitoring';
 import { usePagination } from '@/hooks/common/usePagination';
 import {
   SystemHealthDto,
@@ -25,12 +25,12 @@ import {
   SystemMetricsSummaryDto,
 } from '@/types/admin/monitoring';
 
-export interface UseAdminMonitoringOptions {
+export interface UseMonitoringOptions {
   refetchInterval?: number;
   pageSize?: number;
 }
 
-export interface UseAdminMonitoringReturn {
+export interface UseMonitoringReturn {
   // System health
   systemHealth: SystemHealthDto | null;
   isLoadingHealth: boolean;
@@ -80,9 +80,9 @@ export interface UseAdminMonitoringReturn {
 /**
  * Hook for managing admin monitoring
  */
-export function useAdminMonitoring(
-  options: UseAdminMonitoringOptions = {}
-): UseAdminMonitoringReturn {
+export function useMonitoring(
+  options: UseMonitoringOptions = {}
+): UseMonitoringReturn {
   const { refetchInterval = 30000, pageSize = 20 } = options; // 30 seconds default
 
   const [dateRange, setDateRangeState] = useState({

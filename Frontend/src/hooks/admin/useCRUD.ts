@@ -8,9 +8,10 @@ import { useState, useCallback, useEffect } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { PagedResult } from '@/types/common/pagination';
 
-export interface UseAdminCRUDOptions {
+export interface UseCRUDOptions {
   pageSize?: number;
   refetchInterval?: number;
+  invalidationKeys?: (readonly string[])[]; // Optional keys to invalidate on success (e.g., public keys)
 }
 
 export interface PaginationInfo {
@@ -22,7 +23,7 @@ export interface PaginationInfo {
   hasPreviousPage: boolean;
 }
 
-export interface UseAdminCRUDReturn<T, CreateDto, UpdateDto> {
+export interface UseCRUDReturn<T, CreateDto, UpdateDto> {
   // Data
   items: T[];
   selectedItem: T | null;
@@ -55,7 +56,7 @@ export interface UseAdminCRUDReturn<T, CreateDto, UpdateDto> {
  * Generic Admin CRUD Hook
  * Handles all common CRUD operations for admin resources
  */
-export function useAdminCRUD<T extends { id: string }, CreateDto, UpdateDto>(
+export function useCRUD<T extends { id: string }, CreateDto, UpdateDto>(
   {
     fetchList,
     fetchDetails,
@@ -69,8 +70,8 @@ export function useAdminCRUD<T extends { id: string }, CreateDto, UpdateDto>(
     update: (id: string, data: UpdateDto) => Promise<T>;
     delete: (id: string) => Promise<void>;
   },
-  options: UseAdminCRUDOptions = {}
-): UseAdminCRUDReturn<T, CreateDto, UpdateDto> {
+  options: UseCRUDOptions = {}
+): UseCRUDReturn<T, CreateDto, UpdateDto> {
   const { pageSize: initialPageSize = 20, refetchInterval } = options;
 
   const queryClient = useQueryClient();
@@ -117,6 +118,12 @@ export function useAdminCRUD<T extends { id: string }, CreateDto, UpdateDto>(
     mutationFn: create,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin-items'] });
+      // Perform cascade invalidation for related public keys if provided
+      if (options.invalidationKeys) {
+        options.invalidationKeys.forEach(key => {
+          queryClient.invalidateQueries({ queryKey: key });
+        });
+      }
       setError(null);
     },
     onError: (err: unknown) => {
@@ -129,6 +136,12 @@ export function useAdminCRUD<T extends { id: string }, CreateDto, UpdateDto>(
       update(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin-items'] });
+      // Perform cascade invalidation for related public keys if provided
+      if (options.invalidationKeys) {
+        options.invalidationKeys.forEach(key => {
+          queryClient.invalidateQueries({ queryKey: key });
+        });
+      }
       setSelectedItem(null);
       setError(null);
     },
@@ -141,6 +154,12 @@ export function useAdminCRUD<T extends { id: string }, CreateDto, UpdateDto>(
     mutationFn: deleteItem,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin-items'] });
+      // Perform cascade invalidation for related public keys if provided
+      if (options.invalidationKeys) {
+        options.invalidationKeys.forEach(key => {
+          queryClient.invalidateQueries({ queryKey: key });
+        });
+      }
       setSelectedItem(null);
       setError(null);
     },

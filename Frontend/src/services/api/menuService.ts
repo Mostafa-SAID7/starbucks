@@ -1,64 +1,36 @@
 /**
  * Menu API Service
- * Handles all menu-related API calls
+ * Handles all menu-related API calls to the backend
  */
 
 import { apiService } from './index';
-
-export interface MenuItem {
-  id: string;
-  name: { en: string; ar: string };
-  description: { en: string; ar: string };
-  image: string;
-  price: number;
-  calories?: number;
-  allergens?: string[];
-}
-
-export interface MenuSubcategory {
-  id: string;
-  name: { en: string; ar: string };
-  description: { en: string; ar: string };
-  image: string;
-  items: MenuItem[];
-}
-
-export interface MenuCategory {
-  id: string;
-  name: { en: string; ar: string };
-  description: { en: string; ar: string };
-  image: string;
-  subcategories: MenuSubcategory[];
-}
+import { MenuCategory, MenuItem } from '@/lib/schemas';
 
 export interface CategoriesResponse {
-  categories: MenuCategory[];
-}
-
-export interface SearchResponse {
-  items: MenuItem[];
-  total: number;
+  items: MenuCategory[];
+  totalCount: number;
 }
 
 /**
  * Get all menu categories
  */
-export const getCategories = async (): Promise<CategoriesResponse> => {
-  return apiService.get<CategoriesResponse>('/menu/categories');
+export const getCategories = async (language: string = 'en'): Promise<MenuCategory[]> => {
+  const response = await apiService.get<CategoriesResponse>(`/api/v1/Menu/categories?language=${language}`);
+  return response.items;
 };
 
 /**
- * Get specific menu category
+ * Get specific menu category by slug
  */
-export const getCategory = async (categoryId: string): Promise<MenuCategory> => {
-  return apiService.get<MenuCategory>(`/menu/categories/${categoryId}`);
+export const getCategory = async (slug: string, language: string = 'en'): Promise<MenuCategory> => {
+  return apiService.get<MenuCategory>(`/api/v1/Menu/categories/${slug}?language=${language}`);
 };
 
 /**
  * Get menu item details
  */
 export const getItem = async (itemId: string): Promise<MenuItem> => {
-  return apiService.get<MenuItem>(`/menu/items/${itemId}`);
+  return apiService.get<MenuItem>(`/api/v1/Menu/items/${itemId}`);
 };
 
 /**
@@ -66,13 +38,13 @@ export const getItem = async (itemId: string): Promise<MenuItem> => {
  */
 export const search = async (
   query: string,
-  language: 'en' | 'ar' = 'en'
-): Promise<SearchResponse> => {
+  language: string = 'en'
+): Promise<MenuItem[]> => {
   const params = new URLSearchParams();
-  params.append('q', query);
-  params.append('lang', language);
+  params.append('query', query);
+  params.append('language', language);
 
-  return apiService.get<SearchResponse>(`/menu/search?${params.toString()}`);
+  return apiService.get<MenuItem[]>(`/api/v1/Menu/search?${params.toString()}`);
 };
 
 /**

@@ -52,7 +52,7 @@ export function CartDrawer({
   const onClose = controlledOnClose || (() => setStoreIsOpen(false));
   const navigate = useNavigate();
 
-  const { t, i18n } = useTranslation(['common', 'cart']);
+  const { t, i18n } = useTranslation(['common']);
   const { isRTL, lang } = useLanguage();
   const { items, total, removeItem, updateQuantity, applyDiscount, removeDiscount, discount, clearCart } = useCartStore();
 
@@ -132,15 +132,15 @@ export function CartDrawer({
             <div className="relative z-20 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-md border-b border-gray-100 dark:border-zinc-800">
               <div className="flex items-center justify-between p-7 pb-4">
                 <div>
-                  <h2 className="text-3xl font-black tracking-tighter text-gray-900 dark:text-white uppercase leading-none">{t('common:cart')}</h2>
+                  <h2 className="text-3xl font-black tracking-tighter text-gray-900 dark:text-white uppercase leading-none">{t('cart')}</h2>
                   <p className="text-xs text-gray-500 dark:text-gray-400 mt-1.5 font-bold uppercase tracking-widest">
-                    {items.length} {items.length === 1 ? t('cart:item') : t('cart:items')}
+                    {items.length} {items.length === 1 ? t('cart.item') : t('cart.items')}
                   </p>
                 </div>
                 <button
                   onClick={onClose}
                   className="p-3 hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-full transition-all active:scale-90 text-gray-400 hover:text-gray-900 dark:hover:text-white"
-                  aria-label={t('common:close')}
+                  aria-label={t('close')}
                 >
                   <X className="w-6 h-6" />
                 </button>
@@ -164,7 +164,7 @@ export function CartDrawer({
                     </div>
                     <div className="text-left rtl:text-right">
                       <p className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 dark:text-zinc-500 leading-none mb-1.5">
-                        {currentLocation.type === 'delivery' ? t('cart:delivery_to') : t('cart:pickup_from')}
+                        {currentLocation.type === 'delivery' ? t('cart.delivery_to') : t('cart.pickup_from')}
                       </p>
                       <p className="text-base font-black text-gray-900 dark:text-white line-clamp-1 tracking-tight">
                         {currentLocation.type === 'delivery' ? currentLocation.address : currentLocation.store}
@@ -172,7 +172,7 @@ export function CartDrawer({
                     </div>
                   </div>
                   <div className="flex items-center gap-2 text-starbucks-green group-hover:translate-x-1 rtl:group-hover:-translate-x-1 transition-transform relative z-10">
-                    <span className="text-[10px] font-black uppercase tracking-widest">{t('cart:change')}</span>
+                    <span className="text-[10px] font-black uppercase tracking-widest">{t('cart.change')}</span>
                     <ChevronRight className="w-4 h-4" />
                   </div>
                 </motion.button>
@@ -191,14 +191,14 @@ export function CartDrawer({
                     <ShoppingBag className="w-12 h-12 text-gray-200 dark:text-zinc-800" />
                   </motion.div>
                   <div className="max-w-[280px]">
-                    <h3 className="text-2xl font-black text-gray-900 dark:text-white mb-2 tracking-tight">{t('cart:empty_title')}</h3>
-                    <p className="text-gray-500 dark:text-gray-400 font-medium leading-relaxed">{t('cart:empty_description')}</p>
+                    <h3 className="text-2xl font-black text-gray-900 dark:text-white mb-2 tracking-tight">{t('cart.empty_title')}</h3>
+                    <p className="text-gray-500 dark:text-gray-400 font-medium leading-relaxed">{t('cart.empty_description')}</p>
                   </div>
                   <Button 
                     onClick={onClose}
                     className="bg-starbucks-green hover:bg-starbucks-green-dark text-white rounded-full px-10 py-7 text-lg font-black shadow-2xl shadow-starbucks-green/30 active:scale-95 transition-all mt-4"
                   >
-                    {t('cart:start_ordering')}
+                    {t('cart.start_ordering')}
                   </Button>
                 </div>
               ) : (
@@ -248,14 +248,14 @@ export function CartDrawer({
                             <button
                               onClick={() => removeItem(item.id)}
                               className="shrink-0 p-2 text-gray-300 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 rounded-full transition-all active:scale-90"
-                              aria-label={t('common:remove')}
+                              aria-label={t('remove')}
                             >
                               <X className="w-4 h-4" />
                             </button>
                           </div>
                           
                           <p className="text-[10px] font-black text-gray-400 dark:text-zinc-500 mt-1 uppercase tracking-[0.2em]">
-                            {t('cart:regular')}
+                            {t('cart.regular')}
                           </p>
 
                           <div className="flex items-center justify-between mt-auto pt-4">
@@ -263,7 +263,7 @@ export function CartDrawer({
                               <span className="text-lg font-black text-starbucks-green dark:text-starbucks-light tracking-tighter">
                                 {item.price.toFixed(2)}
                               </span>
-                              <span className="text-[10px] font-black text-gray-400 uppercase">{t('cart:currency')}</span>
+                              <span className="text-[10px] font-black text-gray-400 uppercase">{t('cart.currency')}</span>
                             </div>
 
                             {/* Quantity Controls - Premium Style */}
@@ -271,7 +271,7 @@ export function CartDrawer({
                               <button
                                 onClick={() => updateQuantity(item.id, item.quantity - 1)}
                                 className="w-9 h-9 flex items-center justify-center text-gray-400 hover:text-starbucks-green hover:bg-white dark:hover:bg-zinc-800 rounded-full transition-all active:scale-90"
-                                aria-label={t('common:decrease')}
+                                aria-label={t('decrease')}
                               >
                                 <Minus className="w-4 h-4" />
                               </button>
@@ -279,7 +279,7 @@ export function CartDrawer({
                               <button
                                 onClick={() => updateQuantity(item.id, item.quantity + 1)}
                                 className="w-9 h-9 flex items-center justify-center text-gray-400 hover:text-starbucks-green hover:bg-white dark:hover:bg-zinc-800 rounded-full transition-all active:scale-90"
-                                aria-label={t('common:increase')}
+                                aria-label={t('increase')}
                               >
                                 <Plus className="w-4 h-4" />
                               </button>
@@ -304,7 +304,7 @@ export function CartDrawer({
                         type="text"
                         value={discountCode}
                         onChange={(e) => setDiscountCode(e.target.value)}
-                        placeholder={t('cart:discountCode')}
+                        placeholder={t('cart.discountCode')}
                         className="w-full pl-11 pr-4 py-4 rounded-[1.25rem] border border-gray-100 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-900 text-sm font-bold focus:ring-4 focus:ring-starbucks-green/10 focus:border-starbucks-green outline-none transition-all placeholder:text-gray-400"
                       />
                     </div>
@@ -315,7 +315,7 @@ export function CartDrawer({
                     >
                       {isApplyingDiscount ? (
                         <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                      ) : t('cart:apply')}
+                      ) : t('cart.apply')}
                     </Button>
                   </div>
                 ) : (
@@ -330,10 +330,10 @@ export function CartDrawer({
                       </div>
                       <div>
                         <p className="text-sm font-black text-starbucks-green tracking-tight uppercase">
-                          {discount.code} {t('cart:discountApplied')}
+                          {discount.code} {t('cart.discountApplied')}
                         </p>
                         <p className="text-[10px] text-starbucks-green/60 font-black uppercase tracking-[0.2em] mt-1">
-                          {discount.percentage}% {t('cart:off')}
+                          {discount.percentage}% {t('cart.off')}
                         </p>
                       </div>
                     </div>
@@ -354,27 +354,27 @@ export function CartDrawer({
                 {/* Totals - Premium Presentation */}
                 <div className="space-y-4 mb-8">
                   <div className="flex justify-between items-center text-gray-500 dark:text-zinc-500">
-                    <span className="font-black text-[10px] uppercase tracking-[0.2em]">{t('cart:subtotal')}</span>
+                    <span className="font-black text-[10px] uppercase tracking-[0.2em]">{t('cart.subtotal')}</span>
                     <div className="flex items-baseline gap-1">
                       <span className="font-black text-gray-900 dark:text-white tracking-tight">{subtotal.toFixed(2)}</span>
-                      <span className="text-[8px] font-black uppercase">{t('cart:currency')}</span>
+                      <span className="text-[8px] font-black uppercase">{t('cart.currency')}</span>
                     </div>
                   </div>
                   {discount && (
                     <div className="flex justify-between items-center text-starbucks-green">
-                      <span className="font-black text-[10px] uppercase tracking-[0.2em]">{t('cart:discount')}</span>
+                      <span className="font-black text-[10px] uppercase tracking-[0.2em]">{t('cart.discount')}</span>
                       <div className="flex items-baseline gap-1">
                         <span className="font-black tracking-tight">-{discountAmount.toFixed(2)}</span>
-                        <span className="text-[8px] font-black uppercase">{t('cart:currency')}</span>
+                        <span className="text-[8px] font-black uppercase">{t('cart.currency')}</span>
                       </div>
                     </div>
                   )}
                   <div className="flex justify-between items-end pt-4 border-t border-gray-100 dark:border-zinc-800/50">
                     <div className="flex flex-col">
-                      <span className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400 dark:text-zinc-600 mb-1 leading-none">{t('cart:order_total')}</span>
+                      <span className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400 dark:text-zinc-600 mb-1 leading-none">{t('cart.order_total')}</span>
                       <span className="text-3xl font-black text-gray-900 dark:text-white tracking-tighter leading-none">{total.toFixed(2)}</span>
                     </div>
-                    <span className="text-sm font-black text-starbucks-green uppercase mb-0.5">{t('cart:currency')}</span>
+                    <span className="text-sm font-black text-starbucks-green uppercase mb-0.5">{t('cart.currency')}</span>
                   </div>
                 </div>
 
@@ -384,7 +384,7 @@ export function CartDrawer({
                     onClick={handleCheckout}
                     className="flex-1 bg-starbucks-green hover:bg-starbucks-green-dark h-20 rounded-[1.5rem] text-xl font-black shadow-2xl shadow-starbucks-green/30 active:scale-[0.98] transition-all relative overflow-hidden group"
                   >
-                    <span className="relative z-10">{t('cart:checkout')}</span>
+                    <span className="relative z-10">{t('cart.checkout')}</span>
                     <motion.div 
                       initial={false}
                       whileHover={{ x: 10 }}
@@ -400,7 +400,7 @@ export function CartDrawer({
                     }}
                     variant="outline"
                     className="w-20 h-20 rounded-[1.5rem] border-gray-100 dark:border-zinc-800 hover:bg-red-50 hover:text-red-500 hover:border-red-100 dark:hover:bg-red-950/30 transition-all active:scale-[0.95] flex items-center justify-center"
-                    title={t('cart:clear')}
+                    title={t('cart.clear')}
                   >
                     <Trash2 className="w-6 h-6" />
                   </Button>

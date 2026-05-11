@@ -1,3 +1,4 @@
+#pragma warning disable CS8603
 using Starbucks.Domain.Entities;
 using Starbucks.Domain.Enums;
 using System.Linq.Expressions;

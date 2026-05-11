@@ -8,7 +8,7 @@ interface MenuGridProps {
 }
 
 export function MenuGrid({ categories }: MenuGridProps) {
-  const { t } = useTranslation('menu');
+  const { t } = useTranslation(['pages']);
   const { lang } = useParams<{ lang: string }>();
 
   return (

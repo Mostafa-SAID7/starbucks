@@ -137,7 +137,7 @@ const AnimatedRoutes = () => {
           })}
 
           {/* Account redirect */}
-          <Route path="account" element={<Navigate to="" replace />} />
+          <Route path="account" element={<Navigate to="profile" replace />} />
         </Route>
       </Routes>
     </AnimatePresence>

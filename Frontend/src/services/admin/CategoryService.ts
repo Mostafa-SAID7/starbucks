@@ -25,14 +25,14 @@ export const getCategories = async (
   params.append('pageNumber', pageNumber.toString());
   params.append('pageSize', pageSize.toString());
 
-  return apiService.get(`/admin/categories?${params.toString()}`);
+  return apiService.get(`/api/v1/admin/categories?${params.toString()}`);
 };
 
 /**
  * Get category details by ID
  */
 export const getCategoryDetails = async (id: string): Promise<CategoryManagementDto> => {
-  return apiService.get(`/admin/categories/${id}`);
+  return apiService.get(`/api/v1/admin/categories/${id}`);
 };
 
 /**
@@ -41,7 +41,7 @@ export const getCategoryDetails = async (id: string): Promise<CategoryManagement
 export const createCategory = async (
   data: CreateCategoryRequestDto
 ): Promise<CategoryManagementDto> => {
-  return apiService.post('/admin/categories', data);
+  return apiService.post('/api/v1/admin/categories', data);
 };
 
 /**
@@ -51,14 +51,14 @@ export const updateCategory = async (
   id: string,
   data: UpdateCategoryRequestDto
 ): Promise<CategoryManagementDto> => {
-  return apiService.put(`/admin/categories/${id}`, data);
+  return apiService.put(`/api/v1/admin/categories/${id}`, data);
 };
 
 /**
  * Delete a category
  */
 export const deleteCategory = async (id: string): Promise<void> => {
-  return apiService.delete(`/admin/categories/${id}`);
+  return apiService.delete(`/api/v1/admin/categories/${id}`);
 };
 
 /**
@@ -73,7 +73,7 @@ export const getCategoryMenuItems = async (
   params.append('pageNumber', pageNumber.toString());
   params.append('pageSize', pageSize.toString());
 
-  return apiService.get(`/admin/categories/${categoryId}/items?${params.toString()}`);
+  return apiService.get(`/api/v1/admin/categories/${categoryId}/items?${params.toString()}`);
 };
 
 /**
@@ -82,7 +82,7 @@ export const getCategoryMenuItems = async (
 export const createMenuItem = async (
   data: CreateMenuItemRequestDto
 ): Promise<MenuItemManagementDto> => {
-  return apiService.post('/admin/menu-items', data);
+  return apiService.post('/api/v1/admin/menu-items', data);
 };
 
 /**
@@ -92,24 +92,24 @@ export const updateMenuItem = async (
   id: string,
   data: UpdateMenuItemRequestDto
 ): Promise<MenuItemManagementDto> => {
-  return apiService.put(`/admin/menu-items/${id}`, data);
+  return apiService.put(`/api/v1/admin/menu-items/${id}`, data);
 };
 
 /**
  * Delete a menu item
  */
 export const deleteMenuItem = async (id: string): Promise<void> => {
-  return apiService.delete(`/admin/menu-items/${id}`);
+  return apiService.delete(`/api/v1/admin/menu-items/${id}`);
 };
 
 /**
  * Get menu item details
  */
 export const getMenuItemDetails = async (id: string): Promise<MenuItemManagementDto> => {
-  return apiService.get(`/admin/menu-items/${id}`);
+  return apiService.get(`/api/v1/admin/menu-items/${id}`);
 };
 
-export const adminCategoryService = {
+export const categoryService = {
   getCategories,
   getCategoryDetails,
   createCategory,

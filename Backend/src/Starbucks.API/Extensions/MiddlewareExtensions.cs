@@ -21,19 +21,63 @@ public static class MiddlewareExtensions
                 var logger = context.RequestServices
                     .GetRequiredService<ILogger<Program>>();
 
-                logger.LogError(exception, "Unhandled exception on {Method} {Path}",
-                    context.Request.Method, context.Request.Path);
+                var (statusCode, title, detail, extensions) = exception switch
+                {
+                    Starbucks.Application.Common.Exceptions.ValidationException valEx => (
+                        StatusCodes.Status400BadRequest,
+                        "Validation Error",
+                        "One or more validation failures occurred.",
+                        new Dictionary<string, object?> { ["errors"] = valEx.Errors }
+                    ),
+                    Starbucks.Application.Common.Exceptions.NotFoundException nfEx => (
+                        StatusCodes.Status404NotFound,
+                        "Not Found",
+                        nfEx.Message,
+                        null
+                    ),
+                    UnauthorizedAccessException => (
+                        StatusCodes.Status401Unauthorized,
+                        "Unauthorized",
+                        "You are not authorized to access this resource.",
+                        null
+                    ),
+                    _ => (
+                        StatusCodes.Status500InternalServerError,
+                        "An unexpected error occurred.",
+                        "Please try again later or contact support.",
+                        null
+                    )
+                };
 
-                context.Response.StatusCode  = StatusCodes.Status500InternalServerError;
+                if (statusCode == StatusCodes.Status500InternalServerError)
+                {
+                    logger.LogError(exception, "Unhandled exception on {Method} {Path}",
+                        context.Request.Method, context.Request.Path);
+                }
+                else
+                {
+                    logger.LogWarning("Request error on {Method} {Path}: {Title} - {Detail}",
+                        context.Request.Method, context.Request.Path, title, detail);
+                }
+
+                context.Response.StatusCode  = statusCode;
                 context.Response.ContentType = "application/problem+json";
 
                 var problem = new ProblemDetails
                 {
-                    Status   = StatusCodes.Status500InternalServerError,
-                    Title    = "An unexpected error occurred.",
-                    Detail   = "Please try again later or contact support.",
+                    Status   = statusCode,
+                    Title    = title,
+                    Detail   = detail,
                     Instance = context.Request.Path
                 };
+
+                if (extensions != null)
+                {
+                    foreach (var (key, value) in extensions)
+                    {
+                        problem.Extensions[key] = value;
+                    }
+                }
 
                 await context.Response.WriteAsync(
                     JsonSerializer.Serialize(problem));

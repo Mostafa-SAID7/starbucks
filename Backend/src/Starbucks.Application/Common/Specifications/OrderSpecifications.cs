@@ -1,3 +1,4 @@
+#pragma warning disable CS8603
 using Starbucks.Domain.Entities;
 using Starbucks.Domain.Enums;
 
@@ -13,7 +14,7 @@ public class OrdersByUserSpecification : BaseSpecification<Order>
         Criteria = o => o.UserId == userId;
         AddInclude(o => o.Items);
         AddInclude(o => o.User);
-        AddInclude(o => o.Location);
+        AddInclude(o => o.Location!);
         ApplyOrderByDescending(o => o.CreatedAt);
         ApplyTotalCount();
     }
@@ -29,7 +30,7 @@ public class OrdersByUserPagedSpecification : BaseSpecification<Order>
         Criteria = o => o.UserId == userId;
         AddInclude(o => o.Items);
         AddInclude(o => o.User);
-        AddInclude(o => o.Location);
+        AddInclude(o => o.Location!);
         ApplyOrderByDescending(o => o.CreatedAt);
         ApplyPaging((pageNumber - 1) * pageSize, pageSize);
         ApplyTotalCount();
@@ -46,7 +47,7 @@ public class OrdersByStatusSpecification : BaseSpecification<Order>
         Criteria = o => o.Status == status;
         AddInclude(o => o.Items);
         AddInclude(o => o.User);
-        AddInclude(o => o.Location);
+        AddInclude(o => o.Location!);
         ApplyOrderByDescending(o => o.CreatedAt);
         ApplyTotalCount();
     }
@@ -62,7 +63,7 @@ public class PendingOrdersSpecification : BaseSpecification<Order>
         Criteria = o => o.Status == OrderStatus.Pending || o.Status == OrderStatus.Confirmed;
         AddInclude(o => o.Items);
         AddInclude(o => o.User);
-        AddInclude(o => o.Location);
+        AddInclude(o => o.Location!);
         ApplyOrderBy(o => o.CreatedAt);
         ApplyTotalCount();
     }
@@ -78,7 +79,7 @@ public class CompletedOrdersSpecification : BaseSpecification<Order>
         Criteria = o => o.Status == OrderStatus.Completed || o.Status == OrderStatus.Refunded;
         AddInclude(o => o.Items);
         AddInclude(o => o.User);
-        AddInclude(o => o.Location);
+        AddInclude(o => o.Location!);
         ApplyOrderByDescending(o => o.CreatedAt);
         ApplyTotalCount();
     }
@@ -94,7 +95,7 @@ public class CancelledOrdersSpecification : BaseSpecification<Order>
         Criteria = o => o.Status == OrderStatus.Cancelled;
         AddInclude(o => o.Items);
         AddInclude(o => o.User);
-        AddInclude(o => o.Location);
+        AddInclude(o => o.Location!);
         ApplyOrderByDescending(o => o.CreatedAt);
         ApplyTotalCount();
     }
@@ -110,7 +111,7 @@ public class OrdersByLocationSpecification : BaseSpecification<Order>
         Criteria = o => o.LocationId == locationId;
         AddInclude(o => o.Items);
         AddInclude(o => o.User);
-        AddInclude(o => o.Location);
+        AddInclude(o => o.Location!);
         ApplyOrderByDescending(o => o.CreatedAt);
         ApplyTotalCount();
     }
@@ -126,7 +127,7 @@ public class OrdersCreatedAfterSpecification : BaseSpecification<Order>
         Criteria = o => o.CreatedAt >= date;
         AddInclude(o => o.Items);
         AddInclude(o => o.User);
-        AddInclude(o => o.Location);
+        AddInclude(o => o.Location!);
         ApplyOrderByDescending(o => o.CreatedAt);
         ApplyTotalCount();
     }
@@ -142,7 +143,7 @@ public class OrdersInDateRangeSpecification : BaseSpecification<Order>
         Criteria = o => o.CreatedAt >= startDate && o.CreatedAt <= endDate;
         AddInclude(o => o.Items);
         AddInclude(o => o.User);
-        AddInclude(o => o.Location);
+        AddInclude(o => o.Location!);
         ApplyOrderByDescending(o => o.CreatedAt);
         ApplyTotalCount();
     }
@@ -158,7 +159,7 @@ public class HighValueOrdersSpecification : BaseSpecification<Order>
         Criteria = o => o.Total >= minAmount;
         AddInclude(o => o.Items);
         AddInclude(o => o.User);
-        AddInclude(o => o.Location);
+        AddInclude(o => o.Location!);
         ApplyOrderByDescending(o => o.Total);
         ApplyTotalCount();
     }
@@ -174,7 +175,7 @@ public class OrdersByPaymentMethodSpecification : BaseSpecification<Order>
         Criteria = o => o.PaymentMethod == paymentMethod;
         AddInclude(o => o.Items);
         AddInclude(o => o.User);
-        AddInclude(o => o.Location);
+        AddInclude(o => o.Location!);
         ApplyOrderByDescending(o => o.CreatedAt);
         ApplyTotalCount();
     }
@@ -190,7 +191,7 @@ public class OrdersByUserAndStatusSpecification : BaseSpecification<Order>
         Criteria = o => o.UserId == userId && o.Status == status;
         AddInclude(o => o.Items);
         AddInclude(o => o.User);
-        AddInclude(o => o.Location);
+        AddInclude(o => o.Location!);
         ApplyOrderByDescending(o => o.CreatedAt);
         ApplyTotalCount();
     }
@@ -206,7 +207,7 @@ public class OrderByIdWithItemsSpecification : BaseSpecification<Order>
         Criteria = o => o.Id == orderId;
         AddInclude(o => o.Items);
         AddInclude(o => o.User);
-        AddInclude(o => o.Location);
+        AddInclude(o => o.Location!);
     }
 }
 
@@ -221,7 +222,7 @@ public class RecentOrdersSpecification : BaseSpecification<Order>
         Criteria = o => o.CreatedAt >= startDate;
         AddInclude(o => o.Items);
         AddInclude(o => o.User);
-        AddInclude(o => o.Location);
+        AddInclude(o => o.Location!);
         ApplyOrderByDescending(o => o.CreatedAt);
         ApplyTotalCount();
     }
@@ -237,7 +238,7 @@ public class OrdersAwaitingPaymentSpecification : BaseSpecification<Order>
         Criteria = o => o.Status == OrderStatus.Pending && o.PaymentStatus == PaymentStatus.Pending;
         AddInclude(o => o.Items);
         AddInclude(o => o.User);
-        AddInclude(o => o.Location);
+        AddInclude(o => o.Location!);
         ApplyOrderBy(o => o.CreatedAt);
         ApplyTotalCount();
     }
@@ -253,7 +254,7 @@ public class OrdersByPaymentStatusSpecification : BaseSpecification<Order>
         Criteria = o => o.PaymentStatus == paymentStatus;
         AddInclude(o => o.Items);
         AddInclude(o => o.User);
-        AddInclude(o => o.Location);
+        AddInclude(o => o.Location!);
         ApplyOrderByDescending(o => o.CreatedAt);
         ApplyTotalCount();
     }
@@ -269,7 +270,7 @@ public class ReadyForPickupOrdersSpecification : BaseSpecification<Order>
         Criteria = o => o.Status == OrderStatus.Ready && o.Type == OrderType.PickUp;
         AddInclude(o => o.Items);
         AddInclude(o => o.User);
-        AddInclude(o => o.Location);
+        AddInclude(o => o.Location!);
         ApplyOrderBy(o => o.CreatedAt);
         ApplyTotalCount();
     }
@@ -285,7 +286,7 @@ public class PreparingOrdersSpecification : BaseSpecification<Order>
         Criteria = o => o.Status == OrderStatus.Preparing;
         AddInclude(o => o.Items);
         AddInclude(o => o.User);
-        AddInclude(o => o.Location);
+        AddInclude(o => o.Location!);
         ApplyOrderBy(o => o.CreatedAt);
         ApplyTotalCount();
     }

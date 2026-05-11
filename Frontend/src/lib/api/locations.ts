@@ -1,14 +1,25 @@
-import { simulateDelay } from "./client";
+import { locationsService } from "@/services/api/locationsService";
+import type { Location } from "@/types";
 
 export const locationFetchers = {
-  async fetchLocations() {
-    await simulateDelay();
-    const locations = await import("@/data/locations/locations.json");
-    return locations.default;
+  /**
+   * Fetch all locations from the API
+   */
+  async fetchLocations(): Promise<Location[]> {
+    return locationsService.getAll();
   },
 
-  async fetchLocationsByRegion(region: string) {
-    const locations = await this.fetchLocations();
-    return locations.filter((loc: { slug: string }) => loc.slug === region);
+  /**
+   * Fetch locations filtered by region/slug
+   */
+  async fetchLocationsByRegion(region: string): Promise<Location[]> {
+    return locationsService.getByCity(region);
+  },
+
+  /**
+   * Fetch unique cities where stores are located
+   */
+  async fetchCities(): Promise<string[]> {
+    return locationsService.getCities();
   },
 };

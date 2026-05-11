@@ -17,7 +17,7 @@ import {
  * Get dashboard statistics
  */
 export const getDashboardStats = async (): Promise<DashboardStatsDto> => {
-  return apiService.get('/admin/analytics/dashboard');
+  return apiService.get('/api/v1/admin/analytics/dashboard');
 };
 
 /**
@@ -31,7 +31,7 @@ export const getSalesAnalytics = async (
   params.append('startDate', startDate);
   params.append('endDate', endDate);
 
-  return apiService.get(`/admin/analytics/sales?${params.toString()}`);
+  return apiService.get(`/api/v1/admin/analytics/sales?${params.toString()}`);
 };
 
 /**
@@ -45,7 +45,7 @@ export const getUserAnalytics = async (
   params.append('startDate', startDate);
   params.append('endDate', endDate);
 
-  return apiService.get(`/admin/analytics/users?${params.toString()}`);
+  return apiService.get(`/api/v1/admin/analytics/users?${params.toString()}`);
 };
 
 /**
@@ -59,24 +59,24 @@ export const getOrderAnalytics = async (
   params.append('startDate', startDate);
   params.append('endDate', endDate);
 
-  return apiService.get(`/admin/analytics/orders?${params.toString()}`);
+  return apiService.get(`/api/v1/admin/analytics/orders?${params.toString()}`);
 };
 
 /**
  * Get location performance metrics
  */
 export const getLocationPerformance = async (): Promise<LocationPerformanceDto[]> => {
-  return apiService.get('/admin/analytics/locations');
+  return apiService.get('/api/v1/admin/analytics/locations');
 };
 
 /**
  * Get menu item popularity metrics
  */
 export const getMenuItemPopularity = async (): Promise<MenuItemPopularityDto[]> => {
-  return apiService.get('/admin/analytics/menu-items');
+  return apiService.get('/api/v1/admin/analytics/menu-items');
 };
 
-export const adminAnalyticsService = {
+export const analyticsService = {
   getDashboardStats,
   getSalesAnalytics,
   getUserAnalytics,

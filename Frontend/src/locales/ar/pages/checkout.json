@@ -1,5 +1,6 @@
 {
   "title": "إتمام الشراء",
+  "confirmationTitle": "تم تأكيد الطلب!",
   "steps": {
     "delivery": "تفاصيل التوصيل",
     "payment": "طريقة الدفع",
@@ -27,5 +28,19 @@
   "discount": "الخصم",
   "total": "الإجمالي",
   "processingOrder": "نحن نجهز تجربة ستاربكس الخاصة بك...",
-  "noItems": "لا توجد عناصر في هذه الفئة"
+  "noItems": "لا توجد عناصر في هذه الفئة",
+  "thankYou": "شكراً لك!",
+  "orderReceived": "تم استلام طلبك وجاري تحضيره.",
+  "orderNumber": "رقم الطلب",
+  "estimatedArrival": "وقت الوصول المتوقع",
+  "deliveryTo": "التوصيل إلى",
+  "deliveryFee": "رسوم التوصيل",
+  "items": "العناصر",
+  "orderPlaced": "تم الطلب",
+  "preparing": "جاري التحضير",
+  "onTheWay": "في الطريق",
+  "delivered": "تم التوصيل",
+  "shareOrder": "مشاركة الطلب",
+  "needHelp": "تحتاج مساعدة؟",
+  "contactSupport": "تواصل مع الدعم"
 }

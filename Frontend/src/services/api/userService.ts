@@ -1,46 +1,31 @@
 /**
  * User API Service
- * Handles all user profile-related API calls
+ * Handles all user profile-related API calls to the backend
  */
 
 import { apiService } from './index';
-
-export interface UserPreferences {
-  language: 'en' | 'ar';
-  notifications: boolean;
-}
-
-export interface UserProfile {
-  id: string;
-  email: string;
-  firstName: string;
-  lastName: string;
-  phone?: string;
-  dateOfBirth?: string;
-  loyaltyPoints: number;
-  preferences: UserPreferences;
-}
+import { User } from '@/lib/schemas';
 
 export interface UpdateProfileData {
   firstName?: string;
   lastName?: string;
   phone?: string;
   dateOfBirth?: string;
-  preferences?: Partial<UserPreferences>;
+  preferences?: any;
 }
 
 /**
  * Get current user profile
  */
-export const getProfile = async (): Promise<UserProfile> => {
-  return apiService.get<UserProfile>('/user/profile');
+export const getProfile = async (): Promise<User> => {
+  return apiService.get<User>('/api/v1/User/profile');
 };
 
 /**
  * Update user profile
  */
-export const updateProfile = async (data: UpdateProfileData): Promise<UserProfile> => {
-  return apiService.put<UserProfile>('/user/profile', data);
+export const updateProfile = async (data: UpdateProfileData): Promise<User> => {
+  return apiService.put<User>('/api/v1/User/profile', data);
 };
 
 /**

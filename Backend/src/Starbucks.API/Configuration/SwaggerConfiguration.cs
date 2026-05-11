@@ -1,3 +1,5 @@
+using Swashbuckle.AspNetCore.SwaggerGen;
+
 namespace Starbucks.API.Configuration;
 
 /// <summary>
@@ -28,13 +30,16 @@ public static class SwaggerConfiguration
                 }
             });
 
+            // ── JWT Security Definition ───────────────────────────────────────────
+            // Use SecuritySchemeType.Http so Swagger UI sends "Bearer <token>"
+            // automatically — no need for the user to type "Bearer " manually.
             c.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
             {
-                Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
-                Name        = "Authorization",
-                In          = Microsoft.OpenApi.Models.ParameterLocation.Header,
-                Type        = Microsoft.OpenApi.Models.SecuritySchemeType.ApiKey,
-                Scheme      = "Bearer",
+                Description  = "JWT Authorization header using the Bearer scheme. Enter your token below (without the 'Bearer ' prefix).",
+                Name         = "Authorization",
+                In           = Microsoft.OpenApi.Models.ParameterLocation.Header,
+                Type         = Microsoft.OpenApi.Models.SecuritySchemeType.Http,
+                Scheme       = "Bearer",
                 BearerFormat = "JWT"
             });
 
@@ -53,14 +58,33 @@ public static class SwaggerConfiguration
                 }
             });
 
-            // Support for API versioning in Swagger
+            // ── DocInclusionPredicate ──────────────────────────────────────────────
+            // The old predicate `docName == apiDesc.GroupName` silently excluded
+            // EVERY endpoint because GroupName is null unless the controller carries
+            // [ApiExplorerSettings(GroupName = "v1")].
+            // The fix reads [ApiVersion] attributes directly from the controller type.
             c.DocInclusionPredicate((docName, apiDesc) =>
             {
-                var versions = apiDesc.ActionDescriptor.EndpointMetadata
+                if (!apiDesc.TryGetMethodInfo(out System.Reflection.MethodInfo methodInfo))
+                    return false;
+
+                var versions = methodInfo.DeclaringType?
+                    .GetCustomAttributes(true)
                     .OfType<Microsoft.AspNetCore.Mvc.ApiVersionAttribute>()
                     .SelectMany(attr => attr.Versions);
-                return versions?.Any(v => $"v{v}" == docName) ?? false;
+
+                // ApiVersion(1,0) → MajorVersion = 1 → "v1" == docName "v1" ✓
+                return versions?.Any(v => $"v{v.MajorVersion}" == docName) ?? false;
             });
+
+            // ── XML Comments ──────────────────────────────────────────────────────
+            // Exposes all /// <summary> / <param> / <returns> tags in Swagger UI.
+            // Requires <GenerateDocumentationFile>true</GenerateDocumentationFile>
+            // in the .csproj (already added).
+            var xmlFile = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
+            var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+            if (File.Exists(xmlPath))
+                c.IncludeXmlComments(xmlPath, includeControllerXmlComments: true);
         });
 
         return services;

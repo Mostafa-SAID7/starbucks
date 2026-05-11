@@ -14,7 +14,7 @@ export interface HealthResponse {
  * Check API health status
  */
 export const check = async (): Promise<HealthResponse> => {
-  return apiService.get<HealthResponse>('/health');
+  return apiService.get<HealthResponse>('/health/live');
 };
 
 /**

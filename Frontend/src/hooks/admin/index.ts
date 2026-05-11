@@ -3,13 +3,16 @@
  * Exports all admin-related hooks
  */
 
-export { useAdminUsers } from './useAdminUsers';
-export { useAdminAnalytics } from './useAdminAnalytics';
-export { useAdminCategories } from './useAdminCategories';
-export { useAdminModeration } from './useAdminModeration';
-export { useAdminMonitoring } from './useAdminMonitoring';
+export * from './useUsers';
+export * from './useAnalytics';
+export * from './useCategories';
+export * from './useModeration';
+export * from './useMonitoring';
+export * from './useCRUD';
 
-export type { UseAdminUsersReturn } from './useAdminUsers';
-// Return types are inferred from the hooks; no separate type exports needed
-export type { UseAdminModerationReturn } from './useAdminModeration';
-export type { UseAdminMonitoringReturn } from './useAdminMonitoring';
+export { useUsers as useAdminUsers } from './useUsers';
+export { useAnalytics as useAdminAnalytics } from './useAnalytics';
+export { useCategories as useAdminCategories } from './useCategories';
+export { useModeration as useAdminModeration } from './useModeration';
+export { useMonitoring as useAdminMonitoring } from './useMonitoring';
+export { useCRUD as useAdminCRUD } from './useCRUD';

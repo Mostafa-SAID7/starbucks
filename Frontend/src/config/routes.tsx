@@ -76,6 +76,11 @@ const OrderConfirmationPage = lazy(() =>
 );
 
 // eslint-disable-next-line react-refresh/only-export-components
+const ProfilePage = lazy(() =>
+  import('@/pages/AccountPage/ProfilePage').then((module) => ({ default: module.ProfilePage }))
+);
+
+// eslint-disable-next-line react-refresh/only-export-components
 const NotFound = lazy(() =>
   import('@/pages').then((module) => ({ default: module.NotFound }))
 );
@@ -259,6 +264,12 @@ export const PAGE_ROUTES: PageRoute[] = [
     component: OrderConfirmationPage,
     skeleton: StaticPageSkeleton,
     name: 'order-confirmation',
+  },
+  {
+    path: 'account/profile',
+    component: ProfilePage,
+    skeleton: StaticPageSkeleton,
+    name: 'profile',
   },
   {
     path: '*',

@@ -8,13 +8,17 @@ import { useState, useCallback } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { queryKeys } from '@/lib/api/queryKeys';
 import {
+  analyticsService,
+} from '@/services/admin';
+
+const {
   getDashboardStats,
   getSalesAnalytics,
   getUserAnalytics,
   getOrderAnalytics,
   getLocationPerformance,
   getMenuItemPopularity,
-} from '@/services/admin/adminAnalyticsService';
+} = analyticsService;
 import {
   DashboardStatsDto,
   SalesAnalyticsDto,
@@ -24,14 +28,14 @@ import {
   MenuItemPopularityDto,
 } from '@/types/admin/analytics';
 
-export interface UseAdminAnalyticsOptions {
+export interface UseAnalyticsOptions {
   refetchInterval?: number;
 }
 
 /**
  * Hook for managing admin analytics
  */
-export function useAdminAnalytics(options: UseAdminAnalyticsOptions = {}) {
+export function useAnalytics(options: UseAnalyticsOptions = {}) {
   const { refetchInterval = 60000 } = options; // 1 minute default
 
   // Get default date range (last 30 days)

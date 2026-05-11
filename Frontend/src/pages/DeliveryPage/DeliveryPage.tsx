@@ -8,7 +8,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Plus, Minus, ExternalLink } from "lucide-react";
 
 const DeliveryPageContent: React.FC<{ data: GenericPageData }> = ({ data }) => {
-  const { isRTL } = useLanguage();
+  const { lang, isRTL } = useLanguage();
   const { t } = useTranslation(["pages", "common"]);
   const { toggleSection, isOpen } = useAccordion("intro");
 
@@ -19,7 +19,7 @@ const DeliveryPageContent: React.FC<{ data: GenericPageData }> = ({ data }) => {
   const sidebarMedia =
     typeof data.sidebarImage === "string"
       ? data.sidebarImage
-      : (data.sidebarImage as { en?: string; ar?: string } | null)?.en ?? "";
+      : (data.sidebarImage as Record<string, string> | null)?.[lang] ?? "";
 
   const isVideo =
     sidebarMedia.includes("player.cloudinary.com") ||

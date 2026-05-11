@@ -17,7 +17,7 @@ export const MainLayout = () => {
       <div className="flex min-h-screen flex-col bg-background text-foreground transition-colors duration-300">
         <Navbar />
        
-        <div className="flex-1 relative flex flex-col overflow-x-hidden">
+        <div className="flex-1 relative flex flex-col">
           <main className="flex-1 scroll-smooth">
             <Outlet />
             <Suspense fallback={null}>

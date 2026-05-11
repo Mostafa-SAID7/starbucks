@@ -44,10 +44,36 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(UserConfiguration).Assembly);
         
         base.OnModelCreating(modelBuilder);
+
+        if (Database.IsSqlite())
+        {
+            foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+            {
+                var rowVersionProperty = entityType.FindProperty("RowVersion");
+                if (rowVersionProperty != null)
+                {
+                    rowVersionProperty.ValueGenerated = Microsoft.EntityFrameworkCore.Metadata.ValueGenerated.Never;
+                }
+            }
+        }
+    }
+
+    public override int SaveChanges()
+    {
+        UpdateAuditFields();
+        return base.SaveChanges();
     }
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
+        UpdateAuditFields();
+        return await base.SaveChangesAsync(cancellationToken);
+    }
+
+    private void UpdateAuditFields()
+    {
+        bool isSqlite = Database.IsSqlite();
+
         foreach (var entry in ChangeTracker.Entries<Domain.Common.BaseEntity>())
         {
             switch (entry.State)
@@ -55,15 +81,15 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
                 case EntityState.Added:
                     entry.Entity.CreatedBy = _currentUserService.UserId?.ToString();
                     entry.Entity.CreatedAt = _dateTime.UtcNow;
+                    if (isSqlite) entry.Entity.RowVersion = Guid.NewGuid().ToByteArray();
                     break;
 
                 case EntityState.Modified:
                     entry.Entity.UpdatedBy = _currentUserService.UserId?.ToString();
                     entry.Entity.UpdatedAt = _dateTime.UtcNow;
+                    if (isSqlite) entry.Entity.RowVersion = Guid.NewGuid().ToByteArray();
                     break;
             }
         }
-
-        return await base.SaveChangesAsync(cancellationToken);
     }
 }

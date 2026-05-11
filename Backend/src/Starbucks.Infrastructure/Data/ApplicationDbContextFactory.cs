@@ -15,7 +15,7 @@ public class ApplicationDbContextFactory : IDesignTimeDbContextFactory<Applicati
     {
         // Build configuration
         var configuration = new ConfigurationBuilder()
-            .SetBasePath(Path.Combine(Directory.GetCurrentDirectory(), "../StarbucksEgypt.API"))
+            .SetBasePath(Path.Combine(Directory.GetCurrentDirectory(), "../Starbucks.API"))
             .AddJsonFile("appsettings.json", optional: false)
             .AddJsonFile("appsettings.Development.json", optional: true)
             .Build();

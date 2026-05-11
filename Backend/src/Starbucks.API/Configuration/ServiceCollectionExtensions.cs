@@ -27,6 +27,7 @@ public static class ServiceCollectionExtensions
         
         // Observability
         services.AddHealthCheckConfiguration(configuration);
+        services.AddLocalizationConfiguration();
 
         return services;
     }

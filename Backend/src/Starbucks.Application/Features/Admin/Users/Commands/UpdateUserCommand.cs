@@ -16,18 +16,20 @@ public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, Resul
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IDateTimeService _dateTime;
-    private readonly IAuditService _auditService;
+    private readonly ICacheInvalidationService _cacheInvalidationService;
     private readonly ILogger<UpdateUserCommandHandler> _logger;
 
     public UpdateUserCommandHandler(
         IUnitOfWork unitOfWork,
         IDateTimeService dateTime,
         IAuditService auditService,
+        ICacheInvalidationService cacheInvalidationService,
         ILogger<UpdateUserCommandHandler> logger)
     {
         _unitOfWork = unitOfWork;
         _dateTime = dateTime;
         _auditService = auditService;
+        _cacheInvalidationService = cacheInvalidationService;
         _logger = logger;
     }
 
@@ -111,9 +113,12 @@ public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, Resul
             await _unitOfWork.Users.UpdateAsync(user, cancellationToken);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
+            // STEP 7: Invalidate cache
+            await _cacheInvalidationService.InvalidateUserCacheAsync(user.Id);
+
             _logger.LogInformation("User updated successfully: {UserId}", request.UserId);
 
-            // STEP 7: Create audit log
+            // STEP 8: Create audit log
             await _auditService.LogActionAsync(
                 userId: Guid.Empty, // System user
                 action: "UPDATE",

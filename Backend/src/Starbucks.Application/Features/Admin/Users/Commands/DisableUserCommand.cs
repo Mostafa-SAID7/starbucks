@@ -13,15 +13,18 @@ public class DisableUserCommandHandler : IRequestHandler<DisableUserCommand, Res
     private readonly IApplicationDbContext _context;
     private readonly IDateTimeService _dateTime;
     private readonly IAuditService _auditService;
+    private readonly ICacheInvalidationService _cacheInvalidationService;
 
     public DisableUserCommandHandler(
         IApplicationDbContext context,
         IDateTimeService dateTime,
-        IAuditService auditService)
+        IAuditService auditService,
+        ICacheInvalidationService cacheInvalidationService)
     {
         _context = context;
         _dateTime = dateTime;
         _auditService = auditService;
+        _cacheInvalidationService = cacheInvalidationService;
     }
 
     public async Task<Result<string>> Handle(DisableUserCommand request, CancellationToken cancellationToken)
@@ -40,6 +43,9 @@ public class DisableUserCommandHandler : IRequestHandler<DisableUserCommand, Res
 
         _context.Users.Update(user);
         await _context.SaveChangesAsync(cancellationToken);
+
+        // Invalidate cache
+        await _cacheInvalidationService.InvalidateUserCacheAsync(user.Id);
 
         // Create audit log
         await _auditService.LogActionAsync(

@@ -14,18 +14,20 @@ public class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand, Resul
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IDateTimeService _dateTime;
-    private readonly IAuditService _auditService;
+    private readonly ICacheInvalidationService _cacheInvalidationService;
     private readonly ILogger<DeleteUserCommandHandler> _logger;
 
     public DeleteUserCommandHandler(
         IUnitOfWork unitOfWork,
         IDateTimeService dateTime,
         IAuditService auditService,
+        ICacheInvalidationService cacheInvalidationService,
         ILogger<DeleteUserCommandHandler> logger)
     {
         _unitOfWork = unitOfWork;
         _dateTime = dateTime;
         _auditService = auditService;
+        _cacheInvalidationService = cacheInvalidationService;
         _logger = logger;
     }
 
@@ -64,9 +66,12 @@ public class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand, Resul
             await _unitOfWork.Users.UpdateAsync(user, cancellationToken);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
+            // STEP 6: Invalidate cache
+            await _cacheInvalidationService.InvalidateUserCacheAsync(user.Id);
+
             _logger.LogInformation("User deleted successfully (soft delete): {UserId}", request.UserId);
 
-            // STEP 6: Create audit log
+            // STEP 7: Create audit log
             await _auditService.LogActionAsync(
                 userId: Guid.Empty,
                 action: "DELETE",

@@ -6,17 +6,10 @@
 
 import { useCallback } from 'react';
 import {
-  getCategories,
-  getCategoryDetails,
-  createCategory,
-  updateCategory,
-  deleteCategory,
-  getCategoryMenuItems,
-  createMenuItem,
-  updateMenuItem,
-  deleteMenuItem,
-} from '@/services/admin/adminCategoryService';
-import { useAdminCRUD } from '@/hooks/admin/useAdminCRUD';
+  categoryService,
+} from '@/services/admin';
+import { queryKeys } from '@/lib/api/queryKeys';
+import { useCRUD } from '@/hooks/admin/useCRUD';
 import {
   CategoryManagementDto,
   CreateCategoryRequestDto,
@@ -26,7 +19,7 @@ import {
   UpdateMenuItemRequestDto,
 } from '@/types/admin/category';
 
-export interface UseAdminCategoriesOptions {
+export interface UseCategoriesOptions {
   pageSize?: number;
 }
 
@@ -34,40 +27,58 @@ export interface UseAdminCategoriesOptions {
  * Hook for managing admin categories
  * Uses unified useAdminCRUD for CRUD operations
  */
-export function useAdminCategories(options: UseAdminCategoriesOptions = {}) {
+export function useCategories(options: UseCategoriesOptions = {}) {
   const { pageSize = 20 } = options;
 
+  const {
+    getCategories,
+    getCategoryDetails,
+    createCategory,
+    updateCategory,
+    deleteCategory,
+    getCategoryMenuItems,
+    createMenuItem,
+    updateMenuItem,
+    deleteMenuItem,
+  } = categoryService;
+
   // Use generic CRUD hook for categories
-  const categories = useAdminCRUD<
+  const categories = useCRUD<
     CategoryManagementDto,
     CreateCategoryRequestDto,
     UpdateCategoryRequestDto
   >(
     {
-      fetchList: (pageNumber, pageSize) => getCategories(pageNumber, pageSize),
+      fetchList: (pageNumber: number, pageSize: number) => getCategories(pageNumber, pageSize),
       fetchDetails: getCategoryDetails,
       create: createCategory,
       update: updateCategory,
       delete: deleteCategory,
     },
-    { pageSize }
+    { 
+      pageSize,
+      invalidationKeys: [queryKeys.menu.all()]
+    }
   );
 
   // Use generic CRUD hook for menu items
-  const menuItems = useAdminCRUD<
+  const menuItems = useCRUD<
     MenuItemManagementDto,
     CreateMenuItemRequestDto,
     UpdateMenuItemRequestDto
   >(
     {
-      fetchList: (pageNumber, pageSize) => 
+      fetchList: (pageNumber: number, pageSize: number) => 
         getCategoryMenuItems(categories.selectedItem?.id || '', pageNumber, pageSize),
-      fetchDetails: (id) => Promise.resolve({} as MenuItemManagementDto),
+      fetchDetails: (id: string) => Promise.resolve({} as MenuItemManagementDto),
       create: createMenuItem,
       update: updateMenuItem,
       delete: deleteMenuItem,
     },
-    { pageSize }
+    { 
+      pageSize,
+      invalidationKeys: [queryKeys.menu.all()]
+    }
   );
 
   // Load menu items when category is selected

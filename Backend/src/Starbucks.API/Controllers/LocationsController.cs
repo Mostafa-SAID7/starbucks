@@ -1,7 +1,8 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Versioning;
 using Starbucks.API.Extensions;
+using Starbucks.Application.Common.Models;
+using Starbucks.Application.DTOs.Locations;
 using Starbucks.Application.Features.Locations.Queries;
 
 namespace Starbucks.API.Controllers;
@@ -20,16 +21,19 @@ public class LocationsController : ControllerBase
     }
 
     /// <summary>
-    /// Get all store locations
+    /// Get all store locations with optional filtering and pagination
     /// </summary>
-    /// <param name="city">Filter by city</param>
-    /// <param name="governorate">Filter by governorate</param>
+    /// <param name="city">Filter by city name</param>
+    /// <param name="governorate">Filter by governorate name</param>
     /// <param name="pageNumber">Page number (default: 1)</param>
-    /// <param name="pageSize">Page size (default: 50)</param>
+    /// <param name="pageSize">Page size (default: 50, max: 100)</param>
     /// <returns>Paginated list of store locations</returns>
     [HttpGet]
+    [Cache(CacheAttribute.Durations.Long)]
+    [ProducesResponseType(typeof(PagedResult<LocationDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> GetLocations(
-        [FromQuery] string? city = null, 
+        [FromQuery] string? city = null,
         [FromQuery] string? governorate = null,
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 50)
@@ -39,11 +43,14 @@ public class LocationsController : ControllerBase
     }
 
     /// <summary>
-    /// Get location by ID
+    /// Get a single store location by ID
     /// </summary>
-    /// <param name="id">Location ID</param>
+    /// <param name="id">Location GUID</param>
     /// <returns>Location details</returns>
     [HttpGet("{id:guid}")]
+    [Cache(CacheAttribute.Durations.Long)]
+    [ProducesResponseType(typeof(LocationDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetLocation(Guid id)
     {
         var result = await _mediator.Send(new GetLocationByIdQuery(id));
@@ -51,13 +58,16 @@ public class LocationsController : ControllerBase
     }
 
     /// <summary>
-    /// Get locations by city
+    /// Get all store locations in a specific city
     /// </summary>
     /// <param name="city">City name</param>
     /// <param name="pageNumber">Page number (default: 1)</param>
     /// <param name="pageSize">Page size (default: 50)</param>
-    /// <returns>Paginated list of locations in the city</returns>
+    /// <returns>Paginated list of locations in the specified city</returns>
     [HttpGet("cities/{city}")]
+    [Cache(CacheAttribute.Durations.Long)]
+    [ProducesResponseType(typeof(PagedResult<LocationDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> GetLocationsByCity(
         string city,
         [FromQuery] int pageNumber = 1,
@@ -68,10 +78,12 @@ public class LocationsController : ControllerBase
     }
 
     /// <summary>
-    /// Get available cities
+    /// Get all cities that have at least one active store
     /// </summary>
-    /// <returns>List of cities with store counts</returns>
+    /// <returns>List of cities with their store counts</returns>
     [HttpGet("cities")]
+    [Cache(CacheAttribute.Durations.VeryLong)]
+    [ProducesResponseType(typeof(List<CityInfoDto>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetCities()
     {
         var result = await _mediator.Send(new GetCitiesQuery());
@@ -79,14 +91,20 @@ public class LocationsController : ControllerBase
     }
 
     /// <summary>
-    /// Find nearest locations
+    /// Find store locations near a geographic coordinate
     /// </summary>
-    /// <param name="latitude">User latitude</param>
-    /// <param name="longitude">User longitude</param>
-    /// <param name="radius">Search radius in kilometers</param>
-    /// <returns>List of nearby locations</returns>
+    /// <param name="latitude">User latitude (decimal degrees)</param>
+    /// <param name="longitude">User longitude (decimal degrees)</param>
+    /// <param name="radius">Search radius in kilometres (default: 10)</param>
+    /// <returns>List of nearby store locations sorted by distance</returns>
     [HttpGet("nearby")]
-    public async Task<IActionResult> GetNearbyLocations([FromQuery] double latitude, [FromQuery] double longitude, [FromQuery] double radius = 10)
+    [Cache(CacheAttribute.Durations.Short)]
+    [ProducesResponseType(typeof(IEnumerable<LocationDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> GetNearbyLocations(
+        [FromQuery] double latitude,
+        [FromQuery] double longitude,
+        [FromQuery] double radius = 10)
     {
         var result = await _mediator.Send(new GetNearbyLocationsQuery(latitude, longitude, radius));
         return result.ToActionResult(this);

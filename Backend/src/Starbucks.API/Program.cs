@@ -1,6 +1,7 @@
 using Serilog;
 using Starbucks.API.Configuration;
 using Starbucks.API.Extensions;
+using Starbucks.Infrastructure.Data;
 using AspNetCoreRateLimit;
 
 // ── Bootstrap logger (before host builds, so startup errors are captured) ────
@@ -30,6 +31,7 @@ try
     app.UseResponseCompression();           // compress responses early
     app.UseResponseCaching();               // response caching after compression
     app.UseGlobalExceptionHandler();        // must be early — catches everything below
+    app.UseRequestLocalization();           // handle culture early for localized responses
     app.UseSecurityHeaders();
     app.UseHttpsRedirection();
     app.UseCors(CorsConfiguration.AllowFrontendPolicy);
@@ -44,6 +46,18 @@ try
     app.UseSwaggerUI();
 
     Log.Information("Starting Starbucks Egypt API in {Environment}", app.Environment.EnvironmentName);
+
+    // ── Database Initialization ───────────────────────────────────────────────
+    if (app.Environment.IsDevelopment())
+    {
+        using (var scope = app.Services.CreateScope())
+        {
+            var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            await context.Database.EnsureCreatedAsync();
+            await DataSeeder.SeedAsync(context);
+        }
+    }
+
     app.Run();
 }
 catch (Exception ex)

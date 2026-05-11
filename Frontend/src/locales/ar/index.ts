@@ -9,6 +9,7 @@ import errors from "./common/errors.json";
 import loading from "./common/loading.json";
 import accessibility from "./common/accessibility.json";
 import cookieConsent from "./common/cookieConsent.json";
+import cart from "./common/cart.json";
 
 // We only include common/global translations in the main bundle.
 // Page-specific translations are loaded dynamically by the pages themselves
@@ -20,6 +21,7 @@ const common = {
   ...general,
   auth,
   chat,
+  cart,
   notfound,
   errors,
   loading,

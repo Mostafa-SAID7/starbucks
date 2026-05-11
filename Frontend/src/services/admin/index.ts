@@ -3,14 +3,12 @@
  * Exports all admin-related services
  */
 
-export * from './adminUserService';
-export * from './adminAnalyticsService';
-export * from './adminCategoryService';
-export * from './adminModerationService';
-export * from './adminMonitoringService';
+export * from './UserService';
+export * from './AnalyticsService';
+export * from './CategoryService';
+export * from './ModerationService';
 
-export { adminUserService } from './adminUserService';
-export { adminAnalyticsService } from './adminAnalyticsService';
-export { adminCategoryService } from './adminCategoryService';
-export { adminModerationService } from './adminModerationService';
-export { adminMonitoringService } from './adminMonitoringService';
+export { adminUserService } from './UserService';
+export { analyticsService } from './AnalyticsService';
+export { categoryService } from './CategoryService';
+export { moderationService } from './ModerationService';

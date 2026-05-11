@@ -6,6 +6,10 @@
 import { useState, useCallback } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
+  adminUserService,
+} from '@/services/admin';
+
+const {
   getUsers,
   getUserById,
   createUser,
@@ -17,7 +21,8 @@ import {
   changeUserRole,
   getUserActivity,
   getUserLoginHistory,
-} from '@/services/admin/adminUserService';
+} = adminUserService;
+import { queryKeys } from '@/lib/api/queryKeys';
 import { usePagination } from '@/hooks/common/usePagination';
 import {
   UserManagementDto,
@@ -26,11 +31,11 @@ import {
 } from '@/types/admin/user';
 import { UserRole } from '@/types';
 
-export interface UseAdminUsersOptions {
+export interface UseUsersOptions {
   pageSize?: number;
 }
 
-export interface UseAdminUsersReturn {
+export interface UseUsersReturn {
   // User list
   users: UserManagementDto[];
   pagination: any;
@@ -66,7 +71,7 @@ export interface UseAdminUsersReturn {
 /**
  * Hook for managing admin user operations
  */
-export function useAdminUsers(options: UseAdminUsersOptions = {}): UseAdminUsersReturn {
+export function useUsers(options: UseUsersOptions = {}): UseUsersReturn {
   const { pageSize = 20 } = options;
   const queryClient = useQueryClient();
 
@@ -102,6 +107,8 @@ export function useAdminUsers(options: UseAdminUsersOptions = {}): UseAdminUsers
     mutationFn: (data: CreateUserRequestDto) => createUser(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin-users'] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.user.all() });
+      queryClient.invalidateQueries({ queryKey: queryKeys.auth.all() });
     },
   });
 
@@ -111,6 +118,8 @@ export function useAdminUsers(options: UseAdminUsersOptions = {}): UseAdminUsers
       updateUser(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin-users'] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.user.all() });
+      queryClient.invalidateQueries({ queryKey: queryKeys.auth.all() });
       if (selectedUser) {
         setSelectedUser(null);
       }
@@ -122,6 +131,8 @@ export function useAdminUsers(options: UseAdminUsersOptions = {}): UseAdminUsers
     mutationFn: (id: string) => deleteUser(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin-users'] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.user.all() });
+      queryClient.invalidateQueries({ queryKey: queryKeys.auth.all() });
       setSelectedUser(null);
     },
   });
@@ -131,6 +142,8 @@ export function useAdminUsers(options: UseAdminUsersOptions = {}): UseAdminUsers
     mutationFn: (id: string) => disableUser(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin-users'] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.user.all() });
+      queryClient.invalidateQueries({ queryKey: queryKeys.auth.all() });
     },
   });
 
@@ -139,6 +152,8 @@ export function useAdminUsers(options: UseAdminUsersOptions = {}): UseAdminUsers
     mutationFn: (id: string) => enableUser(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin-users'] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.user.all() });
+      queryClient.invalidateQueries({ queryKey: queryKeys.auth.all() });
     },
   });
 
@@ -153,6 +168,8 @@ export function useAdminUsers(options: UseAdminUsersOptions = {}): UseAdminUsers
       changeUserRole(id, role),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin-users'] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.user.all() });
+      queryClient.invalidateQueries({ queryKey: queryKeys.auth.all() });
     },
   });
 

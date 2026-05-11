@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useMemo, memo } from "react";
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Search, Navigation } from "lucide-react";
@@ -14,7 +15,7 @@ import type { Location } from "@/types";
  * Prevents unnecessary re-renders when parent list updates
  */
 const LocationCard = memo(
-  ({ city, isRTL }: { city: Location; isRTL: boolean }) => {
+  ({ city, isRTL, t }: { city: Location; isRTL: boolean; t: any }) => {
     const c = city as Location & { nameAr: string; count: number };
     return (
       <motion.a
@@ -33,7 +34,7 @@ const LocationCard = memo(
           </span>
         </div>
         <span className="text-sm font-bold text-gray-400 dark:text-gray-500 bg-white dark:bg-black/20 px-3 py-1 rounded-full border border-gray-100 dark:border-white/5">
-          {c.count} {isRTL ? "فرع" : "stores"}
+          {c.count} {t('pages:locations.content.stores_count')}
         </span>
       </motion.a>
     );
@@ -51,6 +52,7 @@ LocationCard.displayName = "LocationCard";
 
 export const LocationsPage: React.FC = () => {
   const { lang, isRTL } = useLanguage();
+  const { t } = useTranslation(['pages', 'common']);
   const [search, setSearch] = useState("");
   const [geoStatus, setGeoStatus] = useState<"idle" | "loading" | "error">("idle");
 
@@ -121,11 +123,7 @@ export const LocationsPage: React.FC = () => {
   return (
     <div className={`min-h-screen bg-white dark:bg-zinc-950 transition-colors duration-300`} dir={isRTL ? "rtl" : "ltr"}>
       <SEO
-        title={
-          isRTL
-            ? "ابحث عن مقهى ستاربكس | مصر"
-            : "Find Your Nearest Starbucks | Egypt"
-        }
+        title={t('pages:locations.title')}
       />
 
       <div className="container mx-auto px-4 py-8 lg:py-16">
@@ -151,26 +149,12 @@ export const LocationsPage: React.FC = () => {
                 <motion.h1
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="mb-4 text-4xl lg:text-5xl font-black uppercase tracking-tight leading-[0.9] text-white"
+                  className="mb-4 text-4xl lg:text-5xl font-black uppercase tracking-tight leading-[0.9] text-white whitespace-pre-line"
                 >
-                  {isRTL ? (
-                    <>
-                      ابحث عن أقرب
-                      <br />
-                      ستاربكس
-                    </>
-                  ) : (
-                    <>
-                      FIND YOUR
-                      <br />
-                      NEAREST
-                      <br />
-                      STARBUCKS
-                    </>
-                  )}
+                  {t('pages:locations.hero.title')}
                 </motion.h1>
                 <p className="mb-8 text-lg font-bold text-white/70">
-                  {isRTL ? "في مصر" : "in Egypt"}
+                  {t('pages:locations.hero.subtitle')}
                 </p>
 
                 {/* Search bar */}
@@ -179,7 +163,7 @@ export const LocationsPage: React.FC = () => {
                     type="text"
                     value={search}
                     onChange={(e) => handleSearch(e.target.value)}
-                    placeholder={isRTL ? "ابحث عن فرع..." : "Find a store"}
+                    placeholder={t('pages:locations.hero.search_placeholder')}
                     className={`w-full rounded-full bg-white/10 hover:bg-white/15 backdrop-blur-md py-4 ${isRTL ? "pr-6 pl-14 text-right" : "pl-6 pr-14"} text-white placeholder-white/50 outline-none ring-2 ring-white/10 focus:ring-starbucks-green focus:bg-white/20 transition-all shadow-xl`}
                   />
                   <div
@@ -197,10 +181,10 @@ export const LocationsPage: React.FC = () => {
                 >
                   <Navigation className={`h-4 w-4 ${geoStatus === "loading" ? "animate-spin" : ""}`} />
                   {geoStatus === "loading"
-                    ? (isRTL ? "جارٍ تحديد الموقع..." : "Locating...")
+                    ? t('pages:locations.hero.locating')
                     : geoStatus === "error"
-                    ? (isRTL ? "تعذّر تحديد الموقع" : "Location unavailable")
-                    : (isRTL ? "استخدم موقعي" : "Use my location")}
+                    ? t('pages:locations.hero.location_unavailable')
+                    : t('pages:locations.hero.use_my_location')}
                 </button>
               </div>
             </div>
@@ -210,12 +194,10 @@ export const LocationsPage: React.FC = () => {
           <div className="lg:w-[60%]">
             <div className={`mb-12 ${isRTL ? "text-right" : "text-left"}`}>
               <h2 className="text-4xl lg:text-6xl font-black text-gray-900 dark:text-white mb-6 leading-tight">
-                {isRTL ? "فروعنا في مصر" : "Our Locations in Egypt"}
+                {t('pages:locations.content.title')}
               </h2>
               <p className="text-xl font-bold text-gray-500 dark:text-gray-400 mb-12">
-                {isRTL 
-                  ? "اكتشف أقرب مقهى إليك واستمتع بتجربة ستاربكس المميزة" 
-                  : "Discover your nearest store and enjoy the Starbucks experience."}
+                {t('pages:locations.content.subtitle')}
               </p>
 
               {/* Promo Cards - Same style as Category/Item Grid */}
@@ -225,22 +207,22 @@ export const LocationsPage: React.FC = () => {
                   <div className="aspect-4/3 overflow-hidden">
                     <img
                       src="https://images.unsplash.com/photo-1559496417-e7f25cb247f3?auto=format&fit=crop&q=80&w=800"
-                      alt={isRTL ? "متعة القهوة" : "Joy of Coffee"}
+                      alt={t('pages:locations.promo.joy.title')}
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                     />
                   </div>
                     <div className="p-8 flex flex-col flex-1">
                       <h3 className="text-2xl font-black text-gray-900 dark:text-white mb-3">
-                        {isRTL ? "بهجة قهوة ستاربكس" : "The Joy of Starbucks Coffee"}
+                        {t('pages:locations.promo.joy.title')}
                       </h3>
                       <p className="text-gray-500 dark:text-gray-400 font-medium mb-6 line-clamp-2 flex-1">
-                        {isRTL ? "اكتشف طيف تحميص ستاربكس وتعمق في تقنيات التخمير" : "Discover Starbucks Roast Spectrum and dive deep into brewing techniques"}
+                        {t('pages:locations.promo.joy.desc')}
                       </p>
                       <Link
                         to={`/${lang}/our-coffees`}
                         className="inline-flex items-center justify-center px-6 py-2 border-2 border-starbucks-green text-starbucks-green font-black rounded-full hover:bg-starbucks-green hover:text-white transition-all w-fit"
                       >
-                        {isRTL ? "اقرأ المزيد" : "Read more"}
+                        {t('pages:locations.promo.joy.cta')}
                       </Link>
                     </div>
                   </div>
@@ -250,16 +232,16 @@ export const LocationsPage: React.FC = () => {
                     <div className="aspect-4/3 overflow-hidden">
                       <img
                         src="https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=800&q=80"
-                        alt="Starbucks Delivers"
+                        alt={t('pages:locations.promo.delivery.title')}
                         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                       />
                     </div>
                     <div className="p-8 flex flex-col flex-1">
                       <h3 className="text-2xl font-black text-gray-900 dark:text-white mb-3">
-                        {isRTL ? "ستاربكس توصل" : "Starbucks Delivers"}
+                        {t('pages:locations.promo.delivery.title')}
                       </h3>
                       <p className="text-gray-500 dark:text-gray-400 font-medium mb-6 line-clamp-2 flex-1">
-                        {isRTL ? "احصل على مشروبك المفضل من ستاربكس حتى بابك!" : "Get your Starbucks favourite delivered to your door!"}
+                        {t('pages:locations.promo.delivery.desc')}
                       </p>
                       <a
                         href={TALABAT_URL}
@@ -267,7 +249,7 @@ export const LocationsPage: React.FC = () => {
                         rel="noopener noreferrer"
                         className="inline-flex items-center justify-center px-6 py-2 border-2 border-starbucks-green text-starbucks-green font-black rounded-full hover:bg-starbucks-green hover:text-white transition-all w-fit"
                       >
-                        {isRTL ? "اطلب الآن" : "Order now"}
+                        {t('pages:locations.promo.delivery.cta')}
                       </a>
                     </div>
                   </div>
@@ -276,7 +258,7 @@ export const LocationsPage: React.FC = () => {
               {/* City Grid - Premium Style */}
               <div className="border-t border-gray-100 dark:border-white/10 pt-12">
                 <h3 className="text-2xl font-black text-gray-900 dark:text-white mb-8">
-                  {isRTL ? "جميع المدن" : "All Cities"}
+                  {t('pages:locations.content.all_cities')}
                 </h3>
                 
                 <QueryErrorBoundary variant="compact">
@@ -296,7 +278,7 @@ export const LocationsPage: React.FC = () => {
                   >
                     {filteredCities.length === 0 ? (
                       <p className="col-span-full py-8 text-gray-400 font-bold text-center italic">
-                        {isRTL ? "لم يتم العثور على نتائج" : "No locations found"}
+                        {t('pages:locations.content.no_results')}
                       </p>
                     ) : (
                       filteredCities.map((city: Location) => (
@@ -307,7 +289,7 @@ export const LocationsPage: React.FC = () => {
                             visible: { opacity: 1, y: 0 }
                           }}
                         >
-                          <LocationCard city={city} isRTL={isRTL} />
+                          <LocationCard city={city} isRTL={isRTL} t={t} />
                         </motion.div>
                       ))
                     )}

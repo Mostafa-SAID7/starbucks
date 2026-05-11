@@ -2,8 +2,10 @@ import { NavLink } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
 import { MapPin, Search, Moon, Sun, User } from "lucide-react";
+import { Link } from "react-router-dom";
 import { Button, Tooltip } from "@/components/ui";
 import { CartTrigger } from "@/components";
+import { useAuth } from "@/hooks/auth/useAuth";
 import { Language, useLanguage } from "@/hooks";
 import { ANIMATION_CONFIG } from "@/lib/core/constants";
 import { Theme } from "@/types";
@@ -30,6 +32,7 @@ export function NavbarUtilities({
 }: NavbarUtilitiesProps) {
   const { t } = useTranslation();
   const { toggleLanguage } = useLanguage();
+  const { isAuthenticated } = useAuth();
 
   return (
     <div className="flex items-center gap-1 sm:gap-2 lg:gap-3">
@@ -122,15 +125,25 @@ export function NavbarUtilities({
         content={t("navigation:navbar.tooltips.account")}
         className="w-11 h-11"
       >
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={onAuthOpen}
-          className="text-starbucks-dark dark:text-foreground-dark hover:bg-gray-100 dark:hover:bg-zinc-900 rounded-full h-11 w-11 transition-all hover:scale-110 active:scale-95 border-2 border-transparent hover:border-starbucks-green/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-starbucks-green"
-          aria-label={t("navigation:navbar.tooltips.account")}
-        >
-          <User className="h-5 w-5" />
-        </Button>
+        {isAuthenticated ? (
+          <Link
+            to={`/${lang}/account/profile`}
+            className="flex items-center justify-center text-starbucks-dark dark:text-foreground-dark hover:bg-gray-100 dark:hover:bg-zinc-900 rounded-full h-11 w-11 transition-all hover:scale-110 active:scale-95 border-2 border-transparent hover:border-starbucks-green/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-starbucks-green"
+            aria-label={t("navigation:navbar.tooltips.account")}
+          >
+            <User className="h-5 w-5" />
+          </Link>
+        ) : (
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={onAuthOpen}
+            className="text-starbucks-dark dark:text-foreground-dark hover:bg-gray-100 dark:hover:bg-zinc-900 rounded-full h-11 w-11 transition-all hover:scale-110 active:scale-95 border-2 border-transparent hover:border-starbucks-green/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-starbucks-green"
+            aria-label={t("navigation:navbar.tooltips.account")}
+          >
+            <User className="h-5 w-5" />
+          </Button>
+        )}
       </Tooltip>
 
       {/* Cart Drawer */}

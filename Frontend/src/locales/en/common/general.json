@@ -11,6 +11,16 @@
   "back": "Back",
   "home": "Home",
   "close": "Close",
+  "remove": "Remove",
+  "decrease": "Decrease quantity",
+  "increase": "Increase quantity",
+  "backToHome": "Back to Home",
+  "minutes": "Minutes",
+  "roles": {
+    "user": "Customer",
+    "admin": "Admin",
+    "superadmin": "Super Admin"
+  },
   "search": "Search",
   "search_placeholder": "Search for your favorite coffee or food...",
   "search_trending": "Trending Now",
@@ -33,7 +43,7 @@
   "explore": "Explore",
   "discover_more": "Discover More",
   "status": {
-    "loading": "Loading...",
     "error": "Error loading data"
-  }
+  },
+  "cart": "Cart"
 }

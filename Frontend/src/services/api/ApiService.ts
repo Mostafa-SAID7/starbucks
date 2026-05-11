@@ -1,22 +1,17 @@
-import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
+import { AxiosInstance, AxiosRequestConfig } from 'axios';
+import { apiClient } from '@/lib/api/client';
 import { ApiConfig } from '@/types/services';
-import { DEFAULT_CONFIG } from './config';
 
 /**
  * Main API Service class
- * Handles all HTTP requests with interceptors, caching, and retry logic
+ * Handles all HTTP requests using the unified apiClient
  */
 export class ApiService {
   private client: AxiosInstance;
-  private config: ApiConfig;
 
-  constructor(config: Partial<ApiConfig> = {}) {
-    this.config = { ...DEFAULT_CONFIG, ...config };
-    this.client = axios.create({
-      baseURL: this.config.baseUrl,
-      timeout: this.config.timeout,
-      headers: this.config.headers,
-    });
+  constructor(_config: Partial<ApiConfig> = {}) {
+    // Use the shared apiClient instance
+    this.client = apiClient;
   }
 
   /**
@@ -64,12 +59,5 @@ export class ApiService {
    */
   getClient(): AxiosInstance {
     return this.client;
-  }
-
-  /**
-   * Update configuration
-   */
-  updateConfig(config: Partial<ApiConfig>): void {
-    this.config = { ...this.config, ...config };
   }
 }

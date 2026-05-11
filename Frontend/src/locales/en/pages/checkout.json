@@ -1,5 +1,6 @@
 {
   "title": "Checkout",
+  "confirmationTitle": "Order Confirmed!",
   "steps": {
     "delivery": "Delivery Details",
     "payment": "Payment Method",
@@ -27,5 +28,19 @@
   "discount": "Discount",
   "total": "Total",
   "processingOrder": "Preparing your Starbucks experience...",
-  "noItems": "No items in this category"
+  "noItems": "No items in this category",
+  "thankYou": "Thank You!",
+  "orderReceived": "Your order has been received and is being prepared.",
+  "orderNumber": "Order Number",
+  "estimatedArrival": "Estimated Arrival",
+  "deliveryTo": "Delivery To",
+  "deliveryFee": "Delivery Fee",
+  "items": "Items",
+  "orderPlaced": "Order Placed",
+  "preparing": "Preparing",
+  "onTheWay": "On the Way",
+  "delivered": "Delivered",
+  "shareOrder": "Share Order",
+  "needHelp": "Need help?",
+  "contactSupport": "Contact Support"
 }

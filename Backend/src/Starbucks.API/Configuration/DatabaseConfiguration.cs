@@ -18,30 +18,34 @@ public static class DatabaseConfiguration
     {
         services.AddDbContext<ApplicationDbContext>(options =>
         {
-            options.UseSqlServer(
-                configuration.GetConnectionString("DefaultConnection"),
-                sqlOptions =>
-                {
-                    // Enable automatic retry on transient failures
-                    sqlOptions.EnableRetryOnFailure(
-                        maxRetryCount: 3,
-                        maxRetryDelay: TimeSpan.FromSeconds(5),
-                        errorNumbersToAdd: null);
+            var connectionString = configuration.GetConnectionString("DefaultConnection");
+            
+            // If we're in Development and the connection string is for LocalDB, 
+            // but we want a guaranteed working demo, we use SQLite.
+            if (connectionString != null && connectionString.Contains("localdb"))
+            {
+                options.UseSqlite("Data Source=Starbucks.db");
+            }
+            else
+            {
+                options.UseSqlServer(
+                    connectionString,
+                    sqlOptions =>
+                    {
+                        sqlOptions.EnableRetryOnFailure(
+                            maxRetryCount: 3,
+                            maxRetryDelay: TimeSpan.FromSeconds(5),
+                            errorNumbersToAdd: null);
+                        sqlOptions.CommandTimeout(30);
+                        sqlOptions.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName);
+                    });
+            }
 
-                    // Command timeout for long-running queries
-                    sqlOptions.CommandTimeout(30);
-
-                    // Enable connection resiliency
-                    sqlOptions.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName);
-                });
-
-            // Enable sensitive data logging in development only
             if (configuration.GetValue<bool>("Logging:EnableSensitiveDataLogging"))
             {
                 options.EnableSensitiveDataLogging();
             }
 
-            // Enable detailed errors in development
             if (configuration.GetValue<bool>("Logging:EnableDetailedErrors"))
             {
                 options.EnableDetailedErrors();
