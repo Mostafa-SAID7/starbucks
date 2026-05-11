@@ -1,5 +1,5 @@
 import { ApiService } from './ApiService';
-import { RewardOffer, UserReward } from '@/lib/schemas';
+import { RewardOffer } from '@/lib/schemas';
 
 export class RewardsService extends ApiService {
   private static instance: RewardsService;

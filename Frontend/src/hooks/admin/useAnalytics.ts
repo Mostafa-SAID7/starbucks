@@ -19,14 +19,6 @@ const {
   getLocationPerformance,
   getMenuItemPopularity,
 } = analyticsService;
-import {
-  DashboardStatsDto,
-  SalesAnalyticsDto,
-  UserAnalyticsDto,
-  OrderAnalyticsDto,
-  LocationPerformanceDto,
-  MenuItemPopularityDto,
-} from '@/types/admin/analytics';
 
 export interface UseAnalyticsOptions {
   refetchInterval?: number;

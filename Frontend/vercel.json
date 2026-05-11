@@ -1,8 +1,9 @@
 {
-  "buildCommand": "npm run build",
-  "devCommand": "npm run dev",
-  "installCommand": "npm ci",
+  "buildCommand": "npx tsc -b && npx vite build",
+  "devCommand": "npx vite",
+  "installCommand": "npm install",
   "framework": "vite",
+  "outputDirectory": "dist",
   "nodeVersion": "20.x",
   "env": {
     "VITE_API_URL": "@vite_api_url"

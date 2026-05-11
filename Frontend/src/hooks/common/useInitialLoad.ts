@@ -30,8 +30,13 @@ export function useInitialLoad(options: InitialLoadOptions = {}) {
   } = options;
 
   const { addBreadcrumb } = useErrorMonitoring();
-  const loadStartTimeRef = useRef<number>(Date.now());
+  const loadStartTimeRef = useRef<number>(0);
   const hasNotifiedRef = useRef(false);
+
+  // Initialize load start time on mount
+  useEffect(() => {
+    loadStartTimeRef.current = Date.now();
+  }, []);
 
   // Prefetch menu data
   const menuQuery = useQuery({
@@ -159,7 +164,7 @@ export function useOptimisticUpdate<T>(
  * Hook for managing retry logic with exponential backoff
  */
 export function useRetryWithBackoff(
-  fn: () => Promise<any>,
+  fn: () => Promise<unknown>,
   options?: {
     maxRetries?: number;
     initialDelay?: number;

@@ -4,7 +4,7 @@ export interface CartItemDto {
   menuItemId: string;
   variantId?: string;
   quantity: number;
-  customizations?: any;
+  customizations?: Record<string, unknown>;
 }
 
 export interface CartDto {

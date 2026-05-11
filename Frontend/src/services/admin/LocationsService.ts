@@ -15,11 +15,11 @@ export class LocationsService extends ApiService {
     return this.get<Location[]>('/admin/locations');
   }
 
-  public async createLocation(request: any): Promise<Location> {
+  public async createLocation(request: unknown): Promise<Location> {
     return this.post<Location>('/admin/locations', request);
   }
 
-  public async updateLocation(id: string, request: any): Promise<Location> {
+  public async updateLocation(id: string, request: unknown): Promise<Location> {
     return this.put<Location>(`/admin/locations/${id}`, request);
   }
 

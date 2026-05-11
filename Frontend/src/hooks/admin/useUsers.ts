@@ -4,7 +4,7 @@
  */
 
 import { useState, useCallback } from 'react';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient, UseMutationResult } from '@tanstack/react-query';
 import {
   adminUserService,
 } from '@/services/admin';
@@ -38,7 +38,7 @@ export interface UseUsersOptions {
 export interface UseUsersReturn {
   // User list
   users: UserManagementDto[];
-  pagination: any;
+  pagination: { pageNumber: number; pageSize: number; totalPages: number; totalCount: number };
   isLoadingUsers: boolean;
   usersError: string | null;
   goToPage: (pageNumber: number) => void;
@@ -46,13 +46,13 @@ export interface UseUsersReturn {
   searchUsers: (searchTerm: string, role?: UserRole) => Promise<void>;
 
   // User operations
-  createUserMutation: any;
-  updateUserMutation: any;
-  deleteUserMutation: any;
-  disableUserMutation: any;
-  enableUserMutation: any;
-  resetPasswordMutation: any;
-  changeUserRoleMutation: any;
+  createUserMutation: UseMutationResult<UserManagementDto, Error, CreateUserRequestDto>;
+  updateUserMutation: UseMutationResult<UserManagementDto, Error, { id: string; data: UpdateUserRequestDto }>;
+  deleteUserMutation: UseMutationResult<void, Error, string>;
+  disableUserMutation: UseMutationResult<{ message: string }, Error, string>;
+  enableUserMutation: UseMutationResult<{ message: string }, Error, string>;
+  resetPasswordMutation: UseMutationResult<{ temporaryPassword: string }, Error, string>;
+  changeUserRoleMutation: UseMutationResult<UserManagementDto, Error, { id: string; role: UserRole }>;
 
   // User details
   selectedUser: UserManagementDto | null;
@@ -60,8 +60,8 @@ export interface UseUsersReturn {
   selectUser: (id: string) => Promise<void>;
 
   // Activity and history
-  userActivity: any;
-  userLoginHistory: any;
+  userActivity: unknown;
+  userLoginHistory: unknown;
   isLoadingActivity: boolean;
   isLoadingLoginHistory: boolean;
   loadUserActivity: (userId: string, pageNumber?: number, pageSize?: number) => Promise<void>;
@@ -76,8 +76,8 @@ export function useUsers(options: UseUsersOptions = {}): UseUsersReturn {
   const queryClient = useQueryClient();
 
   const [selectedUser, setSelectedUser] = useState<UserManagementDto | null>(null);
-  const [userActivity, setUserActivity] = useState<any>(null);
-  const [userLoginHistory, setUserLoginHistory] = useState<any>(null);
+  const [userActivity, setUserActivity] = useState<unknown>(null);
+  const [userLoginHistory, setUserLoginHistory] = useState<unknown>(null);
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [selectedRole, setSelectedRole] = useState<UserRole | undefined>();
 
@@ -175,7 +175,7 @@ export function useUsers(options: UseUsersOptions = {}): UseUsersReturn {
 
   // Get user details
   const {
-    data: userDetailsData,
+    data: _userDetailsData,
     isLoading: isLoadingUserDetails,
   } = useQuery({
     queryKey: ['admin-user-details', selectedUser?.id],

@@ -1,13 +1,12 @@
 import type { 
   Location, 
-  MenuItem,
-  GenericPageData
+  MenuItem 
 } from '@/lib/schemas';
 
 export interface SchemaConfig {
   '@context': string;
   '@type': string;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 /**

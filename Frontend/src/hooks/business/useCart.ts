@@ -1,11 +1,11 @@
-import { useEffect } from 'react';
+import { useEffect, useCallback } from 'react';
 import { useCartStore } from '@/stores/cartStore';
 import { cartService } from '@/services/api/cartService';
 import { useAuth } from '@/hooks/auth/useAuth';
 
 export const useCart = () => {
   const { user } = useAuth();
-  const { items, clearCart, addItem } = useCartStore();
+  const { clearCart } = useCartStore();
 
   // Sync with backend on login
   useEffect(() => {
@@ -17,7 +17,7 @@ export const useCart = () => {
           // For now, let's assume backend is source of truth if it has items
           if (backendCart.items.length > 0) {
             clearCart();
-            backendCart.items.forEach(item => {
+            backendCart.items.forEach((_item) => {
               // Note: need to fetch menu item details if backend only returns IDs
               // This is a simplified version
             });
@@ -28,15 +28,14 @@ export const useCart = () => {
       };
       syncCart();
     }
-  }, [user]);
+  }, [user, clearCart]);
 
-  const addToCart = async (menuItemId: string, variantId?: string, quantity: number = 1) => {
+  const addToCart = useCallback(async (menuItemId: string, variantId?: string, quantity: number = 1) => {
     if (user) {
       await cartService.addToCart({ menuItemId, variantId, quantity });
     }
     // Update local store as well for immediate feedback
-    // addItem({ id: menuItemId, ... }); 
-  };
+  }, [user]);
 
   return {
     addToCart,

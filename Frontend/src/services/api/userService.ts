@@ -11,7 +11,7 @@ export interface UpdateProfileData {
   lastName?: string;
   phone?: string;
   dateOfBirth?: string;
-  preferences?: any;
+  preferences?: Record<string, unknown>;
 }
 
 /**

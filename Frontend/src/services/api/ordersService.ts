@@ -1,5 +1,5 @@
 import { ApiService } from './ApiService';
-import { Order, OrderStatus } from '@/lib/schemas';
+import { Order } from '@/lib/schemas';
 
 export class OrdersService extends ApiService {
   private static instance: OrdersService;
@@ -19,7 +19,7 @@ export class OrdersService extends ApiService {
     return this.get<Order>(`/orders/${id}`);
   }
 
-  public async createOrder(orderData: any): Promise<Order> {
+  public async createOrder(orderData: unknown): Promise<Order> {
     return this.post<Order>('/orders', orderData);
   }
 

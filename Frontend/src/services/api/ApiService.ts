@@ -9,7 +9,7 @@ import { ApiConfig } from '@/types/services';
 export class ApiService {
   private client: AxiosInstance;
 
-  constructor(_config: Partial<ApiConfig> = {}) {
+  constructor() {
     // Use the shared apiClient instance
     this.client = apiClient;
   }

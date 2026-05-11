@@ -9,7 +9,6 @@ import { useErrorContext } from '@/contexts/ErrorContext';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 import { useAuthStore } from '@/hooks/auth/useAuth';
-import axios, { AxiosError } from 'axios';
 import { clientMonitoringService as monitoringService } from '@/services/monitoring';
 import { AppError, detectErrorType, getErrorMessages } from '@/lib/error';
 
@@ -41,6 +40,21 @@ export function useErrorHandling(): UseErrorHandlingReturn {
   const { t } = useTranslation();
   const location = useLocation();
   const user = useAuthStore((s) => s.user);
+
+  /**
+   * Add breadcrumb — declared FIRST so other callbacks can reference it
+   */
+  const addBreadcrumb = useCallback(
+    (
+      message: string,
+      category: string = 'user-action',
+      level: 'info' | 'warning' | 'error' = 'info',
+      data?: Record<string, unknown>
+    ) => {
+      monitoringService.addBreadcrumb(message, category, level, data);
+    },
+    []
+  );
 
   /**
    * Handle error with notifications and monitoring
@@ -107,7 +121,7 @@ export function useErrorHandling(): UseErrorHandlingReturn {
         { errorType, context }
       );
     },
-    [addError, t, location.pathname, user?.id]
+    [addError, t, location.pathname, user?.id, addBreadcrumb]
   );
 
   /**
@@ -131,7 +145,7 @@ export function useErrorHandling(): UseErrorHandlingReturn {
         { errorName: error.name }
       );
     },
-    [location.pathname, user?.id]
+    [location.pathname, user?.id, addBreadcrumb]
   );
 
   /**
@@ -147,22 +161,7 @@ export function useErrorHandling(): UseErrorHandlingReturn {
       // Add breadcrumb
       addBreadcrumb(message, 'message', level);
     },
-    [location.pathname, user?.id]
-  );
-
-  /**
-   * Add breadcrumb
-   */
-  const addBreadcrumb = useCallback(
-    (
-      message: string,
-      category: string = 'user-action',
-      level: 'info' | 'warning' | 'error' = 'info',
-      data?: Record<string, unknown>
-    ) => {
-      monitoringService.addBreadcrumb(message, category, level, data);
-    },
-    []
+    [location.pathname, user?.id, addBreadcrumb]
   );
 
   return {
@@ -207,4 +206,3 @@ export function useErrorMonitoring() {
     addBreadcrumb,
   };
 }
-

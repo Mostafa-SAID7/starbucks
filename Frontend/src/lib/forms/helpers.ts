@@ -7,10 +7,10 @@
  * Form error handler
  */
 export function getFormError(
-  errors: Record<string, any>,
+  errors: Record<string, unknown>,
   fieldName: string
 ): string | undefined {
-  const error = errors[fieldName];
+  const error = errors[fieldName] as { message?: string } | undefined;
   return error?.message;
 }
 
@@ -18,9 +18,9 @@ export function getFormError(
  * Form field helper
  */
 export function getFormFieldProps(
-  register: any,
+  register: (name: string, options?: unknown) => unknown,
   fieldName: string,
-  options?: any
+  options?: unknown
 ) {
   return register(fieldName, options);
 }
@@ -46,7 +46,7 @@ export async function handleFormSubmit<T>(
 /**
  * Form reset helper
  */
-export function resetForm(reset: any, defaultValues?: any): void {
+export function resetForm(reset: (values?: unknown) => void, defaultValues?: unknown): void {
   reset(defaultValues);
 }
 
@@ -55,8 +55,8 @@ export function resetForm(reset: any, defaultValues?: any): void {
  */
 export async function validateFieldAsync(
   fieldName: string,
-  value: any,
-  validator: (value: any) => Promise<boolean>
+  value: unknown,
+  validator: (value: unknown) => Promise<boolean>
 ): Promise<string | undefined> {
   try {
     const isValid = await validator(value);
@@ -73,10 +73,15 @@ export interface FormState {
   isSubmitting: boolean;
   isValid: boolean;
   isDirty: boolean;
-  errors: Record<string, any>;
+  errors: Record<string, unknown>;
 }
 
-export function getFormState(formState: any): FormState {
+export function getFormState(formState: {
+  isSubmitting: boolean;
+  isValid: boolean;
+  isDirty: boolean;
+  errors: Record<string, unknown>;
+}): FormState {
   return {
     isSubmitting: formState.isSubmitting,
     isValid: formState.isValid,

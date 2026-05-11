@@ -38,7 +38,7 @@ export interface UseMonitoringReturn {
 
   // Error logs
   errorLogs: ErrorLogDto[];
-  errorLogsPagination: any;
+  errorLogsPagination: { pageNumber: number; pageSize: number; totalPages: number; totalCount: number };
   isLoadingErrorLogs: boolean;
   errorLogsError: string | null;
   goToErrorLogsPage: (pageNumber: number) => void;
@@ -47,7 +47,7 @@ export interface UseMonitoringReturn {
 
   // Audit logs
   auditLogs: AuditLogDto[];
-  auditLogsPagination: any;
+  auditLogsPagination: { pageNumber: number; pageSize: number; totalPages: number; totalCount: number };
   isLoadingAuditLogs: boolean;
   auditLogsError: string | null;
   goToAuditLogsPage: (pageNumber: number) => void;
@@ -85,9 +85,12 @@ export function useMonitoring(
 ): UseMonitoringReturn {
   const { refetchInterval = 30000, pageSize = 20 } = options; // 30 seconds default
 
-  const [dateRange, setDateRangeState] = useState({
-    startDate: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-    endDate: new Date().toISOString().split('T')[0],
+  const [dateRange, setDateRangeState] = useState(() => {
+    const now = new Date();
+    return {
+      startDate: new Date(now.getTime() - 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+      endDate: now.toISOString().split('T')[0],
+    };
   });
 
   const [performanceMetrics, setPerformanceMetrics] = useState<PerformanceMetricsDto[]>([]);

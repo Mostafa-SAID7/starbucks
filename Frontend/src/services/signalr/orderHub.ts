@@ -27,7 +27,7 @@ class OrderHub {
   private reconnectAttempts = 0;
   private maxReconnectAttempts = 5;
   private reconnectDelay = 3000;
-  private offlineQueue: Array<{ method: string; args: any[] }> = [];
+  private offlineQueue: Array<{ method: string; args: unknown[] }> = [];
 
   constructor(private hubUrl: string = '/orderHub') {}
 
@@ -79,7 +79,7 @@ class OrderHub {
     });
 
     // Delivery tracking
-    this.connection.on('DeliveryLocationUpdated', (orderId: string, location: any) => {
+    this.connection.on('DeliveryLocationUpdated', (orderId: string, location: { latitude: number; longitude: number }) => {
       this.callbacks.onDeliveryLocationUpdated?.(orderId, location);
     });
 
@@ -125,7 +125,7 @@ class OrderHub {
     while (this.offlineQueue.length > 0 && this.isConnected()) {
       const { method, args } = this.offlineQueue.shift()!;
       try {
-        await (this.connection as any).invoke(method, ...args);
+        await this.connection!.invoke(method, ...args);
       } catch (error) {
         console.error(`Failed to invoke ${method}:`, error);
         this.offlineQueue.unshift({ method, args });

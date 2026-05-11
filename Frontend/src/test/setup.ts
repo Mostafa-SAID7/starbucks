@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom';
 import { cleanup } from '@testing-library/react';
-import { afterEach, beforeAll, afterAll, beforeEach } from 'vitest';
+import { afterEach, beforeAll, afterAll } from 'vitest';
 import { server } from './mocks/server';
 
 // Start MSW server
@@ -22,7 +22,7 @@ global.IntersectionObserver = class IntersectionObserver {
   observe() {}
   unobserve() {}
   takeRecords() { return []; }
-} as any;
+} as unknown as typeof IntersectionObserver;
 
 // Mock ResizeObserver
 global.ResizeObserver = class ResizeObserver {
@@ -55,9 +55,9 @@ Object.defineProperty(window, 'scrollTo', {
 
 // Mock localStorage
 const localStorageMock = {
-  getItem: (key: string) => null,
-  setItem: (key: string, value: string) => {},
-  removeItem: (key: string) => {},
+  getItem: (_key: string) => null,
+  setItem: (_key: string, _value: string) => {},
+  removeItem: (_key: string) => {},
   clear: () => {},
 };
 Object.defineProperty(window, 'localStorage', {
@@ -72,7 +72,7 @@ afterEach(() => {
 // Suppress console errors in tests unless explicitly needed
 beforeAll(() => {
   const originalError = console.error;
-  console.error = (...args: any[]) => {
+  console.error = (...args: unknown[]) => {
     if (
       typeof args[0] === 'string' &&
       args[0].includes('Warning: ReactDOM.render is no longer supported')

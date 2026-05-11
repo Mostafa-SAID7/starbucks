@@ -8,8 +8,7 @@ import {
   Theme as ThemeType,
   Status as StatusType,
   LocalizedText as LocalizedTextType,
-  User as UserType,
-  UserRoleSchema
+  User as UserType
 } from '@/lib/schemas';
 
 /** Language identifiers */

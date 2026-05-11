@@ -2,10 +2,19 @@
  * Background Sync and Offline Mutations
  */
 
+export interface PendingMutation {
+  id: string;
+  url: string;
+  method: string;
+  body?: string;
+  headers?: Record<string, string>;
+  timestamp: number;
+}
+
 export const registerMutation = async (
   url: string,
   method: string,
-  body?: any,
+  body?: unknown,
   headers?: Record<string, string>
 ): Promise<void> => {
   if (!('serviceWorker' in navigator) || !('SyncManager' in window)) {
@@ -27,7 +36,7 @@ export const registerMutation = async (
     await saveMutation(db, mutation);
 
     const registration = await navigator.serviceWorker.ready;
-    const syncManager = registration as any;
+    const syncManager = registration as unknown as { sync?: { register: (name: string) => Promise<void> } };
     if (syncManager.sync) {
       await syncManager.sync.register('sync-mutations');
     }
@@ -55,7 +64,7 @@ function openIndexedDB(): Promise<IDBDatabase> {
   });
 }
 
-function saveMutation(db: IDBDatabase, mutation: any): Promise<void> {
+function saveMutation(db: IDBDatabase, mutation: PendingMutation): Promise<void> {
   return new Promise((resolve, reject) => {
     const transaction = db.transaction(['mutations'], 'readwrite');
     const store = transaction.objectStore('mutations');

@@ -54,7 +54,7 @@ export interface GenericPageProps {
   data: GenericPageData;
   seoTitle?: string;
   showAccordion?: boolean;
-  accordionTitle?: any; // Using any for LocalizedText to avoid circular dep if common.ts is tricky
+  accordionTitle?: unknown; // Using unknown for LocalizedText to avoid circular dep if common.ts is tricky
   accordionSectionIndices?: number[];
   useAccordionLayout?: boolean;
 }
@@ -63,7 +63,7 @@ export interface GenericPageWrapperProps {
   slug: string;
   seoTitle?: string;
   showAccordion?: boolean;
-  accordionTitle?: any;
+  accordionTitle?: unknown;
   accordionSectionIndices?: number[];
   useAccordionLayout?: boolean;
 }

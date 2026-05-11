@@ -38,7 +38,7 @@ export function useFormValidation<T>(
       } catch (error) {
         if (error instanceof ZodError) {
           const fieldErrors: ValidationError = {};
-          error.issues.forEach((err: any) => {
+          error.issues.forEach((err) => {
             const path = err.path.join('.');
             if (fieldErrors[path]) {
               if (Array.isArray(fieldErrors[path])) {
@@ -143,7 +143,7 @@ export function useAsyncFormValidation<T>(
       } catch (error) {
         if (error instanceof ZodError) {
           const fieldErrors: ValidationError = {};
-          error.issues.forEach((err: any) => {
+          error.issues.forEach((err) => {
             const path = err.path.join('.');
             fieldErrors[path] = err.message;
           });

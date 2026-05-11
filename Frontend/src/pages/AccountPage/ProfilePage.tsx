@@ -28,7 +28,7 @@ import { cn } from '@/lib/ui/cn';
  */
 export const ProfilePage: React.FC = () => {
   const { t, i18n } = useTranslation(['pages', 'common']);
-  const isRTL = i18n.language === 'ar';
+  const _isRTL = i18n.language === 'ar';
   const { user, logout } = useAuth();
   const [activeTab, setActiveTab] = useState<'profile' | 'orders' | 'admin'>('profile');
 
@@ -96,7 +96,7 @@ export const ProfilePage: React.FC = () => {
           {tabs.map((tab) => (
             <button
               key={tab.id}
-              onClick={() => setActiveTab(tab.id as any)}
+              onClick={() => setActiveTab(tab.id as 'profile' | 'orders' | 'admin')}
               className={cn(
                 "relative flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-medium transition-all duration-300",
                 activeTab === tab.id 
@@ -138,7 +138,7 @@ export const ProfilePage: React.FC = () => {
 
 // Sub-components for better organization
 
-const ProfileSettings: React.FC<{ user: any }> = ({ user }) => {
+const ProfileSettings: React.FC<{ user: { firstName?: string; lastName?: string; email?: string } }> = ({ user }) => {
   const { t } = useTranslation(['pages', 'common']);
   
   const settingsItems = [
@@ -250,7 +250,7 @@ const OrderHistory: React.FC = () => {
   );
 };
 
-const AdminDashboard: React.FC<{ user: any }> = ({ user }) => {
+const AdminDashboard: React.FC<{ user: unknown }> = ({ user: _user }) => {
   const { t } = useTranslation(['pages', 'common']);
   const { dashboardStats, isLoadingDashboard } = useAnalytics();
   

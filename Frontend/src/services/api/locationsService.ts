@@ -46,8 +46,8 @@ export const getNearby = async (
 /**
  * Get city info
  */
-export const getCities = async (): Promise<any[]> => {
-  return apiService.get<any[]>('/api/v1/Locations/cities');
+export const getCities = async (): Promise<unknown[]> => {
+  return apiService.get<unknown[]>('/api/v1/Locations/cities');
 };
 
 /**

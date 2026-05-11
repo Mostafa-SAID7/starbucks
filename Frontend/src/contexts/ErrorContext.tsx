@@ -24,6 +24,10 @@ const ErrorContext = createContext<ErrorContextType | undefined>(undefined);
 export function ErrorProvider({ children }: { children: React.ReactNode }) {
   const [errors, setErrors] = useState<AppError[]>([]);
 
+  const removeError = useCallback((id: string) => {
+    setErrors((prev) => prev.filter((error) => error.id !== id));
+  }, []);
+
   const addError = useCallback((error: Omit<AppError, 'id' | 'timestamp'>) => {
     const id = `${Date.now()}-${Math.random()}`;
     const newError: AppError = {
@@ -38,11 +42,7 @@ export function ErrorProvider({ children }: { children: React.ReactNode }) {
     if (error.type !== 'error') {
       setTimeout(() => removeError(id), 5000);
     }
-  }, []);
-
-  const removeError = useCallback((id: string) => {
-    setErrors((prev) => prev.filter((error) => error.id !== id));
-  }, []);
+  }, [removeError]);
 
   const clearErrors = useCallback(() => {
     setErrors([]);
@@ -55,6 +55,7 @@ export function ErrorProvider({ children }: { children: React.ReactNode }) {
   );
 }
 
+// Exported separately for non-component exports
 export function useErrorContext() {
   const context = useContext(ErrorContext);
   if (!context) {

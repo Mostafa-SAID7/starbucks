@@ -5,7 +5,7 @@
  */
 
 import { useState, useCallback, useEffect } from 'react';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient, UseMutationResult } from '@tanstack/react-query';
 import { PagedResult } from '@/types/common/pagination';
 
 export interface UseCRUDOptions {
@@ -39,9 +39,9 @@ export interface UseCRUDReturn<T, CreateDto, UpdateDto> {
   error: string | null;
 
   // Mutations
-  createMutation: any;
-  updateMutation: any;
-  deleteMutation: any;
+  createMutation: UseMutationResult<T, unknown, CreateDto>;
+  updateMutation: UseMutationResult<T, unknown, { id: string; data: UpdateDto }>;
+  deleteMutation: UseMutationResult<void, unknown, string>;
 
   // Actions
   selectItem: (item: T | null) => void;

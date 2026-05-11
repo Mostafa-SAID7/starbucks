@@ -8,7 +8,7 @@ import {
   Coffee,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { useParams, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useMenuData, useLanguage } from "@/hooks";
 import { Modal, Input } from "@/components/ui";
 import { SearchMenuItem } from "@/types";
