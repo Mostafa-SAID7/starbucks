@@ -10,15 +10,15 @@ public static class SwaggerUIExtension
     /// </summary>
     public static WebApplication UseSwaggerUI(this WebApplication app)
     {
-        if (app.Environment.IsDevelopment())
+        // ── Enable Swagger in all environments for deployment verification ────
+        // TODO: In a highly sensitive production environment, you may want to 
+        // restrict this to Development only or add basic authentication.
+        app.UseSwagger();
+        app.UseSwaggerUI(c =>
         {
-            app.UseSwagger();
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Starbucks Egypt API V1");
-                c.RoutePrefix = string.Empty;
-            });
-        }
+            c.SwaggerEndpoint("/swagger/v1/swagger.json", "Starbucks Egypt API V1");
+            c.RoutePrefix = string.Empty; // Serve Swagger UI at the app's root
+        });
 
         return app;
     }

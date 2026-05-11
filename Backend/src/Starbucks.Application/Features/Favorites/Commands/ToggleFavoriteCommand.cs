@@ -22,8 +22,8 @@ public class ToggleFavoriteCommandHandler : IRequestHandler<ToggleFavoriteComman
 
     public async Task<Result<bool>> Handle(ToggleFavoriteCommand request, CancellationToken cancellationToken)
     {
-        var userId = _currentUserService.UserId;
-        if (userId == Guid.Empty) return Result<bool>.Failure("User not authenticated.");
+        if (!_currentUserService.UserId.HasValue) return Result<bool>.Failure("User not authenticated.");
+        var userId = _currentUserService.UserId.Value;
 
         var existing = await _context.Favorites
             .FirstOrDefaultAsync(f => f.UserId == userId && f.MenuItemId == request.MenuItemId, cancellationToken);

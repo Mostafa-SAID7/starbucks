@@ -10,36 +10,35 @@ namespace Starbucks.API.Configuration;
 public static class DatabaseConfiguration
 {
     /// <summary>
-    /// Adds database context with SQL Server provider and retry policies
+    /// Adds SQL Server database context with retry policies.
+    /// Always uses SQL Server — both locally and in production.
     /// </summary>
     public static IServiceCollection AddDatabaseConfiguration(
         this IServiceCollection services,
         IConfiguration configuration)
     {
+        var connectionString = configuration.GetConnectionString("DefaultConnection");
+
+        if (string.IsNullOrWhiteSpace(connectionString))
+        {
+            throw new InvalidOperationException(
+                "Database connection string 'DefaultConnection' is not configured. " +
+                "Set it in appsettings.json, appsettings.Development.json, or via environment variables.");
+        }
+
         services.AddDbContext<ApplicationDbContext>(options =>
         {
-            var connectionString = configuration.GetConnectionString("DefaultConnection");
-            
-            // If we're in Development and the connection string is for LocalDB, 
-            // but we want a guaranteed working demo, we use SQLite.
-            if (connectionString != null && connectionString.Contains("localdb"))
-            {
-                options.UseSqlite("Data Source=Starbucks.db");
-            }
-            else
-            {
-                options.UseSqlServer(
-                    connectionString,
-                    sqlOptions =>
-                    {
-                        sqlOptions.EnableRetryOnFailure(
-                            maxRetryCount: 3,
-                            maxRetryDelay: TimeSpan.FromSeconds(5),
-                            errorNumbersToAdd: null);
-                        sqlOptions.CommandTimeout(30);
-                        sqlOptions.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName);
-                    });
-            }
+            options.UseSqlServer(
+                connectionString,
+                sqlOptions =>
+                {
+                    sqlOptions.EnableRetryOnFailure(
+                        maxRetryCount: 5,
+                        maxRetryDelay: TimeSpan.FromSeconds(10),
+                        errorNumbersToAdd: null);
+                    sqlOptions.CommandTimeout(60);
+                    sqlOptions.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName);
+                });
 
             if (configuration.GetValue<bool>("Logging:EnableSensitiveDataLogging"))
             {

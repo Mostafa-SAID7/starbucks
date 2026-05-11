@@ -4,6 +4,7 @@ using Starbucks.API.Extensions;
 using Starbucks.Application.Common.Models;
 using Starbucks.Application.DTOs.Locations;
 using Starbucks.Application.Features.Locations.Queries;
+using Starbucks.API.Attributes;
 
 namespace Starbucks.API.Controllers;
 

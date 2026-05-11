@@ -30,7 +30,7 @@ public class MarkNotificationAsReadCommandHandler : IRequestHandler<MarkNotifica
         if (notification == null) return Result<bool>.Failure("Notification not found.");
 
         notification.IsRead = true;
-        notification.ReadAt = _dateTimeService.Now;
+        notification.ReadAt = _dateTimeService.UtcNow;
 
         await _context.SaveChangesAsync(cancellationToken);
         return Result<bool>.Success(true);

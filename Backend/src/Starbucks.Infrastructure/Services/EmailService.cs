@@ -49,4 +49,10 @@ public sealed class EmailService : IEmailService
         _logger.LogInformation("[EMAIL] ContactNotification from {Email} subject={Subject}", email, subject);
         return Task.CompletedTask;
     }
+
+    public Task SendOrderConfirmationAsync(string toEmail, string orderNumber, decimal totalAmount, CancellationToken cancellationToken = default)
+    {
+        _logger.LogInformation("[EMAIL] OrderConfirmation → {Email} order={OrderNumber} total={TotalAmount}", toEmail, orderNumber, totalAmount);
+        return Task.CompletedTask;
+    }
 }

@@ -41,6 +41,10 @@ public class MenuItem : BaseEntity
     
     public int SortOrder { get; set; } = 0;
     
+    public double AverageRating { get; set; } = 0;
+    
+    public int ReviewCount { get; set; } = 0;
+    
     // Nutritional Information
     public decimal? Fat { get; set; }
     

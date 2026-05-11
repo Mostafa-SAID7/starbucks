@@ -130,7 +130,7 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Res
         var user = await _context.Users.FindAsync(new object[] { _currentUserService.UserId.Value }, cancellationToken);
         if (user != null)
         {
-            await _email.SendEmailAsync(user.Email, "Order Confirmation", $"Your order {order.OrderNumber} has been placed successfully!");
+            await _email.SendOrderConfirmationAsync(user.Email, order.OrderNumber, order.Total, cancellationToken);
         }
 
         return Result<OrderDto>.Success(order.Adapt<OrderDto>());

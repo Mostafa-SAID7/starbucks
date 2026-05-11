@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Starbucks.API.Extensions;
 using Starbucks.Application.DTOs.Admin;
 using Starbucks.Application.Features.Admin.Banners.Commands;
+using Starbucks.Application.Features.Admin.Banners.Queries;
 
 namespace Starbucks.API.Controllers.Admin;
 

@@ -20,6 +20,10 @@ public class Notification : BaseEntity
     
     public DateTime? ReadAt { get; set; }
 
+    [Required]
+    [MaxLength(50)]
+    public string Type { get; set; } = string.Empty;
+
     // Navigation properties
     public virtual User User { get; set; } = null!;
 }

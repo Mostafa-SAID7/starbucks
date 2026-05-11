@@ -43,7 +43,7 @@ public class UpdateOrderStatusCommandHandler : IRequestHandler<UpdateOrderStatus
         else if (request.NewStatus == OrderStatus.Completed && order.CompletedAt == null)
         {
             order.CompletedAt = _dateTime.UtcNow;
-            order.PaymentStatus = PaymentStatus.Paid; // Mark as paid when completed
+            order.PaymentStatus = PaymentStatus.Completed; // Mark as completed when order is completed
         }
         else if (request.NewStatus == OrderStatus.Cancelled)
         {

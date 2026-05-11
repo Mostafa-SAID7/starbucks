@@ -7,33 +7,44 @@ using Starbucks.Application.Common.Interfaces.Services;
 namespace Starbucks.Infrastructure.Data;
 
 /// <summary>
-/// Design-time factory for creating ApplicationDbContext instances during migrations
+/// Design-time factory for creating ApplicationDbContext instances during migrations.
+/// Used by: dotnet ef migrations add / dotnet ef database update
 /// </summary>
 public class ApplicationDbContextFactory : IDesignTimeDbContextFactory<ApplicationDbContext>
 {
     public ApplicationDbContext CreateDbContext(string[] args)
     {
-        // Build configuration
+        // Build configuration — reads appsettings + Development overrides + env vars
         var configuration = new ConfigurationBuilder()
             .SetBasePath(Path.Combine(Directory.GetCurrentDirectory(), "../Starbucks.API"))
             .AddJsonFile("appsettings.json", optional: false)
             .AddJsonFile("appsettings.Development.json", optional: true)
+            .AddEnvironmentVariables()
             .Build();
 
-        // Create DbContext options
-        var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
         var connectionString = configuration.GetConnectionString("DefaultConnection");
-        
-        optionsBuilder.UseSqlServer(connectionString);
 
-        // Create mock services for design-time
+        if (string.IsNullOrWhiteSpace(connectionString))
+        {
+            throw new InvalidOperationException(
+                "Design-time factory: 'DefaultConnection' is not set. " +
+                "Ensure appsettings.json or the ConnectionStrings__DefaultConnection environment variable is configured.");
+        }
+
+        var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
+        optionsBuilder.UseSqlServer(connectionString, sqlOptions =>
+        {
+            sqlOptions.CommandTimeout(60);
+            sqlOptions.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName);
+        });
+
+        // Mock services for design-time (no DI container available)
         var currentUserService = new DesignTimeCurrentUserService();
         var dateTimeService = new DesignTimeDateTimeService();
 
         return new ApplicationDbContext(optionsBuilder.Options, currentUserService, dateTimeService);
     }
 
-    // Mock services for design-time
     private class DesignTimeCurrentUserService : ICurrentUserService
     {
         public Guid? UserId => null;

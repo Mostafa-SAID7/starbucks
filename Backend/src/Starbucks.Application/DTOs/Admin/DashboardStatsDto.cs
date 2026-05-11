@@ -7,6 +7,7 @@ public class DashboardStatsDto
     public decimal TotalRevenue { get; set; }
     public int TotalLocations { get; set; }
     public int TotalMenuItems { get; set; }
+    public decimal GrowthRate { get; set; }
     public List<RecentOrderDto> RecentOrders { get; set; } = new();
     public List<RevenuePointDto> RevenueChart { get; set; } = new();
     public List<TopProductDto> TopProducts { get; set; } = new();

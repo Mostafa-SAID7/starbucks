@@ -22,8 +22,8 @@ public class GetErrorLogsQueryHandler : IRequestHandler<GetErrorLogsQuery, Resul
     {
         var query = _context.ErrorLogs.AsQueryable();
 
-        if (!string.IsNullOrEmpty(request.Filter.Severity))
-            query = query.Where(l => l.Severity == request.Filter.Severity);
+        if (!string.IsNullOrEmpty(request.Filter.Severity) && Enum.TryParse<Starbucks.Domain.Enums.ErrorSeverity>(request.Filter.Severity, true, out var severity))
+            query = query.Where(l => l.Severity == severity);
 
         if (request.Filter.StartDate.HasValue)
             query = query.Where(l => l.Timestamp >= request.Filter.StartDate.Value);

@@ -36,6 +36,7 @@ public class DeleteLocationCommandHandler : IRequestHandler<DeleteLocationComman
             entityType: "Location",
             entityId: request.Id,
             oldValues: new { Name = location.Name },
+            newValues: null,
             cancellationToken: cancellationToken
         );
 

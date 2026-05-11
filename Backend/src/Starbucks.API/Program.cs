@@ -3,6 +3,7 @@ using Starbucks.API.Configuration;
 using Starbucks.API.Extensions;
 using Starbucks.Infrastructure.Data;
 using AspNetCoreRateLimit;
+using Microsoft.EntityFrameworkCore;
 
 // ── Bootstrap logger (before host builds, so startup errors are captured) ────
 Log.Logger = new LoggerConfiguration()
@@ -48,15 +49,23 @@ try
     Log.Information("Starting Starbucks Egypt API in {Environment}", app.Environment.EnvironmentName);
 
     // ── Database Initialization ───────────────────────────────────────────────
-    if (app.Environment.IsDevelopment())
+    using (var scope = app.Services.CreateScope())
     {
-        using (var scope = app.Services.CreateScope())
+        var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+        if (app.Environment.IsDevelopment())
         {
-            var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            // Development: create schema directly and seed demo data
             await context.Database.EnsureCreatedAsync();
             await DataSeeder.SeedAsync(context);
         }
+        else
+        {
+            // Production / Staging: apply any pending EF migrations automatically
+            await context.Database.MigrateAsync();
+        }
     }
+
 
     app.Run();
 }

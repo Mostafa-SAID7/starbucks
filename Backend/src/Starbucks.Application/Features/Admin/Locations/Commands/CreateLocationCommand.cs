@@ -41,6 +41,7 @@ public class CreateLocationCommandHandler : IRequestHandler<CreateLocationComman
             action: "CREATE",
             entityType: "Location",
             entityId: location.Id,
+            oldValues: null,
             newValues: request.Request,
             cancellationToken: cancellationToken
         );

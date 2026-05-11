@@ -16,6 +16,7 @@ public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, Resul
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IDateTimeService _dateTime;
+    private readonly IAuditService _auditService;
     private readonly ICacheInvalidationService _cacheInvalidationService;
     private readonly ILogger<UpdateUserCommandHandler> _logger;
 

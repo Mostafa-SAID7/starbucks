@@ -14,6 +14,7 @@ public class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand, Resul
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IDateTimeService _dateTime;
+    private readonly IAuditService _auditService;
     private readonly ICacheInvalidationService _cacheInvalidationService;
     private readonly ILogger<DeleteUserCommandHandler> _logger;
 

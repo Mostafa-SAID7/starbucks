@@ -22,8 +22,8 @@ public class UpdateCartCommandHandler : IRequestHandler<UpdateCartCommand, Resul
 
     public async Task<Result<bool>> Handle(UpdateCartCommand request, CancellationToken cancellationToken)
     {
-        var userId = _currentUserService.UserId;
-        if (userId == Guid.Empty) return Result<bool>.Failure("User not authenticated.");
+        if (!_currentUserService.UserId.HasValue) return Result<bool>.Failure("User not authenticated.");
+        var userId = _currentUserService.UserId.Value;
 
         if (request.Quantity <= 0)
         {

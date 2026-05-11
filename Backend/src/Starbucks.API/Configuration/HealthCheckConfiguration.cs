@@ -8,15 +8,21 @@ namespace Starbucks.API.Configuration;
 public static class HealthCheckConfiguration
 {
     /// <summary>
-    /// Adds health checks for database and Redis
+    /// Adds health checks for database and optionally Redis.
+    /// Redis health check is skipped if no Redis connection string is configured.
     /// </summary>
     public static IServiceCollection AddHealthCheckConfiguration(
         this IServiceCollection services,
         IConfiguration configuration)
     {
-        services.AddHealthChecks()
-            .AddDbContextCheck<ApplicationDbContext>("database", tags: new[] { "ready" })
-            .AddRedis(configuration.GetConnectionString("Redis")!, "redis", tags: new[] { "ready" });
+        var healthChecks = services.AddHealthChecks()
+            .AddDbContextCheck<ApplicationDbContext>("database", tags: new[] { "ready" });
+
+        var redisConnection = configuration.GetConnectionString("Redis");
+        if (!string.IsNullOrWhiteSpace(redisConnection))
+        {
+            healthChecks.AddRedis(redisConnection, "redis", tags: new[] { "ready" });
+        }
 
         return services;
     }

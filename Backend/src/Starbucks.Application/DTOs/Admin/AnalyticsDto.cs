@@ -1,9 +1,9 @@
 namespace Starbucks.Application.DTOs.Admin;
 
 /// <summary>
-/// DTO for dashboard statistics.
+/// DTO for system analytics summary.
 /// </summary>
-public class DashboardStatsDto
+public class AnalyticsSummaryDto
 {
     public int TotalUsers { get; set; }
     public int ActiveUsers { get; set; }
@@ -17,7 +17,9 @@ public class DashboardStatsDto
     public int TotalMenuItems { get; set; }
     public double UserRetentionRate { get; set; }
     public double ConversionRate { get; set; }
+    public decimal GrowthRate { get; set; }
 }
+
 
 /// <summary>
 /// DTO for sales analytics.

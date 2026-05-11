@@ -40,6 +40,7 @@ public class CreateBannerCommandHandler : IRequestHandler<CreateBannerCommand, R
             action: "CREATE",
             entityType: "HomeBanner",
             entityId: banner.Id,
+            oldValues: null,
             newValues: request.Request,
             cancellationToken: cancellationToken
         );
