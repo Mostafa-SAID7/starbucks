@@ -6,6 +6,19 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) · Versioning: 
 
 ---
 
+## [2.3.0] — 2026-05-11
+
+### Added
+- 🚀 **Live Production URLs** — Integrated live deployment links for Frontend (Vercel) and Backend (runasp.net) across documentation.
+- 🏗️ **Documentation Consolidation** — Merged fragmented architectural and setup files into a focused set of three core documents: `ARCHITECTURE.md`, `DEVELOPMENT.md`, and `FEATURES.md`.
+
+### Changed
+- 🧼 **Documentation Cleanup** — Removed 5+ redundant markdown files to ensure a single source of truth and reduce maintenance overhead.
+- 🎨 **Premium README** — Completely redesigned the root `README.md` with a modern, high-impact aesthetic and clear navigation hub.
+- 🧭 **Docs Index Update** — Updated `docs/README.md` to point to the new consolidated structure.
+
+---
+
 ## [2.2.0] — 2026-05-08
 
 ### Changed

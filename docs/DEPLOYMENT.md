@@ -1,6 +1,16 @@
 # 🚢 Deployment Guide
 
-Complete guide for deploying the Starbucks Egypt React application to various platforms.
+Complete guide for deploying the Starbucks Egypt application and managing its live environments.
+
+---
+
+## 🚀 Live Production URLs
+
+| Component | URL |
+| :--- | :--- |
+| **✨ Frontend** | [starbucks73.vercel.app](https://starbucks73.vercel.app) |
+| **⚙️ Backend API** | [starbucks.runasp.net/api](http://starbucks.runasp.net/api) |
+| **📚 Swagger UI** | [starbucks.runasp.net/swagger](http://starbucks.runasp.net/swagger) |
 
 ---
 

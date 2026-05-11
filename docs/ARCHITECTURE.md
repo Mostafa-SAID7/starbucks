@@ -1,13 +1,15 @@
-# 🏗️ Project Architecture
+# 🏗️ Architecture & Design
 
-Detailed technical overview of the Starbucks Egypt React engineering patterns.
+Detailed technical overview of the Starbucks Egypt engineering patterns, system design, and project structure.
+
+---
 
 ## 1. State Management Strategy
 
 The application employs a **Dual-State** architecture to separate local UI interactions from persistent server data:
 
 ### Server State (TanStack Query)
-- **Source of Truth:** Asynchronous data from `src/data/`.
+- **Source of Truth:** Asynchronous data from the Backend API.
 - **Logic:** Custom hooks in `src/hooks/queries/` wrap `useQuery` to provide typed, cached data.
 - **Caching:** We use a stale-while-revalidate strategy. Static content (About, Sustainability) is cached for 24h, while dynamic content (Menu) is cached for 1h.
 
@@ -15,6 +17,9 @@ The application employs a **Dual-State** architecture to separate local UI inter
 - **Navigation:** Managed via `useNavigation` to sync route changes with UI elements.
 - **Theme:** `useTheme` manages the Light/Dark mode preference in `localStorage`.
 - **Language:** `i18next` context handles the global `ar`/`en` toggle.
+- **Global State:** `Zustand` is used for client-side state like shopping cart and user preferences.
+
+---
 
 ## 2. The "Bilingual Data" Pattern
 
@@ -31,14 +36,77 @@ interface BilingualData<T> {
 - **Resolution:** The UI resolves content using `data[i18n.language]`.
 - **Fallback:** If a language key is missing, the system defaults to English to prevent blank screens.
 
-## 3. GenericPage Pattern
+---
 
-The `GenericPage` is a recursive renderer that allows creating 80% of the site's pages using only JSON configuration.
+## 3. System Design Diagrams
 
-- **Sections:** Pages are composed of an array of section objects (Hero, ImageText, Accordion, etc.).
-- **Dynamic Routing:** `GenericPageWrapper` catches slugs and fetches the corresponding JSON from `src/data/pages/`.
-- **Benefits:** Minimizes boilerplate, ensures design consistency, and centralizes SEO metadata management.
+### Application Hierarchy
+```mermaid
+graph TD
+    A[main.tsx] --> B[App.tsx]
+    B --> C[MainLayout]
+    C --> D[Navbar]
+    C --> E[Outlet / Page Components]
+    C --> F[Footer]
+    E --> G[HomePage]
+    E --> H[MenuPage]
+    E --> I[LocationsPage]
+```
+
+### Data Lifecycle Flow
+```mermaid
+sequenceDiagram
+    participant UI as Component
+    participant Q as TanStack Query
+    participant F as API Service
+    participant B as Backend API
+    
+    UI->>Q: useQuery(key)
+    Note over Q: 1. Search Memory Cache
+    alt Data found & fresh
+        Q-->>UI: return cached data
+    else Data stale or missing
+        Q->>F: trigger fetcher()
+        F->>B: async GET /api/v1/...
+        B-->>F: return JSON result
+        F-->>Q: return typed result
+        Q->>Q: Commit to Cache
+        Q-->>UI: trigger re-render
+    end
+```
 
 ---
-*For folder organization, see [STRUCTURE.md](STRUCTURE.md).*
-*For flow diagrams, see [System_Design.md](System_Design.md).*
+
+## 4. Project Structure
+
+### Frontend Directory Tree
+```text
+src/
+├── assets/              # Static assets (images, logos)
+├── components/          # UI components
+│   ├── accessibility/  # ARIA and screen reader helpers
+│   ├── layout/         # Shell components (Navbar, Footer, MainLayout)
+│   ├── sections/       # Domain-specific UI sections
+│   ├── skeletons/      # Content placeholders
+│   └── ui/             # Atomic primitives (Buttons, Inputs, etc.)
+├── constants/           # Global app constants
+├── contexts/            # React Contexts (Theme, Auth, Language)
+├── hooks/               # Custom hooks & TanStack queries
+├── lib/                 # Core configs (i18n, QueryClient)
+├── pages/               # Route-level page components
+├── services/           # API services and configurations
+└── types/               # TypeScript interfaces
+```
+
+### Backend Architecture
+The backend follows **Clean Architecture** with four distinct layers:
+1. **Domain:** Enterprise logic and entities.
+2. **Application:** Business logic, CQRS (MediatR), and DTOs.
+3. **Infrastructure:** Data access (EF Core), Redis, and external services.
+4. **API:** Entry point, controllers, and middleware.
+
+---
+
+*Related Documents:*
+- [DEVELOPMENT.md](DEVELOPMENT.md) - Setup and Tools
+- [FEATURES.md](FEATURES.md) - Capabilities and Use Cases

@@ -1,37 +1,52 @@
-# 🔐 Security Policy
+# 🔒 Security Policy
 
-## Security Practices
+This policy defines the security standards and reporting procedures for the Starbucks Egypt enterprise application.
 
-### 1. Static Analysis
-The project uses **GitHub CodeQL** to automatically scan for vulnerabilities (SQL injection, XSS, etc.) on every push and pull request.
+---
 
-### 2. Dependency Audits
-- **npm audit:** Integrated into the CI pipeline to block builds with high-severity vulnerabilities.
-- **Dependabot:** Automated weekly updates for all dependencies to ensure the latest security patches are applied.
+## 🛡️ Security Practices
 
-### 3. Data Safety
-- All user inputs are sanitized.
-- Security headers are configured in the Nginx production container.
+We take the security of our users and data seriously. Our infrastructure includes multiple layers of protection:
 
-### 4. Code Reviews
-All changes undergo mandatory peer review with a focus on:
-- Secure data handling.
-- Proper authentication flow.
-- Absence of hardcoded secrets.
+### 1. Automated Security Scanning
+- **CodeQL Analysis**: Continuous static analysis on every push to identify common vulnerabilities (XSS, SQLi, etc.).
+- **Dependency Audits**: Automated `npm audit` and `dotnet list package --vulnerable` checks integrated into the CI/CD pipeline.
+- **Dependabot**: Proactive dependency management and automated security patching.
 
-## Reporting a Vulnerability
+### 2. Application Security
+- **Authentication**: JWT-based authentication with high-entropy secrets and secure token rotation.
+- **Validation**: Strict input validation using **FluentValidation** (Backend) and **Zod** (Frontend).
+- **Sanitization**: All user-generated content is sanitized before storage and rendering to prevent injection attacks.
+- **Rate Limiting**: IP-based rate limiting on sensitive endpoints (Login, Register).
 
-If you discover a security vulnerability within this project, please send an email to security@example.com. All security vulnerabilities will be promptly addressed.
+### 3. Infrastructure Security
+- **Secure Headers**: Nginx is configured with strict Content Security Policy (CSP), HSTS, and XSS protection headers.
+- **CORS Policy**: Strictly defined allowed origins for production environments.
+- **Environment Management**: No secrets are stored in the codebase; all sensitive data is managed via environment variables and GitHub Secrets.
 
-Please include the following in your report:
-- Type of issue (e.g., XSS, CSRF, etc.).
-- Steps to reproduce the issue.
-- Potential impact.
+---
 
-## Supported Versions
+## 🐛 Reporting a Vulnerability
 
-| Version | Supported |
-| ------- | --------- |
-| 2.1.x   | ✅ Yes    |
-| 2.0.x   | ❌ No     |
-| < 2.0   | ❌ No     |
+If you believe you have found a security vulnerability, please report it immediately.
+
+**Email**: [security@starbucks.eg](mailto:security@starbucks.eg)
+
+Please include:
+1. **Description**: A detailed description of the vulnerability.
+2. **Steps to Reproduce**: A clear set of steps to reproduce the issue.
+3. **Proof of Concept**: Any scripts or screenshots that demonstrate the vulnerability.
+4. **Impact**: Your assessment of the potential impact on users or the system.
+
+---
+
+## ✅ Supported Versions
+
+| Version | Status |
+| :--- | :--- |
+| **2.3.x (Current)** | ✅ Supported |
+| **2.x.x** | ❌ Limited Support |
+| **1.x.x** | ❌ Deprecated |
+
+---
+*Thank you for helping us keep the Starbucks Egypt community safe.*
