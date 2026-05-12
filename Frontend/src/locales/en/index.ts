@@ -11,11 +11,8 @@ import accessibility from "./common/accessibility.json";
 import cookieConsent from "./common/cookieConsent.json";
 import cart from "./common/cart.json";
 
-// We only include common/global translations in the main bundle.
-// Page-specific translations are loaded dynamically by the pages themselves
-// to optimize initial bundle size and first-load performance.
-
-import pages from "./pages";
+// Page-specific translations are loaded lazily per route via
+// src/lib/i18n/pageTranslations.ts — they are NOT part of the main bundle.
 
 const common = {
   ...general,
@@ -38,5 +35,4 @@ const navigation = {
 export default {
   common,
   navigation,
-  pages,
 };

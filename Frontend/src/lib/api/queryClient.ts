@@ -19,9 +19,9 @@ const queryConfig: DefaultOptions = {
     // Cache time: how long unused data is kept in cache
     gcTime: 1000 * 60 * 30, // 30 minutes (formerly cacheTime)
     
-    // Retry configuration
-    retry: 3,
-    retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
+    // Retry configuration — kept low so failures surface quickly
+    retry: 1,
+    retryDelay: 800,
     
     // Refetch configuration
     refetchOnWindowFocus: false,

@@ -38,13 +38,13 @@ outputType = "webview"
 name = "Backend API"
 author = "agent"
 
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "cd Backend/src/Starbucks.API && dotnet run --urls=http://localhost:8080 --environment Development"
-waitForPort = 8080
-
 [workflows.workflow.metadata]
 outputType = "console"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd Backend/src/Starbucks.API && dotnet run --no-build --urls=http://localhost:8080 --environment Development"
+waitForPort = 8080
 
 [[ports]]
 localPort = 5000

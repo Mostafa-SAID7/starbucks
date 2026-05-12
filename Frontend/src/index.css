@@ -3,8 +3,8 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --font-sans: "Noto Sans Arabic", "Mada", "system-ui", "sans-serif";
-  --font-heading: "Noto Kufi Arabic", "Cairo", "serif";
+  --font-sans: "Noto Sans Arabic", "system-ui", "sans-serif";
+  --font-heading: "Cairo", "serif";
   --font-branding: "Cairo", "sans-serif";
 
   --color-starbucks-green: #006241;
