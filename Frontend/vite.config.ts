@@ -160,8 +160,11 @@ export default defineConfig({
     chunkSizeWarningLimit: 1000,
   },
   server: {
+    host: "0.0.0.0",
+    port: 5000,
+    allowedHosts: true,
     hmr: {
-      overlay: false, // Disable HMR overlay for cleaner UX
+      overlay: false,
     },
   },
 });
