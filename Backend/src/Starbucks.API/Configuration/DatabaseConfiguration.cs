@@ -10,35 +10,18 @@ namespace Starbucks.API.Configuration;
 public static class DatabaseConfiguration
 {
     /// <summary>
-    /// Adds SQL Server database context with retry policies.
-    /// Always uses SQL Server — both locally and in production.
+    /// Adds SQLite database context for Replit/local development.
     /// </summary>
     public static IServiceCollection AddDatabaseConfiguration(
         this IServiceCollection services,
         IConfiguration configuration)
     {
-        var connectionString = configuration.GetConnectionString("DefaultConnection");
-
-        if (string.IsNullOrWhiteSpace(connectionString))
-        {
-            throw new InvalidOperationException(
-                "Database connection string 'DefaultConnection' is not configured. " +
-                "Set it in appsettings.json, appsettings.Development.json, or via environment variables.");
-        }
+        var connectionString = configuration.GetConnectionString("DefaultConnection")
+            ?? "Data Source=starbucks.db";
 
         services.AddDbContext<ApplicationDbContext>(options =>
         {
-            options.UseSqlServer(
-                connectionString,
-                sqlOptions =>
-                {
-                    sqlOptions.EnableRetryOnFailure(
-                        maxRetryCount: 5,
-                        maxRetryDelay: TimeSpan.FromSeconds(10),
-                        errorNumbersToAdd: null);
-                    sqlOptions.CommandTimeout(60);
-                    sqlOptions.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName);
-                });
+            options.UseSqlite(connectionString);
 
             if (configuration.GetValue<bool>("Logging:EnableSensitiveDataLogging"))
             {

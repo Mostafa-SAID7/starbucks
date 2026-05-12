@@ -55,7 +55,7 @@ export const Modal = React.forwardRef<HTMLDivElement, ModalProps>(
         {isOpen && (
           <motion.div
             {...ANIMATION_CONFIG.VARIANTS.FADE_IN}
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
+            className="fixed inset-0 z-[350] flex items-center justify-center p-4 sm:p-6 bg-black/60 backdrop-blur-sm overflow-y-auto"
             onClick={onClose}
             role="dialog"
             aria-modal="true"
@@ -65,7 +65,7 @@ export const Modal = React.forwardRef<HTMLDivElement, ModalProps>(
               {...ANIMATION_CONFIG.VARIANTS.SCALE_IN}
               transition={ANIMATION_CONFIG.TRANSITIONS.SPRING}
               className={cn(
-                "relative w-full max-w-lg rounded-2xl bg-white dark:bg-zinc-900 shadow-2xl",
+                "relative w-full max-w-lg rounded-2xl bg-white dark:bg-zinc-900 shadow-2xl my-auto",
                 className
               )}
               onClick={(e) => e.stopPropagation()}

@@ -6,10 +6,10 @@ import { itemVariants } from './variants'
 export const ContentBlockSkeleton: React.FC = () => {
   return (
     <motion.div variants={itemVariants} className="space-y-6 mb-12">
-      <Skeleton className="h-16 lg:h-20 w-3/4 rounded-2xl" />
+      <Skeleton className="h-16 lg:h-20 w-3/4 rounded-2xl rtl:ml-auto" />
       <div className="space-y-3">
         <Skeleton className="h-6 w-full rounded-lg" />
-        <Skeleton className="h-6 w-5/6 rounded-lg" />
+        <Skeleton className="h-6 w-5/6 rounded-lg rtl:ml-auto" />
       </div>
     </motion.div>
   )
@@ -26,9 +26,9 @@ export const GridSkeletonTemplate: React.FC<{ items?: number }> = ({ items = 4 }
         >
           <Skeleton className="h-2/3 w-full" />
           <div className="p-8 space-y-4">
-            <Skeleton className="h-8 w-3/4 rounded-xl" />
+            <Skeleton className="h-8 w-3/4 rounded-xl rtl:ml-auto" />
             <Skeleton className="h-4 w-full rounded-md" />
-            <Skeleton className="h-10 w-32 rounded-full mt-4" />
+            <Skeleton className="h-10 w-32 rounded-full mt-4 rtl:ml-auto" />
           </div>
         </motion.div>
       ))}

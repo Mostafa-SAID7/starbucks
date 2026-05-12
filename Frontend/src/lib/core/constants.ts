@@ -44,7 +44,7 @@ export const CLEANUP_CONFIG = {
  * API Constants
  */
 export const API_CONFIG = {
-  BASE_URL: import.meta.env.VITE_API_URL || "https://api.starbucks.eg",
+  BASE_URL: import.meta.env.VITE_API_URL ?? "",
   TIMEOUT: 10000,
   SIMULATED_DELAY: 10, // Significantly reduced for better user experience
 };

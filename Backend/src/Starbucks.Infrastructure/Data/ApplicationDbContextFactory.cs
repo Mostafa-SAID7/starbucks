@@ -32,11 +32,7 @@ public class ApplicationDbContextFactory : IDesignTimeDbContextFactory<Applicati
         }
 
         var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
-        optionsBuilder.UseSqlServer(connectionString, sqlOptions =>
-        {
-            sqlOptions.CommandTimeout(60);
-            sqlOptions.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName);
-        });
+        optionsBuilder.UseSqlite(connectionString ?? "Data Source=starbucks_dev.db");
 
         // Mock services for design-time (no DI container available)
         var currentUserService = new DesignTimeCurrentUserService();

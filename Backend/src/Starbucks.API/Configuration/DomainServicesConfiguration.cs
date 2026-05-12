@@ -30,7 +30,6 @@ public static class DomainServicesConfiguration
         services.AddScoped<MenuItemDomainService>();
 
         // Scoped: one instance per HTTP request
-        services.AddScoped<IDistributedCacheService, CacheService>();
         services.AddScoped<ICacheInvalidationService, CacheInvalidationService>();
         services.AddScoped<ICacheWarmingService, CacheWarmingService>();
         services.AddScoped<ITokenService, TokenService>();

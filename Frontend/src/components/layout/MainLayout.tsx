@@ -25,7 +25,7 @@ export const MainLayout = () => {
               <ScrollToTop />
             </Suspense>
           </main>
-          <CartDrawer variant="inner" />
+          <CartDrawer />
         </div>
         
         <Suspense fallback={null}>

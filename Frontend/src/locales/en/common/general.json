@@ -45,5 +45,11 @@
   "status": {
     "error": "Error loading data"
   },
-  "cart": "Cart"
+  "cart": "Cart",
+  "items": "items",
+  "backToMenu": "Back to Menu",
+  "egp": "EGP",
+  "order_delivery": "Order Delivery",
+  "processing": "Processing...",
+  "qty": "Qty"
 }

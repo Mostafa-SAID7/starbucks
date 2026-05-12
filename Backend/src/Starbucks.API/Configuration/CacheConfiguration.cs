@@ -1,4 +1,6 @@
 using StackExchange.Redis;
+using Starbucks.Application.Common.Interfaces.Services;
+using Starbucks.Infrastructure.Services;
 
 namespace Starbucks.API.Configuration;
 
@@ -25,10 +27,10 @@ public static class CacheConfiguration
                 var configOptions = ConfigurationOptions.Parse(redisConnection);
 
                 configOptions.ConnectRetry = 3;
-                configOptions.ConnectTimeout = 5000;   // 5 s
+                configOptions.ConnectTimeout = 5000;
                 configOptions.SyncTimeout = 5000;
                 configOptions.AsyncTimeout = 5000;
-                configOptions.AbortOnConnectFail = false; // don't crash if Redis is temporarily down
+                configOptions.AbortOnConnectFail = false;
                 configOptions.KeepAlive = 60;
                 configOptions.ReconnectRetryPolicy = new ExponentialRetry(5000);
 
@@ -40,11 +42,14 @@ public static class CacheConfiguration
                 opts.Configuration = redisConnection;
                 opts.InstanceName = "StarbucksEgypt:";
             });
+
+            services.AddScoped<IDistributedCacheService, CacheService>();
         }
         else
         {
-            // No Redis configured — fall back to in-memory distributed cache (local dev only)
+            // No Redis configured — fall back to in-memory (local dev / no-Redis environments)
             services.AddDistributedMemoryCache();
+            services.AddSingleton<IDistributedCacheService, InMemoryCacheService>();
         }
 
         return services;

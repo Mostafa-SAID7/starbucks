@@ -22,6 +22,5 @@ public abstract class BaseEntity
     
     public string? DeletedBy { get; set; }
     
-    [Timestamp]
     public byte[] RowVersion { get; set; } = Array.Empty<byte>();
 }

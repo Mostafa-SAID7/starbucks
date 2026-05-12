@@ -13,15 +13,15 @@ export const HomeSkeleton: React.FC = () => {
         <div className="container mx-auto px-8 relative z-10 max-w-7xl">
           <div className="flex flex-col lg:w-1/2 space-y-8">
             <div className="space-y-4">
-              <Skeleton className="h-4 w-32 rounded-full opacity-60" />
-              <Skeleton className="h-16 md:h-24 w-full md:w-[120%] rounded-2xl" />
-              <Skeleton className="h-16 md:h-24 w-3/4 rounded-2xl" />
+              <Skeleton className="h-4 w-32 rounded-full opacity-60 rtl:ml-auto" />
+              <Skeleton className="h-16 md:h-24 w-full rounded-2xl" />
+              <Skeleton className="h-16 md:h-24 w-3/4 rounded-2xl rtl:ml-auto" />
             </div>
             <div className="space-y-3">
               <Skeleton className="h-6 w-full opacity-40 rounded-md" />
-              <Skeleton className="h-6 w-5/6 opacity-40 rounded-md" />
+              <Skeleton className="h-6 w-5/6 opacity-40 rounded-md rtl:ml-auto" />
             </div>
-            <Skeleton className="h-14 w-48 rounded-full mt-4" />
+            <Skeleton className="h-14 w-48 rounded-full mt-4 rtl:ml-auto" />
           </div>
         </div>
 

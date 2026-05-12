@@ -7,16 +7,17 @@ function Skeleton({
   return (
     <div
       className={cn(
-        "animate-shimmer rounded-md bg-zinc-100 dark:bg-zinc-800",
-        "bg-gradient-to-r from-transparent via-black/5 to-transparent dark:via-white/5",
-        "bg-[length:200%_100%]",
+        "relative overflow-hidden rounded-md bg-zinc-100 dark:bg-zinc-800",
         className
       )}
       {...props}
-    />
+    >
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 -translate-x-full animate-shimmer bg-gradient-to-r from-transparent via-white/40 dark:via-white/8 to-transparent"
+      />
+    </div>
   )
 }
 
 export { Skeleton }
-
-

@@ -6,7 +6,7 @@
 export const config = {
   // API Configuration
   api: {
-    baseUrl: import.meta.env.VITE_API_URL || 'http://localhost:5000/api',
+    baseUrl: import.meta.env.VITE_API_URL ?? '',
     timeout: 10000,
     retries: 3,
   },
@@ -99,9 +99,15 @@ export function validateConfig() {
   );
 
   if (missing.length > 0) {
-    throw new Error(
-      `Missing required environment variables: ${missing.join(', ')}`
-    );
+    if (import.meta.env.DEV) {
+      console.warn(
+        `[Config] Missing environment variables (using defaults): ${missing.join(', ')}`
+      );
+    } else {
+      throw new Error(
+        `Missing required environment variables: ${missing.join(', ')}`
+      );
+    }
   }
 }
 

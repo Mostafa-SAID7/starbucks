@@ -107,23 +107,18 @@ export function CartDrawer({
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+            exit={{ opacity: 0, transition: { duration: 0.18 } }}
             onClick={onClose}
-            className={cn(
-              "bg-black/60 backdrop-blur-sm z-[200]",
-              isInner ? "absolute inset-0" : "fixed inset-0"
-            )}
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[200]"
           />
 
           {/* Drawer */}
           <motion.div
             initial={{ x: isRTL ? -400 : 400 }}
-            animate={{ x: 0 }}
-            exit={{ x: isRTL ? -400 : 400 }}
-            transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+            animate={{ x: 0, transition: { type: 'spring', damping: 30, stiffness: 300 } }}
+            exit={{ x: isRTL ? -400 : 400, transition: { duration: 0.22, ease: [0.4, 0, 1, 1] } }}
             className={cn(
-              'w-full max-w-md h-full bg-white dark:bg-zinc-950 shadow-2xl z-[210] flex flex-col',
-              isInner ? 'absolute top-0' : 'fixed top-0',
+              'w-full max-w-md h-screen bg-white dark:bg-zinc-950 shadow-2xl z-[210] flex flex-col fixed top-0',
               isRTL ? 'left-0 border-r dark:border-zinc-800' : 'right-0 border-l dark:border-zinc-800'
             )}
             dir={isRTL ? 'rtl' : 'ltr'}

@@ -39,11 +39,12 @@ public static class BuilderExtensions
 
     /// <summary>
     /// Configures a decimal property for money/price fields
+    /// SQLite-compatible: uses precision/scale instead of column type string
     /// </summary>
     public static PropertyBuilder<decimal> HasMoneyPrecision(
         this PropertyBuilder<decimal> builder)
     {
-        return builder.HasColumnType("decimal(10,2)");
+        return builder.HasPrecision(10, 2);
     }
 
     /// <summary>
@@ -52,15 +53,16 @@ public static class BuilderExtensions
     public static PropertyBuilder<decimal?> HasOptionalMoneyPrecision(
         this PropertyBuilder<decimal?> builder)
     {
-        return builder.HasColumnType("decimal(10,2)");
+        return builder.HasPrecision(10, 2);
     }
 
     /// <summary>
-    /// Configures a unique index with soft delete filter
+    /// Configures a unique index (without SQL Server-specific filter syntax)
+    /// Soft-delete is handled via global query filters on each entity
     /// </summary>
     public static IndexBuilder HasUniqueIndexWithSoftDelete(
         this IndexBuilder builder)
     {
-        return builder.IsUnique().HasFilter("[IsDeleted] = 0");
+        return builder.IsUnique();
     }
 }
