@@ -171,7 +171,10 @@ public class OrderDomainServiceTests
     {
         // Arrange
         var order = new OrderBuilder()
-            .WithSubtotal(100m)
+            .WithItems(new List<OrderItem> 
+            { 
+                new OrderItem { UnitPrice = 50m, Quantity = 2, TotalPrice = 100m } 
+            })
             .WithDeliveryFee(20m)
             .WithDiscount(0m)
             .Build();
@@ -189,7 +192,10 @@ public class OrderDomainServiceTests
     {
         // Arrange
         var order = new OrderBuilder()
-            .WithSubtotal(100m)
+            .WithItems(new List<OrderItem> 
+            { 
+                new OrderItem { UnitPrice = 100m, Quantity = 1, TotalPrice = 100m } 
+            })
             .WithDeliveryFee(0m)
             .WithDiscount(10m)
             .Build();
@@ -226,7 +232,10 @@ public class OrderDomainServiceTests
     {
         // Arrange
         var order = new OrderBuilder()
-            .WithSubtotal(100m)
+            .WithItems(new List<OrderItem> 
+            { 
+                new OrderItem { UnitPrice = 100m, Quantity = 1, TotalPrice = 100m } 
+            })
             .WithDiscount(0m)
             .Build();
 
@@ -253,7 +262,10 @@ public class OrderDomainServiceTests
     {
         // Arrange
         var order = new OrderBuilder()
-            .WithSubtotal(100m)
+            .WithItems(new List<OrderItem> 
+            { 
+                new OrderItem { UnitPrice = 100m, Quantity = 1, TotalPrice = 100m } 
+            })
             .Build();
 
         // Act & Assert

@@ -5,20 +5,24 @@ on:
     - cron: '0 0 * * 0' # Weekly on Sundays at midnight UTC
   push:
     paths:
-      - 'package.json'
-      - 'package-lock.json'
+      - 'Frontend/package.json'
+      - 'Frontend/package-lock.json'
+      - 'Backend/**/*.csproj'
+      - 'Backend/StarbucksEgypt.slnx'
   pull_request:
     paths:
-      - 'package.json'
-      - 'package-lock.json'
+      - 'Frontend/package.json'
+      - 'Frontend/package-lock.json'
+      - 'Backend/**/*.csproj'
+      - 'Backend/StarbucksEgypt.slnx'
 
 permissions:
   contents: read
   security-events: write
 
 jobs:
-  audit:
-    name: NPM Security Audit
+  frontend-audit:
+    name: Frontend Security Audit
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -29,20 +33,44 @@ jobs:
         with:
           node-version: '20'
           cache: 'npm'
+          cache-dependency-path: 'Frontend/package-lock.json'
 
       - name: Install dependencies
-        run: npm install --legacy-peer-deps
+        run: npm ci --legacy-peer-deps
+        working-directory: Frontend
 
       - name: Run npm audit (high severity)
         run: npm audit --audit-level=high
+        working-directory: Frontend
 
       - name: Run npm audit (full report)
         run: npm audit --json > audit-report.json || true
+        working-directory: Frontend
 
       - name: Upload audit report
         uses: actions/upload-artifact@v4
         if: always()
         with:
           name: npm-audit-report
-          path: audit-report.json
+          path: Frontend/audit-report.json
           retention-days: 30
+
+  backend-audit:
+    name: Backend Security Audit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Check for vulnerable packages
+        run: dotnet list package --vulnerable
+        working-directory: Backend
+
+      - name: Check for deprecated packages
+        run: dotnet list package --deprecated
+        working-directory: Backend

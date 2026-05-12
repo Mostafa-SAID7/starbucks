@@ -9,16 +9,15 @@ import {
   createFetchError,
 } from '@/lib/error';
 
-// Mock fetch for logError tests
-global.fetch = vi.fn();
-
 describe('errorUtils', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    vi.stubGlobal('fetch', vi.fn());
   });
 
   afterEach(() => {
     vi.restoreAllMocks();
+    vi.unstubAllGlobals();
   });
 
   describe('AppError', () => {
@@ -155,7 +154,7 @@ describe('errorUtils', () => {
     beforeEach(() => {
       // Mock environment
       vi.stubGlobal('import.meta', { env: { DEV: false, PROD: true } });
-      (global.fetch as any).mockResolvedValue(new Response());
+      vi.mocked(global.fetch).mockResolvedValue(new Response());
     });
 
     it('logs to console in development', () => {
@@ -175,7 +174,7 @@ describe('errorUtils', () => {
 
       await new Promise(resolve => setTimeout(resolve, 0));
 
-      expect(fetch).toHaveBeenCalledWith('/api/logging/error', {
+      expect(global.fetch).toHaveBeenCalledWith('/api/logging/error', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: expect.stringContaining('Test error'),
@@ -183,7 +182,7 @@ describe('errorUtils', () => {
     });
 
     it('handles fetch failure silently', async () => {
-      (global.fetch as any).mockRejectedValue(new Error('Fetch failed'));
+      vi.mocked(global.fetch).mockRejectedValue(new Error('Fetch failed'));
 
       const error = new Error('Test error');
       

@@ -1,5 +1,6 @@
-import { AxiosInstance, AxiosRequestConfig } from 'axios';
+import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 import { apiClient } from '@/lib/api/client';
+import { ApiConfig } from '@/types/services';
 
 /**
  * Main API Service class
@@ -8,9 +9,17 @@ import { apiClient } from '@/lib/api/client';
 export class ApiService {
   private client: AxiosInstance;
 
-  constructor() {
-    // Use the shared apiClient instance
-    this.client = apiClient;
+  constructor(configOrClient: AxiosInstance | Partial<ApiConfig> = apiClient) {
+    if (typeof (configOrClient as AxiosInstance).interceptors !== 'undefined') {
+      this.client = configOrClient as AxiosInstance;
+    } else {
+      const config = configOrClient as Partial<ApiConfig>;
+      this.client = axios.create({
+        baseURL: config.baseUrl,
+        timeout: config.timeout,
+        headers: config.headers,
+      });
+    }
   }
 
   /**

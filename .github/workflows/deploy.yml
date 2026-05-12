@@ -5,13 +5,20 @@ on:
     branches: [main]
   workflow_dispatch:
 
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   deploy-frontend:
     name: Deploy Frontend (Vercel)
     runs-on: ubuntu-latest
+    needs: [deploy-backend]
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -33,13 +40,16 @@ jobs:
       - name: Build Project Artifacts
         run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
         working-directory: Frontend
+        env:
+          VITE_API_URL: ${{ secrets.PROD_API_URL }}
+          VITE_SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
       
       - name: Deploy Project Artifacts to Vercel
         run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
         working-directory: Frontend
 
   deploy-backend:
-    name: Deploy Backend (Production)
+    name: Deploy Backend (Azure)
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -49,19 +59,70 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '9.0.x'
+          cache: true
+          cache-dependency-path: 'Backend/StarbucksEgypt.slnx'
+      
+      - name: Install EF Tool
+        run: dotnet tool install --global dotnet-ef
       
       - name: Restore dependencies
-        run: dotnet restore
+        run: dotnet restore StarbucksEgypt.slnx
         working-directory: Backend
       
-      - name: Build
-        run: dotnet build --configuration Release --no-restore
+      - name: Create Migration Bundle
+        run: |
+          dotnet ef migrations bundle --project src/Starbucks.Infrastructure --startup-project src/Starbucks.API --output publish/migrate.exe --self-contained -r win-x64
+        working-directory: Backend
+        env:
+          ASPNETCORE_ENVIRONMENT: Production
+
+      - name: Build and Publish
+        run: |
+          dotnet build StarbucksEgypt.slnx --configuration Release --no-restore
+          dotnet publish StarbucksEgypt.slnx -c Release -o ./publish --no-build
         working-directory: Backend
       
-      - name: Publish
-        run: dotnet publish -c Release -o ./publish
-        working-directory: Backend
-      
-      - name: Deploy backend
-        run: echo "Deploying backend artifacts to production server..."
-        # Add actual deployment steps here (e.g., Azure WebApp, AWS Elastic Beanstalk, or Docker Push)
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Deploy to Azure Web App
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: ${{ secrets.AZURE_WEBAPP_NAME }}
+          package: Backend/publish
+
+  create-release:
+    name: Create GitHub Release
+    runs-on: ubuntu-latest
+    needs: [deploy-frontend]
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get Version
+        id: version
+        run: |
+          VERSION=$(node -p "require('./Frontend/package.json').version")
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+        
+      - name: Create Tag
+        run: |
+          git tag v${{ steps.version.outputs.VERSION }}
+          git push origin v${{ steps.version.outputs.VERSION }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ steps.version.outputs.VERSION }}
+          name: Release v${{ steps.version.outputs.VERSION }}
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

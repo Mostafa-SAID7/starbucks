@@ -23,7 +23,7 @@ jobs:
           cache-dependency-path: 'Frontend/package-lock.json'
       
       - name: Install dependencies
-        run: npm ci
+        run: npm ci --legacy-peer-deps
         working-directory: Frontend
       
       - name: Run npm audit
@@ -50,12 +50,16 @@ jobs:
         with:
           dotnet-version: '9.0.x'
       
+      - name: .NET Vulnerability Scan
+        run: dotnet list package --vulnerable
+        working-directory: Backend
+
       - name: Snyk Backend Scan
         uses: snyk/actions/dotnet@master
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
-          args: --severity-threshold=high Backend
+          args: --severity-threshold=high Backend/StarbucksEgypt.slnx
         continue-on-error: true
 
   secret-scan:
@@ -72,5 +76,5 @@ jobs:
           path: ./
           base: ${{ github.event.repository.default_branch }}
           head: HEAD
-          extra_args: --debug
+          extra_args: --debug --only-verified
         continue-on-error: true

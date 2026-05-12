@@ -4,8 +4,10 @@
  */
 
 import { useEffect, useRef, useCallback, useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { queryKeys } from '@/lib/api/queryKeys';
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { queryKeys } from "@/lib/api/queryKeys";
+import { menuFetchers, locationFetchers } from "@/lib/api";
+import { userService } from "@/services/api/userService";
 import { useErrorMonitoring } from '@/hooks/error/useErrorHandling';
 
 export interface InitialLoadOptions {
@@ -41,6 +43,7 @@ export function useInitialLoad(options: InitialLoadOptions = {}) {
   // Prefetch menu data
   const menuQuery = useQuery({
     queryKey: queryKeys.menu.all(),
+    queryFn: () => menuFetchers.fetchMenuData(),
     enabled: prefetchMenu,
     staleTime: 5 * 60 * 1000, // 5 minutes
   });
@@ -48,15 +51,17 @@ export function useInitialLoad(options: InitialLoadOptions = {}) {
   // Prefetch locations
   const locationsQuery = useQuery({
     queryKey: queryKeys.locations.all(),
+    queryFn: () => locationFetchers.fetchLocations(),
     enabled: prefetchLocations,
-    staleTime: 10 * 60 * 1000, // 10 minutes
+    staleTime: 30 * 60 * 1000, // 30 minutes
   });
 
   // Prefetch user profile if authenticated
-  const userQuery = useQuery({
+  const profileQuery = useQuery({
     queryKey: queryKeys.user.profile(),
+    queryFn: () => userService.getProfile(),
     enabled: prefetchUser,
-    staleTime: 1 * 60 * 1000, // 1 minute
+    staleTime: 10 * 60 * 1000, // 10 minutes
   });
 
   // Track loading state
@@ -91,11 +96,11 @@ export function useInitialLoad(options: InitialLoadOptions = {}) {
     error,
     menuData: menuQuery.data,
     locationsData: locationsQuery.data,
-    userData: userQuery.data,
+    userData: profileQuery.data,
     retry: () => {
       menuQuery.refetch();
       locationsQuery.refetch();
-      userQuery.refetch();
+      profileQuery.refetch();
     },
   };
 }

@@ -4,6 +4,9 @@
     <Project Path="src/Starbucks.Application/Starbucks.Application.csproj" />
     <Project Path="src/Starbucks.Domain/Starbucks.Domain.csproj" />
     <Project Path="src/Starbucks.Infrastructure/Starbucks.Infrastructure.csproj" />
-    <Project Path="src/Starbucks.Tests/Starbucks.Tests.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="src/Starbucks.UnitTests/Starbucks.UnitTests.csproj" />
+    <Project Path="src/Starbucks.IntegrationTests/Starbucks.IntegrationTests.csproj" />
   </Folder>
 </Solution>

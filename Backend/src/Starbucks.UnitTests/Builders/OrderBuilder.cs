@@ -11,6 +11,7 @@ public class OrderBuilder
     private Guid _userId = Guid.NewGuid();
     private Guid? _locationId = Guid.NewGuid();
     private string _orderNumber = $"ORD-{Guid.NewGuid().ToString().Substring(0, 8).ToUpper()}";
+    private List<OrderItem> _items = new List<OrderItem>();
     private OrderStatus _status = OrderStatus.Pending;
     private OrderType _type = OrderType.PickUp;
     private decimal _subtotal = 100m;
@@ -193,7 +194,7 @@ public class OrderBuilder
 
     public OrderBuilder WithItems(List<OrderItem> items)
     {
-        // This will be set in the Build method
+        _items = items;
         return this;
     }
 
@@ -238,7 +239,8 @@ public class OrderBuilder
             PointsEarned = _pointsEarned,
             PointsRedeemed = _pointsRedeemed,
             IsDeleted = _isDeleted,
-            CreatedAt = _createdAt
+            CreatedAt = _createdAt,
+            Items = _items
         };
 
         return order;

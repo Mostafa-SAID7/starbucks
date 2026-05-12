@@ -136,6 +136,7 @@ export const useCartStore = create<CartStore>()(
       clearCart: () => {
         set({
           ...initialState,
+          discount: undefined,
           lastUpdated: Date.now(),
         });
       },

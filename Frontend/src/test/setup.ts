@@ -2,9 +2,16 @@ import '@testing-library/jest-dom';
 import { cleanup } from '@testing-library/react';
 import { afterEach, beforeAll, afterAll } from 'vitest';
 import { server } from './mocks/server';
+import { initializeErrorMonitoring } from '@/lib/error/errorMonitoring';
 
-// Start MSW server
-beforeAll(() => server.listen({ onUnhandledRequest: 'error' }));
+// Start MSW server and initialize error monitoring
+beforeAll(() => {
+  server.listen({ onUnhandledRequest: 'error' });
+  initializeErrorMonitoring({
+    enabled: false, // Disable in tests to avoid noise
+    environment: 'development',
+  });
+});
 
 // Reset handlers after each test
 afterEach(() => {

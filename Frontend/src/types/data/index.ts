@@ -23,6 +23,7 @@ import {
   OrderItem as OrderItemSchemaType,
   OrderStatus as OrderStatusSchemaType
 } from '@/lib/schemas';
+import { LocalizedText } from '../common';
 
 // Re-export inferred types to maintain backward compatibility with components
 export type NavigationItem = NavItemSchemaType;
@@ -54,7 +55,7 @@ export interface GenericPageProps {
   data: GenericPageData;
   seoTitle?: string;
   showAccordion?: boolean;
-  accordionTitle?: unknown; // Using unknown for LocalizedText to avoid circular dep if common.ts is tricky
+  accordionTitle?: LocalizedText;
   accordionSectionIndices?: number[];
   useAccordionLayout?: boolean;
 }
@@ -63,7 +64,7 @@ export interface GenericPageWrapperProps {
   slug: string;
   seoTitle?: string;
   showAccordion?: boolean;
-  accordionTitle?: unknown;
+  accordionTitle?: LocalizedText;
   accordionSectionIndices?: number[];
   useAccordionLayout?: boolean;
 }
