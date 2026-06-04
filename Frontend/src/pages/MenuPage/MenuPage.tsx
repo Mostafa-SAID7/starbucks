@@ -377,6 +377,7 @@ function MenuPageContent({ categories }: { categories: MenuCategory[] }) {
                 {categoryTabs.map((catId) => (
                   <button
                     key={catId}
+                    data-testid="category-item"
                     onClick={() => setActiveCategory(catId)}
                     className={cn(
                       "px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all capitalize",
