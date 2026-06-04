@@ -1,5 +1,6 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
+import tailwindcss from "@tailwindcss/vite";
 import path from "path";
 import { VitePWA } from "vite-plugin-pwa";
 
@@ -7,6 +8,7 @@ import { VitePWA } from "vite-plugin-pwa";
 export default defineConfig({
   plugins: [
     react(),
+    tailwindcss(),
     // Disable PWA plugin on Vercel/CI builds to avoid Rolldown bundle assignment errors
     ...(process.env.VERCEL || process.env.CI || process.env.NODE_ENV === "production"
       ? []
@@ -127,13 +129,6 @@ export default defineConfig({
   },
   build: {
     target: "esnext",
-    minify: "terser",
-    terserOptions: {
-      compress: {
-        drop_console: true,
-        drop_debugger: true,
-      },
-    },
     rollupOptions: {
       output: {
         manualChunks(id) {
