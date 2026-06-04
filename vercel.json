@@ -1,16 +1,7 @@
 {
-  "buildCommand": "cd Frontend && npm install && npx tsc -b && npx vite build",
-  "devCommand": "cd Frontend && npx vite",
-  "installCommand": "cd Frontend && npm install",
-  "framework": "vite",
+  "buildCommand": "npm --prefix Frontend run build",
+  "installCommand": "npm --prefix Frontend install",
   "outputDirectory": "Frontend/dist",
-  "nodeVersion": "20.x",
-  "env": {
-    "VITE_API_URL": "@vite_api_url",
-    "VITE_SENTRY_DSN": "@vite_sentry_dsn",
-    "VITE_ERROR_MONITORING_ENABLED": "@vite_error_monitoring_enabled"
-  },
-  "envPrefix": "VITE_",
   "rewrites": [
     { "source": "/(.*)", "destination": "/index.html" }
   ],
