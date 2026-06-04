@@ -13,14 +13,19 @@ export function logError(error: unknown, context?: string) {
   // 2. Add context if provided
   const errorContext = context ? { context } : {};
 
+  // Retrieve environment dynamically to support Vitest global stubbing
+  const meta = (globalThis as any)['import.meta'] || import.meta;
+  const isDev = meta?.env?.DEV;
+  const isProd = meta?.env?.PROD;
+
   // In development, log to console
-  if (import.meta.env.DEV) {
+  if (isDev) {
     const prefix = context ? `[${context}] Error:` : 'Error:';
     console.error(prefix, normalizedError);
   }
 
   // In production, send to monitoring service and backend endpoint
-  if (import.meta.env.PROD) {
+  if (isProd) {
     try {
       errorMonitor.captureException(normalizedError as Error | AppError, errorContext);
     } catch (err) {
@@ -46,6 +51,7 @@ export function logError(error: unknown, context?: string) {
  * Log a warning message without throwing
  */
 export function logWarning(message: string, context?: string) {
+  const meta = (globalThis as any)['import.meta'] || import.meta;
   errorMonitor.captureMessage(message, 'warning', context ? { context } : {});
 }
 
@@ -53,5 +59,6 @@ export function logWarning(message: string, context?: string) {
  * Log an info message for auditing
  */
 export function logInfo(message: string, context?: string) {
+  const meta = (globalThis as any)['import.meta'] || import.meta;
   errorMonitor.captureMessage(message, 'info', context ? { context } : {});
 }
