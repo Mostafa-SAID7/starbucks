@@ -1,0 +1,28 @@
+{
+  "buildCommand": "cd Frontend && npm install && npx tsc -b && npx vite build",
+  "devCommand": "cd Frontend && npx vite",
+  "installCommand": "cd Frontend && npm install",
+  "framework": "vite",
+  "outputDirectory": "Frontend/dist",
+  "nodeVersion": "20.x",
+  "env": {
+    "VITE_API_URL": "@vite_api_url",
+    "VITE_SENTRY_DSN": "@vite_sentry_dsn",
+    "VITE_ERROR_MONITORING_ENABLED": "@vite_error_monitoring_enabled"
+  },
+  "envPrefix": "VITE_",
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/index.html" }
+  ],
+  "headers": [
+    {
+      "source": "/assets/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    }
+  ]
+}
