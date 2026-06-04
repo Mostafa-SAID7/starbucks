@@ -4,7 +4,7 @@
  * Eliminates 200+ lines of duplicate code
  */
 
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import { useMutation, useQuery, useQueryClient, UseMutationResult } from '@tanstack/react-query';
 import { PagedResult } from '@/types/common/pagination';
 

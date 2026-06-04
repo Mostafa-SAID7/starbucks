@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback } from 'react';
+import { useEffect, useCallback, useState } from 'react';
 
 export interface KeyboardNavigationOptions {
   onEscape?: () => void;
@@ -107,18 +107,24 @@ export function useArrowKeyNavigation(
   items: HTMLElement[],
   onSelect?: (index: number) => void
 ) {
-  const currentIndexRef = useRef(0);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   const handleArrowUp = useCallback(() => {
-    currentIndexRef.current = Math.max(0, currentIndexRef.current - 1);
-    items[currentIndexRef.current]?.focus();
-    onSelect?.(currentIndexRef.current);
+    setCurrentIndex((prev) => {
+      const newIndex = Math.max(0, prev - 1);
+      items[newIndex]?.focus();
+      onSelect?.(newIndex);
+      return newIndex;
+    });
   }, [items, onSelect]);
 
   const handleArrowDown = useCallback(() => {
-    currentIndexRef.current = Math.min(items.length - 1, currentIndexRef.current + 1);
-    items[currentIndexRef.current]?.focus();
-    onSelect?.(currentIndexRef.current);
+    setCurrentIndex((prev) => {
+      const newIndex = Math.min(items.length - 1, prev + 1);
+      items[newIndex]?.focus();
+      onSelect?.(newIndex);
+      return newIndex;
+    });
   }, [items, onSelect]);
 
   useKeyboardNavigation({
@@ -126,5 +132,5 @@ export function useArrowKeyNavigation(
     onArrowDown: handleArrowDown,
   });
 
-  return { currentIndex: currentIndexRef.current };
+  return { currentIndex };
 }

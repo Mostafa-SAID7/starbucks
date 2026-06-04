@@ -11,7 +11,6 @@ import { cn } from '@/lib/ui';
 interface CartDrawerProps {
   isOpen?: boolean;
   onClose?: () => void;
-  variant?: 'global' | 'inner';
 }
 
 export function CartTrigger() {
@@ -44,8 +43,7 @@ export function CartTrigger() {
 
 export function CartDrawer({ 
   isOpen: controlledIsOpen, 
-  onClose: controlledOnClose,
-  variant = 'global'
+  onClose: controlledOnClose
 }: CartDrawerProps) {
   const { isOpen: storeIsOpen, setIsOpen: setStoreIsOpen } = useCartStore();
   const isOpen = controlledIsOpen !== undefined ? controlledIsOpen : storeIsOpen;
@@ -96,8 +94,6 @@ export function CartDrawer({
 
   const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const discountAmount = discount?.amount || 0;
-
-  const isInner = variant === 'inner';
 
   return (
     <AnimatePresence>

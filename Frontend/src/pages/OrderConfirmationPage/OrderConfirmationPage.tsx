@@ -4,7 +4,6 @@ import { motion } from 'framer-motion';
 import { CheckCircle2, Package, MapPin, Clock, ArrowLeft, Share2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { SEO } from '@/components';
-import { useLanguage } from '@/hooks';
 import { cn } from '@/lib/ui';
 
 export function OrderConfirmationPage() {

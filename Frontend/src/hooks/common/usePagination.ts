@@ -65,10 +65,10 @@ export function usePagination<T>(
     [fetchFn]
   );
 
-  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => {
     fetchData(initialPageNumber, initialPageSize);
-  }, [initialPageNumber, initialPageSize, fetchData]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Navigation methods
   const goToPage = useCallback(

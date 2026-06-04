@@ -16,10 +16,11 @@ export interface AccordionProps {
 }
 
 export const Accordion = React.forwardRef<HTMLDivElement, AccordionProps>(
-  ({ items, className, variant = 'default', defaultIndex = null }, _ref) => {
+  ({ items, className, variant = 'default', defaultIndex = null }, forwardedRef) => {
     const [openIndex, setOpenIndex] = React.useState<number | null>(defaultIndex)
     const [focusedIndex, setFocusedIndex] = React.useState<number>(-1)
     const containerRef = React.useRef<HTMLDivElement>(null)
+    const ref = forwardedRef || containerRef
     const buttonRefs = React.useRef<(HTMLButtonElement | null)[]>([])
 
     const toggleItem = (index: number) => {

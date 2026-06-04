@@ -1,8 +1,5 @@
 import React, { ReactNode, ErrorInfo } from 'react';
-import { useTranslation } from 'react-i18next';
-import { AlertCircle, RefreshCw } from 'lucide-react';
 import { ErrorFallback } from './ErrorFallback';
-import { Button } from '@/components/ui/button';
 
 interface Props {
   children: ReactNode;
@@ -24,8 +21,8 @@ export class GlobalErrorBoundary extends React.Component<Props, State> {
     };
   }
 
-  static getDerivedStateFromError(_error: Error): Partial<State> {
-    return { hasError: true };
+  static getDerivedStateFromError(error: Error): Partial<State> {
+    return { hasError: true, error };
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {

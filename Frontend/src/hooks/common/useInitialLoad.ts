@@ -4,7 +4,7 @@
  */
 
 import { useEffect, useRef, useCallback, useState } from 'react';
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { queryKeys } from "@/lib/api/queryKeys";
 import { menuFetchers, locationFetchers } from "@/lib/api";
 import { userService } from "@/services/api/userService";
