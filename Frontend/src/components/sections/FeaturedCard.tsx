@@ -2,6 +2,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui";
 import { cn } from "@/lib/ui";
+import { ANIMATION_CONFIG } from '@/lib/core/constants';
 
 interface FeaturedCardProps {
   id: string;
@@ -37,8 +38,8 @@ export const FeaturedCard: React.FC<FeaturedCardProps> = ({
   return (
     <motion.div
       key={id}
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={ANIMATION_CONFIG.VARIANTS.SLIDE_UP.initial}
+      whileInView={ANIMATION_CONFIG.VARIANTS.SLIDE_UP.animate}
       viewport={{ once: true }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
       className={cn(

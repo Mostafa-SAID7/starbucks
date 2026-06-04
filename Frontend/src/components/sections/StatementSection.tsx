@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui";
 import { Link } from "react-router-dom";
 import { useStatement, useLanguage } from "@/hooks";
+import { ANIMATION_CONFIG } from '@/lib/core/constants';
 
 
 const StatementSection = () => {
@@ -41,8 +42,8 @@ const StatementSection = () => {
     <section className="bg-background py-16 transition-colors">
       <div className="container mx-auto max-w-4xl px-4">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={ANIMATION_CONFIG.VARIANTS.SLIDE_UP.initial}
+          whileInView={ANIMATION_CONFIG.VARIANTS.SLIDE_UP.animate}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
           className="text-center"

@@ -2,6 +2,7 @@ import React from 'react'
 import { motion } from 'framer-motion'
 import { useLanguage } from '@/hooks'
 import { SEO, Header } from '@/components'
+import { ANIMATION_CONFIG } from '@/lib/core/constants'
 
 interface StaticPageLayoutProps {
   title: { ar: string; en: string }
@@ -41,8 +42,7 @@ export const StaticPageLayout: React.FC<StaticPageLayoutProps> = ({
           )}
 
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
+            {...ANIMATION_CONFIG.VARIANTS.FADE_IN}
             className="flex-1 space-y-12"
           >
             {children}

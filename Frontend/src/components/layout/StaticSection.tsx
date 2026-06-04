@@ -1,6 +1,7 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 import { useLanguage } from '@/hooks'
+import { ANIMATION_CONFIG } from '@/lib/core/constants'
 
 interface StaticSectionProps {
   title?: { ar: string; en: string }
@@ -18,8 +19,8 @@ export const StaticSection: React.FC<StaticSectionProps> = ({ title, children, i
   return (
     <motion.section
       id={id}
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={ANIMATION_CONFIG.VARIANTS.SLIDE_UP.initial}
+      whileInView={ANIMATION_CONFIG.VARIANTS.SLIDE_UP.animate}
       viewport={{ once: true }}
       className="space-y-6"
     >

@@ -112,6 +112,34 @@ export const ANIMATION_CONFIG = {
       animate: { x: 0 },
       exit: { x: "-100%" },
     },
+    STAGGER_CONTAINER: {
+      hidden: { opacity: 0 },
+      visible: {
+        opacity: 1,
+        transition: {
+          staggerChildren: 0.1,
+        },
+      },
+    },
+    STAGGER_CONTAINER_DELAY: {
+      hidden: { opacity: 0 },
+      visible: {
+        opacity: 1,
+        transition: {
+          staggerChildren: 0.1,
+          delayChildren: 0.3
+        }
+      }
+    },
+    STAGGER_ITEM: {
+      hidden: { opacity: 0, y: 20 },
+      visible: { opacity: 1, y: 0 },
+    },
+    /** Accordion expand/collapse (used with initial="collapsed" animate="open" exit="collapsed") */
+    ACCORDION_EXPAND: {
+      open: { opacity: 1, height: "auto" },
+      collapsed: { opacity: 0, height: 0 },
+    },
   },
 } as const;
 

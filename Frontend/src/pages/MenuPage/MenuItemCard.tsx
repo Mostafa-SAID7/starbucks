@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { ShoppingCart, Plus } from "lucide-react";
+import { ANIMATION_CONFIG } from '@/lib/core/constants';
 import type { FlatItem } from "./types";
 
 interface MenuItemCardProps {
@@ -30,8 +31,7 @@ export function MenuItemCard({
     <motion.article
       data-testid="menu-item"
       layout
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
+      {...ANIMATION_CONFIG.VARIANTS.SLIDE_UP}
       exit={{ opacity: 0, y: -10, scale: 0.95 }}
       className="group relative bg-white dark:bg-zinc-900 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl border border-gray-100 dark:border-zinc-800 transition-all cursor-pointer"
       onClick={() => onClick(item)}

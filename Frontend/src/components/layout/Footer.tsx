@@ -113,10 +113,7 @@ export function Footer() {
                           initial="collapsed"
                           animate="open"
                           exit="collapsed"
-                          variants={{
-                            open: { opacity: 1, height: "auto" },
-                            collapsed: { opacity: 0, height: 0 },
-                          }}
+                          variants={ANIMATION_CONFIG.VARIANTS.ACCORDION_EXPAND}
                           transition={ANIMATION_CONFIG.TRANSITIONS.SPRING}
                         >
                           <ul className="px-4 pb-4 space-y-3">
@@ -167,10 +164,7 @@ export function Footer() {
                     initial="collapsed"
                     animate="open"
                     exit="collapsed"
-                    variants={{
-                      open: { opacity: 1, height: "auto" },
-                      collapsed: { opacity: 0, height: 0 },
-                    }}
+                    variants={ANIMATION_CONFIG.VARIANTS.ACCORDION_EXPAND}
                     transition={ANIMATION_CONFIG.TRANSITIONS.SPRING}
                   >
                     <div className="px-4 pb-4">

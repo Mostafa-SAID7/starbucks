@@ -5,6 +5,7 @@ import { motion } from 'framer-motion'
 import { Home, Coffee } from 'lucide-react'
 import { SEO, Logo } from '@/components'
 import { useLanguage } from '@/hooks'
+import { ANIMATION_CONFIG } from '@/lib/core/constants'
 import bg404 from '@/assets/bg-404.png'
 
 export const NotFound: React.FC = () => {
@@ -59,8 +60,7 @@ export const NotFound: React.FC = () => {
 
         {/* Title */}
         <motion.h2
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
+          {...ANIMATION_CONFIG.VARIANTS.SLIDE_UP}
           transition={{ delay: 0.25 }}
           className="mb-4 text-2xl font-extrabold text-white lg:text-3xl"
         >
@@ -69,8 +69,7 @@ export const NotFound: React.FC = () => {
 
         {/* Message */}
         <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
+          {...ANIMATION_CONFIG.VARIANTS.SLIDE_UP}
           transition={{ delay: 0.3 }}
           className="mb-10 max-w-sm text-base text-white/75 leading-relaxed"
         >
@@ -79,8 +78,7 @@ export const NotFound: React.FC = () => {
 
         {/* Buttons */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
+          {...ANIMATION_CONFIG.VARIANTS.SLIDE_UP}
           transition={{ delay: 0.38 }}
           className="flex flex-col gap-4 sm:flex-row"
         >

@@ -128,10 +128,7 @@ export const Accordion = React.forwardRef<HTMLDivElement, AccordionProps>(
                   initial="collapsed"
                   animate="open"
                   exit="collapsed"
-                  variants={{
-                    open: { opacity: 1, height: "auto" },
-                    collapsed: { opacity: 0, height: 0 }
-                  }}
+                  variants={ANIMATION_CONFIG.VARIANTS.ACCORDION_EXPAND}
                   transition={ANIMATION_CONFIG.TRANSITIONS.ACCORDION as unknown as import("framer-motion").Transition}
                   role="region"
                   aria-live="polite"

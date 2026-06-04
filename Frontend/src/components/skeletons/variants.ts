@@ -1,15 +1,4 @@
-export const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-      duration: 0.5
-    }
-  }
-}
+import { ANIMATION_CONFIG } from '@/lib/core/constants';
 
-export const itemVariants = {
-  hidden: { opacity: 0, y: 10 },
-  visible: { opacity: 1, y: 0 }
-}
+export const containerVariants = ANIMATION_CONFIG.VARIANTS.STAGGER_CONTAINER;
+export const itemVariants = ANIMATION_CONFIG.VARIANTS.STAGGER_ITEM;
