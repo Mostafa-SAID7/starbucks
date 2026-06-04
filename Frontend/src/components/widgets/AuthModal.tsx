@@ -31,8 +31,8 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
     }
   }, [isOpen, mode]);
 
-  const toggleMode = useCallback(() => {
-    setMode((prev) => (prev === "login" ? "register" : "login"));
+  const handleModeChange = useCallback((newMode: "login" | "register") => {
+    setMode(newMode);
     setFormData({
       email: "",
       password: "",
@@ -43,6 +43,10 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
     });
     clearError();
   }, [clearError]);
+
+  const toggleMode = useCallback(() => {
+    handleModeChange(mode === "login" ? "register" : "login");
+  }, [mode, handleModeChange]);
 
   const handleInputChange = useCallback(
     (field: string, value: string | boolean) => {
@@ -110,7 +114,7 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
             aria-hidden="true"
           />
           <button
-            onClick={() => setMode("login")}
+            onClick={() => handleModeChange("login")}
             className={`relative z-10 flex-1 py-3 text-sm font-black uppercase tracking-widest transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-starbucks-green rounded ${
               mode === "login" ? "text-starbucks-green" : "text-gray-500"
             }`}
@@ -121,7 +125,7 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
             {t("common:auth.login_title")}
           </button>
           <button
-            onClick={() => setMode("register")}
+            onClick={() => handleModeChange("register")}
             className={`relative z-10 flex-1 py-3 text-sm font-black uppercase tracking-widest transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-starbucks-green rounded ${
               mode === "register" ? "text-starbucks-green" : "text-gray-500"
             }`}

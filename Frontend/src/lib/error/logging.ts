@@ -13,13 +13,32 @@ export function logError(error: unknown, context?: string) {
   // 2. Add context if provided
   const errorContext = context ? { context } : {};
 
-  // 3. Capture with global monitoring service
-  try {
-    errorMonitor.captureException(normalizedError as Error | AppError, errorContext);
-  } catch (err) {
-    // Fallback if monitoring service fails or is not initialized
-    console.error(`[CRITICAL] Error logging failed:`, err);
-    console.error(`[Original Error]:`, error);
+  // In development, log to console
+  if (import.meta.env.DEV) {
+    const prefix = context ? `[${context}] Error:` : 'Error:';
+    console.error(prefix, normalizedError);
+  }
+
+  // In production, send to monitoring service and backend endpoint
+  if (import.meta.env.PROD) {
+    try {
+      errorMonitor.captureException(normalizedError as Error | AppError, errorContext);
+    } catch (err) {
+      // Fallback silently if monitoring service fails or is not initialized
+    }
+
+    fetch('/api/logging/error', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        message: normalizedError.message,
+        stack: normalizedError.stack,
+        context,
+        timestamp: new Date().toISOString(),
+      }),
+    }).catch(() => {
+      // Handle fetch failure silently
+    });
   }
 }
 

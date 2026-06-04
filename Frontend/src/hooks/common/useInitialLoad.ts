@@ -67,7 +67,7 @@ export function useInitialLoad(options: InitialLoadOptions = {}) {
   // Track loading state
   const isLoading = menuQuery.isLoading || locationsQuery.isLoading;
   const isError = menuQuery.isError || locationsQuery.isError;
-  const error = menuQuery.error || locationsQuery.error;
+  const error = menuQuery.error || locationsQuery.error || undefined;
 
   // Notify on load complete
   useEffect(() => {

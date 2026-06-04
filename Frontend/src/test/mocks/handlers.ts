@@ -181,4 +181,52 @@ export const handlers = [
       data: [],
     });
   }),
+
+  // Actual API endpoints requested by hooks
+  http.get('*/api/v1/Menu/categories', () => {
+    return HttpResponse.json({
+      items: [
+        {
+          id: '1',
+          name: 'Coffee',
+          description: 'Premium coffee drinks',
+          image: 'coffee.jpg',
+        },
+        {
+          id: '2',
+          name: 'Tea',
+          description: 'Specialty teas',
+          image: 'tea.jpg',
+        },
+      ],
+      totalCount: 2,
+    });
+  }),
+
+  http.get('*/api/v1/Locations', () => {
+    return HttpResponse.json({
+      items: [
+        {
+          id: '1',
+          name: 'Downtown Cairo',
+          address: '123 Main St, Cairo',
+          latitude: 30.0444,
+          longitude: 31.2357,
+          phone: '+20-100-123-4567',
+          hours: '7:00 AM - 10:00 PM',
+        },
+      ],
+      totalCount: 1,
+    });
+  }),
+
+  http.get('*/api/v1/User/profile', () => {
+    return HttpResponse.json({
+      id: '1',
+      email: 'test@example.com',
+      firstName: 'Test',
+      lastName: 'User',
+      role: 'Customer',
+    });
+  }),
 ];
