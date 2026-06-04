@@ -8,6 +8,8 @@ import { LiveRegion } from "@/components/accessibility";
 import { logError, getErrorMessages } from "@/lib/error";
 import { cn } from "@/lib/ui";
 import { useLanguage } from "@/hooks";
+import { ANIMATION_CONFIG } from "@/lib/core/constants";
+
 
 interface ErrorFallbackProps extends FallbackProps {
   variant?: "full" | "compact";
@@ -64,8 +66,7 @@ export const ErrorFallback: React.FC<ErrorFallbackProps> = ({
       <SectionBackground variant="default" className="opacity-70" />
       
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
+        {...ANIMATION_CONFIG.VARIANTS.SLIDE_UP}
         className="max-w-md w-full text-center space-y-8 relative z-10"
       >
         <motion.div

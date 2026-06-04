@@ -2,6 +2,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { X, ShoppingCart } from "lucide-react";
 import type { FlatItem } from "./types";
+import { ANIMATION_CONFIG } from "@/lib/core/constants";
+
 
 interface ItemDetailsModalProps {
   item: FlatItem;
@@ -34,9 +36,7 @@ export function ItemDetailsModal({
       >
         {/* Backdrop */}
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
+          {...ANIMATION_CONFIG.VARIANTS.FADE_IN}
           className="absolute inset-0 bg-black/60 backdrop-blur-sm"
         />
 

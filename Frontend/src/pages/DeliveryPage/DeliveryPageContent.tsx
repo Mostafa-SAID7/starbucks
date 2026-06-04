@@ -4,6 +4,8 @@ import { useTranslation } from 'react-i18next';
 import { SEO, SidebarTemplate } from '@/components';
 import { useLanguage, useAccordion } from '@/hooks';
 import type { GenericPageData } from '@/types';
+import { ANIMATION_CONFIG } from '@/lib/core/constants';
+
 
 interface DeliveryPageContentProps {
   data: GenericPageData;
@@ -53,8 +55,7 @@ export function DeliveryPageContent({ data }: DeliveryPageContentProps) {
             {/* Page title (shown when hideMainTitle is false) */}
             {!data.hideMainTitle && (
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
+                {...ANIMATION_CONFIG.VARIANTS.SLIDE_UP}
                 className={`mb-12 ${textAlignClass}`}
               >
                 <h1 className="text-4xl lg:text-7xl font-black text-gray-900 dark:text-white leading-tight tracking-tight">

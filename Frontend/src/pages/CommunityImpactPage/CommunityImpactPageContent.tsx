@@ -3,6 +3,8 @@ import { SEO } from '@/components';
 import { SectionRenderer } from '@/components/sections/generic/SectionRenderer';
 import { useLanguage } from '@/hooks';
 import type { GenericPageData, LocalizedText } from '@/types';
+import { ANIMATION_CONFIG } from '@/lib/core/constants';
+
 
 interface CommunityImpactPageContentProps {
   data: GenericPageData;
@@ -25,8 +27,7 @@ export function CommunityImpactPageContent({ data }: CommunityImpactPageContentP
         {/* Content Column */}
         <div className="w-full lg:w-3/5 p-6 md:p-12 lg:p-20 xl:p-24">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            {...ANIMATION_CONFIG.VARIANTS.SLIDE_UP}
             className="mb-12 lg:mb-16"
           >
             <h1 className="text-3xl md:text-5xl lg:text-6xl font-black text-gray-900 dark:text-white mb-8 leading-tight">

@@ -77,8 +77,7 @@ export function MiddleEastPageContent({ data }: MiddleEastPageContentProps) {
           <div className="lg:w-[60%]">
             <div className="max-w-4xl">
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
+                {...ANIMATION_CONFIG.VARIANTS.SLIDE_UP}
                 className={`mb-8 ${textAlignClass}`}
               >
                 {localizedLastUpdated && (

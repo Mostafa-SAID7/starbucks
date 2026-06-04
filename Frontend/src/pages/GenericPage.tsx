@@ -11,6 +11,8 @@ import {
 import { useLanguage } from "@/hooks";
 import type { GenericPageProps } from "@/types";
 import { SectionRenderer, SectionImageGrid } from "@/components/sections/generic";
+import { ANIMATION_CONFIG } from "@/lib/core/constants";
+
 
 export const GenericPage: React.FC<GenericPageProps> = ({
   data,
@@ -223,8 +225,7 @@ export const GenericPage: React.FC<GenericPageProps> = ({
             <div className="space-y-16">
               <div className="max-w-4xl">
                 <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
+                  {...ANIMATION_CONFIG.VARIANTS.SLIDE_UP}
                   className="mb-12"
                 >
                   {!data.hideMainTitle && (
