@@ -1,6 +1,10 @@
+<div align="center">
+
 # 🚢 Deployment Guide
 
-Complete guide for deploying the Starbucks Egypt application and managing its live environments.
+**Complete guide for deploying the Starbucks Egypt application and managing its live environments.**
+
+</div>
 
 ---
 

@@ -1,6 +1,10 @@
+<div align="center">
+
 # 🔒 Security Policy
 
-This policy defines the security standards and reporting procedures for the Starbucks Egypt enterprise application.
+**This policy defines the security standards and reporting procedures for the Starbucks Egypt enterprise application.**
+
+</div>
 
 ---
 

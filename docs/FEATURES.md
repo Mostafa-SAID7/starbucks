@@ -1,6 +1,10 @@
+<div align="center">
+
 # ✨ Features & Use Cases
 
-A comprehensive list of implemented features and common user workflows for the Starbucks Egypt application.
+**A comprehensive list of implemented features and common user workflows for the Starbucks Egypt application.**
+
+</div>
 
 ---
 
@@ -41,26 +45,27 @@ A comprehensive list of implemented features and common user workflows for the S
 
 ## 2. Common Use Cases
 
-### User: "Find a morning coffee"
-1. User lands on HomePage and clicks "Find a Store".
-2. System requests location; shows nearest stores.
-3. User filters for "Drive-thru".
-4. User selects store and views the menu.
+### 🚶 User: "Find a morning coffee"
+1. User lands on **HomePage** and clicks **Find a Store**.
+2. System requests location; displays the nearest Starbucks stores.
+3. User filters for **Drive-thru**.
+4. User selects their preferred store and browses the local menu.
 
-### User: "Reorder my favorite drink"
+### 🔁 User: "Reorder my favorite drink"
 1. User logs in.
-2. Navigates to "Recent Orders" or "Favorites".
-3. Clicks "Order Again" on a previous Latte with extra caramel.
-4. Checkout flow starts with pre-filled preferences.
+2. Navigates to **Recent Orders** or **Favorites**.
+3. Clicks **Order Again** on a previous Latte with extra caramel.
+4. Checkout flow starts immediately with pre-filled preferences.
 
-### Manager: "Update Menu Item"
-1. Manager logs into the Admin Dashboard.
-2. Navigates to Menu Management.
-3. Edits "Cold Brew" price and updates availability.
-4. Changes are reflected instantly on the Frontend.
+### 👨‍💼 Manager: "Update Menu Item"
+1. Manager logs into the **Admin Dashboard**.
+2. Navigates to **Menu Management**.
+3. Edits the "Cold Brew" price and updates availability status.
+4. Changes are reflected instantly across the Frontend.
 
 ---
 
-*Related Documents:*
-- [ARCHITECTURE.md](ARCHITECTURE.md) - How it works under the hood
-- [DEVELOPMENT.md](DEVELOPMENT.md) - How to add new features
+<div align="center">
+  <b>Related Documents</b> <br/>
+  <a href="ARCHITECTURE.md">ARCHITECTURE.md</a> &nbsp;&bull;&nbsp; <a href="DEVELOPMENT.md">DEVELOPMENT.md</a>
+</div>

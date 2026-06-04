@@ -1,6 +1,12 @@
-# 🤝 Contributors
+<div align="center">
 
-Recognition of the individuals who have helped build the Starbucks Egypt React Clone.
+# 🌟 Contributors
+
+**Recognition of the individuals who have helped build the Starbucks Egypt React Clone.**
+
+</div>
+
+---
 
 ## Maintainers
 - **Mostafa Said** (@Mostafa-SAID7) - Lead Architect & Developer

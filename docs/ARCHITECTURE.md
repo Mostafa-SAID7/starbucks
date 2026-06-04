@@ -1,6 +1,10 @@
+<div align="center">
+
 # 🏗️ Architecture & Design
 
-Detailed technical overview of the Starbucks Egypt engineering patterns, system design, and project structure.
+**Detailed technical overview of the Starbucks Egypt engineering patterns, system design, and project structure.**
+
+</div>
 
 ---
 
@@ -84,17 +88,17 @@ sequenceDiagram
 src/
 ├── assets/              # Static assets (images, logos)
 ├── components/          # UI components
-│   ├── accessibility/  # ARIA and screen reader helpers
-│   ├── layout/         # Shell components (Navbar, Footer, MainLayout)
-│   ├── sections/       # Domain-specific UI sections
-│   ├── skeletons/      # Content placeholders
-│   └── ui/             # Atomic primitives (Buttons, Inputs, etc.)
+│   ├── accessibility/   # ARIA and screen reader helpers
+│   ├── layout/          # Shell components (Navbar, Footer, MainLayout)
+│   ├── sections/        # Domain-specific UI sections
+│   ├── skeletons/       # Content placeholders
+│   └── ui/              # Atomic primitives (Buttons, Inputs, etc.)
 ├── constants/           # Global app constants
 ├── contexts/            # React Contexts (Theme, Auth, Language)
 ├── hooks/               # Custom hooks & TanStack queries
 ├── lib/                 # Core configs (i18n, QueryClient)
 ├── pages/               # Route-level page components
-├── services/           # API services and configurations
+├── services/            # API services and configurations
 └── types/               # TypeScript interfaces
 ```
 
@@ -107,6 +111,7 @@ The backend follows **Clean Architecture** with four distinct layers:
 
 ---
 
-*Related Documents:*
-- [DEVELOPMENT.md](DEVELOPMENT.md) - Setup and Tools
-- [FEATURES.md](FEATURES.md) - Capabilities and Use Cases
+<div align="center">
+  <b>Related Documents</b> <br/>
+  <a href="DEVELOPMENT.md">DEVELOPMENT.md</a> &nbsp;&bull;&nbsp; <a href="FEATURES.md">FEATURES.md</a>
+</div>

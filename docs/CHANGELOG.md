@@ -1,8 +1,12 @@
-# Changelog
+<div align="center">
 
-All notable changes to this project will be documented in this file.
+# 📜 Changelog
 
-Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) · Versioning: [SemVer](https://semver.org/spec/v2.0.0.html)
+**All notable changes to this project will be documented in this file.**
+
+*Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) &bull; Versioning: [SemVer](https://semver.org/spec/v2.0.0.html)*
+
+</div>
 
 ---
 

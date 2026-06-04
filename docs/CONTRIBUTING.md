@@ -1,6 +1,10 @@
+<div align="center">
+
 # 🤝 Contributing to Starbucks Egypt
 
-Thank you for your interest in contributing to the Starbucks Egypt enterprise application! We appreciate your help in making this project better.
+**Thank you for your interest in contributing to the Starbucks Egypt enterprise application! We appreciate your help in making this project better.**
+
+</div>
 
 ---
 

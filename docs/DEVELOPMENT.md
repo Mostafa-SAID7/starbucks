@@ -1,10 +1,16 @@
+<div align="center">
+
 # 🛠️ Development Guide
 
-Guidelines for setting up the development environment, technology stack, and coding standards.
+**Guidelines for setting up the development environment, technology stack, and coding standards.**
+
+</div>
 
 ---
 
 ## 1. Prerequisites
+
+Before starting, ensure your local machine is equipped with the following:
 
 - **Node.js**: v20 or higher
 - **.NET SDK**: v9.0 or higher
@@ -25,6 +31,7 @@ cd starbucks-eg-react
 ### 2. Backend Setup
 ```bash
 cd Backend
+
 # Start infrastructure via Docker
 docker-compose up -d
 
@@ -32,6 +39,7 @@ docker-compose up -d
 dotnet restore
 dotnet run --project src/Starbucks.API
 ```
+> The API runs on `https://localhost:7082` by default.
 
 ### 3. Frontend Setup
 ```bash
@@ -40,6 +48,7 @@ npm install --legacy-peer-deps
 cp .env.example .env
 npm run dev
 ```
+> The UI runs on `http://localhost:5173` by default.
 
 ---
 
@@ -65,35 +74,39 @@ npm run dev
 
 ## 4. Coding Standards
 
-### Frontend
-- Use **functional components** and hooks.
+### Frontend Best Practices
+- Use **functional components** and React Hooks.
 - Prefix custom hooks with `use`.
 - Maintain strictly typed props and API responses.
-- Use **CSS logical properties** (e.g., `margin-inline`) for RTL compatibility.
+- Use **CSS logical properties** (e.g., `margin-inline`, `padding-block`) for automatic RTL compatibility.
 
-### Backend
-- Follow **Clean Architecture** boundaries.
+### Backend Best Practices
+- Follow **Clean Architecture** boundaries strictly.
 - Ensure all business logic stays in the `Application` layer.
-- Use **async/await** for all I/O operations.
-- Write meaningful unit tests for CQRS Handlers.
+- Use **async/await** for all I/O bound operations.
+- Write meaningful unit tests for all CQRS Handlers.
 
 ---
 
 ## 5. Deployment Commands
 
 ### Production Build
+
+**Frontend**
 ```bash
-# Frontend
 cd Frontend
 npm run build
+```
 
-# Backend
+**Backend**
+```bash
 cd Backend
 dotnet publish -c Release
 ```
 
 ---
 
-*Related Documents:*
-- [ARCHITECTURE.md](ARCHITECTURE.md) - Deep dive into design
-- [FEATURES.md](FEATURES.md) - Features checklist
+<div align="center">
+  <b>Related Documents</b> <br/>
+  <a href="ARCHITECTURE.md">ARCHITECTURE.md</a> &nbsp;&bull;&nbsp; <a href="FEATURES.md">FEATURES.md</a>
+</div>
