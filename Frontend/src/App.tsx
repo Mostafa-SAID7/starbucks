@@ -16,6 +16,7 @@ import { ANIMATION_CONFIG } from "@/lib/core/constants";
 import { loadPageTranslations, getPageSlug } from "@/lib/i18n/pageTranslations";
 import { MainLayout, SkipNav, ErrorBoundary } from "@/components";
 import { OfflineIndicator } from "@/components/ui/OfflineIndicator";
+import ErrorProvider from "@/contexts/ErrorContext";
 import { REDIRECT_ROUTES, PAGE_ROUTES } from "@/config/routes";
 
 const ReactQueryDevtools = import.meta.env.DEV
@@ -129,14 +130,16 @@ const AnimatedRoutes = () => {
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <ErrorBoundary>
-        <Router>
-          <SkipNav />
-          <div id="main-content" />
-          <AnimatedRoutes />
-          <OfflineIndicator />
-        </Router>
-      </ErrorBoundary>
+      <ErrorProvider>
+        <ErrorBoundary>
+          <Router>
+            <SkipNav />
+            <div id="main-content" />
+            <AnimatedRoutes />
+            <OfflineIndicator />
+          </Router>
+        </ErrorBoundary>
+      </ErrorProvider>
       {import.meta.env.DEV && ReactQueryDevtools && (
         <Suspense fallback={null}>
           <ReactQueryDevtools initialIsOpen={false} position="bottom" buttonPosition="bottom-right" />

@@ -59,109 +59,234 @@ Call log:
           - button "key 'cart (ar)' returned an object instead of string." [ref=e52]:
             - img [ref=e53]
     - main [ref=e57]:
-      - generic [ref=e59]:
-        - generic [ref=e61]:
-          - generic [ref=e62]:
-            - heading "عن ستارباكس" [level=3] [ref=e63]
-            - list [ref=e64]:
-              - listitem [ref=e65]:
-                - link "شركتنا" [ref=e66] [cursor=pointer]:
-                  - /url: /ar/about-us
-              - listitem [ref=e67]:
-                - link "قهوتنا" [ref=e68] [cursor=pointer]:
-                  - /url: /ar/our-coffees
-          - generic [ref=e69]:
-            - heading "خدمة الزبائن" [level=3] [ref=e70]
-            - list [ref=e71]:
-              - listitem [ref=e72]:
-                - link "اتصل بنا" [ref=e73] [cursor=pointer]:
-                  - /url: /ar/contact-us
-              - listitem [ref=e74]:
-                - link "مواقعنا" [ref=e75] [cursor=pointer]:
-                  - /url: /ar/locations
+      - generic [ref=e61]:
+        - generic [ref=e64]:
+          - img "قائمة الطعام" [ref=e65]
+          - generic [ref=e66]:
+            - heading "قائمة الطعام" [level=2] [ref=e67]
+            - paragraph [ref=e70]: ستاربكس يقدم لكم مشروبات لذيذة محضرة يدوياً ومأكولات خفيفة رائعة المذاق من مكونات عالية الجودة. فن تحضير القهوة هو شغفنا الأول، وكذلك كل ما نقوم به لتستمتع بتجربة تذوق ممتعة لدى ستاربكس أينما كنت.
+        - generic [ref=e72]:
+          - generic [ref=e73]:
+            - heading "قائمة الطعام" [level=1] [ref=e74]
+            - paragraph [ref=e75]: ستاربكس يقدم لكم مشروبات لذيذة محضرة يدوياً ومأكولات خفيفة رائعة المذاق من مكونات عالية الجودة. فن تحضير القهوة هو شغفنا الأول، وكذلك كل ما نقوم به لتستمتع بتجربة تذوق ممتعة لدى ستاربكس أينما كنت.
           - generic [ref=e76]:
-            - heading "الأثر الاجتماعي" [level=3] [ref=e77]
-            - list [ref=e78]:
-              - listitem [ref=e79]:
-                - link "الاستدامة" [ref=e80] [cursor=pointer]:
+            - generic [ref=e77]:
+              - img [ref=e78]
+              - textbox "ابحث في القائمة..." [ref=e81]
+            - generic [ref=e82]:
+              - button "الكل" [ref=e83]
+              - button "المشروبات" [ref=e84]
+              - button "المأكولات" [ref=e85]
+          - generic [ref=e87]:
+            - button "كافيه لاتيه" [ref=e88] [cursor=pointer]:
+              - generic [ref=e89]:
+                - img "كافيه لاتيه" [ref=e90]
+                - button "Add كافيه لاتيه to cart" [ref=e91]:
+                  - img [ref=e92]
+              - generic [ref=e93]:
+                - generic [ref=e94]:
+                  - heading "كافيه لاتيه" [level=3] [ref=e95]
+                  - generic [ref=e96]: 45 EGP
+                - paragraph [ref=e97]: إسبريسو غني متوازن مع الحليب المبخر وطبقة خفيفة من الرغوة.
+                - button "أضف إلى السلة" [ref=e98]:
+                  - img [ref=e99]
+                  - text: أضف إلى السلة
+            - button "كابتشينو" [ref=e103] [cursor=pointer]:
+              - generic [ref=e104]:
+                - img "كابتشينو" [ref=e105]
+                - button "Add كابتشينو to cart" [ref=e106]:
+                  - img [ref=e107]
+              - generic [ref=e108]:
+                - generic [ref=e109]:
+                  - heading "كابتشينو" [level=3] [ref=e110]
+                  - generic [ref=e111]: 48 EGP
+                - paragraph [ref=e112]: إسبريسو داكن تحت طبقة ناعمة من الرغوة المخملية العميقة.
+                - button "أضف إلى السلة" [ref=e113]:
+                  - img [ref=e114]
+                  - text: أضف إلى السلة
+            - button "إسبريسو" [ref=e118] [cursor=pointer]:
+              - generic [ref=e119]:
+                - img "إسبريسو" [ref=e120]
+                - button "Add إسبريسو to cart" [ref=e121]:
+                  - img [ref=e122]
+              - generic [ref=e123]:
+                - generic [ref=e124]:
+                  - heading "إسبريسو" [level=3] [ref=e125]
+                  - generic [ref=e126]: 35 EGP
+                - paragraph [ref=e127]: قهوة مركزة تقدم في جرعة صغيرة وقوية.
+                - button "أضف إلى السلة" [ref=e128]:
+                  - img [ref=e129]
+                  - text: أضف إلى السلة
+            - button "فرابوتشينو كراميل" [ref=e133] [cursor=pointer]:
+              - generic [ref=e134]:
+                - img "فرابوتشينو كراميل" [ref=e135]
+                - generic [ref=e136]: New
+                - button "Add فرابوتشينو كراميل to cart" [ref=e137]:
+                  - img [ref=e138]
+              - generic [ref=e139]:
+                - generic [ref=e140]:
+                  - heading "فرابوتشينو كراميل" [level=3] [ref=e141]
+                  - generic [ref=e142]: 65 EGP
+                - paragraph [ref=e143]: شراب الكراميل مع القهوة والحليب والثلج في مشروب مخفوق.
+                - button "أضف إلى السلة" [ref=e144]:
+                  - img [ref=e145]
+                  - text: أضف إلى السلة
+            - button "فرابوتشينو موكا" [ref=e149] [cursor=pointer]:
+              - generic [ref=e150]:
+                - img "فرابوتشينو موكا" [ref=e151]
+                - button "Add فرابوتشينو موكا to cart" [ref=e152]:
+                  - img [ref=e153]
+              - generic [ref=e154]:
+                - generic [ref=e155]:
+                  - heading "فرابوتشينو موكا" [level=3] [ref=e156]
+                  - generic [ref=e157]: 65 EGP
+                - paragraph [ref=e158]: صوص الموكا وقهوة فرابوتشينو مخفوقة مع الحليب والثلج.
+                - button "أضف إلى السلة" [ref=e159]:
+                  - img [ref=e160]
+                  - text: أضف إلى السلة
+            - button "بانيني الحلوم على الطريقة العربية" [ref=e164] [cursor=pointer]:
+              - generic [ref=e165]:
+                - img "بانيني الحلوم على الطريقة العربية" [ref=e166]
+                - button "Add بانيني الحلوم على الطريقة العربية to cart" [ref=e167]:
+                  - img [ref=e168]
+              - generic [ref=e169]:
+                - generic [ref=e170]:
+                  - heading "بانيني الحلوم على الطريقة العربية" [level=3] [ref=e171]
+                  - generic [ref=e172]: 75 EGP
+                - paragraph [ref=e173]: حلوم مشوي مع أعشاب، محضر على الطريقة العربية مع جبنة حلوم مشوية وطماطم مجففة ومعجون زيتون أسود.
+                - button "أضف إلى السلة" [ref=e174]:
+                  - img [ref=e175]
+                  - text: أضف إلى السلة
+            - button "فوكاتشيا الدجاج" [ref=e179] [cursor=pointer]:
+              - generic [ref=e180]:
+                - img "فوكاتشيا الدجاج" [ref=e181]
+                - generic [ref=e182]: New
+                - button "Add فوكاتشيا الدجاج to cart" [ref=e183]:
+                  - img [ref=e184]
+              - generic [ref=e185]:
+                - generic [ref=e186]:
+                  - heading "فوكاتشيا الدجاج" [level=3] [ref=e187]
+                  - generic [ref=e188]: 80 EGP
+                - paragraph [ref=e189]: صدر دجاج مشوي مع الخس والطماطم وصوص البيستو على خبز الفوكاتشيا.
+                - button "أضف إلى السلة" [ref=e190]:
+                  - img [ref=e191]
+                  - text: أضف إلى السلة
+            - button "سلطة سيزر" [ref=e195] [cursor=pointer]:
+              - generic [ref=e196]:
+                - img "سلطة سيزر" [ref=e197]
+                - button "Add سلطة سيزر to cart" [ref=e198]:
+                  - img [ref=e199]
+              - generic [ref=e200]:
+                - generic [ref=e201]:
+                  - heading "سلطة سيزر" [level=3] [ref=e202]
+                  - generic [ref=e203]: 65 EGP
+                - paragraph [ref=e204]: سلطة سيزر الكلاسيكية مع خس روماني وجبن البارميزان وصوص سيزر.
+                - button "أضف إلى السلة" [ref=e205]:
+                  - img [ref=e206]
+                  - text: أضف إلى السلة
+      - generic [ref=e211]:
+        - generic [ref=e213]:
+          - generic [ref=e214]:
+            - heading "عن ستارباكس" [level=3] [ref=e215]
+            - list [ref=e216]:
+              - listitem [ref=e217]:
+                - link "شركتنا" [ref=e218] [cursor=pointer]:
+                  - /url: /ar/about-us
+              - listitem [ref=e219]:
+                - link "قهوتنا" [ref=e220] [cursor=pointer]:
+                  - /url: /ar/our-coffees
+          - generic [ref=e221]:
+            - heading "خدمة الزبائن" [level=3] [ref=e222]
+            - list [ref=e223]:
+              - listitem [ref=e224]:
+                - link "اتصل بنا" [ref=e225] [cursor=pointer]:
+                  - /url: /ar/contact-us
+              - listitem [ref=e226]:
+                - link "مواقعنا" [ref=e227] [cursor=pointer]:
+                  - /url: /ar/locations
+          - generic [ref=e228]:
+            - heading "الأثر الاجتماعي" [level=3] [ref=e229]
+            - list [ref=e230]:
+              - listitem [ref=e231]:
+                - link "الاستدامة" [ref=e232] [cursor=pointer]:
                   - /url: /ar/social-impact-sustainability
-          - generic [ref=e81]:
-            - heading "مصر" [level=3] [ref=e82]
-            - button "مصر" [ref=e84] [cursor=pointer]:
-              - img [ref=e85]
-              - generic [ref=e88]: مصر
-              - img [ref=e89]
-        - generic [ref=e91]:
-          - generic [ref=e92]:
-            - generic [ref=e93]:
-              - link "سياسة الخصوصية" [ref=e94] [cursor=pointer]:
+          - generic [ref=e233]:
+            - heading "مصر" [level=3] [ref=e234]
+            - button "مصر" [ref=e236] [cursor=pointer]:
+              - img [ref=e237]
+              - generic [ref=e240]: مصر
+              - img [ref=e241]
+        - generic [ref=e243]:
+          - generic [ref=e244]:
+            - generic [ref=e245]:
+              - link "سياسة الخصوصية" [ref=e246] [cursor=pointer]:
                 - /url: /ar/privacy-statement
-              - link "شروط الاستخدام" [ref=e95] [cursor=pointer]:
+              - link "شروط الاستخدام" [ref=e247] [cursor=pointer]:
                 - /url: /ar/terms-of-use
-              - button "تنبيه ملفات تعريف الارتباط" [ref=e96] [cursor=pointer]
-            - paragraph [ref=e98]: ستارباكس ملتزمة بتوفير قهوة عالية الجودة وخدمة استثنائية.
-            - generic [ref=e99]:
-              - link [ref=e100] [cursor=pointer]:
+              - button "تنبيه ملفات تعريف الارتباط" [ref=e248] [cursor=pointer]
+            - paragraph [ref=e250]: ستارباكس ملتزمة بتوفير قهوة عالية الجودة وخدمة استثنائية.
+            - generic [ref=e251]:
+              - link [ref=e252] [cursor=pointer]:
                 - /url: https://open.spotify.com/user/starbucks
-                - img [ref=e101]
-              - link [ref=e103] [cursor=pointer]:
+                - img [ref=e253]
+              - link [ref=e255] [cursor=pointer]:
                 - /url: https://facebook.com/StarbucksMiddleEast
-                - img [ref=e104]
-              - link [ref=e106] [cursor=pointer]:
+                - img [ref=e256]
+              - link [ref=e258] [cursor=pointer]:
                 - /url: https://pinterest.com/starbucks
-                - img [ref=e107]
-              - link [ref=e109] [cursor=pointer]:
+                - img [ref=e259]
+              - link [ref=e261] [cursor=pointer]:
                 - /url: https://instagram.com/starbucksegypt
-                - img [ref=e110]
-              - link [ref=e113] [cursor=pointer]:
+                - img [ref=e262]
+              - link [ref=e265] [cursor=pointer]:
                 - /url: https://youtube.com/starbucks
-                - img [ref=e114]
-              - link [ref=e116] [cursor=pointer]:
+                - img [ref=e266]
+              - link [ref=e268] [cursor=pointer]:
                 - /url: https://tiktok.com/@starbucks
-                - img [ref=e117]
-          - generic [ref=e120]:
-            - generic [ref=e121]:
-              - heading "احصل على تطبيق ستارباكس" [level=4] [ref=e122]
-              - paragraph [ref=e123]: أفضل طريقة لطلب القهوة والدفع وكسب المكافآت هي من خلال تطبيق ستارباكس.
-            - generic [ref=e124]:
-              - link "تحميل من متجر التطبيقات" [ref=e125] [cursor=pointer]:
+                - img [ref=e269]
+          - generic [ref=e272]:
+            - generic [ref=e273]:
+              - heading "احصل على تطبيق ستارباكس" [level=4] [ref=e274]
+              - paragraph [ref=e275]: أفضل طريقة لطلب القهوة والدفع وكسب المكافآت هي من خلال تطبيق ستارباكس.
+            - generic [ref=e276]:
+              - link "تحميل من متجر التطبيقات" [ref=e277] [cursor=pointer]:
                 - /url: "#"
-                - img [ref=e126]
-                - generic [ref=e128]:
-                  - generic [ref=e129]: تحميل
-                  - generic [ref=e130]: من متجر التطبيقات
-              - link "تحميل من جوجل بلاي" [ref=e131] [cursor=pointer]:
+                - img [ref=e278]
+                - generic [ref=e280]:
+                  - generic [ref=e281]: تحميل
+                  - generic [ref=e282]: من متجر التطبيقات
+              - link "تحميل من جوجل بلاي" [ref=e283] [cursor=pointer]:
                 - /url: "#"
-                - img [ref=e132]
-                - generic [ref=e134]:
-                  - generic [ref=e135]: تحميل من
-                  - generic [ref=e136]: جوجل بلاي
-        - generic [ref=e138]:
-          - paragraph [ref=e139]: © 2026 Starbucks Coffee Company. جميع الحقوق محفوظة.
-          - paragraph [ref=e140]:
-            - generic [ref=e141]: تصميم وتطوير
-            - link "M.Said" [ref=e142] [cursor=pointer]:
+                - img [ref=e284]
+                - generic [ref=e286]:
+                  - generic [ref=e287]: تحميل من
+                  - generic [ref=e288]: جوجل بلاي
+        - generic [ref=e290]:
+          - paragraph [ref=e291]: © 2026 Starbucks Coffee Company. جميع الحقوق محفوظة.
+          - paragraph [ref=e292]:
+            - generic [ref=e293]: تصميم وتطوير
+            - link "M.Said" [ref=e294] [cursor=pointer]:
               - /url: https://m-said-portfolio.netlify.app
-    - region "Cookie Consent" [ref=e143]:
-      - generic [ref=e145]:
-        - generic [ref=e146]:
-          - img "Starbucks" [ref=e147]
-          - generic [ref=e148]:
-            - paragraph [ref=e149]: خياراتك فيما يتعلق بملفات تعريف الارتباط على هذا الموقع
-            - paragraph [ref=e150]: تعد ملفات تعريف الارتباط مهمة للتشغيل السليم للموقع. لتحسين تجربتك، نستخدم ملفات تعريف الارتباط لتذكر تفاصيل تسجيل الدخول وتوفير تسجيل دخول آمن، وجمع الإحصاءات لتحسين وظائف الموقع، وتقديم محتوى مخصص لاهتماماتك.
-        - generic [ref=e151]:
-          - button "الموافقة والمتابعة" [ref=e152]
-          - button "رفض الكل" [ref=e153]
-          - button "cookieConsent.more" [ref=e154]
-          - button "Close cookie consent" [ref=e155]:
-            - img [ref=e156]
+    - region "Cookie Consent" [ref=e295]:
+      - generic [ref=e297]:
+        - generic [ref=e298]:
+          - img "Starbucks" [ref=e299]
+          - generic [ref=e300]:
+            - paragraph [ref=e301]: خياراتك فيما يتعلق بملفات تعريف الارتباط على هذا الموقع
+            - paragraph [ref=e302]: تعد ملفات تعريف الارتباط مهمة للتشغيل السليم للموقع. لتحسين تجربتك، نستخدم ملفات تعريف الارتباط لتذكر تفاصيل تسجيل الدخول وتوفير تسجيل دخول آمن، وجمع الإحصاءات لتحسين وظائف الموقع، وتقديم محتوى مخصص لاهتماماتك.
+        - generic [ref=e303]:
+          - button "الموافقة والمتابعة" [ref=e304]
+          - button "رفض الكل" [ref=e305]
+          - button "cookieConsent.more" [ref=e306]
+          - button "Close cookie consent" [ref=e307]:
+            - img [ref=e308]
     - region "Notifications alt+T"
-    - button "فتح المحادثة" [ref=e160]:
-      - img [ref=e162]
-  - generic [ref=e164]:
-    - img [ref=e166]
-    - button "Open Tanstack query devtools" [ref=e214] [cursor=pointer]:
-      - img [ref=e215]
+    - button "فتح المحادثة" [ref=e312]:
+      - img [ref=e314]
+  - generic [ref=e316]:
+    - img [ref=e318]
+    - button "Open Tanstack query devtools" [ref=e366] [cursor=pointer]:
+      - img [ref=e367]
 ```
 
 # Test source

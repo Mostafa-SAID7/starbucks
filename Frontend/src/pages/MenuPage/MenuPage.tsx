@@ -7,6 +7,7 @@ import { SEO, SidebarTemplate } from "@/components";
 import { MenuSkeleton } from "@/components/skeletons";
 import { useLanguage } from "@/hooks";
 import { useMenuData } from "@/hooks/queries";
+import { useCartStore } from "@/stores/cartStore";
 import type { MenuCategory } from "@/types";
 
 /* ── flat item shape ─────────────────────────────────────────────── */
@@ -287,11 +288,19 @@ function MenuPageContent({ categories }: { categories: MenuCategory[] }) {
     return items;
   }, [allItems, activeCategory, search]);
 
+  const addItem = useCartStore((state) => state.addItem);
+
   const handleAddToCart = useCallback((item: FlatItem) => {
     const name = isRTL && item.nameAr ? item.nameAr : item.name;
+    addItem({
+      id: item.id,
+      name: name,
+      price: item.price,
+      image: item.image,
+    });
     setToast(`${isRTL ? "تمت الإضافة:" : "Added to cart:"} ${name}`);
     setTimeout(() => setToast(null), 3000);
-  }, [isRTL]);
+  }, [isRTL, addItem]);
 
   const getCategoryLabel = (catId: string) => {
     if (catId === "drinks") return isRTL ? "المشروبات" : "Drinks";
