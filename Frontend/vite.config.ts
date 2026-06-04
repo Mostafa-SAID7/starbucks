@@ -7,99 +7,104 @@ import { VitePWA } from "vite-plugin-pwa";
 export default defineConfig({
   plugins: [
     react(),
-    VitePWA({
-      registerType: "autoUpdate",
-      includeAssets: ["favicon.png", "favicon.svg", "logo.png", "robots.txt"],
-      manifest: {
-        name: "Starbucks Egypt | ستاربكس مصر",
-        short_name: "Starbucks EG",
-        description: "Official Starbucks Egypt Portal - Experience the world's best coffee",
-        theme_color: "#006241",
-        background_color: "#ffffff",
-        display: "standalone",
-        orientation: "portrait-primary",
-        icons: [
-          {
-            src: "/favicon.png",
-            sizes: "512x512",
-            type: "image/png",
-            purpose: "any maskable",
-          },
-          {
-            src: "/favicon.svg",
-            sizes: "any",
-            type: "image/svg+xml",
-          },
-          {
-            src: "/logo.png",
-            sizes: "512x512",
-            type: "image/png",
-          },
-        ],
-        shortcuts: [
-          {
-            name: "Menu | قائمة الطعام",
-            short_name: "Menu",
-            url: "/ar/menu",
-            icons: [{ src: "/favicon.png", sizes: "192x192" }],
-          },
-          {
-            name: "Locations | مواقعنا",
-            short_name: "Locations",
-            url: "/ar/locations",
-            icons: [{ src: "/favicon.png", sizes: "192x192" }],
-          },
-        ],
-        categories: ["food", "drink", "lifestyle"],
-        lang: "ar",
-        dir: "rtl",
-        start_url: "/",
-        scope: "/",
-      },
-      workbox: {
-        globPatterns: ["**/*.{js,css,html,ico,png,svg,webp,woff2}"],
-        runtimeCaching: [
-          {
-            urlPattern: /^https:\/\/www\.starbucks\.eg\/.*\.(?:jpg|jpeg|png|webp|svg|avif)$/i,
-            handler: "CacheFirst",
-            options: {
-              cacheName: "external-starbucks-assets",
-              expiration: {
-                maxEntries: 100,
-                maxAgeSeconds: 60 * 60 * 24 * 30, // 30 days
-              },
-              cacheableResponse: {
-                statuses: [0, 200],
-              },
+    // Disable PWA plugin when deploying on Vercel to avoid Rolldown bundle assignment errors
+    ...(process.env.VERCEL
+      ? []
+      : [
+          VitePWA({
+            registerType: "autoUpdate",
+            includeAssets: ["favicon.png", "favicon.svg", "logo.png", "robots.txt"],
+            manifest: {
+              name: "Starbucks Egypt | ستاربكس مصر",
+              short_name: "Starbucks EG",
+              description: "Official Starbucks Egypt Portal - Experience the world's best coffee",
+              theme_color: "#006241",
+              background_color: "#ffffff",
+              display: "standalone",
+              orientation: "portrait-primary",
+              icons: [
+                {
+                  src: "/favicon.png",
+                  sizes: "512x512",
+                  type: "image/png",
+                  purpose: "any maskable",
+                },
+                {
+                  src: "/favicon.svg",
+                  sizes: "any",
+                  type: "image/svg+xml",
+                },
+                {
+                  src: "/logo.png",
+                  sizes: "512x512",
+                  type: "image/png",
+                },
+              ],
+              shortcuts: [
+                {
+                  name: "Menu | قائمة الطعام",
+                  short_name: "Menu",
+                  url: "/ar/menu",
+                  icons: [{ src: "/favicon.png", sizes: "192x192" }],
+                },
+                {
+                  name: "Locations | مواقعنا",
+                  short_name: "Locations",
+                  url: "/ar/locations",
+                  icons: [{ src: "/favicon.png", sizes: "192x192" }],
+                },
+              ],
+              categories: ["food", "drink", "lifestyle"],
+              lang: "ar",
+              dir: "rtl",
+              start_url: "/",
+              scope: "/",
             },
-          },
-          {
-            urlPattern: /\.(?:png|jpg|jpeg|svg|webp)$/,
-            handler: "StaleWhileRevalidate",
-            options: {
-              cacheName: "local-images",
-              expiration: {
-                maxEntries: 50,
-              },
+            workbox: {
+              globPatterns: ["**/*.{js,css,html,ico,png,svg,webp,woff2}"],
+              runtimeCaching: [
+                {
+                  urlPattern: /^https:\/\/www\.starbucks\.eg\/.*\.(?:jpg|jpeg|png|webp|svg|avif)$/i,
+                  handler: "CacheFirst",
+                  options: {
+                    cacheName: "external-starbucks-assets",
+                    expiration: {
+                      maxEntries: 100,
+                      maxAgeSeconds: 60 * 60 * 24 * 30, // 30 days
+                    },
+                    cacheableResponse: {
+                      statuses: [0, 200],
+                    },
+                  },
+                },
+                {
+                  urlPattern: /\.(?:png|jpg|jpeg|svg|webp)$/,
+                  handler: "StaleWhileRevalidate",
+                  options: {
+                    cacheName: "local-images",
+                    expiration: {
+                      maxEntries: 50,
+                    },
+                  },
+                },
+                {
+                  urlPattern: /^https:\/\/fonts\.(?:googleapis|gstatic)\.com\/.*/i,
+                  handler: "CacheFirst",
+                  options: {
+                    cacheName: "google-fonts",
+                    expiration: {
+                      maxEntries: 30,
+                      maxAgeSeconds: 60 * 60 * 24 * 365,
+                    },
+                  },
+                },
+              ],
             },
-          },
-          {
-            urlPattern: /^https:\/\/fonts\.(?:googleapis|gstatic)\.com\/.*/i,
-            handler: "CacheFirst",
-            options: {
-              cacheName: "google-fonts",
-              expiration: {
-                maxEntries: 30,
-                maxAgeSeconds: 60 * 60 * 24 * 365,
-              },
+            devOptions: {
+              enabled: false,
             },
-          },
-        ],
-      },
-      devOptions: {
-        enabled: false,
-      },
-    }),
+          }),
+        ]),
   ],
   resolve: {
     alias: [
