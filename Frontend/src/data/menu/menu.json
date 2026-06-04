@@ -12,7 +12,39 @@
           "items": [
             {
               "id": "caffe-latte",
-              "image": "/menu/deink.webp"
+              "name": "Caffe Latte",
+              "nameAr": "كافيه لاتيه",
+              "description": "Our dark, rich espresso balanced with steamed milk and a light layer of foam.",
+              "descriptionAr": "إسبريسو غني متوازن مع الحليب المبخر وطبقة خفيفة من الرغوة.",
+              "price": 45,
+              "image": "/menu/deink.webp",
+              "href": "/menu/drinks/espresso/caffe-latte",
+              "category": "Coffee",
+              "isNew": false
+            },
+            {
+              "id": "cappuccino",
+              "name": "Cappuccino",
+              "nameAr": "كابتشينو",
+              "description": "Dark espresso lies in wait under a smoothed and stretched layer of deep, velvety foam.",
+              "descriptionAr": "إسبريسو داكن تحت طبقة ناعمة من الرغوة المخملية العميقة.",
+              "price": 48,
+              "image": "/menu/deink.webp",
+              "href": "/menu/drinks/espresso/cappuccino",
+              "category": "Coffee",
+              "isNew": false
+            },
+            {
+              "id": "espresso",
+              "name": "Espresso",
+              "nameAr": "إسبريسو",
+              "description": "A concentrated form of coffee served in a small, strong shot.",
+              "descriptionAr": "قهوة مركزة تقدم في جرعة صغيرة وقوية.",
+              "price": 35,
+              "image": "/menu/deink.webp",
+              "href": "/menu/drinks/espresso/espresso",
+              "category": "Coffee",
+              "isNew": false
             }
           ]
         },
@@ -20,7 +52,32 @@
           "id": "frappuccino",
           "image": "/menu/deink.webp",
           "href": "/menu/drinks/frappuccino",
-          "items": []
+          "items": [
+            {
+              "id": "caramel-frappuccino",
+              "name": "Caramel Frappuccino",
+              "nameAr": "فرابوتشينو كراميل",
+              "description": "Caramel syrup meets coffee, milk and ice for a blended beverage.",
+              "descriptionAr": "شراب الكراميل مع القهوة والحليب والثلج في مشروب مخفوق.",
+              "price": 65,
+              "image": "/menu/deink.webp",
+              "href": "/menu/drinks/frappuccino/caramel-frappuccino",
+              "category": "Coffee",
+              "isNew": true
+            },
+            {
+              "id": "mocha-frappuccino",
+              "name": "Mocha Frappuccino",
+              "nameAr": "فرابوتشينو موكا",
+              "description": "Mocha sauce and Frappuccino roast coffee blended with milk and ice.",
+              "descriptionAr": "صوص الموكا وقهوة فرابوتشينو مخفوقة مع الحليب والثلج.",
+              "price": 65,
+              "image": "/menu/deink.webp",
+              "href": "/menu/drinks/frappuccino/mocha-frappuccino",
+              "category": "Coffee",
+              "isNew": false
+            }
+          ]
         }
       ]
     },
@@ -36,11 +93,27 @@
           "items": [
             {
               "id": "halloumi",
-              "image": "/menu/food.webp"
+              "name": "Arabic Style Halloumi Panini",
+              "nameAr": "بانيني الحلوم على الطريقة العربية",
+              "description": "Grilled halloumi with herbs, prepared Arabic style with grilled halloumi cheese, dried tomatoes and black olive paste.",
+              "descriptionAr": "حلوم مشوي مع أعشاب، محضر على الطريقة العربية مع جبنة حلوم مشوية وطماطم مجففة ومعجون زيتون أسود.",
+              "price": 75,
+              "image": "/menu/food.webp",
+              "href": "/menu/food/sandwiches/halloumi",
+              "category": "Food",
+              "isNew": false
             },
             {
               "id": "focaccia",
-              "image": "/menu/food.webp"
+              "name": "Chicken Focaccia",
+              "nameAr": "فوكاتشيا الدجاج",
+              "description": "Grilled chicken breast with lettuce, tomato and pesto sauce on focaccia bread.",
+              "descriptionAr": "صدر دجاج مشوي مع الخس والطماطم وصوص البيستو على خبز الفوكاتشيا.",
+              "price": 80,
+              "image": "/menu/food.webp",
+              "href": "/menu/food/sandwiches/focaccia",
+              "category": "Food",
+              "isNew": true
             }
           ]
         },
@@ -48,7 +121,20 @@
           "id": "salads",
           "image": "/menu/food.webp",
           "href": "/menu/food/salads",
-          "items": []
+          "items": [
+            {
+              "id": "caesar-salad",
+              "name": "Caesar Salad",
+              "nameAr": "سلطة سيزر",
+              "description": "Classic Caesar salad with romaine lettuce, parmesan cheese and Caesar dressing.",
+              "descriptionAr": "سلطة سيزر الكلاسيكية مع خس روماني وجبن البارميزان وصوص سيزر.",
+              "price": 65,
+              "image": "/menu/food.webp",
+              "href": "/menu/food/salads/caesar-salad",
+              "category": "Food",
+              "isNew": false
+            }
+          ]
         }
       ]
     }

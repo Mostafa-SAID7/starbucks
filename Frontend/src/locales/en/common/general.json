@@ -51,5 +51,7 @@
   "egp": "EGP",
   "order_delivery": "Order Delivery",
   "processing": "Processing...",
-  "qty": "Qty"
+  "qty": "Qty",
+  "add_to_cart": "Add to Cart",
+  "added_to_cart": "Added to cart"
 }

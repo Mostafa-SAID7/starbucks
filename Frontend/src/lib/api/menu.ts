@@ -1,14 +1,24 @@
 import { menuService } from "@/services/api/menuService";
 import type { MenuData, MenuCategory } from "@/types";
 import { AppError, ErrorType } from '@/lib/error';
+import mockMenuData from '@/data/menu/menu.json';
 
 export const menuFetchers = {
   /**
-   * Fetch all menu categories (structural)
+   * Fetch all menu categories (structural) with sidebar/allergyInfo
    */
   async fetchMenuData(): Promise<MenuData> {
-    const categories = await menuService.getCategories();
-    return { categories };
+    try {
+      const categories = await menuService.getCategories();
+      return {
+        categories,
+        allergyInfo: mockMenuData.allergyInfo as MenuData['allergyInfo'],
+        sidebar: mockMenuData.sidebar as MenuData['sidebar'],
+      };
+    } catch {
+      // Full fallback to local JSON
+      return mockMenuData as unknown as MenuData;
+    }
   },
 
   /**

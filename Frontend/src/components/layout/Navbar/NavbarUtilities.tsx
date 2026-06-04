@@ -140,6 +140,7 @@ export function NavbarUtilities({
             onClick={onAuthOpen}
             className="text-starbucks-dark dark:text-foreground-dark hover:bg-gray-100 dark:hover:bg-zinc-900 rounded-full h-11 w-11 transition-all hover:scale-110 active:scale-95 border-2 border-transparent hover:border-starbucks-green/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-starbucks-green"
             aria-label={t("navigation:navbar.tooltips.account")}
+            data-testid="auth-trigger-button"
           >
             <User className="h-5 w-5" />
           </Button>

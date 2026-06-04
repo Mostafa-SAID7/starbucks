@@ -7,7 +7,7 @@ test.describe('Authentication Flow', () => {
 
   test('should display login modal', async ({ page }) => {
     // Look for auth button
-    const authButton = page.locator('button:has-text("Sign In")');
+    const authButton = page.locator('[data-testid="auth-trigger-button"]');
     await authButton.click();
 
     // Check if modal is visible
@@ -17,7 +17,7 @@ test.describe('Authentication Flow', () => {
 
   test('should login successfully', async ({ page }) => {
     // Click auth button
-    const authButton = page.locator('button:has-text("Sign In")');
+    const authButton = page.locator('[data-testid="auth-trigger-button"]');
     await authButton.click();
 
     // Fill login form
@@ -38,7 +38,7 @@ test.describe('Authentication Flow', () => {
 
   test('should show validation errors', async ({ page }) => {
     // Click auth button
-    const authButton = page.locator('button:has-text("Sign In")');
+    const authButton = page.locator('[data-testid="auth-trigger-button"]');
     await authButton.click();
 
     // Try to submit empty form
@@ -52,7 +52,7 @@ test.describe('Authentication Flow', () => {
 
   test('should logout successfully', async ({ page }) => {
     // Login first
-    const authButton = page.locator('button:has-text("Sign In")');
+    const authButton = page.locator('[data-testid="auth-trigger-button"]');
     await authButton.click();
 
     await page.fill('input[type="email"]', 'test@example.com');
@@ -72,7 +72,7 @@ test.describe('Authentication Flow', () => {
     await logoutButton.click();
 
     // Check if logged out
-    const signInButton = page.locator('button:has-text("Sign In")');
+    const signInButton = page.locator('[data-testid="auth-trigger-button"]');
     await expect(signInButton).toBeVisible();
   });
 });
