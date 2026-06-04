@@ -66,8 +66,8 @@ export function usePagination<T>(
   );
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/exhaustive-deps, react-hooks/set-state-in-effect
     fetchData(initialPageNumber, initialPageSize);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Navigation methods

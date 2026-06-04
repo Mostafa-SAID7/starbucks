@@ -50,9 +50,9 @@ export interface UseModerationReturn {
   setFlaggedPageSize: (pageSize: number) => void;
 
   // Moderation operations
-  approveMutation: UseMutationResult<any, Error, ApproveContentRequestDto>;
-  rejectMutation: UseMutationResult<any, Error, RejectContentRequestDto>;
-  flagMutation: UseMutationResult<any, Error, FlagContentRequestDto>;
+  approveMutation: UseMutationResult<unknown, Error, ApproveContentRequestDto>;
+  rejectMutation: UseMutationResult<unknown, Error, RejectContentRequestDto>;
+  flagMutation: UseMutationResult<unknown, Error, FlagContentRequestDto>;
 
   // Moderation history
   history: ModerationHistoryDto[];

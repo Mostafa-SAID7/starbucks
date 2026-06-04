@@ -65,7 +65,7 @@ const VirtualizedListComponent = React.forwardRef<
         {visibleItems.map((item, index) => {
           const actualIndex = startIndex + index;
           const key = keyExtractor
-            ? keyExtractor(item as any, actualIndex)
+            ? keyExtractor(item, actualIndex)
             : actualIndex;
 
           return (
@@ -76,7 +76,7 @@ const VirtualizedListComponent = React.forwardRef<
                 height: itemHeight,
               }}
             >
-              {renderItem(item as any, actualIndex)}
+              {renderItem(item, actualIndex)}
             </div>
           );
         })}
@@ -172,12 +172,12 @@ const VirtualizedGridComponent = React.forwardRef<
           {visibleItems.map((item, index) => {
             const actualIndex = startIndex + index;
             const key = keyExtractor
-              ? keyExtractor(item as any, actualIndex)
+              ? keyExtractor(item, actualIndex)
               : actualIndex;
 
             return (
               <div key={key} role="gridcell">
-                {renderItem(item as any, actualIndex)}
+                {renderItem(item, actualIndex)}
               </div>
             );
           })}
