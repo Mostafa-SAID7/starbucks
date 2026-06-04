@@ -10,6 +10,7 @@ export function useAutoScroll<T extends HTMLElement = HTMLDivElement>(
 ) {
   const ref = useRef<T>(null);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (ref.current) {
       ref.current.scrollIntoView(options);
@@ -27,6 +28,7 @@ export function useScrollToTop(dependency: DependencyList = []) {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     scrollToTop();
   }, dependency);
