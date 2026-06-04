@@ -1,314 +1,109 @@
 /**
- * Error Monitoring Service
- * Handles error tracking and reporting
- * 
- * Supports multiple monitoring backends:
- * - Sentry (recommended for production)
- * - Custom error logging service
- * - Console logging (development)
+ * Sentry Error Monitoring
+ *
+ * Single source of truth for all Sentry configuration.
+ * Uses @sentry/react which bundles everything needed (browser SDK + React integrations).
+ *
+ * Call `initSentry()` once at application startup in main.tsx, BEFORE React.render().
  */
 
 import * as Sentry from '@sentry/react';
-import { AppError } from '@/lib/error';
 
-export interface ErrorMonitoringConfig {
-  enabled: boolean;
-  environment: 'development' | 'staging' | 'production';
-  dsn?: string; // Sentry DSN
-  tracesSampleRate?: number;
-  debug?: boolean;
-}
-
-export interface ErrorContext {
-  userId?: string;
-  sessionId?: string;
-  page?: string;
-  action?: string;
-  [key: string]: unknown;
-}
-
-class ErrorMonitoringService {
-  private config: ErrorMonitoringConfig;
-  private context: ErrorContext = {};
-  private initialized = false;
-
-  constructor(config: ErrorMonitoringConfig) {
-    this.config = config;
-  }
-
-  /**
-   * Initialize error monitoring
-   * Sets up Sentry or other monitoring service
-   */
-  async initialize(): Promise<void> {
-    if (this.initialized) return;
-
-    if (!this.config.enabled) {
-      console.log('Error monitoring is disabled');
-      return;
-    }
-
-    try {
-      // Initialize Sentry
-      if (this.config.dsn) {
-        Sentry.init({
-          dsn: this.config.dsn,
-          environment: this.config.environment,
-          tracesSampleRate: this.config.tracesSampleRate || 0.1,
-          debug: this.config.debug,
-          integrations: [
-            Sentry.replayIntegration({
-              maskAllText: true,
-              blockAllMedia: true,
-            }),
-          ],
-          replaysSessionSampleRate: 0.1,
-          replaysOnErrorSampleRate: 1.0,
-        });
-      }
-
-      this.initialized = true;
-      console.log('Error monitoring initialized');
-    } catch (err) {
-      console.error('Failed to initialize error monitoring:', err);
-    }
-  }
-
-  /**
-   * Set user context for error tracking
-   */
-  setUser(userId: string, email?: string, username?: string): void {
-    this.context.userId = userId;
-
-    // Set Sentry user context
-    Sentry.setUser({ id: userId, email, username });
-  }
-
-  /**
-   * Clear user context
-   */
-  clearUser(): void {
-    delete this.context.userId;
-
-    // Clear Sentry user context
-    Sentry.setUser(null);
-  }
-
-  /**
-   * Set additional context for error tracking
-   */
-  setContext(key: string, value: unknown): void {
-    this.context[key] = value;
-
-    // Set Sentry context
-    Sentry.setContext(key, { [key]: value });
-  }
-
-  /**
-   * Add breadcrumb for error tracking
-   */
-  addBreadcrumb(
-    message: string,
-    category: string = 'user-action',
-    level: 'info' | 'warning' | 'error' = 'info',
-    data?: Record<string, unknown>
-  ): void {
-    // Add Sentry breadcrumb
-    Sentry.addBreadcrumb({
-      message,
-      category,
-      level,
-      data,
-    });
-
-    if (this.config.debug) {
-      console.log(`[${category}] ${message}`, data);
-    }
-  }
-
-  /**
-   * Capture exception
-   */
-  captureException(
-    error: Error | AppError,
-    context?: ErrorContext
-  ): void {
-    const mergedContext = { ...this.context, ...context };
-
-    // Log to console in development
-    if (this.config.environment === 'development') {
-      console.error('Error captured:', error, mergedContext);
-    }
-
-    // Send to Sentry
-    Sentry.captureException(error, {
-      contexts: { app: mergedContext },
-      tags: {
-        errorType: error instanceof AppError ? error.type : 'unknown',
-      },
-    });
-
-    // Send to custom error logging service
-    this.sendToLoggingService();
-  }
-
-  /**
-   * Capture message
-   */
-  captureMessage(
-    message: string,
-    level: 'info' | 'warning' | 'error' = 'info',
-    context?: ErrorContext
-  ): void {
-    const mergedContext = { ...this.context, ...context };
-
-    // Log to console in development
-    if (this.config.environment === 'development') {
-      console.log(`[${level}] ${message}`, mergedContext);
-    }
-
-    // Send to Sentry
-    Sentry.captureMessage(message, level);
-  }
-
-  /**
-   * Send error to custom logging service
-   */
-  private sendToLoggingService(): void {
-    try {
-      // TODO: Implement custom logging service
-      // const response = await fetch('/api/logs/errors', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({
-      //     message: error.message,
-      //     stack: error.stack,
-      //     type: error instanceof AppError ? error.type : 'unknown',
-      //     statusCode: error instanceof AppError ? error.statusCode : undefined,
-      //     context,
-      //     timestamp: new Date().toISOString(),
-      //     userAgent: navigator.userAgent,
-      //     url: window.location.href,
-      //   }),
-      // });
-
-      // if (!response.ok) {
-      //   console.error('Failed to send error to logging service');
-      // }
-    } catch (err) {
-      console.error('Error sending to logging service:', err);
-    }
-  }
-
-  /**
-   * Get current context
-   */
-  getContext(): ErrorContext {
-    return { ...this.context };
-  }
-
-  /**
-   * Clear all context
-   */
-  clearContext(): void {
-    this.context = {};
-  }
-}
+const DSN = import.meta.env.VITE_SENTRY_DSN as string | undefined;
+const IS_ENABLED = import.meta.env.VITE_ERROR_MONITORING_ENABLED !== 'false' && !!DSN;
+const ENV = (import.meta.env.MODE ?? 'development') as string;
+const IS_PROD = import.meta.env.PROD as boolean;
 
 /**
- * Global error monitoring instance
+ * Initialize Sentry. Must be called before React renders.
+ * Safe to call multiple times – Sentry ignores duplicate init calls.
  */
-let errorMonitoring: ErrorMonitoringService | null = null;
-
-/**
- * Initialize global error monitoring
- */
-export function initializeErrorMonitoring(
-  config: ErrorMonitoringConfig
-): ErrorMonitoringService {
-  errorMonitoring = new ErrorMonitoringService(config);
-  errorMonitoring.initialize();
-  return errorMonitoring;
-}
-
-/**
- * Get global error monitoring instance
- */
-export function getErrorMonitoring(): ErrorMonitoringService {
-  if (!errorMonitoring) {
-    throw new Error(
-      'Error monitoring not initialized. Call initializeErrorMonitoring first.'
-    );
+export function initSentry(): void {
+  if (!IS_ENABLED) {
+    if (import.meta.env.DEV) {
+      console.info('[Sentry] Disabled (no DSN or VITE_ERROR_MONITORING_ENABLED=false)');
+    }
+    return;
   }
-  return errorMonitoring;
+
+  Sentry.init({
+    dsn: DSN,
+    environment: ENV,
+
+    // Tracing: capture 100% in dev, 10% in production
+    tracesSampleRate: IS_PROD ? 0.1 : 1.0,
+
+    // Session Replay: record 10% of sessions, 100% on errors
+    replaysSessionSampleRate: IS_PROD ? 0.1 : 0,
+    replaysOnErrorSampleRate: 1.0,
+
+    // Only enable debug logging in development
+    debug: !IS_PROD,
+
+    integrations: [
+      // Automatic React Router v6 tracing
+      Sentry.browserTracingIntegration(),
+
+      // Session Replay (lazy-loaded, no bundle cost on load)
+      Sentry.replayIntegration({
+        maskAllText: true,    // PII protection
+        blockAllMedia: true,
+      }),
+    ],
+  });
+
+  if (import.meta.env.DEV) {
+    console.info(`[Sentry] ✅ Initialized — env: ${ENV}, tracing: ${IS_PROD ? '10%' : '100%'}`);
+  }
 }
 
-/**
- * Convenience functions for error monitoring
- */
-export const errorMonitor = {
-  /**
-   * Capture exception
-   */
-  captureException: (error: Error | AppError, context?: ErrorContext) => {
-    getErrorMonitoring().captureException(error, context);
-  },
+// ─── Convenience helpers ────────────────────────────────────────────────────
 
-  /**
-   * Capture message
-   */
-  captureMessage: (
-    message: string,
-    level?: 'info' | 'warning' | 'error',
-    context?: ErrorContext
-  ) => {
-    getErrorMonitoring().captureMessage(message, level, context);
-  },
+/** Attach an authenticated user to all future events */
+export function setSentryUser(id: string, email?: string, username?: string): void {
+  if (!IS_ENABLED) return;
+  Sentry.setUser({ id, email, username });
+}
 
-  /**
-   * Add breadcrumb
-   */
-  addBreadcrumb: (
-    message: string,
-    category?: string,
-    level?: 'info' | 'warning' | 'error',
-    data?: Record<string, unknown>
-  ) => {
-    getErrorMonitoring().addBreadcrumb(message, category, level, data);
-  },
+/** Clear user on logout */
+export function clearSentryUser(): void {
+  if (!IS_ENABLED) return;
+  Sentry.setUser(null);
+}
 
-  /**
-   * Set user context
-   */
-  setUser: (userId: string, email?: string, username?: string) => {
-    getErrorMonitoring().setUser(userId, email, username);
-  },
+/** Capture any JS error */
+export function captureError(error: Error, extras?: Record<string, unknown>): void {
+  if (!IS_ENABLED) {
+    console.error('[Error]', error, extras);
+    return;
+  }
+  Sentry.captureException(error, { extra: extras });
+}
 
-  /**
-   * Clear user context
-   */
-  clearUser: () => {
-    getErrorMonitoring().clearUser();
-  },
+/** Capture a custom message */
+export function captureMessage(
+  message: string,
+  level: Sentry.SeverityLevel = 'info',
+  extras?: Record<string, unknown>,
+): void {
+  if (!IS_ENABLED) {
+    console.log(`[${level}]`, message, extras);
+    return;
+  }
+  Sentry.captureMessage(message, { level, extra: extras });
+}
 
-  /**
-   * Set context
-   */
-  setContext: (key: string, value: unknown) => {
-    getErrorMonitoring().setContext(key, value);
-  },
+/** Add a breadcrumb for richer error context */
+export function addBreadcrumb(
+  message: string,
+  category = 'app',
+  level: Sentry.SeverityLevel = 'info',
+  data?: Record<string, unknown>,
+): void {
+  if (!IS_ENABLED) return;
+  Sentry.addBreadcrumb({ message, category, level, data });
+}
 
-  /**
-   * Get context
-   */
-  getContext: () => {
-    return getErrorMonitoring().getContext();
-  },
-
-  /**
-   * Clear context
-   */
-  clearContext: () => {
-    getErrorMonitoring().clearContext();
-  },
-};
+// Re-export the Sentry ErrorBoundary component for use in JSX trees
+export { Sentry };
+export const SentryErrorBoundary = Sentry.ErrorBoundary;

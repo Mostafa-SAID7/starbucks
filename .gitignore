@@ -1,0 +1,44 @@
+# ===========================
+# SECRETS & ENVIRONMENT FILES
+# ===========================
+
+# Frontend env files with real secrets
+Frontend/.env.local
+Frontend/.env.development.local
+Frontend/.env.production.local
+
+# Backend secrets overrides
+Backend/src/Starbucks.API/appsettings.Development.json
+Backend/src/Starbucks.API/appsettings.Local.json
+Backend/src/Starbucks.API/secrets.json
+
+# ===========================
+# NODE / FRONTEND
+# ===========================
+node_modules/
+Frontend/node_modules/
+Frontend/dist/
+Frontend/.vite/
+
+# ===========================
+# DOTNET / BACKEND
+# ===========================
+Backend/**/bin/
+Backend/**/obj/
+Backend/**/*.user
+Backend/**/*.suo
+*.log
+
+# ===========================
+# IDE & OS
+# ===========================
+.vs/
+.idea/
+*.DS_Store
+Thumbs.db
+
+# ===========================
+# LOGS
+# ===========================
+logs/
+*.log

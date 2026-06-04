@@ -1,44 +1,85 @@
 import { memo } from 'react';
 import { motion } from 'framer-motion';
-import { Navigation } from 'lucide-react';
+import { MapPin, Navigation } from 'lucide-react';
 import { TFunction } from 'i18next';
+import { cn } from '@/lib/ui';
 import type { Location } from '@/types';
 
 interface LocationCardProps {
-  city: Location;
+  location: Location;
   isRTL: boolean;
   t: TFunction;
+  isSelected?: boolean;
+  onClick?: () => void;
 }
 
 export const LocationCard = memo(
-  ({ city, isRTL, t }: LocationCardProps) => {
-    const c = city as Location & { nameAr?: string; count?: number };
+  ({ location, isRTL, t, isSelected, onClick }: LocationCardProps) => {
+    const c = location as Location & { nameAr?: string };
+    const name = isRTL && c.nameAr ? c.nameAr : (typeof c.name === 'string' ? c.name : c.name?.en);
+    const address = typeof c.address === 'string' ? c.address : c.address?.en;
+
     return (
-      <motion.a
-        href={`https://locations.starbucks.eg/directory/${city.slug || ''}`}
-        target="_blank"
-        rel="noopener noreferrer"
-        whileHover={{ x: isRTL ? -8 : 8 }}
-        className="flex items-center justify-between p-6 bg-gray-50 dark:bg-white/5 rounded-2xl border border-gray-100 dark:border-white/10 group transition-all hover:bg-starbucks-green/5 hover:border-starbucks-green/30 shadow-sm"
+      <div
+        onClick={onClick}
+        className={cn(
+          "cursor-pointer p-5 rounded-2xl border transition-all shadow-sm group",
+          isSelected 
+            ? "bg-starbucks-green/10 border-starbucks-green dark:bg-starbucks-green/20" 
+            : "bg-gray-50 dark:bg-white/5 border-gray-100 dark:border-white/10 hover:bg-gray-100 dark:hover:bg-white/10"
+        )}
       >
-        <div className="flex items-center gap-4">
-          <div className="w-10 h-10 rounded-full bg-starbucks-green/10 flex items-center justify-center text-starbucks-green group-hover:bg-starbucks-green group-hover:text-white transition-colors">
-            <Navigation className="h-5 w-5" />
+        <div className="flex items-start gap-4">
+          <div className={cn(
+            "mt-1 w-10 h-10 shrink-0 rounded-full flex items-center justify-center transition-colors",
+            isSelected
+              ? "bg-starbucks-green text-white"
+              : "bg-starbucks-green/10 text-starbucks-green group-hover:bg-starbucks-green group-hover:text-white"
+          )}>
+            <MapPin className="h-5 w-5" />
           </div>
-          <span className="text-lg font-black text-gray-900 dark:text-white group-hover:text-starbucks-green transition-colors">
-            {isRTL ? c.nameAr : String(c.name)}
-          </span>
+          
+          <div className="flex-1">
+            <h3 className={cn(
+              "text-lg font-black transition-colors mb-1",
+              isSelected ? "text-starbucks-green" : "text-gray-900 dark:text-white group-hover:text-starbucks-green"
+            )}>
+              {name}
+            </h3>
+            
+            {address && (
+              <p className="text-sm text-gray-500 dark:text-gray-400 mb-3 leading-relaxed">
+                {address}
+              </p>
+            )}
+
+            {location.operatingHours && Object.entries(location.operatingHours)[0] && (
+              <div className="text-xs font-bold text-gray-400 dark:text-gray-500 mb-4 flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-green-500"></span>
+                <span>
+                  {Object.entries(location.operatingHours)[0][1].open} -{' '}
+                  {Object.entries(location.operatingHours)[0][1].close}
+                </span>
+              </div>
+            )}
+
+            <div className="flex flex-wrap gap-2">
+              {location.features?.slice(0, 3).map((feature, idx) => (
+                <span key={idx} className="text-xs font-bold text-gray-500 bg-white dark:bg-black/20 px-2 py-1 rounded-full border border-gray-100 dark:border-white/5">
+                  {feature}
+                </span>
+              ))}
+            </div>
+          </div>
         </div>
-        <span className="text-sm font-bold text-gray-400 dark:text-gray-500 bg-white dark:bg-black/20 px-3 py-1 rounded-full border border-gray-100 dark:border-white/5">
-          {c.count} {t('pages:locations.content.stores_count')}
-        </span>
-      </motion.a>
+      </div>
     );
   },
   (prevProps, nextProps) => {
     return (
-      prevProps.city.id === nextProps.city.id &&
-      prevProps.isRTL === nextProps.isRTL
+      prevProps.location.id === nextProps.location.id &&
+      prevProps.isRTL === nextProps.isRTL &&
+      prevProps.isSelected === nextProps.isSelected
     );
   }
 );

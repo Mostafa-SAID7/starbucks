@@ -153,6 +153,10 @@ export default defineConfig({
             if (id.includes("i18next")) {
               return "i18n-vendor";
             }
+
+            if (id.includes("@sentry")) {
+              return "sentry-vendor";
+            }
           }
         },
       },

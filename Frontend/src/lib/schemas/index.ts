@@ -16,3 +16,4 @@ export * from './review';
 export * from './reward';
 export * from './setting';
 export * from './notification';
+export * from './payment';

@@ -13,7 +13,7 @@ interface OrderSummaryProps {
  * Sticky right-column sidebar: cart items list, subtotal, discount, total, and place-order CTA.
  */
 export function OrderSummary({ onPlaceOrder, isLoading }: OrderSummaryProps) {
-  const { t } = useTranslation(['pages', 'common']);
+  const { t, i18n } = useTranslation(['pages', 'common']);
   const { items, total, discount } = useCartStore();
 
   const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
@@ -56,7 +56,7 @@ export function OrderSummary({ onPlaceOrder, isLoading }: OrderSummaryProps) {
                   {t('common:qty')}: {item.quantity}
                 </span>
                 <span className="font-black text-starbucks-green dark:text-starbucks-light">
-                  ${(item.price * item.quantity).toFixed(2)}
+                  {item.price * item.quantity} {i18n.language === 'ar' ? 'ج.م' : 'EGP'}
                 </span>
               </div>
             </div>
@@ -68,7 +68,7 @@ export function OrderSummary({ onPlaceOrder, isLoading }: OrderSummaryProps) {
       <div className="space-y-4 pt-8 border-t border-gray-100 dark:border-zinc-800">
         <div className="flex justify-between items-center text-gray-500 dark:text-zinc-400">
           <span className="font-bold text-sm uppercase tracking-wider">{t('pages:checkout.subtotal')}</span>
-          <span className="font-black text-gray-900 dark:text-white">${subtotal.toFixed(2)}</span>
+          <span className="font-black text-gray-900 dark:text-white">{subtotal} {i18n.language === 'ar' ? 'ج.م' : 'EGP'}</span>
         </div>
 
         {discount && (
@@ -78,14 +78,14 @@ export function OrderSummary({ onPlaceOrder, isLoading }: OrderSummaryProps) {
             className="flex justify-between items-center text-starbucks-green"
           >
             <span className="font-bold text-sm uppercase tracking-wider">{t('pages:checkout.discount')}</span>
-            <span className="font-black">-${discountAmount.toFixed(2)}</span>
+            <span className="font-black">-{discountAmount} {i18n.language === 'ar' ? 'ج.م' : 'EGP'}</span>
           </motion.div>
         )}
 
         <div className="flex justify-between items-center pt-4">
           <span className="font-black text-xl tracking-tight">{t('pages:checkout.total')}</span>
           <span className="text-3xl font-black text-starbucks-green dark:text-starbucks-light tracking-tighter">
-            ${total.toFixed(2)}
+            {total} {i18n.language === 'ar' ? 'ج.م' : 'EGP'}
           </span>
         </div>
       </div>

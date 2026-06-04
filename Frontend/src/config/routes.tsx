@@ -71,6 +71,14 @@ const ProfilePage = lazy(() =>
   import('@/pages/AccountPage/ProfilePage').then((module) => ({ default: module.ProfilePage }))
 );
 
+const PaymentSuccessPage = lazy(() =>
+  import('@/pages/PaymentSuccessPage/PaymentSuccessPage').then((module) => ({ default: module.PaymentSuccessPage }))
+);
+
+const PaymentFailedPage = lazy(() =>
+  import('@/pages/PaymentFailedPage/PaymentFailedPage').then((module) => ({ default: module.PaymentFailedPage }))
+);
+
 const NotFound = lazy(() =>
   import('@/pages').then((module) => ({ default: module.NotFound }))
 );
@@ -254,6 +262,18 @@ export const PAGE_ROUTES: PageRoute[] = [
     component: OrderConfirmationPage,
     skeleton: StaticPageSkeleton,
     name: 'order-confirmation',
+  },
+  {
+    path: 'payment/success',
+    component: PaymentSuccessPage,
+    skeleton: StaticPageSkeleton,
+    name: 'payment-success',
+  },
+  {
+    path: 'payment/failed',
+    component: PaymentFailedPage,
+    skeleton: StaticPageSkeleton,
+    name: 'payment-failed',
   },
   {
     path: 'account/profile',

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { API_CONFIG } from '@/lib/core/constants';
-import { errorMonitor } from '@/lib/error';
+import { captureError, addBreadcrumb } from '@/lib/error/errorMonitoring';
 
 /**
  * Standard API Client with interceptors for error monitoring
@@ -17,7 +17,7 @@ export const apiClient = axios.create({
 apiClient.interceptors.request.use(
   (config) => {
     // Add breadcrumb for outgoing requests
-    errorMonitor.addBreadcrumb(
+    addBreadcrumb(
       `API Request: ${config.method?.toUpperCase()} ${config.url}`,
       'http',
       'info'
@@ -32,7 +32,7 @@ apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
     // Report API errors to monitor
-    errorMonitor.captureException(error, {
+    captureError(error, {
       context: 'API_RESPONSE_ERROR',
       url: error.config?.url,
       method: error.config?.method,

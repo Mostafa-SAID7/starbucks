@@ -19,6 +19,8 @@ export const LocationSchema = z.object({
   slug: z.string().optional(),
   count: z.number().optional(),
   coordinates: CoordinatesSchema.optional(),
+  latitude: z.number().optional(),
+  longitude: z.number().optional(),
   features: z.array(z.string()).optional(),
   amenities: z.array(z.string()).optional(),
   operatingHours: z.record(z.string(), OperatingHoursSchema).optional(),

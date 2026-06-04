@@ -49,6 +49,9 @@ public static class ServiceCollectionExtensions
 
         // Domain Services
         services.AddDomainServices();
+        
+        // Payment Gateways
+        services.AddPaymentServices(configuration);
 
         return services;
     }

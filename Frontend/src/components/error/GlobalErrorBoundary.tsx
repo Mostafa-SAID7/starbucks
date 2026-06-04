@@ -1,4 +1,5 @@
 import React, { ReactNode, ErrorInfo } from 'react';
+import * as Sentry from '@sentry/react';
 import { ErrorFallback } from './ErrorFallback';
 
 interface Props {
@@ -11,6 +12,13 @@ interface State {
   errorInfo: ErrorInfo | null;
 }
 
+/**
+ * GlobalErrorBoundary
+ *
+ * Catches React render errors and reports them to Sentry automatically.
+ * Wraps Sentry.withErrorBoundary pattern using a class component for
+ * maximum compatibility with React 19.
+ */
 export class GlobalErrorBoundary extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
@@ -26,43 +34,26 @@ export class GlobalErrorBoundary extends React.Component<Props, State> {
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    // Log error to monitoring service (e.g., Sentry)
-    console.error('Error caught by boundary:', error, errorInfo);
+    this.setState({ error, errorInfo });
 
-    this.setState({
-      error,
-      errorInfo,
+    // Report to Sentry with React component stack for richer debugging
+    Sentry.captureException(error, {
+      contexts: {
+        react: {
+          componentStack: errorInfo.componentStack,
+        },
+      },
     });
-
-    // Send to error tracking service
-    if (window.__SENTRY__) {
-      window.__SENTRY__.captureException(error, { contexts: { react: errorInfo } });
-    }
   }
 
   handleReset = () => {
-    this.setState({
-      hasError: false,
-      error: null,
-      errorInfo: null,
-    });
+    this.setState({ hasError: false, error: null, errorInfo: null });
   };
 
   render() {
     if (this.state.hasError) {
       return <ErrorFallback error={this.state.error} onReset={this.handleReset} />;
     }
-
     return this.props.children;
-  }
-}
-
-
-// Extend window interface for Sentry
-declare global {
-  interface Window {
-    __SENTRY__?: {
-      captureException: (error: Error, options?: { contexts: { react: ErrorInfo } }) => void;
-    };
   }
 }

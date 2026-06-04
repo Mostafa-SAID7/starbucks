@@ -11,7 +11,6 @@ import { useTranslation } from "react-i18next";
 import { motion, AnimatePresence } from "framer-motion";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "@/lib/api/queryClient";
-import { initializeErrorMonitoring } from "@/lib/error/errorMonitoring";
 import { ANIMATION_CONFIG } from "@/lib/core/constants";
 import { loadPageTranslations, getPageSlug } from "@/lib/i18n/pageTranslations";
 import { MainLayout, SkipNav, ErrorBoundary } from "@/components";
@@ -26,14 +25,6 @@ const ReactQueryDevtools = import.meta.env.DEV
       }))
     )
   : null;
-
-initializeErrorMonitoring({
-  enabled: import.meta.env.VITE_ERROR_MONITORING_ENABLED !== "false",
-  environment: import.meta.env.MODE as "development" | "staging" | "production",
-  dsn: import.meta.env.VITE_SENTRY_DSN,
-  tracesSampleRate: import.meta.env.MODE === "production" ? 0.1 : 1.0,
-  debug: false,
-});
 
 const PageWrapper = ({
   children,

@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { authService } from '@/services/api/authService';
 import { logError } from '@/lib/error';
-import { errorMonitor } from '@/lib/error/errorMonitoring';
+import { setSentryUser, clearSentryUser } from '@/lib/error/errorMonitoring';
 import { AuthStore } from '@/types/auth';
 
 export const useAuthStore = create<AuthStore>()(
@@ -29,7 +29,7 @@ export const useAuthStore = create<AuthStore>()(
           localStorage.setItem('refresh_token', refreshToken);
 
           // Set user context for error monitoring
-          errorMonitor.setUser(user.id, user.email, user.firstName);
+          setSentryUser(user.id, user.email, user.firstName);
 
           set({
             user,
@@ -68,7 +68,7 @@ export const useAuthStore = create<AuthStore>()(
           localStorage.setItem('refresh_token', refreshToken);
 
           // Set user context for error monitoring
-          errorMonitor.setUser(user.id, user.email, user.firstName);
+          setSentryUser(user.id, user.email, user.firstName);
 
           set({
             user,
@@ -102,7 +102,7 @@ export const useAuthStore = create<AuthStore>()(
         });
 
         // Clear user context from error monitoring
-        errorMonitor.clearUser();
+        clearSentryUser();
 
         // Clear tokens from localStorage
         localStorage.removeItem('auth_token');

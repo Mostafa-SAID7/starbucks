@@ -10,5 +10,7 @@ public enum PaymentMethod
     Fawry = 5,
     Vodafone = 6,
     Orange = 7,
-    Etisalat = 8
+    Etisalat = 8,
+    Stripe = 9,       // International cards via Stripe
+    PaymobCard = 10   // Egyptian cards via PayMob hosted form
 }

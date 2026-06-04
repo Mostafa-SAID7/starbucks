@@ -1,9 +1,12 @@
 /**
  * Unified Monitoring Service
- * Consolidates error monitoring, performance monitoring, and breadcrumb tracking
- * Eliminates 200+ lines of duplicate code from errorMonitoring.ts and performanceMonitor.ts
+ * Consolidates error monitoring, performance monitoring, and breadcrumb tracking.
+ *
+ * Error reporting is delegated to Sentry via captureException / captureMessage.
+ * Performance metrics are sent via sendBeacon to the backend analytics endpoint.
  */
 
+import * as Sentry from '@sentry/react';
 import { PerformanceMetric, CacheMetrics } from '@/types';
 
 export interface BreadcrumbData {
@@ -287,23 +290,18 @@ class MonitoringService {
   }
 
   /**
-   * Send data to monitoring service (Sentry, DataDog, etc.)
+   * Forward data to Sentry and optionally to the backend beacon endpoint.
+   * Uses the proper @sentry/react SDK — no window.__SENTRY__ hack needed.
    */
   private sendToMonitoringService(data: unknown): void {
     try {
-      // Check if Sentry is available
-      const sentryWindow = window as unknown as Record<string, unknown>;
-      if (sentryWindow.__SENTRY__) {
-        const sentry = sentryWindow.__SENTRY__ as {
-          captureMessage: (msg: string, opts: unknown) => void;
-        };
-        sentry.captureMessage('Monitoring Event', {
-          level: 'info',
-          contexts: { monitoring: data },
-        });
-      }
+      // Report to Sentry as a structured context message
+      Sentry.captureMessage('Monitoring Event', {
+        level: 'info',
+        contexts: { monitoring: data as Record<string, unknown> },
+      });
 
-      // Send to backend logging endpoint
+      // Send to backend logging endpoint via sendBeacon (production only)
       if (navigator.sendBeacon && import.meta.env.PROD) {
         const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
         navigator.sendBeacon('/api/logging/events', blob);

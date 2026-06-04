@@ -1,5 +1,5 @@
 import { PerformanceMetric, CacheMetrics, BundleMetrics } from "@/types";
-import { errorMonitor } from "@/lib/error";
+import { captureMessage, addBreadcrumb } from "@/lib/error/errorMonitoring";
 import { PERFORMANCE_CONFIG } from "@/lib/core/constants";
 
 /**
@@ -25,7 +25,7 @@ export class PerformanceMonitor {
     }
     
     // Add breadcrumb to error monitor for context in case of later crashes
-    errorMonitor.addBreadcrumb(`Performance start: ${name}`, 'performance', 'info', { context });
+    addBreadcrumb(`Performance start: ${name}`, 'performance', 'info', { context });
   }
 
   /**
@@ -90,7 +90,7 @@ export class PerformanceMonitor {
     }
 
     if (isSlow) {
-      errorMonitor.captureMessage(
+      captureMessage(
         `Slow performance detected: ${name} took ${duration.toFixed(0)}ms (Threshold: ${threshold}ms)`,
         'warning',
         { duration, name, context }
@@ -125,7 +125,7 @@ export class PerformanceMonitor {
     
     // Periodically report low hit rates to monitoring
     if (existing.totalQueries >= 10 && existing.hitRate < PERFORMANCE_CONFIG.TARGET_CACHE_HIT_RATE) {
-        errorMonitor.addBreadcrumb(
+        addBreadcrumb(
             `Low cache hit rate for ${queryKey}: ${existing.hitRate.toFixed(1)}%`,
             'performance',
             'warning'

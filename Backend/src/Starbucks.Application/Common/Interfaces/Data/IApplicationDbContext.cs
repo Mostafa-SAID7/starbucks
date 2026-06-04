@@ -29,6 +29,7 @@ public interface IApplicationDbContext
     DbSet<Favorite> Favorites { get; }
     DbSet<Notification> Notifications { get; }
     DbSet<CartItem> CartItems { get; }
+    DbSet<Payment> Payments { get; }
     
     DatabaseFacade Database { get; }
     

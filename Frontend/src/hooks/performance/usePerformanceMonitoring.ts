@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { onCLS, onFCP, onLCP, onTTFB, type Metric } from 'web-vitals';
+import * as Sentry from '@sentry/react';
 
 interface PerformanceMetrics {
   LCP?: number; // Largest Contentful Paint
@@ -76,23 +77,20 @@ function logMetric(name: string, value: number, threshold: number) {
 }
 
 /**
- * Send metrics to monitoring service (Sentry, DataDog, etc.)
+ * Send Web Vitals to Sentry as a performance measurement.
+ * Uses the proper @sentry/react SDK — no window.__SENTRY__ hack needed.
  */
 function sendMetricsToMonitoring(metrics: PerformanceMetrics) {
   try {
-    // Send to Sentry if available
-    const sentryWindow = window as unknown as unknown as Record<string, unknown>;
-    if (sentryWindow.__SENTRY__) {
-      const sentry = sentryWindow.__SENTRY__ as { captureMessage: (msg: string, opts: unknown) => void };
-      sentry.captureMessage('Web Vitals', {
-        level: 'info',
-        contexts: {
-          performance: metrics,
-        },
-      });
-    }
+    // Send vitals to Sentry with structured context
+    Sentry.captureMessage('Web Vitals', {
+      level: 'info',
+      contexts: {
+        performance: metrics as Record<string, unknown>,
+      },
+    });
 
-    // Send to custom analytics endpoint
+    // Also send to custom analytics endpoint
     if (navigator.sendBeacon) {
       const data = new FormData();
       Object.entries(metrics).forEach(([key, value]) => {
@@ -201,4 +199,3 @@ export const monitorLongTasks = (threshold = 50) => {
   }
 };
 
-// Sentry is accessed via (window as any).__SENTRY__ — no declaration needed

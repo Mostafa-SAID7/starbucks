@@ -1,4 +1,4 @@
-import { errorMonitor } from './errorMonitoring';
+import { captureError, captureMessage } from './errorMonitoring';
 import { AppError } from './AppError';
 
 /**
@@ -27,7 +27,7 @@ export function logError(error: unknown, context?: string) {
   // In production, send to monitoring service and backend endpoint
   if (isProd) {
     try {
-      errorMonitor.captureException(normalizedError as Error | AppError, errorContext);
+      captureError(normalizedError as Error | AppError, errorContext);
     } catch {
       // Fallback silently if monitoring service fails or is not initialized
     }
@@ -51,12 +51,12 @@ export function logError(error: unknown, context?: string) {
  * Log a warning message without throwing
  */
 export function logWarning(message: string, context?: string) {
-  errorMonitor.captureMessage(message, 'warning', context ? { context } : {});
+  captureMessage(message, 'warning', context ? { context } : {});
 }
 
 /**
  * Log an info message for auditing
  */
 export function logInfo(message: string, context?: string) {
-  errorMonitor.captureMessage(message, 'info', context ? { context } : {});
+  captureMessage(message, 'info', context ? { context } : {});
 }

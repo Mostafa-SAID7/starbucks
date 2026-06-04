@@ -40,6 +40,7 @@ export const OrderSchema = z.object({
   paymentMethod: z.string(),
   notes: z.string().optional(),
   deliveryAddress: z.string().optional(),
+  deliveryPhoneNumber: z.string().optional(),
   scheduledTime: z.string().optional(),
   createdAt: z.string(),
   updatedAt: z.string().optional(),
