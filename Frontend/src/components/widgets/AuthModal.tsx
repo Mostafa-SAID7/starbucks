@@ -335,7 +335,7 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
             disabled={isLoading || (mode === "register" && !formData.terms)}
           >
             {isLoading
-              ? t("common:loading")
+              ? t("common:loading.default")
               : mode === "login"
               ? t("common:auth.login_submit")
               : t("common:auth.register_submit")}

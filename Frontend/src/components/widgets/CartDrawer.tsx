@@ -21,7 +21,7 @@ export function CartTrigger() {
     <button
       onClick={toggleCart}
       className="relative p-2.5 hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-full transition-all group active:scale-90"
-      aria-label={t('common:cart')}
+      aria-label={t('common:cart.title')}
     >
       <ShoppingBag className="w-6 h-6 text-gray-700 dark:text-gray-300 group-hover:text-starbucks-green transition-colors" />
       <AnimatePresence>
@@ -123,7 +123,7 @@ export function CartDrawer({
             <div className="relative z-20 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-md border-b border-gray-100 dark:border-zinc-800">
               <div className="flex items-center justify-between p-7 pb-4">
                 <div>
-                  <h2 className="text-3xl font-black tracking-tighter text-gray-900 dark:text-white uppercase leading-none">{t('cart')}</h2>
+                  <h2 className="text-3xl font-black tracking-tighter text-gray-900 dark:text-white uppercase leading-none">{t('cart.title')}</h2>
                   <p className="text-xs text-gray-500 dark:text-gray-400 mt-1.5 font-bold uppercase tracking-widest">
                     {items.length} {items.length === 1 ? t('cart.item') : t('cart.items')}
                   </p>

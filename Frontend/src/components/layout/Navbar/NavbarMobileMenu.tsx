@@ -20,7 +20,8 @@ interface NavbarMobileMenuProps {
  */
 export const NavbarMobileMenu = forwardRef<HTMLDivElement, NavbarMobileMenuProps>(
   ({ navItems, lang, isRTL, onNavClick }, ref) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation(["common", "navigation"]);
+
 
     return (
       <motion.div

@@ -30,8 +30,9 @@ export function NavbarUtilities({
   onSearchOpen,
   onAuthOpen,
 }: NavbarUtilitiesProps) {
-  const { t } = useTranslation();
+  const { t } = useTranslation(["common", "navigation"]);
   const { toggleLanguage } = useLanguage();
+
   const { isAuthenticated } = useAuth();
 
   return (
@@ -149,7 +150,7 @@ export function NavbarUtilities({
 
       {/* Cart Drawer */}
       <Tooltip
-        content={t("common:cart")}
+        content={t("common:cart.title")}
         className="w-11 h-11"
       >
         <div className="flex items-center justify-center">
