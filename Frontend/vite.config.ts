@@ -7,8 +7,8 @@ import { VitePWA } from "vite-plugin-pwa";
 export default defineConfig({
   plugins: [
     react(),
-    // Disable PWA plugin when deploying on Vercel to avoid Rolldown bundle assignment errors
-    ...(process.env.VERCEL
+    // Disable PWA plugin on Vercel/CI builds to avoid Rolldown bundle assignment errors
+    ...(process.env.VERCEL || process.env.CI || process.env.NODE_ENV === "production"
       ? []
       : [
           VitePWA({
