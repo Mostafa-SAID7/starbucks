@@ -1,84 +1,128 @@
-# ☕ Starbucks Egypt - Enterprise Full-Stack
+<div align="center">
 
-[![Frontend Deployment](https://img.shields.io/badge/Frontend-Vercel-black?style=for-the-badge&logo=vercel)](https://starbucks73.vercel.app)
-[![Backend Status](https://img.shields.io/badge/Backend-Live-success?style=for-the-badge&logo=dotnet)](http://starbucks.runasp.net/api)
-[![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)](LICENSE)
+# ☕ Starbucks Egypt
 
-A premium, enterprise-grade digital experience for Starbucks Egypt. Built with **React 19**, **ASP.NET Core 9.0**, and **Clean Architecture** to deliver high-performance, accessible, and bilingual (AR/EN) coffee commerce.
+**Enterprise Full-Stack Commerce Platform**
+
+<p align="center">
+  A premium, enterprise-grade digital experience for Starbucks Egypt. <br/>
+  Built with <strong>React 19</strong>, <strong>ASP.NET Core 9.0</strong>, and <strong>Clean Architecture</strong> <br/>
+  to deliver high-performance, accessible, and bilingual (AR/EN) coffee commerce.
+</p>
+
+<p align="center">
+  <a href="https://starbucks73.vercel.app">
+    <img src="https://img.shields.io/badge/Frontend-Live_App-black?style=for-the-badge&logo=vercel" alt="Frontend Deployment" />
+  </a>
+  <a href="http://starbucks.runasp.net/api">
+    <img src="https://img.shields.io/badge/Backend-Live_API-success?style=for-the-badge&logo=dotnet" alt="Backend Status" />
+  </a>
+  <a href="LICENSE">
+    <img src="https://img.shields.io/badge/License-MIT-blue?style=for-the-badge" alt="License" />
+  </a>
+</p>
+
+</div>
 
 ---
 
 ## 🚀 Live Environments
 
-| Component | Service | URL |
+Explore the application in real-time through our live deployment environments:
+
+| Service | Environment | Live URL |
 | :--- | :--- | :--- |
-| **✨ Frontend** | Production App | [starbucks73.vercel.app](https://starbucks73.vercel.app) |
-| **⚙️ Backend** | RESTful API | [starbucks.runasp.net/api](http://starbucks.runasp.net/api) |
+| **✨ Frontend App** | Production | [starbucks73.vercel.app](https://starbucks73.vercel.app) |
+| **⚙️ Backend API** | Production | [starbucks.runasp.net/api](http://starbucks.runasp.net/api) |
 | **📚 API Docs** | Swagger UI | [starbucks.runasp.net/swagger](http://starbucks.runasp.net/swagger) |
 
 ---
 
 ## 🏗️ Technical Pillar
 
-### Frontend (Modern Stack)
-- **Framework:** React 19 + Vite
-- **Styling:** Tailwind CSS v4 (Glassmorphism & RTL support)
-- **Data:** TanStack Query v5 + Zustand
-- **Animations:** Framer Motion
+Our technology stack is selected to provide a world-class, ultra-fast, and highly scalable user experience.
 
-### Backend (Robust Architecture)
-- **Core:** ASP.NET Core 9.0 (Clean Architecture)
-- **Persistence:** Entity Framework Core + SQL Server
-- **Caching:** Redis-backed sessions and response caching
-- **Patterns:** CQRS with MediatR & Repository Pattern
+<div align="center">
+  <table>
+    <tr>
+      <td align="center" width="50%">
+        <h3>🎨 Frontend (Modern Stack)</h3>
+      </td>
+      <td align="center" width="50%">
+        <h3>⚙️ Backend (Robust Architecture)</h3>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">
+        <ul>
+          <li><b>Framework:</b> React 19 + Vite</li>
+          <li><b>Styling:</b> Tailwind CSS v4 (Glassmorphism & RTL support)</li>
+          <li><b>State/Data:</b> TanStack Query v5 + Zustand</li>
+          <li><b>Animations:</b> Framer Motion</li>
+          <li><b>Localization:</b> i18next (Arabic / English)</li>
+        </ul>
+      </td>
+      <td valign="top">
+        <ul>
+          <li><b>Core:</b> ASP.NET Core 9.0</li>
+          <li><b>Architecture:</b> Clean Architecture & CQRS (MediatR)</li>
+          <li><b>Persistence:</b> Entity Framework Core + SQL Server</li>
+          <li><b>Caching:</b> Redis-backed sessions & response caching</li>
+          <li><b>Security:</b> JWT Authentication & Identity</li>
+        </ul>
+      </td>
+    </tr>
+  </table>
+</div>
 
 ---
 
-## 📂 Documentation Deep-Dive
+## 💻 Quick Start Guide
 
-For detailed information, please refer to our dedicated documentation modules:
+Want to run the project locally? Follow these simple steps.
 
-- [**🏗️ Architecture & Design**](docs/ARCHITECTURE.md)
-  *Technical philosophy, system design, and folder structure.*
-- [**🛠️ Development Guide**](docs/DEVELOPMENT.md)
-  *Setup instructions, technology stack, and coding standards.*
-- [**✨ Features & Use Cases**](docs/FEATURES.md)
-  *Checklist of capabilities and common user workflows.*
-- [**🚢 Deployment Guide**](docs/DEPLOYMENT.md)
-  *Production hosting guides and CI/CD pipeline details.*
-- [**🔒 Security Policy**](docs/SECURITY.md)
-  *Security best practices and audit results.*
-
----
-
-## 💻 Quick Start
-
-### Frontend
+### Frontend Setup
 ```bash
 cd Frontend
 npm install --legacy-peer-deps
 npm run dev
 ```
+> The frontend application will start on `http://localhost:5173`
 
-### Backend
+### Backend Setup
 ```bash
 cd Backend
+# Start the database and Redis instances
 docker-compose up -d
+
+# Run the API server
 dotnet run --project src/Starbucks.API
 ```
+> The API will be available on `https://localhost:7082` (or your configured port). Check out `/swagger` for API documentation.
 
 ---
 
-## 🤝 Contributing
+## 📂 Documentation Deep-Dive
 
-We welcome contributions! Please see our [Contributing Guide](docs/CONTRIBUTING.md) and [Code of Conduct](docs/CODE_OF_CONDUCT.md).
+For detailed insights into our technical decisions, system design, and deployment pipelines, please explore our dedicated documentation modules:
+
+| Document | Description |
+| :--- | :--- |
+| [**🏗️ Architecture & Design**](docs/ARCHITECTURE.md) | Technical philosophy, system design, and project structure. |
+| [**🛠️ Development Guide**](docs/DEVELOPMENT.md) | Local setup instructions, tech stack details, and coding standards. |
+| [**✨ Features & Use Cases**](docs/FEATURES.md) | Checklist of platform capabilities and common user workflows. |
+| [**🚢 Deployment Guide**](docs/DEPLOYMENT.md) | Production hosting configurations and CI/CD pipeline details. |
+| [**🔒 Security Policy**](docs/SECURITY.md) | Security best practices, threat models, and audit results. |
 
 ---
 
-## 🆘 Support
+## 🤝 Contributing & Support
 
-Need help? Check the [Documentation Index](docs/README.md) or open a [GitHub Issue](issues).
+We welcome contributions! Before submitting a Pull Request, please read our [Contributing Guide](docs/CONTRIBUTING.md) and review our [Code of Conduct](docs/CODE_OF_CONDUCT.md).
 
----
+Need help or found a bug? Feel free to check the [Documentation Index](docs/README.md) or open a [GitHub Issue](issues).
 
-**Built with ❤️ for the Starbucks Egypt Community**
+<div align="center">
+  <br/>
+  <p><b>Built with ❤️ for the Starbucks Egypt Community</b></p>
+</div>
