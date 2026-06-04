@@ -1,7 +1,7 @@
 import { useState, useMemo, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, X, ShoppingCart, Star, Plus } from "lucide-react";
+import { Search, X, ShoppingCart, Plus } from "lucide-react";
 import { cn } from "@/lib/ui";
 import { SEO, SidebarTemplate } from "@/components";
 import { MenuSkeleton } from "@/components/skeletons";
@@ -75,13 +75,11 @@ function Toast({ message, onClose }: { message: string; onClose: () => void }) {
 function ItemDetailsModal({
   item,
   isRTL,
-  lang,
   onClose,
   onAddToCart,
 }: {
   item: FlatItem;
   isRTL: boolean;
-  lang: string;
   onClose: () => void;
   onAddToCart: (item: FlatItem) => void;
 }) {
@@ -254,7 +252,7 @@ function MenuItemCard({
 const CATEGORY_ALL = "all";
 
 function MenuPageContent({ categories }: { categories: MenuCategory[] }) {
-  const { isRTL, lang } = useLanguage();
+  const { isRTL } = useLanguage();
   const { t } = useTranslation(["pages", "common"]);
 
   const allItems = useMemo(() => flattenItems(categories), [categories]);
@@ -429,7 +427,6 @@ function MenuPageContent({ categories }: { categories: MenuCategory[] }) {
         <ItemDetailsModal
           item={selectedItem}
           isRTL={isRTL}
-          lang={lang}
           onClose={() => setSelectedItem(null)}
           onAddToCart={handleAddToCart}
         />

@@ -18,7 +18,7 @@ export const orderFetchers = {
         id: `mock-${Date.now()}`,
         orderNumber: `SBUX-${Math.floor(100000 + Math.random() * 900000)}`,
         userId: 'current-user',
-        items: (order.items || []) as any,
+        items: (order.items || []) as Order['items'],
         total: order.total || 0,
         status: 'pending',
         locationId: order.locationId || 'default',

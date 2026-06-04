@@ -49,7 +49,7 @@ export const getItem = async (itemId: string): Promise<MenuItem> => {
     console.warn('Falling back to mock item data', error);
     for (const category of mockMenuData.categories) {
       for (const sub of category.subcategories || []) {
-        const item = sub.items?.find((i: any) => i.id === itemId);
+        const item = sub.items?.find((i: { id: string }) => i.id === itemId);
         if (item) return item as unknown as MenuItem;
       }
     }
