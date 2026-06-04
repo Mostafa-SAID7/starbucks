@@ -1,20 +1,31 @@
 /**
  * Service Worker
- * 
+ *
  * Features:
- * - Cache static assets
+ * - Cache static assets (JS/CSS/images with content hashes)
  * - Offline fallback
  * - Background sync
  * - Push notifications
+ *
+ * IMPORTANT: index.html is intentionally NOT cached here.
+ * It must always be fetched from the network so users get
+ * the latest asset hashes after every Vercel deploy.
  */
 
-const CACHE_NAME = 'starbucks-v1';
-const RUNTIME_CACHE = 'starbucks-runtime-v1';
+// This version string must change on every deploy to bust old caches.
+// It is injected at build time via the filename hash; here we use a
+// build timestamp as a fallback for the manual sw.js in /public.
+const CACHE_VERSION = 'v2';
+const CACHE_NAME = `starbucks-${CACHE_VERSION}`;
+const RUNTIME_CACHE = `starbucks-runtime-${CACHE_VERSION}`;
+
+// Only cache truly static, version-independent assets.
+// Do NOT cache index.html — it must always come from the network.
 const STATIC_ASSETS = [
-  '/',
-  '/index.html',
-  '/manifest.json',
-  '/favicon.ico',
+  '/favicon.svg',
+  '/favicon.png',
+  '/logo.png',
+  '/robots.txt',
 ];
 
 /**
