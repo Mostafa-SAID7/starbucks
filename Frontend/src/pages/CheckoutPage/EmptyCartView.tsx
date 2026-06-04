@@ -2,9 +2,9 @@ import { motion } from 'framer-motion';
 import { ShoppingBag } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { useCartStore } from '@/stores/cartStore';
 import { Button } from '@/components/ui/button';
 import { SEO } from '@/components';
+
 
 /**
  * Shown when the user navigates to checkout with an empty cart.
@@ -12,9 +12,7 @@ import { SEO } from '@/components';
 export function EmptyCartView() {
   const { t, i18n } = useTranslation(['pages', 'common']);
   const navigate = useNavigate();
-  const { optimisticOrder } = useCartStore();
 
-  if (optimisticOrder) return null;
 
   return (
     <div className="min-h-screen bg-white dark:bg-background-dark flex items-center justify-center p-6">
