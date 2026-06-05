@@ -46,13 +46,9 @@ export function LocationsPageContent({ locations }: LocationsPageContentProps) {
     );
   }, []);
 
-  const handlePlaceSelect = useCallback((place: google.maps.places.PlaceResult | null) => {
-    if (place?.geometry?.location) {
-      const lat = place.geometry.location.lat();
-      const lng = place.geometry.location.lng();
-      setUserLocation({ lat, lng });
-      setViewMode('map');
-    }
+  const handlePlaceSelect = useCallback((lat: number, lng: number) => {
+    setUserLocation({ lat, lng });
+    setViewMode('map');
   }, []);
 
   const filteredLocations = useMemo(() => {
