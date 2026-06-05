@@ -1,0 +1,84 @@
+<div class="space-y-6">
+  <h2 class="text-2xl font-bold text-gray-800">Analytics & Reports</h2>
+
+  <!-- Date Range Filter -->
+  <div class="bg-white rounded-lg shadow p-4">
+    <div class="flex items-center space-x-4">
+      <label class="text-sm font-medium text-gray-700">Date Range:</label>
+      <input type="date" class="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-starbucks-green" />
+      <span class="text-gray-500">to</span>
+      <input type="date" class="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-starbucks-green" />
+      <button class="bg-starbucks-green text-white px-6 py-2 rounded-lg hover:bg-starbucks-dark transition-colors">
+        Apply
+      </button>
+      <button class="bg-gray-100 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-200 transition-colors">
+        Export
+      </button>
+    </div>
+  </div>
+
+  <!-- Key Metrics -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div class="bg-white rounded-lg shadow p-6">
+      <p class="text-sm text-gray-600 mb-1">Revenue</p>
+      <p class="text-3xl font-bold text-gray-800">${{ metrics.revenue | number:'1.0-0' }}</p>
+      <p class="text-sm text-green-600 mt-2">↑ {{ metrics.revenueGrowth }}%</p>
+    </div>
+    <div class="bg-white rounded-lg shadow p-6">
+      <p class="text-sm text-gray-600 mb-1">Avg. Order Value</p>
+      <p class="text-3xl font-bold text-gray-800">${{ metrics.avgOrderValue }}</p>
+      <p class="text-sm text-green-600 mt-2">↑ {{ metrics.avgOrderValueGrowth }}%</p>
+    </div>
+    <div class="bg-white rounded-lg shadow p-6">
+      <p class="text-sm text-gray-600 mb-1">Conversion Rate</p>
+      <p class="text-3xl font-bold text-gray-800">{{ metrics.conversionRate }}%</p>
+      <p class="text-sm text-green-600 mt-2">↑ {{ metrics.conversionRateGrowth }}%</p>
+    </div>
+    <div class="bg-white rounded-lg shadow p-6">
+      <p class="text-sm text-gray-600 mb-1">Customer Retention</p>
+      <p class="text-3xl font-bold text-gray-800">{{ metrics.retention }}%</p>
+      <p class="text-sm text-red-600 mt-2">↓ {{ metrics.retentionGrowth }}%</p>
+    </div>
+  </div>
+
+  <!-- Top Customers Table -->
+  <div class="bg-white rounded-lg shadow">
+    <div class="p-6 border-b border-gray-200">
+      <h3 class="text-lg font-bold text-gray-800">Top Customers</h3>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="w-full">
+        <thead class="bg-gray-50 border-b border-gray-200">
+          <tr>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Customer</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Orders</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total Spent</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Avg. Order</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Last Order</th>
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200">
+          @for (customer of topCustomers; track customer.id) {
+            <tr class="hover:bg-gray-50">
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="flex items-center">
+                  <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center mr-3">
+                    <span class="text-starbucks-green font-semibold">{{ customer.initial }}</span>
+                  </div>
+                  <div>
+                    <div class="text-sm font-medium text-gray-900">{{ customer.name }}</div>
+                    <div class="text-sm text-gray-500" [innerHTML]="customer.email"></div>
+                  </div>
+                </div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ customer.orders }}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${{ customer.totalSpent }}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${{ customer.avgOrder }}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ customer.lastOrder }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

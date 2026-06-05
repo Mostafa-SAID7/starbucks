@@ -146,7 +146,7 @@ export function CheckoutPageContent() {
       deliveryAddress: form.address,
       deliveryPhoneNumber: form.phone,
       notes: form.notes,
-      orderType: form.deliveryMethod === 'delivery' ? 'delivery' : 'pickup',
+      orderType: form.deliveryMethod === 'delivery' ? 'Delivery' : 'PickUp',
       createdAt: new Date().toISOString(),
     });
   };

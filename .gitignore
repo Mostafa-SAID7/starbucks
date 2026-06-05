@@ -29,6 +29,11 @@ Backend/**/*.user
 Backend/**/*.suo
 *.log
 
+# SQLite database files
+*.db
+*.db-shm
+*.db-wal
+
 # ===========================
 # IDE & OS
 # ===========================

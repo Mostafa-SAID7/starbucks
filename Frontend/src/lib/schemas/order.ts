@@ -36,7 +36,7 @@ export const OrderSchema = z.object({
   deliveryFee: z.number().optional(),
   discount: z.number().optional(),
   locationId: z.string().optional(),
-  orderType: z.enum(['pickup', 'delivery']).optional(),
+  orderType: z.enum(['PickUp', 'Delivery']).optional(),
   paymentMethod: z.string(),
   notes: z.string().optional(),
   deliveryAddress: z.string().optional(),
