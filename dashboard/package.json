@@ -7,9 +7,13 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "build:netlify": "ng build --configuration=netlify",
+    "build:prod": "ng build --configuration=production",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "serve:ssr:dashboard": "node dist/dashboard/server/server.mjs"
+    "serve:ssr:dashboard": "node dist/dashboard/server/server.mjs",
+    "predeploy": "node .netlify-check.js",
+    "deploy:check": "node .netlify-check.js"
   },
   "private": true,
   "dependencies": {
@@ -24,9 +28,9 @@
     "@angular/platform-server": "^19.2.0",
     "@angular/router": "^19.2.0",
     "@angular/ssr": "^19.2.22",
-    "@ngrx/effects": "^21.1.0",
-    "@ngrx/store": "^21.1.0",
-    "@ngrx/store-devtools": "^21.1.0",
+    "@ngrx/effects": "^19.0.0",
+    "@ngrx/store": "^19.0.0",
+    "@ngrx/store-devtools": "^19.0.0",
     "@types/chart.js": "^2.9.41",
     "chart.js": "^4.5.1",
     "date-fns": "^4.4.0",
