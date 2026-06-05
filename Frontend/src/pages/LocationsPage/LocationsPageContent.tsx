@@ -1,6 +1,6 @@
 import { useState, useCallback, useMemo } from 'react';
 import { captureError } from '@/lib/error/errorMonitoring';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/ui';
 import { ANIMATION_CONFIG } from '@/lib/core/constants';
@@ -10,14 +10,38 @@ import type { Location } from '@/types';
 import { LocationCard } from './LocationCard';
 import { StoreMap } from '@/components/map/StoreMap';
 import { PlacesAutocomplete } from '@/components/map/PlacesAutocomplete';
-import { List, Map as MapIcon } from 'lucide-react';
+import { List, Map as MapIcon, Navigation2 } from 'lucide-react';
 
 interface LocationsPageContentProps {
   locations: Location[];
 }
 
+/** Haversine formula — returns distance in kilometres between two lat/lng points. */
+function haversineKm(
+  lat1: number,
+  lng1: number,
+  lat2: number,
+  lng2: number
+): number {
+  const R = 6371;
+  const toRad = (v: number) => (v * Math.PI) / 180;
+  const dLat = toRad(lat2 - lat1);
+  const dLng = toRad(lng2 - lng1);
+  const a =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLng / 2) ** 2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
+
+function getCoords(loc: Location): { lat: number; lng: number } | null {
+  const lat = loc.coordinates?.lat ?? loc.latitude;
+  const lng = loc.coordinates?.lng ?? loc.longitude;
+  if (!lat || !lng) return null;
+  return { lat, lng };
+}
+
 export function LocationsPageContent({ locations }: LocationsPageContentProps) {
-  const { lang, isRTL } = useLanguage();
+  const { isRTL } = useLanguage();
   const { t } = useTranslation(['pages']);
 
   const [search, setSearch] = useState('');
@@ -39,9 +63,7 @@ export function LocationsPageContent({ locations }: LocationsPageContentProps) {
         setGeoStatus('idle');
         setViewMode('map');
       },
-      () => {
-        setGeoStatus('error');
-      },
+      () => setGeoStatus('error'),
       { timeout: 8000 }
     );
   }, []);
@@ -51,23 +73,50 @@ export function LocationsPageContent({ locations }: LocationsPageContentProps) {
     setViewMode('map');
   }, []);
 
-  const filteredLocations = useMemo(() => {
-    if (search === '') return locations;
+  /** Filtered + optionally sorted list, with distance attached to each entry. */
+  const processedLocations = useMemo(() => {
+    // 1. Filter by search
     const lc = search.toLowerCase();
-    return locations.filter((loc: Location) => {
-      const nameEn = typeof loc.name === 'string' ? loc.name : (loc.name?.en || '');
-      const nameAr = typeof loc.name === 'string' ? '' : (loc.name?.ar || '');
-      const addr = typeof loc.address === 'string'
-        ? loc.address
-        : (loc.address?.en || '');
-      return (
-        nameEn.toLowerCase().includes(lc) ||
-        nameAr.includes(search) ||
-        addr.toLowerCase().includes(lc) ||
-        (loc.city && loc.city.toLowerCase().includes(lc))
-      );
-    });
-  }, [locations, search]);
+    const filtered = search === ''
+      ? locations
+      : locations.filter((loc) => {
+          const nameEn = typeof loc.name === 'string' ? loc.name : (loc.name?.en || '');
+          const nameAr = typeof loc.name === 'string' ? '' : (loc.name?.ar || '');
+          const addr = typeof loc.address === 'string' ? loc.address : (loc.address?.en || '');
+          return (
+            nameEn.toLowerCase().includes(lc) ||
+            nameAr.includes(search) ||
+            addr.toLowerCase().includes(lc) ||
+            (loc.city?.toLowerCase().includes(lc) ?? false)
+          );
+        });
+
+    // 2. Attach distance (km) and sort nearest-first when user location is known
+    if (!userLocation) {
+      return filtered.map((loc) => ({ loc, distanceKm: undefined }));
+    }
+
+    return filtered
+      .map((loc) => {
+        const coords = getCoords(loc);
+        const distanceKm = coords
+          ? haversineKm(userLocation.lat, userLocation.lng, coords.lat, coords.lng)
+          : undefined;
+        return { loc, distanceKm };
+      })
+      .sort((a, b) => {
+        if (a.distanceKm === undefined) return 1;
+        if (b.distanceKm === undefined) return -1;
+        return a.distanceKm - b.distanceKm;
+      });
+  }, [locations, search, userLocation]);
+
+  const filteredLocations = useMemo(
+    () => processedLocations.map(({ loc }) => loc),
+    [processedLocations]
+  );
+
+  const sortedByDistance = userLocation !== null;
 
   return (
     <div
@@ -128,6 +177,29 @@ export function LocationsPageContent({ locations }: LocationsPageContentProps) {
             />
           </div>
 
+          {/* Sorted-by-distance banner */}
+          <AnimatePresence>
+            {sortedByDistance && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+                className="overflow-hidden"
+              >
+                <div className="flex items-center gap-2 px-6 py-3 bg-starbucks-green/5 border-b border-starbucks-green/20 text-starbucks-green text-sm font-bold">
+                  <Navigation2 className="w-4 h-4 shrink-0" />
+                  <span>{t('pages:locations.sorted_by_distance', 'Sorted by nearest to you')}</span>
+                  <button
+                    onClick={() => setUserLocation(null)}
+                    className="ms-auto text-xs underline underline-offset-2 opacity-60 hover:opacity-100 font-medium transition-opacity"
+                  >
+                    {t('pages:locations.clear', 'Clear')}
+                  </button>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
           <div className="flex-1 overflow-y-auto p-6 scrollbar-hide">
             <QueryErrorBoundary variant="compact">
               <motion.div
@@ -136,26 +208,26 @@ export function LocationsPageContent({ locations }: LocationsPageContentProps) {
                 variants={ANIMATION_CONFIG.VARIANTS.STAGGER_CONTAINER}
                 className="flex flex-col gap-4"
               >
-                {filteredLocations.length === 0 ? (
+                {processedLocations.length === 0 ? (
                   <p className="py-8 text-gray-400 font-bold text-center italic">
                     {t('pages:locations.content.no_results', 'No stores found.')}
                   </p>
                 ) : (
-                  filteredLocations.map((location: Location) => (
+                  processedLocations.map(({ loc: location, distanceKm }) => (
                     <motion.div
                       key={location.id || location.slug}
                       variants={ANIMATION_CONFIG.VARIANTS.STAGGER_ITEM}
+                      layout
                     >
                       <LocationCard
                         location={location}
                         isRTL={isRTL}
                         t={t}
                         isSelected={selectedLocation?.id === location.id}
+                        distanceKm={distanceKm}
                         onClick={() => {
                           setSelectedLocation(location);
-                          if (window.innerWidth < 1024) {
-                            setViewMode('map');
-                          }
+                          if (window.innerWidth < 1024) setViewMode('map');
                         }}
                       />
                     </motion.div>
