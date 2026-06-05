@@ -11,50 +11,53 @@ interface OptimisticOrderOptions {
 }
 
 /**
- * Hook for managing order creation with optimistic UI updates
+ * Hook for managing order creation with optimistic UI updates.
+ * NOTE: clearCart() is intentionally NOT called here. The calling page is
+ * responsible for clearing the cart at the right moment:
+ *   - Cash orders: clear immediately before navigating to confirmation
+ *   - Online payments: clear only after payment gateway confirms success
  */
 export function useOptimisticOrder(options: OptimisticOrderOptions = {}) {
   const { onSuccess, onError } = options;
   const queryClient = useQueryClient();
   const { handleError, addBreadcrumb } = useErrorHandling();
-  const { items, total, clearCart } = useCartStore();
+  const { items, total } = useCartStore();
   const [optimisticOrder, setOptimisticOrder] = useState<Order | null>(null);
 
   const createOrderMutation = useMutation<Order, Error, Partial<Order>, { previousOrders?: Order[], optimisticData: Order }>({
     mutationFn: (orderData: Partial<Order>) => orderFetchers.createOrder(orderData),
     onMutate: async (newOrder) => {
       addBreadcrumb('Starting optimistic order creation', 'transaction', 'info', { newOrder });
-      
-      // Cancel any outgoing refetches
+
       await queryClient.cancelQueries({ queryKey: ['orders'] });
 
-      // Snapshot the previous value
       const previousOrders = queryClient.getQueryData<Order[]>(['orders']);
 
-      // Create optimistic order
       const optimisticData: Order = {
         id: `temp-${Date.now()}`,
         orderNumber: `TEMP-${Date.now()}`,
         userId: 'current-user',
         items: items.map(item => ({
-            id: item.id,
-            menuItemId: item.id,
-            name: item.name,
-            quantity: item.quantity,
-            price: item.price
+          id: item.id,
+          menuItemId: item.id,
+          name: item.name,
+          quantity: item.quantity,
+          price: item.price,
         })),
         total: total,
         status: 'pending',
         locationId: newOrder.locationId || 'default',
         orderType: newOrder.orderType || 'pickup',
         paymentMethod: newOrder.paymentMethod || 'cash',
+        deliveryAddress: newOrder.deliveryAddress,
+        deliveryPhoneNumber: newOrder.deliveryPhoneNumber,
+        notes: newOrder.notes,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       };
 
       setOptimisticOrder(optimisticData);
 
-      // Optimistically update the cache
       queryClient.setQueryData<Order[]>(['orders'], (old = []) => [
         ...old,
         optimisticData,
@@ -64,8 +67,7 @@ export function useOptimisticOrder(options: OptimisticOrderOptions = {}) {
     },
     onSuccess: (data) => {
       addBreadcrumb('Order created successfully', 'transaction', 'info', { orderId: data.id });
-      
-      // Update cache with real order
+
       queryClient.setQueryData<Order[]>(['orders'], (old = []) =>
         old.map((order) => (order.id.startsWith('temp-') ? data : order))
       );
@@ -73,12 +75,10 @@ export function useOptimisticOrder(options: OptimisticOrderOptions = {}) {
       queryClient.setQueryData(['order', data.id], data);
 
       setOptimisticOrder(null);
-      clearCart();
 
       onSuccess?.(data);
     },
     onError: (error, _variables, context) => {
-      // Rollback to previous state
       if (context?.previousOrders) {
         queryClient.setQueryData(['orders'], context.previousOrders);
       }

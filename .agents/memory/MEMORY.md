@@ -1,0 +1,1 @@
+- [React-Google-Maps + React 19 Marker Fix](react-google-maps-react19.md) — AdvancedMarker crashes with getRootNode; use legacy Marker with SVG data URL icons instead.

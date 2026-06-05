@@ -17,7 +17,7 @@ export {
 } from "./queries/useMenuData";
 export { usePageData } from "./queries/usePageData";
 export { useNavigation } from "./queries/useNavigationData";
-export { useLocations, useLocationsByRegion } from "./queries/useLocationData";
+export { useLocations } from "./queries/useLocationData";
 export { useFeaturedCards, useHero, useStatement } from "./queries/useFeaturedData";
 export { useContactInfo } from "./queries/useContactData";
 

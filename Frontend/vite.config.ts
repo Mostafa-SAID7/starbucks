@@ -108,6 +108,14 @@ export default defineConfig({
           }),
         ]),
   ],
+  // Inject GOOGLE_API_KEY secret (available in Node/Replit env) as the
+  // VITE_-prefixed variable the browser bundle needs. The define option
+  // takes precedence over any .env file value.
+  define: {
+    'import.meta.env.VITE_GOOGLE_MAPS_API_KEY': JSON.stringify(
+      process.env.GOOGLE_API_KEY || process.env.VITE_GOOGLE_MAPS_API_KEY || ''
+    ),
+  },
   resolve: {
     alias: [
       {

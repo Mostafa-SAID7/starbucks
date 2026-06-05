@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ShoppingBag, X, Plus, Minus, Trash2, Ticket, MapPin, ChevronRight } from 'lucide-react';
+import { ShoppingBag, X, Plus, Minus, Trash2, Ticket, MapPin, ChevronRight, AlertCircle } from 'lucide-react';
 import { useCartStore } from '@/stores/cartStore';
 import { useLanguage } from '@/hooks';
 import { Button } from '@/components/ui/button';
@@ -41,8 +41,8 @@ export function CartTrigger() {
   );
 }
 
-export function CartDrawer({ 
-  isOpen: controlledIsOpen, 
+export function CartDrawer({
+  isOpen: controlledIsOpen,
   onClose: controlledOnClose
 }: CartDrawerProps) {
   const { isOpen: storeIsOpen, setIsOpen: setStoreIsOpen } = useCartStore();
@@ -56,8 +56,8 @@ export function CartDrawer({
 
   const [discountCode, setDiscountCode] = useState('');
   const [isApplyingDiscount, setIsApplyingDiscount] = useState(false);
+  const [discountError, setDiscountError] = useState('');
 
-  // Mock location state - in a real app this would come from a locationStore
   const [currentLocation] = useState({
     type: 'delivery',
     address: 'Cairo, Egypt',
@@ -68,22 +68,26 @@ export function CartDrawer({
     if (!discountCode.trim()) return;
 
     setIsApplyingDiscount(true);
+    setDiscountError('');
     try {
-      // Simulate API call to validate discount code
       await new Promise(resolve => setTimeout(resolve, 800));
 
-      // Mock discount validation
       const code = discountCode.toUpperCase();
       if (code === 'SAVE10') {
         applyDiscount(code, 10);
+        setDiscountCode('');
       } else if (code === 'SAVE20') {
         applyDiscount(code, 20);
+        setDiscountCode('');
       } else {
-        console.warn('Invalid discount code');
+        setDiscountError(
+          i18n.language === 'ar'
+            ? 'كود الخصم غير صالح. حاول SAVE10 أو SAVE20'
+            : 'Invalid code. Try SAVE10 or SAVE20'
+        );
       }
     } finally {
       setIsApplyingDiscount(false);
-      setDiscountCode('');
     }
   };
 
@@ -137,9 +141,9 @@ export function CartDrawer({
                 </button>
               </div>
 
-              {/* Location Selection Bar - Premium Style */}
+              {/* Location Selection Bar */}
               <div className="px-7 pb-7">
-                <motion.button 
+                <motion.button
                   whileHover={{ y: -2 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={() => {
@@ -174,7 +178,7 @@ export function CartDrawer({
             <div className="flex-1 overflow-y-auto px-7 py-4 scroll-smooth custom-scrollbar bg-gray-50/30 dark:bg-transparent">
               {items.length === 0 ? (
                 <div className="flex flex-col items-center justify-center h-full text-center space-y-6">
-                  <motion.div 
+                  <motion.div
                     initial={{ scale: 0.8, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
                     className="w-32 h-32 bg-white dark:bg-zinc-900 rounded-[2.5rem] flex items-center justify-center shadow-2xl shadow-black/5"
@@ -185,7 +189,7 @@ export function CartDrawer({
                     <h3 className="text-2xl font-black text-gray-900 dark:text-white mb-2 tracking-tight">{t('cart.empty_title')}</h3>
                     <p className="text-gray-500 dark:text-gray-400 font-medium leading-relaxed">{t('cart.empty_description')}</p>
                   </div>
-                  <Button 
+                  <Button
                     onClick={onClose}
                     className="bg-starbucks-green hover:bg-starbucks-green-dark text-white rounded-full px-10 py-7 text-lg font-black shadow-2xl shadow-starbucks-green/30 active:scale-95 transition-all mt-4"
                   >
@@ -193,7 +197,7 @@ export function CartDrawer({
                   </Button>
                 </div>
               ) : (
-                <motion.div 
+                <motion.div
                   layout
                   className="space-y-4 py-4"
                 >
@@ -205,11 +209,11 @@ export function CartDrawer({
                         initial={{ opacity: 0, y: 20, scale: 0.95 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, scale: 0.9, x: isRTL ? 50 : -50 }}
-                        transition={{ 
-                          type: 'spring', 
-                          damping: 25, 
+                        transition={{
+                          type: 'spring',
+                          damping: 25,
                           stiffness: 200,
-                          delay: index * 0.05 
+                          delay: index * 0.05
                         }}
                         className="flex gap-5 p-5 bg-white dark:bg-zinc-900/50 rounded-[2.5rem] border border-gray-100 dark:border-zinc-800/50 shadow-sm hover:shadow-xl hover:shadow-black/5 transition-all group relative overflow-hidden"
                       >
@@ -244,7 +248,7 @@ export function CartDrawer({
                               <X className="w-4 h-4" />
                             </button>
                           </div>
-                          
+
                           <p className="text-[10px] font-black text-gray-400 dark:text-zinc-500 mt-1 uppercase tracking-[0.2em]">
                             {t('cart.regular')}
                           </p>
@@ -257,7 +261,7 @@ export function CartDrawer({
                               <span className="text-[10px] font-black text-gray-400 uppercase">{t('cart.currency')}</span>
                             </div>
 
-                            {/* Quantity Controls - Premium Style */}
+                            {/* Quantity Controls */}
                             <div className="flex items-center bg-gray-50 dark:bg-zinc-900 rounded-full p-1 border border-gray-100 dark:border-zinc-800 shadow-inner">
                               <button
                                 onClick={() => updateQuantity(item.id, item.quantity - 1)}
@@ -288,29 +292,49 @@ export function CartDrawer({
             {items.length > 0 && (
               <div className="px-7 py-5 bg-white dark:bg-zinc-950 border-t border-gray-100 dark:border-zinc-800">
                 {!discount ? (
-                  <div className="flex gap-3">
-                    <div className="relative flex-1 group">
-                      <Ticket className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-300 group-focus-within:text-starbucks-green transition-colors" />
-                      <input
-                        type="text"
-                        value={discountCode}
-                        onChange={(e) => setDiscountCode(e.target.value)}
-                        placeholder={t('cart.discountCode')}
-                        className="w-full pl-11 pr-4 py-4 rounded-[1.25rem] border border-gray-100 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-900 text-sm font-bold focus:ring-4 focus:ring-starbucks-green/10 focus:border-starbucks-green outline-none transition-all placeholder:text-gray-400"
-                      />
+                  <div className="space-y-2">
+                    <div className="flex gap-3">
+                      <div className="relative flex-1 group">
+                        <Ticket className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-300 group-focus-within:text-starbucks-green transition-colors" />
+                        <input
+                          type="text"
+                          value={discountCode}
+                          onChange={(e) => {
+                            setDiscountCode(e.target.value);
+                            if (discountError) setDiscountError('');
+                          }}
+                          placeholder={t('cart.discountCode')}
+                          className={cn(
+                            'w-full pl-11 pr-4 py-4 rounded-[1.25rem] border bg-gray-50 dark:bg-zinc-900 text-sm font-bold focus:ring-4 focus:ring-starbucks-green/10 focus:border-starbucks-green outline-none transition-all placeholder:text-gray-400',
+                            discountError
+                              ? 'border-red-300 dark:border-red-800'
+                              : 'border-gray-100 dark:border-zinc-800'
+                          )}
+                        />
+                      </div>
+                      <Button
+                        onClick={handleApplyDiscount}
+                        disabled={isApplyingDiscount || !discountCode.trim()}
+                        className="bg-gray-900 dark:bg-zinc-100 dark:text-zinc-900 rounded-[1.25rem] px-7 font-black text-[10px] uppercase tracking-widest shadow-xl active:scale-95 transition-all disabled:opacity-50"
+                      >
+                        {isApplyingDiscount ? (
+                          <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                        ) : t('cart.apply')}
+                      </Button>
                     </div>
-                    <Button
-                      onClick={handleApplyDiscount}
-                      disabled={isApplyingDiscount || !discountCode.trim()}
-                      className="bg-gray-900 dark:bg-zinc-100 dark:text-zinc-900 rounded-[1.25rem] px-7 font-black text-[10px] uppercase tracking-widest shadow-xl active:scale-95 transition-all disabled:opacity-50"
-                    >
-                      {isApplyingDiscount ? (
-                        <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                      ) : t('cart.apply')}
-                    </Button>
+                    {discountError && (
+                      <motion.div
+                        initial={{ opacity: 0, y: -4 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="flex items-center gap-2 text-xs text-red-500 font-bold px-1"
+                      >
+                        <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+                        {discountError}
+                      </motion.div>
+                    )}
                   </div>
                 ) : (
-                  <motion.div 
+                  <motion.div
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     className="p-5 bg-starbucks-green/5 dark:bg-starbucks-green/10 rounded-[1.5rem] border border-starbucks-green/20 flex items-center justify-between group shadow-sm shadow-starbucks-green/5"
@@ -342,7 +366,7 @@ export function CartDrawer({
             {/* Footer */}
             {items.length > 0 && (
               <div className="p-8 border-t border-gray-100 dark:border-zinc-800 bg-white dark:bg-zinc-950 shadow-[0_-20px_40px_-20px_rgba(0,0,0,0.05)]">
-                {/* Totals - Premium Presentation */}
+                {/* Totals */}
                 <div className="space-y-4 mb-8">
                   <div className="flex justify-between items-center text-gray-500 dark:text-zinc-500">
                     <span className="font-black text-[10px] uppercase tracking-[0.2em]">{t('cart.subtotal')}</span>
@@ -369,14 +393,14 @@ export function CartDrawer({
                   </div>
                 </div>
 
-                {/* Primary Actions */}
+                {/* Actions */}
                 <div className="flex gap-4">
                   <Button
                     onClick={handleCheckout}
                     className="flex-1 bg-starbucks-green hover:bg-starbucks-green-dark h-20 rounded-[1.5rem] text-xl font-black shadow-2xl shadow-starbucks-green/30 active:scale-[0.98] transition-all relative overflow-hidden group"
                   >
                     <span className="relative z-10">{t('cart.checkout')}</span>
-                    <motion.div 
+                    <motion.div
                       initial={false}
                       whileHover={{ x: 10 }}
                       className="absolute right-6 top-1/2 -translate-y-1/2 opacity-20 group-hover:opacity-40 transition-opacity"
@@ -404,5 +428,3 @@ export function CartDrawer({
     </AnimatePresence>
   );
 }
-
-

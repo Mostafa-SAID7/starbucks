@@ -14,8 +14,9 @@ export const orderFetchers = {
       return response.data.data;
     } catch (error) {
       console.warn('Falling back to mock order creation due to API failure', error);
+      const orderId = `mock-${Date.now()}`;
       return {
-        id: `mock-${Date.now()}`,
+        id: orderId,
         orderNumber: `SBUX-${Math.floor(100000 + Math.random() * 900000)}`,
         userId: 'current-user',
         items: (order.items || []) as Order['items'],
@@ -24,6 +25,9 @@ export const orderFetchers = {
         locationId: order.locationId || 'default',
         orderType: order.orderType || 'pickup',
         paymentMethod: order.paymentMethod || 'cash',
+        deliveryAddress: order.deliveryAddress,
+        deliveryPhoneNumber: order.deliveryPhoneNumber,
+        notes: order.notes,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       };
@@ -46,25 +50,13 @@ export const orderFetchers = {
   /**
    * Fetch a specific order by ID
    */
-  fetchOrderById: async (id: string): Promise<Order> => {
+  fetchOrderById: async (id: string): Promise<Order | undefined> => {
     try {
       const response = await apiClient.get<{ data: Order }>(`/api/orders/${id}`);
       return response.data.data;
     } catch (error) {
-      console.warn('Generating mock order details for ID', id, error);
-      return {
-        id,
-        orderNumber: `SBUX-${id.slice(-6).toUpperCase()}`,
-        userId: 'current-user',
-        items: [],
-        total: 0,
-        status: 'pending',
-        locationId: 'default',
-        orderType: 'pickup',
-        paymentMethod: 'cash',
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      };
+      console.warn('Could not fetch order by ID', id, error);
+      return undefined;
     }
   },
 };

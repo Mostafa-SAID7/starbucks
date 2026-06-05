@@ -20,14 +20,6 @@ export const getAll = async (): Promise<Location[]> => {
 };
 
 /**
- * Get locations by city
- */
-export const getByCity = async (city: string): Promise<Location[]> => {
-  const response = await apiService.get<LocationsResponse>(`/api/v1/Locations/cities/${city}`);
-  return response.items;
-};
-
-/**
  * Get nearby locations
  */
 export const getNearby = async (
@@ -44,18 +36,9 @@ export const getNearby = async (
 };
 
 /**
- * Get city info
- */
-export const getCities = async (): Promise<string[]> => {
-  return apiService.get<string[]>('/api/v1/Locations/cities');
-};
-
-/**
  * Locations service object
  */
 export const locationsService = {
   getAll,
-  getByCity,
   getNearby,
-  getCities,
 };
