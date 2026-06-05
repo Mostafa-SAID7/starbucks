@@ -20,18 +20,23 @@ export function PlacesAutocomplete({
   const [placeAutocomplete, setPlaceAutocomplete] =
     useState<google.maps.places.Autocomplete | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  // useMapsLibrary returns null if the API key is missing / Maps failed to load
   const places = useMapsLibrary('places');
 
+  // Attach Google Places Autocomplete only when the library is available
   useEffect(() => {
     if (!places || !inputRef.current) return;
 
-    const options = {
-      fields: ['geometry', 'name', 'formatted_address'],
-      // Restrict to Egypt for example, or remove if not needed
-      componentRestrictions: { country: 'eg' },
-    };
-
-    setPlaceAutocomplete(new places.Autocomplete(inputRef.current, options));
+    try {
+      const ac = new places.Autocomplete(inputRef.current, {
+        fields: ['geometry', 'name', 'formatted_address'],
+        componentRestrictions: { country: 'eg' },
+      });
+      setPlaceAutocomplete(ac);
+    } catch {
+      // Autocomplete class unavailable (deprecated for new keys), fall back to text search
+    }
   }, [places]);
 
   useEffect(() => {

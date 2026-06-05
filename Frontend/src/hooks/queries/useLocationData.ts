@@ -18,17 +18,3 @@ export function useLocations() {
     gcTime: CACHE_TIMES.LOCATION_GC,
   });
 }
-
-/**
- * Hook to fetch locations by region
- */
-export function useLocationsByRegion(region: string) {
-  return useQuery({
-    queryKey: queryKeys.locations.byRegion(region),
-    queryFn: () => locationFetchers.fetchLocationsByRegion(region),
-    staleTime: CACHE_TIMES.LOCATION_STALE,
-    gcTime: CACHE_TIMES.LOCATION_GC,
-    enabled: !!region,
-  });
-}
-

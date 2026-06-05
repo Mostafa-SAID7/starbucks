@@ -1,6 +1,6 @@
 import { useState, useCallback, useMemo } from 'react';
 import { captureError } from '@/lib/error/errorMonitoring';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/ui';
 import { ANIMATION_CONFIG } from '@/lib/core/constants';
@@ -9,7 +9,6 @@ import { useLanguage } from '@/hooks';
 import type { Location } from '@/types';
 import { LocationCard } from './LocationCard';
 import { StoreMap } from '@/components/map/StoreMap';
-import { MapControls } from '@/components/map/MapControls';
 import { PlacesAutocomplete } from '@/components/map/PlacesAutocomplete';
 import { List, Map as MapIcon } from 'lucide-react';
 
@@ -34,16 +33,11 @@ export function LocationsPageContent({ locations }: LocationsPageContentProps) {
     }
     setGeoStatus('loading');
     navigator.geolocation.getCurrentPosition(
-      async (position) => {
-        try {
-          const { latitude, longitude } = position.coords;
-          setUserLocation({ lat: latitude, lng: longitude });
-          setGeoStatus('idle');
-          // Optionally switch to map view on mobile when locating
-          setViewMode('map');
-        } catch {
-          setGeoStatus('error');
-        }
+      (position) => {
+        const { latitude, longitude } = position.coords;
+        setUserLocation({ lat: latitude, lng: longitude });
+        setGeoStatus('idle');
+        setViewMode('map');
       },
       () => {
         setGeoStatus('error');
@@ -62,13 +56,19 @@ export function LocationsPageContent({ locations }: LocationsPageContentProps) {
   }, []);
 
   const filteredLocations = useMemo(() => {
+    if (search === '') return locations;
+    const lc = search.toLowerCase();
     return locations.filter((loc: Location) => {
-      const c = loc as Location & { nameAr?: string };
+      const nameEn = typeof loc.name === 'string' ? loc.name : (loc.name?.en || '');
+      const nameAr = typeof loc.name === 'string' ? '' : (loc.name?.ar || '');
+      const addr = typeof loc.address === 'string'
+        ? loc.address
+        : (loc.address?.en || '');
       return (
-        search === '' ||
-        String(c.name).toLowerCase().includes(search.toLowerCase()) ||
-        (c.nameAr && c.nameAr.includes(search)) ||
-        (c.address && typeof c.address === 'string' && c.address.toLowerCase().includes(search.toLowerCase()))
+        nameEn.toLowerCase().includes(lc) ||
+        nameAr.includes(search) ||
+        addr.toLowerCase().includes(lc) ||
+        (loc.city && loc.city.toLowerCase().includes(lc))
       );
     });
   }, [locations, search]);
@@ -182,20 +182,16 @@ export function LocationsPageContent({ locations }: LocationsPageContentProps) {
             userLocation={userLocation}
             selectedLocation={selectedLocation}
             onLocationSelect={setSelectedLocation}
+            onLocateMe={handleUseMyLocation}
+            geoStatus={geoStatus}
           />
-          <MapControls onLocateMe={handleUseMyLocation} geoStatus={geoStatus} />
 
-          {/* ─── DEV ONLY: Sentry test button ─────────────────────────────────
-              Click to throw a test error and verify it appears in Sentry.
-              This block is stripped by Vite in production builds.
-          ──────────────────────────────────────────────────────────────────── */}
           {import.meta.env.DEV && (
             <button
               id="sentry-test-btn"
               onClick={() => {
                 const err = new Error('[Sentry Test] Starbucks EG — error tracking verified ✅');
                 captureError(err, { page: 'LocationsPage', triggeredBy: 'sentry-test-btn' });
-                // Also throw so the ErrorBoundary / console catches it visibly
                 throw err;
               }}
               className="absolute bottom-4 left-1/2 -translate-x-1/2 z-50 bg-red-600 hover:bg-red-700 text-white text-xs font-bold px-4 py-2 rounded-full shadow-lg transition-all"

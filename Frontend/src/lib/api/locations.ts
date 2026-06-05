@@ -1,25 +1,18 @@
 import { locationsService } from "@/services/api/locationsService";
 import type { Location } from "@/types";
+import { mockStores } from "@/data/locations/mockStores";
 
 export const locationFetchers = {
   /**
-   * Fetch all locations from the API
+   * Fetch all locations from the API, fall back to local mock data if backend
+   * is unreachable (e.g. development without a running backend).
    */
   async fetchLocations(): Promise<Location[]> {
-    return locationsService.getAll();
-  },
-
-  /**
-   * Fetch locations filtered by region/slug
-   */
-  async fetchLocationsByRegion(region: string): Promise<Location[]> {
-    return locationsService.getByCity(region);
-  },
-
-  /**
-   * Fetch unique cities where stores are located
-   */
-  async fetchCities(): Promise<string[]> {
-    return locationsService.getCities();
+    try {
+      return await locationsService.getAll();
+    } catch {
+      console.warn('Falling back to mock store data due to API failure');
+      return mockStores;
+    }
   },
 };
