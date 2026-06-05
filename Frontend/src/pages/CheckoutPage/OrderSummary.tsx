@@ -7,17 +7,21 @@ import { Button } from '@/components/ui/button';
 interface OrderSummaryProps {
   onPlaceOrder: (e: React.FormEvent) => void;
   isLoading: boolean;
+  hideButton?: boolean;
 }
 
 /**
  * Sticky right-column sidebar: cart items list, subtotal, discount, total, and place-order CTA.
+ * Pass hideButton=true on Step 3 (payment UI) so the button doesn't show while
+ * the payment gateway is active.
  */
-export function OrderSummary({ onPlaceOrder, isLoading }: OrderSummaryProps) {
+export function OrderSummary({ onPlaceOrder, isLoading, hideButton = false }: OrderSummaryProps) {
   const { t, i18n } = useTranslation(['pages', 'common']);
   const { items, total, discount } = useCartStore();
 
   const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const discountAmount = discount?.amount || 0;
+  const currency = i18n.language === 'ar' ? 'ج.م' : 'EGP';
 
   return (
     <div className="bg-white dark:bg-zinc-900 p-8 rounded-[2.5rem] border border-gray-100 dark:border-zinc-800 shadow-2xl sticky top-24">
@@ -56,7 +60,7 @@ export function OrderSummary({ onPlaceOrder, isLoading }: OrderSummaryProps) {
                   {t('common:qty')}: {item.quantity}
                 </span>
                 <span className="font-black text-starbucks-green dark:text-starbucks-light">
-                  {item.price * item.quantity} {i18n.language === 'ar' ? 'ج.م' : 'EGP'}
+                  {(item.price * item.quantity).toFixed(2)} {currency}
                 </span>
               </div>
             </div>
@@ -68,7 +72,7 @@ export function OrderSummary({ onPlaceOrder, isLoading }: OrderSummaryProps) {
       <div className="space-y-4 pt-8 border-t border-gray-100 dark:border-zinc-800">
         <div className="flex justify-between items-center text-gray-500 dark:text-zinc-400">
           <span className="font-bold text-sm uppercase tracking-wider">{t('pages:checkout.subtotal')}</span>
-          <span className="font-black text-gray-900 dark:text-white">{subtotal} {i18n.language === 'ar' ? 'ج.م' : 'EGP'}</span>
+          <span className="font-black text-gray-900 dark:text-white">{subtotal.toFixed(2)} {currency}</span>
         </div>
 
         {discount && (
@@ -78,33 +82,35 @@ export function OrderSummary({ onPlaceOrder, isLoading }: OrderSummaryProps) {
             className="flex justify-between items-center text-starbucks-green"
           >
             <span className="font-bold text-sm uppercase tracking-wider">{t('pages:checkout.discount')}</span>
-            <span className="font-black">-{discountAmount} {i18n.language === 'ar' ? 'ج.م' : 'EGP'}</span>
+            <span className="font-black">-{discountAmount.toFixed(2)} {currency}</span>
           </motion.div>
         )}
 
         <div className="flex justify-between items-center pt-4">
           <span className="font-black text-xl tracking-tight">{t('pages:checkout.total')}</span>
           <span className="text-3xl font-black text-starbucks-green dark:text-starbucks-light tracking-tighter">
-            {total} {i18n.language === 'ar' ? 'ج.م' : 'EGP'}
+            {total.toFixed(2)} {currency}
           </span>
         </div>
       </div>
 
-      {/* CTA */}
-      <Button
-        onClick={onPlaceOrder}
-        disabled={isLoading}
-        className="w-full mt-10 bg-starbucks-green hover:bg-starbucks-green/90 py-8 rounded-[1.5rem] text-xl font-black shadow-xl shadow-starbucks-green/30 active:scale-[0.98] transition-all disabled:opacity-50"
-      >
-        {isLoading ? (
-          <div className="flex items-center gap-3">
-            <div className="w-5 h-5 border-4 border-white/30 border-t-white rounded-full animate-spin" />
-            {t('common:processing')}
-          </div>
-        ) : (
-          t('pages:checkout.placeOrder')
-        )}
-      </Button>
+      {/* CTA — hidden on Step 3 while payment gateway is active */}
+      {!hideButton && (
+        <Button
+          onClick={onPlaceOrder}
+          disabled={isLoading}
+          className="w-full mt-10 bg-starbucks-green hover:bg-starbucks-green/90 py-8 rounded-[1.5rem] text-xl font-black shadow-xl shadow-starbucks-green/30 active:scale-[0.98] transition-all disabled:opacity-50"
+        >
+          {isLoading ? (
+            <div className="flex items-center gap-3">
+              <div className="w-5 h-5 border-4 border-white/30 border-t-white rounded-full animate-spin" />
+              {t('common:processing')}
+            </div>
+          ) : (
+            t('pages:checkout.placeOrder')
+          )}
+        </Button>
+      )}
 
       <p className="mt-6 text-center text-[10px] font-bold text-gray-400 dark:text-zinc-500 uppercase tracking-[0.2em] leading-relaxed">
         Secure SSL Encrypted Payment

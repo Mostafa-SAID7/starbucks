@@ -22,14 +22,15 @@ export function CheckoutPageContent() {
   const navigate = useNavigate();
 
   const { items, total, clearCart } = useCartStore();
+
   const { createOrder, isLoading: isCreatingOrder, optimisticOrder } = useOptimisticOrder({
     onSuccess: async (order) => {
-      // Callback after order is created in database
       if (selectedMethod === 'Cash') {
-        // For cash, complete checkout immediately
+        // Clear cart now — payment is complete (cash on delivery)
+        clearCart();
         navigate(`/${i18n.language}/order/${order.id}`);
       } else {
-        // For online payment methods, transition to Step 3 (Payment UI)
+        // For online payment, keep cart visible until payment succeeds
         setCreatedOrderId(order.id);
         await handleInitiatePayment(order.id);
       }
@@ -41,13 +42,11 @@ export function CheckoutPageContent() {
     },
   });
 
-  // State management
   const [checkoutStep, setCheckoutStep] = useState<1 | 2 | 3>(1);
   const [selectedMethod, setSelectedMethod] = useState<PaymentMethod>('Cash');
   const [walletPhoneNumber, setWalletPhoneNumber] = useState('');
   const [createdOrderId, setCreatedOrderId] = useState<string | null>(null);
-  
-  // Payment initiation details
+
   const [isInitiatingPayment, setIsInitiatingPayment] = useState(false);
   const [redirectUrl, setRedirectUrl] = useState<string | null>(null);
   const [clientSecret, setClientSecret] = useState<string | null>(null);
@@ -62,7 +61,6 @@ export function CheckoutPageContent() {
 
   const [errors, setErrors] = useState<Partial<DeliveryForm>>({});
 
-  // Redirect if cart is empty
   if (items.length === 0 && !optimisticOrder) {
     return <EmptyCartView />;
   }
@@ -98,7 +96,6 @@ export function CheckoutPageContent() {
 
       if (response.redirectUrl) {
         if (['Vodafone', 'Orange', 'Etisalat'].includes(selectedMethod)) {
-          // Mobile wallets redirect outside our app
           window.location.href = response.redirectUrl;
           return;
         }
@@ -110,9 +107,9 @@ export function CheckoutPageContent() {
       setCheckoutStep(3);
     } catch (err: unknown) {
       console.error('Payment initiation failed', err);
-      const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred';
+      const msg = err instanceof Error ? err.message : '';
       setErrorMessage(
-        errorMessage ||
+        msg ||
         (isRTL ? 'فشلت تهيئة بوابة الدفع. يرجى المحاولة مرة أخرى.' : 'Failed to initialize payment gateway. Please try again.')
       );
       setCheckoutStep(2);
@@ -123,8 +120,7 @@ export function CheckoutPageContent() {
 
   const handleFinalOrderSubmit = async () => {
     setErrorMessage(null);
-    
-    // Validate phone number for wallets
+
     if (['Vodafone', 'Orange', 'Etisalat'].includes(selectedMethod)) {
       if (!walletPhoneNumber.trim()) {
         setErrorMessage(isRTL ? 'رقم الهاتف المحمول مطلوب للمحفظة الإلكترونية.' : 'Wallet phone number is required.');
@@ -136,7 +132,6 @@ export function CheckoutPageContent() {
       }
     }
 
-    // Create the order in the database first
     await createOrder({
       items: items.map((item) => ({
         id: item.id,
@@ -174,7 +169,7 @@ export function CheckoutPageContent() {
       <SEO title={t('pages:checkout.title')} />
 
       <div className="container mx-auto px-4 py-8 lg:py-12">
-        <CheckoutHeader />
+        <CheckoutHeader currentStep={checkoutStep} />
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
           {/* Main Wizard Column */}
@@ -280,7 +275,7 @@ export function CheckoutPageContent() {
             )}
           </div>
 
-          {/* Sidebar Summary */}
+          {/* Sidebar Summary — button hidden on Step 3 while gateway handles payment */}
           <div className="lg:col-span-1">
             <OrderSummary
               onPlaceOrder={
@@ -291,6 +286,7 @@ export function CheckoutPageContent() {
                   : () => {}
               }
               isLoading={isCreatingOrder || isInitiatingPayment}
+              hideButton={checkoutStep === 3}
             />
           </div>
         </div>

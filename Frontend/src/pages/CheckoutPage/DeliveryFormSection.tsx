@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
-import { MapPin, Clock, ShieldCheck, CreditCard } from 'lucide-react';
+import { MapPin, Clock, ShieldCheck } from 'lucide-react';
 import { cn } from '@/lib/ui';
 import type { DeliveryForm } from './types';
 
@@ -12,11 +12,12 @@ interface DeliveryFormSectionProps {
 }
 
 /**
- * Left column form: delivery method selector, address/phone/notes inputs,
- * and a mock (disabled) payment section.
+ * Step 1 form: delivery method selector, address/phone/notes inputs.
+ * Payment method is chosen in Step 2.
  */
 export function DeliveryFormSection({ form, errors, onChange, onSubmit }: DeliveryFormSectionProps) {
-  const { t } = useTranslation(['pages']);
+  const { t, i18n } = useTranslation(['pages']);
+  const isRTL = i18n.language === 'ar';
 
   return (
     <form onSubmit={onSubmit} className="space-y-10">
@@ -115,21 +116,14 @@ export function DeliveryFormSection({ form, errors, onChange, onSubmit }: Delive
         </div>
       </div>
 
-      {/* Payment (Mock / disabled) */}
-      <div className="bg-white dark:bg-zinc-900/40 p-8 rounded-[2rem] border border-gray-100 dark:border-zinc-800 shadow-sm opacity-50 grayscale select-none">
-        <div className="flex items-center justify-between mb-8">
-          <h2 className="text-2xl font-black tracking-tight">{t('pages:checkout.steps.payment')}</h2>
-          <ShieldCheck className="w-6 h-6 text-gray-400" />
-        </div>
-        <div className="flex items-center gap-5 p-6 rounded-2xl bg-gray-50 dark:bg-zinc-800 border-2 border-dashed border-gray-200 dark:border-zinc-700">
-          <div className="w-14 h-14 rounded-2xl bg-gray-200 dark:bg-zinc-700 flex items-center justify-center">
-            <CreditCard className="w-8 h-8 text-gray-400" />
-          </div>
-          <div className="space-y-2">
-            <div className="h-5 w-40 bg-gray-200 dark:bg-zinc-700 rounded-lg" />
-            <div className="h-4 w-64 bg-gray-200 dark:bg-zinc-700 rounded-lg opacity-50" />
-          </div>
-        </div>
+      {/* Secure payment hint */}
+      <div className="flex items-center gap-3 p-5 bg-starbucks-green/5 border border-starbucks-green/20 rounded-2xl">
+        <ShieldCheck className="w-5 h-5 shrink-0 text-starbucks-green" />
+        <p className="text-sm font-bold text-starbucks-green">
+          {isRTL
+            ? 'ستختار طريقة الدفع الآمنة في الخطوة التالية'
+            : 'You will choose your secure payment method in the next step'}
+        </p>
       </div>
     </form>
   );

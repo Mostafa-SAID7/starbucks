@@ -3,12 +3,22 @@ import { ArrowLeft } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
+interface CheckoutHeaderProps {
+  currentStep: 1 | 2 | 3;
+}
+
 /**
- * Page header with a back button and a 3-step progress indicator.
+ * Page header with a back button and a live 3-step progress indicator.
  */
-export function CheckoutHeader() {
+export function CheckoutHeader({ currentStep }: CheckoutHeaderProps) {
   const { t } = useTranslation(['pages']);
   const navigate = useNavigate();
+
+  const steps = [
+    t('pages:checkout.steps.delivery'),
+    t('pages:checkout.steps.payment'),
+    t('pages:checkout.steps.summary'),
+  ];
 
   return (
     <div className="mb-12">
@@ -30,27 +40,44 @@ export function CheckoutHeader() {
 
       {/* Progress Indicator */}
       <div className="flex items-center gap-4 max-w-2xl">
-        {[
-          t('pages:checkout.steps.delivery'),
-          t('pages:checkout.steps.payment'),
-          t('pages:checkout.steps.summary'),
-        ].map((label, idx) => (
-          <div key={label} className="flex items-center gap-3" style={{ opacity: idx === 0 ? 1 : 0.3 }}>
-            {idx > 0 && <div className="h-0.5 bg-gray-100 dark:bg-zinc-800 flex-1 w-12" />}
+        {steps.map((label, idx) => {
+          const stepNum = idx + 1;
+          const isActive = stepNum === currentStep;
+          const isCompleted = stepNum < currentStep;
+          return (
             <div
-              className={`w-10 h-10 rounded-full flex items-center justify-center font-black shadow-sm ${
-                idx === 0
-                  ? 'bg-starbucks-green text-white shadow-starbucks-green/20'
-                  : 'bg-gray-100 dark:bg-zinc-800 text-gray-400'
-              }`}
+              key={label}
+              className="flex items-center gap-3"
+              style={{ opacity: isActive || isCompleted ? 1 : 0.3 }}
             >
-              {idx + 1}
+              {idx > 0 && (
+                <div
+                  className={`h-0.5 flex-1 w-12 transition-colors duration-300 ${
+                    isCompleted ? 'bg-starbucks-green' : 'bg-gray-100 dark:bg-zinc-800'
+                  }`}
+                />
+              )}
+              <div
+                className={`w-10 h-10 rounded-full flex items-center justify-center font-black shadow-sm transition-colors duration-300 ${
+                  isActive
+                    ? 'bg-starbucks-green text-white shadow-starbucks-green/20'
+                    : isCompleted
+                    ? 'bg-starbucks-green/20 text-starbucks-green'
+                    : 'bg-gray-100 dark:bg-zinc-800 text-gray-400'
+                }`}
+              >
+                {isCompleted ? '✓' : stepNum}
+              </div>
+              <span
+                className={`font-black text-sm uppercase tracking-wider transition-colors duration-300 ${
+                  isActive ? 'text-gray-900 dark:text-white' : 'text-gray-400'
+                }`}
+              >
+                {label}
+              </span>
             </div>
-            <span className="font-black text-sm text-gray-900 dark:text-white uppercase tracking-wider">
-              {label}
-            </span>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
