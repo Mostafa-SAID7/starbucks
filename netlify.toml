@@ -1,0 +1,18 @@
+# Netlify configuration for Starbucks Dashboard
+# This file should be at the root of the repository
+
+[build]
+  # Base directory where the Angular app is located
+  base = "dashboard"
+  # Build command
+  command = "npm install --legacy-peer-deps && npm run build:netlify"
+  # Publish directory (relative to base)
+  publish = "dist/dashboard/browser"
+  # Environment variables
+  environment = { NODE_VERSION = "18.20.5" }
+
+# Redirect all routes to index.html for Angular SPA routing
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
