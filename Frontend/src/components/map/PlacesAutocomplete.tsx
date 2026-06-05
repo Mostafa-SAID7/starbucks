@@ -23,15 +23,19 @@ export function PlacesAutocomplete({
   useEffect(() => {
     if (!places || !containerRef.current) return;
 
-    // Prefer the new PlaceAutocompleteElement (works with all API keys after Mar 2025)
-    // Fall back to the legacy Autocomplete for older keys
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const PlaceAutoEl = (places as any).PlaceAutocompleteElement;
+
     if (PlaceAutoEl) {
+      /*
+       * New PlaceAutocompleteElement web component (required for keys created
+       * after March 2025). Returns a cleanup fn that removes the element.
+       */
       let el: HTMLElement | null = null;
+      let cleanupFn: (() => void) | undefined;
+
       try {
         el = new PlaceAutoEl({ componentRestrictions: { country: 'eg' } }) as HTMLElement;
-        // Match the look of the native input below
         el.style.cssText = `
           width: 100%;
           border: none;
@@ -43,7 +47,7 @@ export function PlacesAutocomplete({
         `;
         containerRef.current.appendChild(el);
 
-        el.addEventListener('gmp-select', async (e: Event) => {
+        const handleSelect = async (e: Event) => {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           const place = (e as any).placePrediction?.toPlace?.();
           if (!place) return;
@@ -55,26 +59,31 @@ export function PlacesAutocomplete({
             setSearch(place.displayName || '');
             onPlaceSelect(lat, lng, place.displayName || '');
           }
-        });
+        };
+
+        el.addEventListener('gmp-select', handleSelect);
+        cleanupFn = () => {
+          el?.removeEventListener('gmp-select', handleSelect);
+          el?.remove();
+        };
       } catch {
-        // PlaceAutocompleteElement failed — fall through to legacy below
+        // PlaceAutocompleteElement failed — fall through to legacy Autocomplete
         el?.remove();
-        useLegacyAutocomplete(places, containerRef, setSearch, onPlaceSelect);
+        cleanupFn = setupLegacyAutocomplete(places, containerRef, setSearch, onPlaceSelect);
       }
 
-      return () => {
-        el?.remove();
-      };
-    } else {
-      // Legacy path: key predates Mar 2025 restriction
-      return useLegacyAutocomplete(places, containerRef, setSearch, onPlaceSelect);
+      return () => cleanupFn?.();
     }
+
+    // Legacy path: key predates the Mar 2025 restriction
+    return setupLegacyAutocomplete(places, containerRef, setSearch, onPlaceSelect);
+
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [places]);
 
   return (
     <div className="relative w-full">
-      {/* Fallback plain text input — always present, drives local list filtering */}
+      {/* Plain text input — always present; drives local list filtering */}
       <input
         type="text"
         value={search}
@@ -85,7 +94,7 @@ export function PlacesAutocomplete({
         } text-gray-900 dark:text-white outline-none focus:border-starbucks-green focus:ring-1 focus:ring-starbucks-green transition-all shadow-sm`}
       />
 
-      {/* The Google Places element mounts here when the Maps API is ready */}
+      {/* Google Places web component mounts here when Maps API is ready */}
       <div
         ref={containerRef}
         className={`absolute inset-y-0 ${isRTL ? 'right-14 left-14' : 'left-6 right-14'} flex items-center pointer-events-none [&>*]:pointer-events-auto`}
@@ -102,7 +111,12 @@ export function PlacesAutocomplete({
   );
 }
 
-function useLegacyAutocomplete(
+/**
+ * Sets up the legacy google.maps.places.Autocomplete on the sibling <input>.
+ * NOT a React hook — named without the `use` prefix intentionally.
+ * Returns a cleanup function that removes the event listener.
+ */
+function setupLegacyAutocomplete(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   places: any,
   containerRef: React.RefObject<HTMLDivElement | null>,
@@ -111,7 +125,6 @@ function useLegacyAutocomplete(
 ): (() => void) | undefined {
   if (!places?.Autocomplete || !containerRef.current) return;
 
-  // Attach to the sibling <input> (first child of parent)
   const parent = containerRef.current.parentElement;
   const input = parent?.querySelector('input');
   if (!input) return;
