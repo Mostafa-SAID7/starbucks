@@ -9,10 +9,12 @@ import {
   LayoutDashboard, ShoppingBag, Package, ChartBarBig,
   Bell, Search, Settings, LogOut, Menu, X,
   ChevronLeft, ChevronRight, Coffee, TrendingUp,
-  Users, DollarSign, ShoppingCart, UserCheck, Boxes,
+  Users, DollarSign, ShoppingCart, UserCheck, UserX, Boxes,
   ArrowUp, ArrowDown, Eye, Pencil, Trash2,
   Filter, Download, Calendar, Plus, CheckCircle,
-  Clock, XCircle, AlertCircle, Star, Sparkles, Lock
+  Clock, XCircle, AlertCircle, Star, Sparkles, Lock,
+  MapPin, Phone, Store, Wrench, ShieldCheck, Globe,
+  ToggleLeft, ToggleRight, Save, RefreshCw
 } from 'lucide-angular';
 
 export const appConfig: ApplicationConfig = {
@@ -28,10 +30,12 @@ export const appConfig: ApplicationConfig = {
         LayoutDashboard, ShoppingBag, Package, ChartBarBig,
         Bell, Search, Settings, LogOut, Menu, X,
         ChevronLeft, ChevronRight, Coffee, TrendingUp,
-        Users, DollarSign, ShoppingCart, UserCheck, Boxes,
+        Users, DollarSign, ShoppingCart, UserCheck, UserX, Boxes,
         ArrowUp, ArrowDown, Eye, Pencil, Trash2,
         Filter, Download, Calendar, Plus, CheckCircle,
-        Clock, XCircle, AlertCircle, Star, Sparkles, Lock
+        Clock, XCircle, AlertCircle, Star, Sparkles, Lock,
+        MapPin, Phone, Store, Wrench, ShieldCheck, Globe,
+        ToggleLeft, ToggleRight, Save, RefreshCw
       })
     }
   ]

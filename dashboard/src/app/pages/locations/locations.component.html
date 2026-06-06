@@ -1,0 +1,129 @@
+<div class="space-y-5">
+
+  @if (loading) {
+    <div class="flex items-center gap-3 p-4 bg-white rounded-2xl border border-gray-100 shadow-sm">
+      <div class="w-5 h-5 border-2 border-[#006241]/30 border-t-[#006241] rounded-full animate-spin shrink-0"></div>
+      <p class="text-sm text-gray-500 font-medium">Loading locations…</p>
+    </div>
+  }
+
+  <!-- Header -->
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+    <div>
+      <h2 class="text-2xl font-bold text-gray-900 font-heading">Store Locations</h2>
+      <p class="text-sm text-gray-500 mt-0.5">{{ filtered.length }} branches across Egypt</p>
+    </div>
+    <button class="inline-flex items-center gap-2 bg-[#006241] text-white px-4 py-2.5 rounded-xl text-sm font-semibold hover:bg-[#1e3932] transition-colors shadow-sm">
+      <lucide-angular name="plus" [size]="15"></lucide-angular>
+      Add Location
+    </button>
+  </div>
+
+  <!-- Filters -->
+  <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4">
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+      <div class="relative sm:col-span-2">
+        <lucide-angular name="search" [size]="15" class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></lucide-angular>
+        <input
+          type="text"
+          [(ngModel)]="search"
+          placeholder="Search by name or address…"
+          class="w-full pl-9 pr-4 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#006241]/20 focus:border-[#006241] transition-colors bg-gray-50"
+        />
+      </div>
+      <select
+        [(ngModel)]="cityFilter"
+        class="border border-gray-200 rounded-xl px-3 py-2.5 text-sm bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#006241]/20 focus:border-[#006241] transition-colors text-gray-700"
+      >
+        <option value="">All Cities</option>
+        @for (city of cities; track city) {
+          <option [value]="city">{{ city }}</option>
+        }
+      </select>
+    </div>
+  </div>
+
+  <!-- Locations grid -->
+  <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+    @for (loc of filtered; track loc.id) {
+      <div class="bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow overflow-hidden">
+
+        <!-- Map preview placeholder -->
+        <div class="h-28 bg-gradient-to-br from-[#1e3932] to-[#006241] relative overflow-hidden flex items-center justify-center">
+          <div class="absolute inset-0 opacity-10">
+            <div class="absolute top-4 left-8 w-20 h-20 rounded-full border-2 border-white"></div>
+            <div class="absolute bottom-2 right-4 w-14 h-14 rounded-full border-2 border-white"></div>
+          </div>
+          <lucide-angular name="map-pin" [size]="32" class="text-white/80 relative z-10"></lucide-angular>
+          <div class="absolute top-3 right-3">
+            <span [class]="'px-2.5 py-1 text-[11px] font-bold rounded-full ' + (loc.status === 'Open' ? 'bg-emerald-400/90 text-white' : 'bg-red-400/90 text-white')">
+              {{ loc.status }}
+            </span>
+          </div>
+        </div>
+
+        <!-- Info -->
+        <div class="p-4">
+          <div class="flex items-start justify-between gap-2 mb-2">
+            <div>
+              <h3 class="text-sm font-bold text-gray-900 leading-tight">{{ loc.name }}</h3>
+              <p class="text-[12px] text-[#006241] font-medium mt-0.5">{{ loc.nameAr }}</p>
+            </div>
+            <span class="text-[11px] text-gray-400 bg-gray-50 px-2 py-1 rounded-lg shrink-0">{{ loc.city }}</span>
+          </div>
+
+          <div class="space-y-1.5 mb-3">
+            <div class="flex items-start gap-2">
+              <lucide-angular name="map-pin" [size]="12" class="text-gray-400 mt-0.5 shrink-0"></lucide-angular>
+              <p class="text-[12px] text-gray-500 leading-tight">{{ loc.address }}</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <lucide-angular name="phone" [size]="12" class="text-gray-400 shrink-0"></lucide-angular>
+              <p class="text-[12px] text-gray-500">{{ loc.phone }}</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <lucide-angular name="clock" [size]="12" class="text-gray-400 shrink-0"></lucide-angular>
+              <p class="text-[12px] text-gray-500">{{ loc.hours }}</p>
+            </div>
+          </div>
+
+          <!-- Features -->
+          <div class="flex gap-2 mb-3">
+            @if (loc.hasDriveThru) {
+              <span class="px-2 py-0.5 text-[10px] font-semibold bg-amber-50 text-amber-700 rounded-md">Drive-Thru</span>
+            }
+            @if (loc.hasDelivery) {
+              <span class="px-2 py-0.5 text-[10px] font-semibold bg-blue-50 text-blue-700 rounded-md">Delivery</span>
+            }
+          </div>
+
+          <!-- Actions -->
+          <div class="flex gap-2">
+            <button
+              (click)="toggleStatus(loc)"
+              [class]="'flex-1 py-2 rounded-xl text-xs font-semibold transition-colors ' + (loc.status === 'Open' ? 'bg-red-50 text-red-600 hover:bg-red-100' : 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100')"
+            >
+              {{ loc.status === 'Open' ? 'Mark Closed' : 'Mark Open' }}
+            </button>
+            <button class="p-2 border border-gray-200 rounded-xl hover:bg-blue-50 hover:border-blue-200 text-gray-400 hover:text-blue-600 transition-colors">
+              <lucide-angular name="pencil" [size]="14"></lucide-angular>
+            </button>
+            <button
+              (click)="deleteLocation(loc.id, loc.name)"
+              class="p-2 border border-gray-200 rounded-xl hover:bg-red-50 hover:border-red-200 text-gray-400 hover:text-red-500 transition-colors"
+            >
+              <lucide-angular name="trash-2" [size]="14"></lucide-angular>
+            </button>
+          </div>
+        </div>
+      </div>
+    }
+
+    @empty {
+      <div class="col-span-full py-16 text-center text-sm text-gray-400">
+        No locations found matching your search.
+      </div>
+    }
+  </div>
+
+</div>
