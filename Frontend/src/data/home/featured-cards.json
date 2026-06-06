@@ -1,35 +1,18 @@
 {
   "cards": [
     {
-      "id": "new-era",
-      "ctaLink": "/new-era-same-icons",
-      "image": "/home/UAE_1.webp",
-      "theme": "White"
+      "id": "1",
+      "title": "New Arrivals",
+      "description": "Try our latest seasonal drinks",
+      "image": "/featured/new-arrivals.jpg",
+      "link": "/menu"
     },
     {
-      "id": "official-statement",
-      "ctaLink": "/delivery",
-      "secondaryCtaLink": "/locations",
-      "image": "/home/Generic.webp",
-      "theme": "Green"
-    },
-    {
-      "id": "delivery-promo",
-      "ctaLink": "/starbucks-for-the-record",
-      "image": "/home/record.webp",
-      "theme": "Green"
-    },
-    {
-      "id": "rewards-promo",
-      "ctaLink": "/menu",
-      "image": "/home/Summer.webp",
-      "theme": "White"
-    },
-    {
-      "id": "summer-menu",
-      "ctaLink": "/menu",
-      "image": "/home/deliver.webp",
-      "theme": "Green"
+      "id": "2",
+      "title": "Summer Collection",
+      "description": "Refresh yourself with iced beverages",
+      "image": "/featured/summer.jpg",
+      "link": "/menu"
     }
   ]
 }

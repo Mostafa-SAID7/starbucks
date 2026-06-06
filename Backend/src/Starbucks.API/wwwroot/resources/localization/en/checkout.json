@@ -1,0 +1,57 @@
+{
+  "title": "Checkout",
+  "steps": {
+    "delivery": "Delivery",
+    "payment": "Payment",
+    "confirmation": "Confirmation"
+  },
+  "delivery": {
+    "title": "Delivery Address",
+    "subtitle": "Where should we deliver your order?",
+    "address": "Street Address",
+    "city": "City",
+    "area": "Area / District",
+    "phone": "Phone Number",
+    "notes": "Delivery Notes",
+    "useCurrentLocation": "Use Current Location",
+    "saveAddress": "Save for future orders"
+  },
+  "payment": {
+    "title": "Payment Method",
+    "subtitle": "How would you like to pay?",
+    "creditCard": "Credit Card",
+    "debitCard": "Debit Card",
+    "wallet": "Digital Wallet",
+    "bankTransfer": "Bank Transfer",
+    "cashOnDelivery": "Cash on Delivery",
+    "saveCard": "Save card for future purchases",
+    "cardNumber": "Card Number",
+    "expiryDate": "Expiry Date",
+    "cvv": "CVV",
+    "holderName": "Cardholder Name"
+  },
+  "order": {
+    "title": "Order Summary",
+    "items": "Items",
+    "subtotal": "Subtotal",
+    "tax": "Tax",
+    "delivery": "Delivery Fee",
+    "total": "Order Total",
+    "placeOrder": "Place Order",
+    "termsAccept": "I agree to the Terms of Service"
+  },
+  "confirmation": {
+    "title": "Order Confirmed",
+    "subtitle": "Thank you for your order!",
+    "orderNumber": "Order Number",
+    "expectedTime": "Expected Delivery Time",
+    "trackOrder": "Track Order",
+    "downloadReceipt": "Download Receipt",
+    "continueShop": "Continue Shopping"
+  },
+  "messages": {
+    "orderPlaced": "Order placed successfully",
+    "paymentFailed": "Payment failed. Please try again.",
+    "invalidAddress": "Please enter a valid address"
+  }
+}

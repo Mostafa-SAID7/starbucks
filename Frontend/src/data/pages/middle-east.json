@@ -1,19 +1,10 @@
 {
   "slug": "middle-east",
-  "layoutType": "sidebar",
-  "sidebarImage": "/api/v1/images/starbucks-middle-east.webp",
-  "sections": [
-    {
-      "id": "political-neutrality"
-    },
-    {
-      "id": "faq-support"
-    },
-    {
-      "id": "faq-israel-stores"
-    },
-    {
-      "id": "alshaya-partnership"
-    }
-  ]
+  "title": { "en": "Middle East", "ar": "الشرق الأوسط" },
+  "description": { "en": "Our heritage in the region", "ar": "تراثنا في المنطقة" },
+  "sections": [],
+  "hero": {
+    "title": { "en": "Our Middle East", "ar": "شرقنا الأوسط" },
+    "image": { "en": "/hero/middle-east.jpg", "ar": "/hero/middle-east.jpg" }
+  }
 }

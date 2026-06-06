@@ -1,8 +1,7 @@
 {
-  "ctaLink": "/community-impact-starbucks",
-  "imageUrl": "/home/banner/background.webp",
-  "secondaryImageUrls": {
-    "ar": "/home/banner/woman-Photoroom.webp",
-    "en": "/home/banner/woman-Photoroom-en.png"
-  }
+  "title": "Welcome to Starbucks",
+  "subtitle": "Your favorite coffee, wherever you go",
+  "backgroundImage": "/hero/main-hero.jpg",
+  "ctaText": "Order Now",
+  "ctaLink": "/menu"
 }

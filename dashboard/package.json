@@ -32,6 +32,8 @@
     "@ngrx/effects": "^19.0.0",
     "@ngrx/store": "^19.0.0",
     "@ngrx/store-devtools": "^19.0.0",
+    "@ngx-translate/core": "^15.0.0",
+    "@ngx-translate/http-loader": "^15.0.0",
     "@types/chart.js": "^2.9.41",
     "chart.js": "^4.5.1",
     "date-fns": "^4.4.0",

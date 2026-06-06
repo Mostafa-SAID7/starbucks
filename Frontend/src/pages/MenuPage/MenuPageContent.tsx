@@ -6,7 +6,7 @@ import { useLanguage } from "@/hooks";
 import { useCartStore } from "@/stores/cartStore";
 import type { MenuCategory } from "@/types";
 
-import { flattenItems } from "./helpers";
+import { flattenItems, getLocalizedText } from "./helpers";
 import { MenuControls, CATEGORY_ALL } from "./MenuControls";
 import { MenuGrid } from "./MenuGrid";
 import { ItemDetailsModal } from "./ItemDetailsModal";
@@ -20,6 +20,9 @@ interface MenuPageContentProps {
 /**
  * Main content area for the Menu page.
  * Manages search, category filter, cart actions, modal, and toast state.
+ * 
+ * Items now contain { English, Arabic } for name/description.
+ * The component uses getLocalizedText() to render based on active language.
  */
 export function MenuPageContent({ categories }: MenuPageContentProps) {
   const { isRTL } = useLanguage();
@@ -49,12 +52,19 @@ export function MenuPageContent({ categories }: MenuPageContentProps) {
 
     if (search.trim()) {
       const q = search.toLowerCase();
-      items = items.filter(
-        (i) =>
-          i.name.toLowerCase().includes(q) ||
-          (i.nameAr && i.nameAr.includes(q)) ||
-          i.description.toLowerCase().includes(q)
-      );
+      items = items.filter((i) => {
+        const nameEn = typeof i.name === "string" ? i.name : i.name.English;
+        const nameAr = typeof i.name === "string" ? "" : i.name.Arabic;
+        const descEn = typeof i.description === "string" ? i.description : i.description.English;
+        const descAr = typeof i.description === "string" ? "" : i.description.Arabic;
+        
+        return (
+          nameEn.toLowerCase().includes(q) ||
+          nameAr.includes(q) ||
+          descEn.toLowerCase().includes(q) ||
+          descAr.includes(q)
+        );
+      });
     }
 
     return items;
@@ -65,7 +75,8 @@ export function MenuPageContent({ categories }: MenuPageContentProps) {
 
   const handleAddToCart = useCallback(
     (item: FlatItem) => {
-      const name = isRTL && item.nameAr ? item.nameAr : item.name;
+      // Use helper to get localized text — no manual isRTL check
+      const name = getLocalizedText(item.name, isRTL);
       addItem({ id: item.id, name, price: item.price, image: item.image });
       setToast(`${isRTL ? "تمت الإضافة:" : "Added to cart:"} ${name}`);
       setTimeout(() => setToast(null), 3000);

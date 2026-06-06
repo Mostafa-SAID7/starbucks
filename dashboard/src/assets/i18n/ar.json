@@ -1,0 +1,169 @@
+{
+  "common": {
+    "save": "حفظ",
+    "cancel": "إلغاء",
+    "delete": "حذف",
+    "edit": "تعديل",
+    "add": "إضافة",
+    "back": "رجوع",
+    "close": "إغلاق",
+    "search": "بحث",
+    "loading": "جاري التحميل...",
+    "error": "خطأ",
+    "success": "نجاح",
+    "warning": "تحذير",
+    "confirm": "تأكيد",
+    "english": "English",
+    "arabic": "العربية"
+  },
+
+  "header": {
+    "title": "لوحة تحكم ستاربكس",
+    "subtitle": "لوحة المسؤول",
+    "language": "اللغة",
+    "profile": "الملف الشخصي",
+    "logout": "تسجيل الخروج",
+    "settings": "الإعدادات"
+  },
+
+  "sidebar": {
+    "dashboard": "لوحة التحكم",
+    "menu": "إدارة القائمة",
+    "locations": "المواقع",
+    "orders": "الطلبات",
+    "users": "المستخدمون",
+    "reports": "التقارير",
+    "settings": "الإعدادات",
+    "help": "مساعدة",
+    "about": "حول"
+  },
+
+  "dashboard": {
+    "title": "لوحة التحكم",
+    "welcome": "مرحباً بك في لوحة تحكم ستاربكس",
+    "overview": "نظرة عامة",
+    "statistics": "الإحصائيات",
+    "recentOrders": "الطلبات الأخيرة",
+    "topProducts": "أفضل المنتجات",
+    "sales": "المبيعات",
+    "revenue": "الإيرادات",
+    "customers": "العملاء",
+    "performance": "الأداء"
+  },
+
+  "menu": {
+    "title": "إدارة القائمة",
+    "categories": "الفئات",
+    "items": "عناصر القائمة",
+    "subcategories": "الفئات الفرعية",
+    "addCategory": "إضافة فئة",
+    "addItem": "إضافة عنصر في القائمة",
+    "editCategory": "تعديل الفئة",
+    "editItem": "تعديل عنصر في القائمة",
+    "deleteCategory": "حذف الفئة",
+    "deleteItem": "حذف عنصر في القائمة",
+    "name": "الاسم",
+    "description": "الوصف",
+    "price": "السعر",
+    "image": "صورة",
+    "english": "الإنجليزية",
+    "arabic": "العربية",
+    "active": "نشط",
+    "inactive": "غير نشط",
+    "calories": "السعرات الحرارية",
+    "allergens": "مسببات الحساسية",
+    "isNew": "عنصر جديد",
+    "isFeatured": "مميز",
+    "sortOrder": "ترتيب الفرز"
+  },
+
+  "locations": {
+    "title": "إدارة المواقع",
+    "addLocation": "إضافة موقع",
+    "editLocation": "تعديل الموقع",
+    "deleteLocation": "حذف الموقع",
+    "locationName": "اسم الموقع",
+    "city": "المدينة",
+    "address": "العنوان",
+    "phone": "الهاتف",
+    "openingHours": "ساعات العمل",
+    "status": "الحالة",
+    "latitude": "خط العرض",
+    "longitude": "خط الطول"
+  },
+
+  "orders": {
+    "title": "الطلبات",
+    "orderId": "رقم الطلب",
+    "customer": "العميل",
+    "total": "الإجمالي",
+    "status": "الحالة",
+    "date": "التاريخ",
+    "items": "العناصر",
+    "pending": "قيد الانتظار",
+    "confirmed": "مؤكد",
+    "preparing": "قيد الإعداد",
+    "ready": "جاهز",
+    "completed": "مكتمل",
+    "cancelled": "ملغى",
+    "viewDetails": "عرض التفاصيل",
+    "markAsCompleted": "وضع علامة كمكتمل"
+  },
+
+  "users": {
+    "title": "إدارة المستخدمين",
+    "addUser": "إضافة مستخدم",
+    "editUser": "تعديل المستخدم",
+    "deleteUser": "حذف المستخدم",
+    "username": "اسم المستخدم",
+    "email": "البريد الإلكتروني",
+    "role": "الدور",
+    "status": "الحالة",
+    "joinDate": "تاريخ الانضمام",
+    "admin": "إداري",
+    "manager": "مدير",
+    "staff": "موظف",
+    "customer": "عميل",
+    "active": "نشط",
+    "inactive": "غير نشط"
+  },
+
+  "reports": {
+    "title": "التقارير",
+    "generateReport": "إنشاء تقرير",
+    "exportData": "تصدير البيانات",
+    "salesReport": "تقرير المبيعات",
+    "ordersReport": "تقرير الطلبات",
+    "customersReport": "تقرير العملاء",
+    "dateRange": "نطاق التاريخ",
+    "from": "من",
+    "to": "إلى",
+    "format": "الصيغة",
+    "pdf": "PDF",
+    "excel": "Excel",
+    "csv": "CSV"
+  },
+
+  "settings": {
+    "title": "الإعدادات",
+    "general": "الإعدادات العامة",
+    "appearance": "المظهر",
+    "notifications": "الإشعارات",
+    "privacy": "الخصوصية",
+    "theme": "المظهر",
+    "light": "فاتح",
+    "dark": "داكن",
+    "notifications_enabled": "تفعيل الإشعارات",
+    "language": "اللغة",
+    "timezone": "المنطقة الزمنية"
+  },
+
+  "messages": {
+    "confirmDelete": "هل أنت متأكد من رغبتك في حذف هذا العنصر؟",
+    "deleteSuccess": "تم حذف العنصر بنجاح",
+    "saveSuccess": "تم حفظ التغييرات بنجاح",
+    "error": "حدث خطأ. يرجى المحاولة مرة أخرى.",
+    "noData": "لا توجد بيانات متاحة",
+    "loading": "جاري تحميل البيانات..."
+  }
+}

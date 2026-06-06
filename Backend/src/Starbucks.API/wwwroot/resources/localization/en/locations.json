@@ -1,0 +1,39 @@
+{
+  "title": "Find Our Stores",
+  "subtitle": "Locate your nearest Starbucks",
+  "description": "Discover all Starbucks locations in Egypt",
+  "search": {
+    "placeholder": "Search locations...",
+    "byCity": "Search by city",
+    "byCafe": "Search by cafe name"
+  },
+  "filters": {
+    "city": "City",
+    "services": "Services",
+    "driveThru": "Drive Thru",
+    "wifi": "WiFi",
+    "mobilePay": "Mobile Pay",
+    "petFriendly": "Pet Friendly",
+    "parking": "Parking",
+    "outdoor": "Outdoor Seating"
+  },
+  "card": {
+    "hours": "Hours",
+    "phone": "Phone",
+    "address": "Address",
+    "viewDetails": "View Details",
+    "getDirections": "Get Directions",
+    "services": "Services"
+  },
+  "details": {
+    "openingHours": "Opening Hours",
+    "phone": "Phone Number",
+    "address": "Address",
+    "services": "Services & Amenities",
+    "wifi": "WiFi Available",
+    "parking": "Parking Available",
+    "driveThru": "Drive Thru Available"
+  },
+  "noResults": "No locations found matching your search",
+  "loading": "Loading locations..."
+}

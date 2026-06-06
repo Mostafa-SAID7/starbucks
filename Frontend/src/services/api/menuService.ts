@@ -1,11 +1,17 @@
 /**
  * Menu API Service
- * Handles all menu-related API calls to the backend
+ * Handles all menu-related API calls to the backend.
+ * All content endpoints accept a `language` parameter (en | ar) so the
+ * Frontend never has to do manual en/ar field switching at the component
+ * level — the API returns a single resolved string for the requested locale.
  */
 
 import { apiService } from './index';
 import { MenuCategory, MenuItem } from '@/lib/schemas';
 import mockMenuData from '@/data/menu/menu.json';
+import type { MenuData } from '@/lib/schemas/menu';
+
+const typedMockData = mockMenuData as unknown as MenuData;
 
 export interface CategoriesResponse {
   items: MenuCategory[];
@@ -13,44 +19,52 @@ export interface CategoriesResponse {
 }
 
 /**
- * Get all menu categories
+ * Get all menu categories with subcategories and items.
+ * Pass the active UI language so the API resolves LocalizedContent fields
+ * into a single string for each locale before returning.
  */
 export const getCategories = async (language: string = 'en'): Promise<MenuCategory[]> => {
   try {
-    const response = await apiService.get<CategoriesResponse>(`/api/v1/Menu/categories?language=${language}`);
+    const response = await apiService.get<CategoriesResponse>(
+      `/api/v1/Menu/categories?language=${language}`
+    );
     return response.items;
   } catch (error) {
     console.warn('Falling back to mock menu data due to API failure', error);
-    return mockMenuData.categories as unknown as MenuCategory[];
+    return typedMockData.categories;
   }
 };
 
 /**
- * Get specific menu category by slug
+ * Get specific menu category by slug.
  */
 export const getCategory = async (slug: string, language: string = 'en'): Promise<MenuCategory> => {
   try {
-    return await apiService.get<MenuCategory>(`/api/v1/Menu/categories/${slug}?language=${language}`);
+    return await apiService.get<MenuCategory>(
+      `/api/v1/Menu/categories/${slug}?language=${language}`
+    );
   } catch (error) {
     console.warn('Falling back to mock category data due to API failure', error);
-    const category = mockMenuData.categories.find(c => c.id === slug);
+    const category = typedMockData.categories.find(c => c.id === slug);
     if (!category) throw error;
-    return category as unknown as MenuCategory;
+    return category;
   }
 };
 
 /**
- * Get menu item details
+ * Get menu item details by ID.
  */
-export const getItem = async (itemId: string): Promise<MenuItem> => {
+export const getItem = async (itemId: string, language: string = 'en'): Promise<MenuItem> => {
   try {
-    return await apiService.get<MenuItem>(`/api/v1/Menu/items/${itemId}`);
+    return await apiService.get<MenuItem>(
+      `/api/v1/Menu/items/${itemId}?language=${language}`
+    );
   } catch (error) {
     console.warn('Falling back to mock item data', error);
-    for (const category of mockMenuData.categories) {
+    for (const category of typedMockData.categories) {
       for (const sub of category.subcategories || []) {
-        const item = sub.items?.find((i: { id: string }) => i.id === itemId);
-        if (item) return item as unknown as MenuItem;
+        const item = sub.items?.find((i: MenuItem) => i.id === itemId);
+        if (item) return item;
       }
     }
     throw error;
@@ -58,28 +72,24 @@ export const getItem = async (itemId: string): Promise<MenuItem> => {
 };
 
 /**
- * Search menu items
+ * Search menu items by keyword.
  */
 export const search = async (
   query: string,
   language: string = 'en'
 ): Promise<MenuItem[]> => {
   try {
-    const params = new URLSearchParams();
-    params.append('query', query);
-    params.append('language', language);
-
+    const params = new URLSearchParams({ query, language });
     return await apiService.get<MenuItem[]>(`/api/v1/Menu/search?${params.toString()}`);
   } catch (error) {
     console.warn('Falling back to mock search data', error);
     const results: MenuItem[] = [];
     const lowerQuery = query.toLowerCase();
-    
-    for (const category of mockMenuData.categories) {
+    for (const category of typedMockData.categories) {
       for (const sub of category.subcategories || []) {
         for (const item of sub.items || []) {
           if (item.id.toLowerCase().includes(lowerQuery)) {
-            results.push(item as unknown as MenuItem);
+            results.push(item);
           }
         }
       }
@@ -88,12 +98,4 @@ export const search = async (
   }
 };
 
-/**
- * Menu service object
- */
-export const menuService = {
-  getCategories,
-  getCategory,
-  getItem,
-  search,
-};
+export const menuService = { getCategories, getCategory, getItem, search };

@@ -47,7 +47,7 @@ export function useOptimisticOrder(options: OptimisticOrderOptions = {}) {
         total: total,
         status: 'pending',
         locationId: newOrder.locationId || 'default',
-        orderType: newOrder.orderType || 'PickUp',
+        orderType: newOrder.orderType || 'pickup',
         paymentMethod: newOrder.paymentMethod || 'cash',
         deliveryAddress: newOrder.deliveryAddress,
         deliveryPhoneNumber: newOrder.deliveryPhoneNumber,

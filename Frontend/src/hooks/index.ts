@@ -1,67 +1,39 @@
-/**
- * Centralized hooks export
- * All custom hooks should be exported from here to ensure consistent imports
- */
+// Localization hooks
+export { useResources, useResourceModule, useResourcesHealth, getLocalizedText } from './useResources';
+export type { ResourcesResponse, ModuleResponse, HealthResponse } from './useResources';
 
-// Language and i18n hooks
-export { useLanguage, type UseLanguageReturn, type Language } from "./i18n/useLanguage";
+export { useLocalization, useCommonResources, useTranslation } from './useLocalization';
 
-// Geolocation hooks
-export { useGeolocation, type GeoStatus, type UseGeolocationReturn } from "./location/useGeolocation";
+// i18n hooks
+export { useLanguage } from './i18n/useLanguage';
+export type { Language, UseLanguageReturn } from './i18n/useLanguage';
 
-// Query hooks (Data Fetching)
-export {
-  useMenuData,
-  useMenuCategory,
-  useMenuItem,
-} from "./queries/useMenuData";
-export { usePageData } from "./queries/usePageData";
-export { useNavigation } from "./queries/useNavigationData";
-export { useLocations } from "./queries/useLocationData";
-export { useFeaturedCards, useHero, useStatement } from "./queries/useFeaturedData";
-export { useContactInfo } from "./queries/useContactData";
+// UI hooks
+export { useTheme } from './ui/useTheme';
+export { useAccordion } from './ui/useAccordion';
 
-// Performance & Optimization hooks
-export { usePrefetch } from "./performance/usePrefetch";
-export { 
-  usePerformanceMonitoring, 
-  measureComponentRender, 
-  measureFunction, 
-  getPerformanceMetrics, 
-  monitorLongTasks 
-} from "./performance/usePerformanceMonitoring";
-
-// Utility hooks
-export { usePrevious } from "./common/usePrevious";
-export { useOnlineStatus } from "./common/useOnlineStatus";
-export { usePagination } from "./common/usePagination";
-export {
-  useInitialLoad,
-  useStaleWhileRevalidate,
-  useOptimisticUpdate,
-  useRetryWithBackoff,
-  type InitialLoadOptions,
-} from "./common/useInitialLoad";
-
-// UI & Interaction hooks
-export { useAutoScroll, useScrollToTop, useScrollPosition } from "./ui/useAutoScroll";
-export { useAccordion } from "./ui/useAccordion";
-export { useTheme } from "./ui/useTheme";
-
-// Accessibility hooks
-export { useAnnounce } from "./accessibility/useAnnounce";
-export { useFocusManagement } from "./accessibility/useFocusManagement";
-export { useKeyboardNavigation, useFocusTrap, useArrowKeyNavigation } from "./accessibility/useKeyboardNavigation";
-
-// Auth & Security hooks
-export { useAuth } from "./auth/useAuth";
-
-// Error monitoring hooks
-export { useErrorHandling } from "./error/useErrorHandling";
-
-// Form handling hooks
-export { useFormHandler } from "./form/useFormHandler";
-export { useFormValidation, useFieldValidation, useAsyncFormValidation } from "./form/useFormValidation";
+// Common hooks
+export { usePrevious } from './common/usePrevious';
+export { useInitialLoad, useStaleWhileRevalidate, useOptimisticUpdate, useRetryWithBackoff } from './common/useInitialLoad';
 
 // Business logic hooks
-export { useOptimisticOrder } from "./business/useOptimisticOrder";
+export { useCart } from './business/useCart';
+export { useOptimisticOrder } from './business/useOptimisticOrder';
+export { usePayment } from './business/usePayment';
+
+// Auth hooks
+export { useAuth } from './auth/useAuth';
+
+// Accessibility hooks
+export { useAnnounce } from './accessibility/useAnnounce';
+export { useFocusManagement } from './accessibility/useFocusManagement';
+export { useKeyboardNavigation, useFocusTrap, useArrowKeyNavigation } from './accessibility/useKeyboardNavigation';
+export type { KeyboardNavigationOptions } from './accessibility/useKeyboardNavigation';
+
+// Query hooks
+export { useMenuData, useMenuCategory, useMenuItem } from './queries/useMenuData';
+export { useContactInfo } from './queries/useContactData';
+export { useFeaturedCards, useHero, useStatement } from './queries/useFeaturedData';
+export { useLocations } from './queries/useLocationData';
+export { usePageData } from './queries/usePageData';
+export { useNavigation } from './queries/useNavigationData';

@@ -1,17 +1,12 @@
 {
-  "layoutType": "sidebar",
-  "sidebarImage": "/api/v1/images/cookie-notice.webp",
-  "accordion": {
-    "items": [
-      {},
-      {},
-      {},
-      {},
-      {},
-      {},
-      {},
-      {}
+  "slug": "cookies",
+  "title": { "en": "Cookie Settings", "ar": "إعدادات ملفات تعريف الارتباط" },
+  "hideMainTitle": true,
+  "sections": [],
+  "intro": {
+    "title": { "en": "Cookies", "ar": "ملفات تعريف الارتباط" },
+    "paragraphs": [
+      { "en": "We use cookies to enhance your experience", "ar": "نستخدم ملفات تعريف الارتباط لتحسين تجربتك" }
     ]
-  },
-  "sections": []
+  }
 }

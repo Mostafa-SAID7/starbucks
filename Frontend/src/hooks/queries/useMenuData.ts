@@ -1,67 +1,54 @@
 import { useQuery, type UseQueryResult } from "@tanstack/react-query";
 import { queryKeys } from "@/lib/api/queryKeys";
 import { menuFetchers } from "@/lib/api";
-import type { MenuData } from "@/types";
+import { useLanguage } from "@/hooks";
+import type { MenuData, MenuCategory } from "@/types";
 import { CACHE_TIMES } from "@/lib/core/constants";
 
 /**
- * Hook to fetch all menu data (structural)
+ * Fetch all menu data for the current UI language.
  *
- * Cache Strategy:
- * - Stale Time: 1 hour (menu data changes infrequently)
- * - GC Time: 2 hours
- *
- * @returns Query result with menu data
+ * The language is read from the active URL locale (ar | en) and forwarded to
+ * the Backend API so content is resolved server-side. The query key includes
+ * the language so React Query keeps separate caches per locale.
  */
 export function useMenuData(): UseQueryResult<MenuData, Error> {
+  const { lang } = useLanguage();
+
   return useQuery({
-    queryKey: queryKeys.menu.all(),
-    queryFn: () => menuFetchers.fetchMenuData(),
+    queryKey: [...queryKeys.menu.all(), lang],
+    queryFn: () => menuFetchers.fetchMenuData(lang),
     staleTime: CACHE_TIMES.MENU_STALE,
     gcTime: CACHE_TIMES.MENU_GC,
   });
 }
 
 /**
- * Hook to fetch specific menu category
- *
- * @param categoryId - Category ID from URL params
- * @returns Query result with category data
- *
- * @example
- * ```tsx
- * function MenuCategoryPage() {
- *   const { categoryId } = useParams();
- *   const { data, isLoading, error } = useMenuCategory(categoryId!);
- *
- *   // ... render logic
- * }
- * ```
+ * Fetch specific menu category for the current UI language.
  */
 export function useMenuCategory(categoryId: string) {
+  const { lang } = useLanguage();
+
   return useQuery({
-    queryKey: queryKeys.menu.byCategory(categoryId),
-    queryFn: () => menuFetchers.fetchMenuCategory(categoryId),
+    queryKey: [...queryKeys.menu.byCategory(categoryId), lang],
+    queryFn: () => menuFetchers.fetchMenuCategory(categoryId, lang),
     staleTime: CACHE_TIMES.MENU_STALE,
     gcTime: CACHE_TIMES.MENU_GC,
-    enabled: !!categoryId, // Only fetch if categoryId is provided
+    enabled: !!categoryId,
   });
 }
 
 /**
- * Hook to fetch specific menu item
- *
- * @param categoryId - Category ID from URL params
- * @param itemId - Item ID from URL params
- * @returns Query result with item data
+ * Fetch specific menu item details for the current UI language.
  */
 export function useMenuItem(categoryId: string, itemId: string) {
+  const { lang } = useLanguage();
+
   return useQuery({
-    queryKey: queryKeys.menu.byItem(categoryId, itemId),
-    queryFn: () => menuFetchers.fetchMenuItem(categoryId, itemId),
+    queryKey: [...queryKeys.menu.byItem(categoryId, itemId), lang],
+    queryFn: () => menuFetchers.fetchMenuItem(categoryId, itemId, lang),
     staleTime: CACHE_TIMES.MENU_STALE,
     gcTime: CACHE_TIMES.MENU_GC,
     enabled: !!categoryId && !!itemId,
   });
 }
-

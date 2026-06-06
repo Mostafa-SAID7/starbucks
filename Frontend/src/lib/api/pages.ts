@@ -2,8 +2,26 @@ import { AppError, ErrorType } from '@/lib/error';
 import type { GenericPageData } from "@/types";
 import { simulateDelay } from "./client";
 
+const API_URL = import.meta.env.VITE_API_URL || '/api';
+
 export const pageFetchers = {
-  async fetchPageBySlug(slug: string): Promise<GenericPageData> {
+  async fetchPageBySlug(slug: string, language: string = 'en'): Promise<GenericPageData> {
+    try {
+      // Try Backend Resources API first (if page content is stored there)
+      const response = await fetch(
+        `${API_URL}/v1/resources/localization/${language}/pages/${slug}`,
+        { headers: { 'Content-Type': 'application/json' } }
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        return data.resources as GenericPageData;
+      }
+    } catch (err) {
+      console.warn(`Backend page API not available for ${slug}, trying local data`, err);
+    }
+
+    // Fallback to local JSON data
     await simulateDelay();
 
     const pageMap: Record<string, () => Promise<{ default: GenericPageData }>> = {

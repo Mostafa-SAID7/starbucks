@@ -1,0 +1,33 @@
+{
+  "title": "سلة التسوق",
+  "empty": "سلتك فارغة",
+  "emptyMessage": "ابدأ بإضافة بعض المنتجات اللذيذة إلى سلتك",
+  "addItems": "إضافة منتجات",
+  "item": "منتج",
+  "items": "منتجات",
+  "quantity": "الكمية",
+  "price": "السعر",
+  "subtotal": "المجموع الفرعي",
+  "total": "الإجمالي",
+  "remove": "حذف",
+  "clearCart": "مسح السلة",
+  "updateQuantity": "تحديث الكمية",
+  "continueShopping": "متابعة التسوق",
+  "proceed": "المتابعة إلى الدفع",
+  "estimate": "تقدير الطلب",
+  "subtotalPrice": "المجموع الفرعي",
+  "taxEstimate": "الضريبة (تقديرية)",
+  "deliveryFee": "رسوم التسليم",
+  "discount": "الخصم",
+  "finalTotal": "إجمالي الطلب",
+  "savings": "توفيرك",
+  "promoCode": "رمز الترويج",
+  "applyCode": "تطبيق الرمز",
+  "codeApplied": "تم تطبيق الرمز بنجاح",
+  "invalidCode": "رمز ترويج غير صحيح",
+  "messages": {
+    "itemAdded": "تمت إضافة المنتج إلى السلة",
+    "itemRemoved": "تم حذف المنتج من السلة",
+    "cartUpdated": "تم تحديث السلة"
+  }
+}

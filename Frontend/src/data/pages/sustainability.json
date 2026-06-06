@@ -1,33 +1,10 @@
 {
   "slug": "sustainability",
-  "layoutType": "sidebar",
-  "hideMainTitle": true,
-  "sidebarImage": {
-    "ar": "/api/v1/images/sustainability/Sustainability-ar.webp",
-    "en": "/api/v1/images/sustainability/Sustainability-en.webp"
-  },
-  "intro": {
-    "image": "/api/v1/images/sustainability/Sustainability1.webp"
-  },
-  "sections": [
-    {
-      "id": "reusables",
-      "image": "/api/v1/images/sustainability/Sustainability2.webp",
-      "imagePosition": "right",
-      "ctaLink": "#",
-      "hideSideBorder": true
-    },
-    {
-      "id": "coffee-grounds",
-      "image": "/api/v1/images/sustainability/Sustainability3.webp",
-      "imagePosition": "left",
-      "hideSideBorder": true
-    },
-    {
-      "id": "strawless-lids",
-      "image": "/api/v1/images/sustainability/Sustainability4.webp",
-      "imagePosition": "right",
-      "hideSideBorder": true
-    }
-  ]
+  "title": { "en": "Sustainability", "ar": "الاستدامة" },
+  "description": { "en": "Our commitment to the planet", "ar": "التزامنا بالكوكب" },
+  "sections": [],
+  "hero": {
+    "title": { "en": "Responsible Business", "ar": "عمل مسؤول" },
+    "image": { "en": "/hero/sustainability.jpg", "ar": "/hero/sustainability.jpg" }
+  }
 }

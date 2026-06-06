@@ -1,15 +1,10 @@
 {
-  "layoutType": "sidebar",
-  "sidebarImage": "/api/v1/images/home/UAE_1.webp",
-  "sections": [
-    {
-      "id": "miranda"
-    },
-    {
-      "id": "andy"
-    },
-    {
-      "id": "nigel"
-    }
-  ]
+  "slug": "new-era",
+  "title": { "en": "New Era", "ar": "العصر الجديد" },
+  "description": { "en": "Innovation and tradition", "ar": "الابتكار والتقاليد" },
+  "sections": [],
+  "hero": {
+    "title": { "en": "Reimagined", "ar": "معاد التصور" },
+    "image": { "en": "/hero/new-era.jpg", "ar": "/hero/new-era.jpg" }
+  }
 }

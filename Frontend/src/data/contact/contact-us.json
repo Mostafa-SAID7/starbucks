@@ -1,17 +1,12 @@
 {
-  "info": {
-    "email": "starbucks.mena@alshaya.com",
-    "phone": "02-24803822",
-    "phoneTel": "0224803822"
-  },
-  "form": {
-    "subjects": [
-      "general",
-      "complaint",
-      "feedback",
-      "delivery",
-      "rewards",
-      "other"
-    ]
+  "title": "Contact Us",
+  "email": "support@starbucks.com",
+  "phone": "+1-800-STARBUCKS",
+  "address": "2401 Utah Avenue South, Seattle, WA 98134",
+  "hours": "Monday - Friday: 9AM - 6PM PST",
+  "socialMedia": {
+    "facebook": "https://facebook.com/starbucks",
+    "twitter": "https://twitter.com/starbucks",
+    "instagram": "https://instagram.com/starbucks"
   }
 }

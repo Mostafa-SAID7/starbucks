@@ -1,23 +1,10 @@
 {
   "slug": "delivery",
-  "sidebarImage": "https://player.cloudinary.com/embed/?cloud_name=djegmn3hm&public_id=AQNaBmByVoeyiVtDYW6GSi8TwoefyWGBL74GM1MgSU9D-uUeUzL5XiUWZb30bFA46D8D_BE3DryETXgEWZ8aT8Bf31zNCQn6a5Y_ztqmex&autoplay=1&loop=1&muted=1&controls=false&hide_controls=1",
-  "layoutType": "sidebar",
-  "hideMainTitle": true,
-  "sections": [
-    {
-      "id": "partners",
-      "image": "/api/v1/images/Talabat_Starbucks.png.webp",
-      "ctaLink": "https://www.talabat.com/ar/egypt/restaurant/516787/starbucks-city-scape-6th-of-october?aid=7935"
-    },
-    {
-      "id": "how-it-works"
-    }
-  ],
-  "accordion": {
-    "items": [
-      {},
-      {},
-      {}
-    ]
+  "title": { "en": "Delivery Options", "ar": "خيارات التوصيل" },
+  "description": { "en": "Fast and convenient delivery", "ar": "توصيل سريع وملائم" },
+  "sections": [],
+  "hero": {
+    "title": { "en": "Delivery", "ar": "التوصيل" },
+    "image": { "en": "/hero/delivery.jpg", "ar": "/hero/delivery.jpg" }
   }
 }

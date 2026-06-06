@@ -4,26 +4,42 @@ import { z } from 'zod';
  * Menu and Product validation schemas
  */
 
+/**
+ * LocalizedContent schema — matches Backend DTOs
+ * Returned by API with both English and Arabic values.
+ * Frontend reads the active language and displays accordingly.
+ */
+export const LocalizedContentSchema = z.object({
+  English: z.string(),
+  Arabic: z.string(),
+});
+
 export const MenuItemSchema = z.object({
   id: z.string(),
   href: z.string(),
   image: z.string(),
+  name: LocalizedContentSchema,
+  description: LocalizedContentSchema.optional(),
+  shortDescription: LocalizedContentSchema.optional(),
   isNew: z.boolean().optional(),
 });
 
 export const MenuSubcategorySchema = z.object({
   id: z.string(),
-  href: z.string(),
+  href: z.string().optional(),
   image: z.string().optional(),
+  name: LocalizedContentSchema.optional(),
+  description: LocalizedContentSchema.optional(),
   items: z.array(MenuItemSchema).optional(),
 });
 
 export const MenuCategorySchema = z.object({
   id: z.string(),
-  name: z.string().optional(),
-  description: z.string().optional(),
+  name: LocalizedContentSchema.optional(),
+  description: LocalizedContentSchema.optional(),
   href: z.string().optional(),
   image: z.string().optional(),
+  slug: z.string().optional(),
   subcategories: z.array(MenuSubcategorySchema).optional(),
 });
 
@@ -54,6 +70,7 @@ export const MenuDataSchema = z.object({
   sidebar: SidebarDataSchema.optional(),
 });
 
+export type LocalizedContent = z.infer<typeof LocalizedContentSchema>;
 export type MenuItem = z.infer<typeof MenuItemSchema>;
 export type MenuSubcategory = z.infer<typeof MenuSubcategorySchema>;
 export type MenuCategory = z.infer<typeof MenuCategorySchema>;

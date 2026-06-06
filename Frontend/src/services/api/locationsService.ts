@@ -1,6 +1,7 @@
 /**
  * Locations API Service
- * Handles all location-related API calls to the backend
+ * All endpoints pass the active UI language so bilingual fields in
+ * LocationDto (DisplayName, LocalizedAddress) are resolved server-side.
  */
 
 import { apiService } from './index';
@@ -11,34 +12,46 @@ export interface LocationsResponse {
   totalCount: number;
 }
 
+export interface CityInfo {
+  city: string;
+  locationCount: number;
+  displayName: { english: string; arabic: string };
+}
+
 /**
- * Get all locations
+ * Get all locations, resolved for a specific language.
  */
-export const getAll = async (): Promise<Location[]> => {
-  const response = await apiService.get<LocationsResponse>('/api/v1/Locations');
+export const getAll = async (language: string = 'en'): Promise<Location[]> => {
+  const response = await apiService.get<LocationsResponse>(
+    `/api/v1/Locations?language=${language}`
+  );
   return response.items;
 };
 
 /**
- * Get nearby locations
+ * Get nearby locations.
  */
 export const getNearby = async (
   lat: number,
   lng: number,
-  radius: number = 10
+  radius: number = 10,
+  language: string = 'en'
 ): Promise<Location[]> => {
-  const params = new URLSearchParams();
-  params.append('latitude', lat.toString());
-  params.append('longitude', lng.toString());
-  params.append('radius', radius.toString());
-
+  const params = new URLSearchParams({
+    latitude: lat.toString(),
+    longitude: lng.toString(),
+    radius: radius.toString(),
+    language,
+  });
   return apiService.get<Location[]>(`/api/v1/Locations/nearby?${params.toString()}`);
 };
 
 /**
- * Locations service object
+ * Get all cities with bilingual display names.
+ * Returns CityInfoDto[] which now includes { displayName: { english, arabic } }.
  */
-export const locationsService = {
-  getAll,
-  getNearby,
+export const getCities = async (): Promise<CityInfo[]> => {
+  return apiService.get<CityInfo[]>('/api/v1/Locations/cities');
 };
+
+export const locationsService = { getAll, getNearby, getCities };

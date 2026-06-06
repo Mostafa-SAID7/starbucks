@@ -1,0 +1,57 @@
+{
+  "title": "الدفع",
+  "steps": {
+    "delivery": "التسليم",
+    "payment": "الدفع",
+    "confirmation": "التأكيد"
+  },
+  "delivery": {
+    "title": "عنوان التسليم",
+    "subtitle": "أين يجب أن نسلم طلبك؟",
+    "address": "عنوان الشارع",
+    "city": "المدينة",
+    "area": "المنطقة / الحي",
+    "phone": "رقم الهاتف",
+    "notes": "ملاحظات التسليم",
+    "useCurrentLocation": "استخدم موقعك الحالي",
+    "saveAddress": "احفظ للطلبات المستقبلية"
+  },
+  "payment": {
+    "title": "طريقة الدفع",
+    "subtitle": "كيف تريد أن تدفع؟",
+    "creditCard": "بطاقة ائتمان",
+    "debitCard": "بطاقة خصم",
+    "wallet": "المحفظة الرقمية",
+    "bankTransfer": "تحويل بنكي",
+    "cashOnDelivery": "الدفع عند الاستلام",
+    "saveCard": "احفظ البطاقة للشراء المستقبلي",
+    "cardNumber": "رقم البطاقة",
+    "expiryDate": "تاريخ الانتهاء",
+    "cvv": "رمز الأمان",
+    "holderName": "اسم صاحب البطاقة"
+  },
+  "order": {
+    "title": "ملخص الطلب",
+    "items": "المنتجات",
+    "subtotal": "المجموع الفرعي",
+    "tax": "الضريبة",
+    "delivery": "رسوم التسليم",
+    "total": "إجمالي الطلب",
+    "placeOrder": "تقديم الطلب",
+    "termsAccept": "أوافق على شروط الخدمة"
+  },
+  "confirmation": {
+    "title": "تم تأكيد الطلب",
+    "subtitle": "شكراً على طلبك!",
+    "orderNumber": "رقم الطلب",
+    "expectedTime": "وقت التسليم المتوقع",
+    "trackOrder": "تتبع الطلب",
+    "downloadReceipt": "تحميل الإيصال",
+    "continueShop": "متابعة التسوق"
+  },
+  "messages": {
+    "orderPlaced": "تم تقديم الطلب بنجاح",
+    "paymentFailed": "فشل الدفع. يرجى المحاولة مرة أخرى.",
+    "invalidAddress": "يرجى إدخال عنوان صحيح"
+  }
+}

@@ -1,20 +1,10 @@
 {
   "slug": "our-coffees",
-  "layoutType": "sidebar",
-  "sidebarImage": "/api/v1/images/our-coffees.webp",
-  "sections": [
-    {
-      "id": "roasts"
-    },
-    {
-      "id": "at-home"
-    },
-    {
-      "id": "brewing-guides"
-    }
-  ],
-  "accordion": {
-    "title": "Learn Our Brewing Methods Step by Step",
-    "items": [{}, {}, {}, {}]
+  "title": { "en": "Our Coffees", "ar": "قهوتنا" },
+  "description": { "en": "Expertly sourced and roasted", "ar": "يتم الحصول عليها وتحميصها بخبرة" },
+  "sections": [],
+  "hero": {
+    "title": { "en": "The Art of Coffee", "ar": "فن القهوة" },
+    "image": { "en": "/hero/coffees.jpg", "ar": "/hero/coffees.jpg" }
   }
 }

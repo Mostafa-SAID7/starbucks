@@ -1,0 +1,42 @@
+{
+  "title": "Menu",
+  "description": "Starbucks offers you delicious handcrafted beverages and great tasting snacks made from high quality ingredients.",
+  "categories": {
+    "drinks": {
+      "title": "Explore Beverages",
+      "description": "Enjoy the wonderful world of signature Starbucks drinks",
+      "sidebarTitle": "Beverages"
+    },
+    "food": {
+      "title": "Explore Food",
+      "description": "Wide selection of sandwiches, salads and desserts",
+      "sidebarTitle": "Food"
+    }
+  },
+  "allergyInfo": {
+    "title": "Allergens",
+    "description": "Please be advised that we cannot confirm that our food or drinks are completely free of allergenic ingredients",
+    "linkLabel": "More information on allergens"
+  },
+  "sidebar": {
+    "title": "Menu",
+    "actions": {
+      "order": "Order Now",
+      "stores": "Find our Stores"
+    }
+  },
+  "filters": {
+    "all": "All",
+    "price": "Price",
+    "calories": "Calories",
+    "allergens": "Allergens",
+    "new": "New"
+  },
+  "sort": {
+    "recommended": "Recommended",
+    "priceLow": "Price: Low to High",
+    "priceHigh": "Price: High to Low",
+    "newest": "Newest First",
+    "popular": "Most Popular"
+  }
+}

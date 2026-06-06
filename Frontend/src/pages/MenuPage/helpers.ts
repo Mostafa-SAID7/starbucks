@@ -4,6 +4,10 @@ import type { FlatItem } from "./types";
 /**
  * Flattens all nested category → subcategory → item
  * structures into a single array of FlatItem objects.
+ * 
+ * Now converts LocalizedContent fields (from API) into the FlatItem shape
+ * without any language-specific field switching — components receive
+ * the full { English, Arabic } object and decide what to display.
  */
 export function flattenItems(categories: MenuCategory[]): FlatItem[] {
   const result: FlatItem[] = [];
@@ -12,12 +16,16 @@ export function flattenItems(categories: MenuCategory[]): FlatItem[] {
     for (const sub of cat.subcategories ?? []) {
       for (const item of sub.items ?? []) {
         const raw = item as unknown as Record<string, unknown>;
+        
+        // Extract LocalizedContent objects from the API response
+        const itemName = raw.name as any;
+        const itemDescription = raw.description as any;
+        
         result.push({
           id: String(item.id),
-          name: (raw.name as string) || item.id,
-          nameAr: raw.nameAr as string | undefined,
-          description: (raw.description as string) || "",
-          descriptionAr: raw.descriptionAr as string | undefined,
+          // Store full { English, Arabic } — don't resolve here
+          name: itemName || { English: String(item.id), Arabic: String(item.id) },
+          description: itemDescription || { English: "", Arabic: "" },
           price: (raw.price as number) || 0,
           image: item.image,
           href: String(raw.href ?? item.href ?? ""),
@@ -30,6 +38,16 @@ export function flattenItems(categories: MenuCategory[]): FlatItem[] {
   }
 
   return result;
+}
+
+/**
+ * Helper to get the correct language string from a LocalizedContent object.
+ * Used in components for rendering.
+ */
+export function getLocalizedText(content: { English: string; Arabic: string } | string | undefined, isRTL: boolean): string {
+  if (!content) return "";
+  if (typeof content === "string") return content;
+  return isRTL ? content.Arabic : content.English;
 }
 
 /**

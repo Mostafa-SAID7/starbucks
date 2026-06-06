@@ -1,0 +1,33 @@
+{
+  "title": "Shopping Cart",
+  "empty": "Your cart is empty",
+  "emptyMessage": "Start by adding some delicious items to your cart",
+  "addItems": "Add Items",
+  "item": "Item",
+  "items": "Items",
+  "quantity": "Qty",
+  "price": "Price",
+  "subtotal": "Subtotal",
+  "total": "Total",
+  "remove": "Remove",
+  "clearCart": "Clear Cart",
+  "updateQuantity": "Update Quantity",
+  "continueShopping": "Continue Shopping",
+  "proceed": "Proceed to Checkout",
+  "estimate": "Order Estimate",
+  "subtotalPrice": "Subtotal",
+  "taxEstimate": "Tax (Estimated)",
+  "deliveryFee": "Delivery Fee",
+  "discount": "Discount",
+  "finalTotal": "Order Total",
+  "savings": "You Save",
+  "promoCode": "Promo Code",
+  "applyCode": "Apply Code",
+  "codeApplied": "Code applied successfully",
+  "invalidCode": "Invalid promo code",
+  "messages": {
+    "itemAdded": "Item added to cart",
+    "itemRemoved": "Item removed from cart",
+    "cartUpdated": "Cart updated"
+  }
+}

@@ -1,7 +1,6 @@
 import { lazy, ComponentType } from 'react';
-import MiddleEastPage from '@/pages/MiddleEastPage/MiddleEastPage';
-import { DeliveryPage } from '@/pages/DeliveryPage/DeliveryPage';
 import { HomeSkeleton, MenuSkeleton, StaticPageSkeleton, ContactSkeleton, LocationsSkeleton } from '@/components/skeletons';
+import { ContactUsPage } from '@/pages';
 
 /**
  * Route configuration type
@@ -43,18 +42,6 @@ const LocationsPage = lazy(() =>
   }))
 );
 
-const ContactUsPage = lazy(() =>
-  import('@/pages/ContactUsPage').then((module) => ({
-    default: module.ContactUsPage,
-  }))
-);
-
-const SustainabilityPage = lazy(() =>
-  import('@/pages').then((module) => ({
-    default: module.SustainabilityPage,
-  }))
-);
-
 const GenericPageWrapper = lazy(() =>
   import('@/pages').then((module) => ({ default: module.GenericPageWrapper }))
 );
@@ -65,10 +52,6 @@ const CheckoutPage = lazy(() =>
 
 const OrderConfirmationPage = lazy(() =>
   import('@/pages').then((module) => ({ default: module.OrderConfirmationPage }))
-);
-
-const ProfilePage = lazy(() =>
-  import('@/pages/AccountPage/ProfilePage').then((module) => ({ default: module.ProfilePage }))
 );
 
 const PaymentSuccessPage = lazy(() =>
@@ -89,17 +72,8 @@ const NotFound = lazy(() =>
  */
 export const REDIRECT_ROUTES = [
   { from: '/', to: '/ar' },
-  { from: '/about-us', to: '/ar/about-us' },
-  { from: '/delivery', to: '/ar/delivery' },
-  { from: '/social-impact-sustainability', to: '/ar/social-impact-sustainability' },
   { from: '/locations', to: '/ar/locations' },
   { from: '/contact-us', to: '/ar/contact-us' },
-  { from: '/terms-of-use', to: '/ar/terms-of-use' },
-  { from: '/privacy-statement', to: '/ar/privacy-statement' },
-  { from: '/cookie-notice', to: '/ar/cookie-notice' },
-  { from: '/starbucks-middle-east', to: '/ar/starbucks-middle-east' },
-  { from: '/community-impact-starbucks', to: '/ar/community-impact-starbucks' },
-  { from: '/new-era-same-icons', to: '/ar/new-era-same-icons' },
 ];
 
 /**
@@ -113,7 +87,7 @@ export const MENU_REDIRECT_ROUTES = [
 
 /**
  * Page route configuration
- * Defines all language-prefixed routes with their components and skeletons
+ * Client-facing routes only - Admin pages managed in Dashboard
  */
 export const PAGE_ROUTES: PageRoute[] = [
   {
@@ -147,109 +121,10 @@ export const PAGE_ROUTES: PageRoute[] = [
     name: 'locations',
   },
   {
-    path: 'our-coffees',
-    component: GenericPageWrapper,
-    skeleton: StaticPageSkeleton,
-    name: 'our-coffees',
-    props: {
-      slug: 'our-coffees',
-      seoTitle: 'Our Coffees - Starbucks Egypt',
-    },
-  },
-  {
-    path: 'starbucks-middle-east',
-    component: MiddleEastPage,
-    skeleton: StaticPageSkeleton,
-    name: 'middle-east',
-  },
-  {
-    path: 'community-impact-starbucks',
-    component: GenericPageWrapper,
-    skeleton: StaticPageSkeleton,
-    name: 'community-impact',
-    props: {
-      slug: 'community-impact',
-      seoTitle: 'Community Impact - Starbucks Egypt',
-      useAccordionLayout: true,
-    },
-  },
-  {
-    path: 'new-era-same-icons',
-    component: GenericPageWrapper,
-    skeleton: StaticPageSkeleton,
-    name: 'new-era',
-    props: {
-      slug: 'new-era',
-      seoTitle: 'New Era. Same Icons. - Starbucks Egypt',
-    },
-  },
-  {
-    path: 'delivery',
-    component: DeliveryPage,
-    skeleton: StaticPageSkeleton,
-    name: 'delivery',
-  },
-  {
-    path: 'about-us',
-    component: GenericPageWrapper,
-    skeleton: StaticPageSkeleton,
-    name: 'about-us',
-    props: {
-      slug: 'about-us',
-      seoTitle: 'About Us - Starbucks Egypt',
-      useAccordionLayout: true,
-    },
-  },
-  {
-    path: 'social-impact-sustainability',
-    component: SustainabilityPage,
-    skeleton: StaticPageSkeleton,
-    name: 'sustainability',
-  },
-  {
-    path: 'privacy-statement',
-    component: GenericPageWrapper,
-    skeleton: StaticPageSkeleton,
-    name: 'privacy',
-    props: {
-      slug: 'privacy-statement',
-      seoTitle: 'Privacy Statement - Starbucks Egypt',
-      showAccordion: true,
-      accordionSectionIndices: [1, 2, 3, 4],
-    },
-  },
-  {
-    path: 'terms-of-use',
-    component: GenericPageWrapper,
-    skeleton: StaticPageSkeleton,
-    name: 'terms',
-    props: {
-      slug: 'terms-of-use',
-      seoTitle: 'Terms of Use - Starbucks Egypt',
-      showAccordion: true,
-      accordionSectionIndices: [1, 2, 3, 4, 5],
-      accordionTitle: {
-        ar: 'شروط إضافية',
-        en: 'Additional Terms',
-      },
-    },
-  },
-  {
     path: 'contact-us',
     component: ContactUsPage,
     skeleton: ContactSkeleton,
     name: 'contact',
-  },
-  {
-    path: 'cookie-notice',
-    component: GenericPageWrapper,
-    skeleton: StaticPageSkeleton,
-    name: 'cookies',
-    props: {
-      slug: 'cookies',
-      seoTitle: 'Cookie Notice - Starbucks Egypt',
-      useAccordionLayout: true,
-    },
   },
   {
     path: 'checkout',
@@ -274,12 +149,6 @@ export const PAGE_ROUTES: PageRoute[] = [
     component: PaymentFailedPage,
     skeleton: StaticPageSkeleton,
     name: 'payment-failed',
-  },
-  {
-    path: 'account/profile',
-    component: ProfilePage,
-    skeleton: StaticPageSkeleton,
-    name: 'profile',
   },
   {
     path: '*',

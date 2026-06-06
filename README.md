@@ -188,6 +188,36 @@ All images are now centralized and served through the Backend API:
 
 ---
 
+## 🌍 Localization & Bilingual Support
+
+The Starbucks Egypt platform is fully bilingual with professional backend-driven localization:
+
+### Architecture
+
+- **Backend**: All business content (Menu, Locations, Orders) stored bilingual in database
+- **Frontend**: Consumes bilingual DTOs from API, manages UI text via i18n
+- **Dashboard**: Bilingual admin interface using @ngx-translate/core
+
+### Language Support
+- **English** (en) - Default
+- **Arabic** (ar) - Full RTL support
+
+### Key Features
+✅ API language parameter: `?language=en|ar`  
+✅ Server-side bilingual content resolution  
+✅ React Query cache per language  
+✅ RTL/LTR automatic styling  
+✅ Dashboard i18n infrastructure  
+✅ Persistent language preference  
+
+### Documentation
+For complete localization architecture and implementation details:
+- **[🌐 Localization Architecture](docs/LOCALIZATION_ARCHITECTURE.md)** - Complete system design
+- **[📋 Migration Summary](docs/LOCALIZATION_MIGRATION_SUMMARY.md)** - What changed and why
+- **[🎨 Dashboard i18n Guide](docs/DASHBOARD_I18N_GUIDE.md)** - Dashboard translation implementation
+
+---
+
 ## 📂 Documentation Deep-Dive
 
 For detailed insights into our technical decisions, system design, and deployment pipelines, please explore our dedicated documentation modules:

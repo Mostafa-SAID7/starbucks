@@ -23,6 +23,21 @@ export const routes: Routes = [
     canActivate: [authGuard]
   },
   {
+    path: 'menu-builder',
+    loadComponent: () => import('./pages/menu-builder/menu-builder.component').then(m => m.MenuBuilderComponent),
+    canActivate: [authGuard]
+  },
+  {
+    path: 'content',
+    loadComponent: () => import('./pages/content/content.component').then(m => m.ContentComponent),
+    canActivate: [authGuard]
+  },
+  {
+    path: 'stores',
+    loadComponent: () => import('./pages/store-manager/store-manager.component').then(m => m.StoreManagerComponent),
+    canActivate: [authGuard]
+  },
+  {
     path: 'users',
     loadComponent: () => import('./pages/users/users.component').then(m => m.UsersComponent),
     canActivate: [authGuard]

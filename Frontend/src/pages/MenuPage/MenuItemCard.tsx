@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { ShoppingCart, Plus } from "lucide-react";
 import { ANIMATION_CONFIG } from '@/lib/core/constants';
+import { getLocalizedText } from "./helpers";
 import type { FlatItem } from "./types";
 
 interface MenuItemCardProps {
@@ -23,9 +24,8 @@ export function MenuItemCard({
   onAddToCart,
 }: MenuItemCardProps) {
   const { t } = useTranslation(["common"]);
-  const title = isRTL && item.nameAr ? item.nameAr : item.name;
-  const desc =
-    isRTL && item.descriptionAr ? item.descriptionAr : item.description;
+  const title = getLocalizedText(item.name, isRTL);
+  const desc = getLocalizedText(item.description, isRTL);
 
   return (
     <motion.article

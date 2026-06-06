@@ -1,35 +1,10 @@
 {
   "slug": "community-impact",
-  "layoutType": "sidebar",
-  "sidebarImage": "/api/v1/images/statics/Gaza.webp",
-  "sections": [
-    {
-      "id": "gaza-humanitarian-aid"
-    },
-    {
-      "id": "world-central-kitchen"
-    },
-    {
-      "id": "alshaya-statement"
-    },
-    {
-      "id": "about-foundation"
-    },
-    {
-      "id": "about-wck"
-    },
-    {
-      "id": "our-impact",
-      "imageGrid": {
-        "images": [
-          "/api/v1/images/statics/Gaza-1.webp",
-          "/api/v1/images/statics/Gaza-2.webp",
-          "/api/v1/images/statics/Gaza-3.webp",
-          "/api/v1/images/statics/Gaza-4.webp"
-        ],
-        "columns": 2,
-        "aspectRatio": "video"
-      }
-    }
-  ]
+  "title": { "en": "Community Impact", "ar": "تأثير المجتمع" },
+  "description": { "en": "Making a difference", "ar": "إحداث فرق" },
+  "sections": [],
+  "hero": {
+    "title": { "en": "Community", "ar": "المجتمع" },
+    "image": { "en": "/hero/community.jpg", "ar": "/hero/community.jpg" }
+  }
 }

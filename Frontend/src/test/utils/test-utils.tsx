@@ -26,19 +26,18 @@ export const mockMenuData = {
   categories: [
     {
       id: 'cat1',
-      name: 'Drinks',
-      nameAr: 'مشروبات',
+      name: { English: 'Drinks', Arabic: 'مشروبات' },
       slug: 'drinks',
       href: '/menu/drinks',
       subcategories: [
         {
           id: 'subcat1',
-          name: 'Coffee',
+          name: { English: 'Coffee', Arabic: 'قهوة' },
           href: '/menu/drinks/coffee',
           items: [
             {
               id: 'item1',
-              name: 'Espresso',
+              name: { English: 'Espresso', Arabic: 'إسبريسو' },
               href: '/menu/drinks/coffee/espresso',
               image: '/espresso.jpg',
             },
