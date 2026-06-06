@@ -18,7 +18,6 @@ export class OrdersComponent implements OnInit {
   page = 1;
   pageSize = 20;
   total = 0;
-
   orders: Order[] = [];
 
   private svc = inject(OrdersService);
@@ -32,16 +31,21 @@ export class OrdersComponent implements OnInit {
 
   get totalPages() { return Math.max(1, Math.ceil(this.total / this.pageSize)); }
 
+  get statusSummary() {
+    return [
+      { label: 'Pending',    value: 'Pending',    count: this.orders.filter(o => o.status === 'Pending').length,    icon: 'alert-circle', bg: 'bg-amber-50',   text: 'text-amber-600',   bar: 'bg-amber-400' },
+      { label: 'Processing', value: 'Processing', count: this.orders.filter(o => o.status === 'Processing').length, icon: 'clock',        bg: 'bg-blue-50',    text: 'text-blue-600',    bar: 'bg-blue-400' },
+      { label: 'Completed',  value: 'Completed',  count: this.orders.filter(o => o.status === 'Completed').length,  icon: 'check-circle', bg: 'bg-emerald-50', text: 'text-emerald-600', bar: 'bg-emerald-400' },
+      { label: 'Cancelled',  value: 'Cancelled',  count: this.orders.filter(o => o.status === 'Cancelled').length,  icon: 'x-circle',     bg: 'bg-red-50',     text: 'text-red-600',     bar: 'bg-red-400' },
+    ];
+  }
+
   ngOnInit() { this.load(); }
 
   load() {
     this.loading = true;
     this.svc.getOrders(this.page, this.pageSize).subscribe({
-      next: res => {
-        this.orders = res.items;
-        this.total  = res.total;
-        this.loading = false;
-      },
+      next: res => { this.orders = res.items; this.total = res.total; this.loading = false; },
       error: () => { this.loading = false; }
     });
   }

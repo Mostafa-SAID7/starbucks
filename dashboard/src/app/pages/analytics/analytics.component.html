@@ -1,17 +1,14 @@
 <div class="page-wrapper">
 
   @if (loading) {
-    <div class="loading-bar">
-      <div class="loading-spinner"></div>
-      <p class="loading-text">Loading analytics…</p>
-    </div>
+    <div class="loading-bar"><div class="loading-spinner"></div><p class="loading-text">Loading analytics…</p></div>
   }
 
   <!-- Header -->
   <div class="page-header">
     <div>
       <h2 class="page-title">Analytics & Reports</h2>
-      <p class="page-subtitle">Performance insights and business metrics</p>
+      <p class="page-subtitle">Performance insights and business metrics for Egypt operations</p>
     </div>
     <div class="flex items-center gap-2">
       <button class="btn-outline">
@@ -20,102 +17,185 @@
       </button>
       <button class="btn-primary">
         <lucide-angular name="download" [size]="14"></lucide-angular>
-        Export
+        Export PDF
       </button>
     </div>
   </div>
 
-  <!-- Metric cards -->
-  <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+  <!-- KPI grid -->
+  <div class="grid grid-cols-2 xl:grid-cols-4 gap-4">
     @for (metric of metrics; track metric.label) {
       <div class="stat-card">
-        <div class="flex items-start justify-between">
-          <div>
-            <p class="stat-label">{{ metric.label }}</p>
-            <p class="stat-value">{{ metric.value }}</p>
-            <div class="stat-change">
-              <lucide-angular [name]="metric.up ? 'arrow-up' : 'arrow-down'" [size]="12"
-                [class]="metric.up ? 'text-emerald-500' : 'text-red-500'"></lucide-angular>
-              <span class="text-xs font-medium" [class]="metric.up ? 'text-emerald-600' : 'text-red-600'">{{ metric.change }}</span>
-              <span class="text-xs text-gray-400">vs last month</span>
-            </div>
+        <div class="flex items-start justify-between mb-3">
+          <div class="stat-icon w-10 h-10 rounded-xl shrink-0" [class]="metric.bg">
+            <lucide-angular [name]="metric.icon" [size]="19" [class]="metric.iconColor"></lucide-angular>
           </div>
-          <div class="stat-icon" [class]="metric.bg">
-            <lucide-angular [name]="metric.icon" [size]="20" [class]="metric.iconColor"></lucide-angular>
-          </div>
+          <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full"
+            [class]="metric.up ? 'bg-emerald-50 text-emerald-700' : 'bg-red-50 text-red-600'">
+            {{ metric.up ? '▲' : '▼' }} {{ metric.change }}
+          </span>
         </div>
+        <p class="stat-label mb-1">{{ metric.label }}</p>
+        <p class="stat-value">{{ metric.value }}</p>
+        <p class="text-[11px] text-gray-400 mt-1">vs last month</p>
       </div>
     }
   </div>
 
-  <!-- Monthly revenue chart -->
-  <div class="card p-5">
-    <div class="flex items-center justify-between mb-6">
-      <h3 class="card-title">Monthly Revenue</h3>
-      <span class="text-xs text-gray-400 bg-gray-50 px-2.5 py-1 rounded-lg border border-gray-100">2026</span>
+  <!-- Charts row -->
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+
+    <!-- Monthly revenue bar chart -->
+    <div class="card p-5 lg:col-span-2">
+      <div class="flex items-center justify-between mb-5">
+        <div>
+          <h3 class="card-title">Monthly Revenue</h3>
+          <p class="text-xs text-gray-400 mt-0.5">EGP — 2026</p>
+        </div>
+        <div class="text-right">
+          <p class="text-lg font-bold text-gray-900 font-heading">EGP 1.87M</p>
+          <p class="text-xs text-emerald-600 font-semibold">↑ 23% YoY</p>
+        </div>
+      </div>
+
+      <!-- Bar chart with value labels -->
+      <div class="flex items-end gap-1 h-40 mb-1">
+        @for (m of monthlyRevenue; track m.month) {
+          <div class="flex-1 flex flex-col items-center gap-1 group relative">
+            <!-- Hover tooltip -->
+            <div class="absolute bottom-full mb-1 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-[10px] font-semibold px-2 py-1 rounded-lg opacity-0 group-hover:opacity-100 whitespace-nowrap pointer-events-none transition-opacity z-10">
+              EGP {{ m.amount }}k
+            </div>
+            <div class="w-full relative rounded-t-lg overflow-hidden"
+              [style.height.px]="(m.pct / 100) * 152"
+              [class]="m.isCurrentMonth ? 'bg-sb-green' : 'bg-sb-green/20 group-hover:bg-sb-green/40 transition-colors'">
+            </div>
+            <span [class]="'text-[10px] font-medium ' + (m.isCurrentMonth ? 'text-sb-green' : 'text-gray-400')">
+              {{ m.month }}
+            </span>
+          </div>
+        }
+      </div>
     </div>
-    <div class="flex items-end gap-1.5 h-36">
-      @for (m of monthlyRevenue; track m.month) {
-        <div class="flex-1 flex flex-col items-center gap-1 group">
-          <div class="w-full relative">
-            <div
-              class="w-full rounded-t-lg bg-sb-green/10 group-hover:bg-sb-green/20 transition-colors"
-              [style.height.px]="(m.pct / 100) * 128"
-            >
-              <div
-                class="w-full rounded-t-lg bg-sb-green group-hover:bg-sb-dark transition-colors absolute bottom-0"
-                [style.height.%]="60 + (m.pct * 0.3)"
-              ></div>
+
+    <!-- Sales by category breakdown -->
+    <div class="card p-5">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="card-title">By Category</h3>
+      </div>
+      <div class="space-y-4">
+        @for (cat of categoryBreakdown; track cat.name) {
+          <div>
+            <div class="flex items-center justify-between mb-1.5">
+              <div class="flex items-center gap-2">
+                <div [class]="'w-2.5 h-2.5 rounded-full ' + cat.dot"></div>
+                <span class="text-sm font-medium text-gray-700">{{ cat.name }}</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="text-sm font-bold text-gray-900">{{ cat.pct }}%</span>
+                <span class="text-[11px] text-gray-400">EGP {{ cat.amount }}k</span>
+              </div>
+            </div>
+            <div class="chart-bar-track">
+              <div [class]="'h-2 rounded-full transition-all duration-700 ' + cat.color" [style.width.%]="cat.pct"></div>
             </div>
           </div>
-          <span class="text-[10px] text-gray-400">{{ m.month }}</span>
+        }
+      </div>
+      <div class="divider mt-4 mb-3"></div>
+      <div class="grid grid-cols-2 gap-3 text-center">
+        <div class="bg-gray-50 rounded-xl p-3">
+          <p class="text-lg font-bold text-gray-900 font-heading">4,820</p>
+          <p class="text-[11px] text-gray-400">Total Orders</p>
         </div>
-      }
+        <div class="bg-gray-50 rounded-xl p-3">
+          <p class="text-lg font-bold text-gray-900 font-heading">EGP 142</p>
+          <p class="text-[11px] text-gray-400">Avg. Order Value</p>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- Top customers -->
-  <div class="card overflow-hidden">
-    <div class="card-header">
-      <h3 class="card-title">Top Customers</h3>
-    </div>
-    <div class="overflow-x-auto">
-      <table class="data-table">
-        <thead>
-          <tr class="table-head-row">
-            <th class="th">#</th>
-            <th class="th">Customer</th>
-            <th class="th hidden sm:table-cell">Orders</th>
-            <th class="th">Total Spent</th>
-            <th class="th hidden md:table-cell">Avg. Order</th>
-            <th class="th hidden lg:table-cell">Last Order</th>
-          </tr>
-        </thead>
-        <tbody class="divide-y divide-gray-50">
-          @for (customer of topCustomers; track customer.id) {
-            <tr class="tr">
-              <td class="td text-sm font-bold text-gray-400">#{{ customer.id }}</td>
-              <td class="td">
-                <div class="flex items-center gap-3">
-                  <div class="avatar-md avatar-green ring-1 ring-emerald-100 ring-offset-1">
-                    {{ customer.name[0] }}
-                  </div>
-                  <div>
-                    <p class="text-sm font-semibold text-gray-800">{{ customer.name }}</p>
-                    <p class="text-[11px] text-gray-400">{{ customer.email }}</p>
-                  </div>
-                </div>
-              </td>
-              <td class="td hidden sm:table-cell">
-                <span class="badge badge-muted text-xs">{{ customer.orders }}</span>
-              </td>
-              <td class="td text-sm font-bold text-gray-900">EGP {{ customer.totalSpent }}</td>
-              <td class="td text-sm text-gray-500 hidden md:table-cell">EGP {{ customer.avgOrder }}</td>
-              <td class="td text-sm text-gray-400 hidden lg:table-cell">{{ customer.lastOrder }}</td>
+  <!-- Bottom row -->
+  <div class="grid grid-cols-1 xl:grid-cols-3 gap-4">
+
+    <!-- Top customers table -->
+    <div class="card overflow-hidden xl:col-span-2">
+      <div class="card-header">
+        <h3 class="card-title">Top Customers</h3>
+        <span class="badge badge-muted text-xs">By total spend</span>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="data-table">
+          <thead>
+            <tr class="table-head-row">
+              <th class="th">#</th>
+              <th class="th">Customer</th>
+              <th class="th hidden sm:table-cell">Orders</th>
+              <th class="th">Spent</th>
+              <th class="th hidden md:table-cell">Avg.</th>
+              <th class="th hidden lg:table-cell">Last Order</th>
             </tr>
-          }
-        </tbody>
-      </table>
+          </thead>
+          <tbody class="divide-y divide-gray-50">
+            @for (customer of topCustomers; track customer.id; let idx = $index) {
+              <tr class="tr">
+                <td class="td">
+                  <div class="flex items-center justify-center w-6 h-6 rounded-full text-[11px] font-bold"
+                    [class]="idx === 0 ? 'bg-sb-gold/20 text-amber-700' : idx === 1 ? 'bg-gray-100 text-gray-600' : 'bg-gray-50 text-gray-400'">
+                    {{ idx + 1 }}
+                  </div>
+                </td>
+                <td class="td">
+                  <div class="flex items-center gap-2.5">
+                    <div class="avatar-md avatar-green ring-1 ring-emerald-100 ring-offset-1">{{ customer.name[0] }}</div>
+                    <div>
+                      <p class="text-sm font-semibold text-gray-800">{{ customer.name }}</p>
+                      <p class="text-[11px] text-gray-400">{{ customer.email }}</p>
+                    </div>
+                  </div>
+                </td>
+                <td class="td hidden sm:table-cell">
+                  <span class="badge badge-muted text-xs">{{ customer.orders }}</span>
+                </td>
+                <td class="td text-sm font-bold text-gray-900">EGP {{ customer.totalSpent }}</td>
+                <td class="td text-sm text-gray-500 hidden md:table-cell">EGP {{ customer.avgOrder }}</td>
+                <td class="td text-sm text-gray-400 hidden lg:table-cell">{{ customer.lastOrder }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Top products by revenue -->
+    <div class="card overflow-hidden">
+      <div class="card-header">
+        <h3 class="card-title">Top Products</h3>
+        <span class="badge badge-muted text-xs">By revenue</span>
+      </div>
+      <div class="divide-y divide-gray-50">
+        @for (p of topProducts; track p.name; let idx = $index) {
+          <div class="px-4 py-3 flex items-center gap-3 hover:bg-gray-50/60 transition-colors">
+            <span class="text-[11px] font-bold text-gray-300 w-4 shrink-0">{{ idx + 1 }}</span>
+            <div [class]="'w-8 h-8 rounded-xl flex items-center justify-center text-white text-xs font-bold shrink-0 ' + p.iconBg">
+              {{ p.name[0] }}
+            </div>
+            <div class="flex-1 min-w-0">
+              <p class="text-sm font-semibold text-gray-800 truncate">{{ p.name }}</p>
+              <div class="mt-1 chart-bar-track">
+                <div class="h-1.5 rounded-full bg-sb-green transition-all duration-700" [style.width.%]="p.pct"></div>
+              </div>
+            </div>
+            <div class="text-right shrink-0">
+              <p class="text-sm font-bold text-gray-900">EGP {{ (p.revenue / 1000).toFixed(0) }}k</p>
+              <p [class]="'text-[11px] font-semibold ' + (p.trend > 0 ? 'text-emerald-600' : 'text-red-500')">
+                {{ p.trend > 0 ? '▲' : '▼' }} {{ p.trend }}%
+              </p>
+            </div>
+          </div>
+        }
+      </div>
     </div>
   </div>
 

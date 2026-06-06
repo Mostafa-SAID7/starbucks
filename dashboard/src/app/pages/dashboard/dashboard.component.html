@@ -1,90 +1,139 @@
 <div class="page-wrapper">
 
-  <!-- Loading -->
+  <!-- Skeleton loading -->
   @if (loading) {
-    <div class="loading-bar">
-      <div class="loading-spinner"></div>
-      <p class="loading-text">Loading dashboard data…</p>
-    </div>
-    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+    <div class="loading-bar"><div class="loading-spinner"></div><p class="loading-text">Loading dashboard…</p></div>
+    <div class="grid grid-cols-2 xl:grid-cols-4 gap-4">
       @for (i of [1,2,3,4]; track i) {
-        <div class="card p-5"><div class="skeleton h-3 w-24 mb-3"></div><div class="skeleton h-7 w-32 mb-3"></div><div class="skeleton h-3 w-16"></div></div>
+        <div class="card p-5 space-y-3">
+          <div class="skeleton h-3 w-20"></div>
+          <div class="skeleton h-8 w-28"></div>
+          <div class="skeleton h-2.5 w-full rounded-full"></div>
+        </div>
       }
+    </div>
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+      <div class="card p-5 lg:col-span-2"><div class="skeleton h-48 w-full rounded-xl"></div></div>
+      <div class="card p-5"><div class="skeleton h-48 w-full rounded-xl"></div></div>
     </div>
   }
 
   @if (!loading) {
 
-    <!-- Header -->
+    <!-- ── Header ─────────────────────────────────────── -->
     <div class="page-header">
       <div>
         <h2 class="page-title">Dashboard Overview</h2>
-        <p class="page-subtitle">Welcome back — here's what's happening today.</p>
+        <p class="page-subtitle">Welcome back — here's what's happening today in Egypt.</p>
       </div>
-      <button class="btn-primary">
-        <lucide-angular name="download" [size]="15"></lucide-angular>
-        Export Report
-      </button>
+      <div class="flex items-center gap-2">
+        <button class="btn-outline">
+          <lucide-angular name="calendar" [size]="14"></lucide-angular>
+          Today
+        </button>
+        <button class="btn-primary">
+          <lucide-angular name="download" [size]="14"></lucide-angular>
+          Export
+        </button>
+      </div>
     </div>
 
-    <!-- Stat cards -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+    <!-- ── KPI cards ──────────────────────────────────── -->
+    <div class="grid grid-cols-2 xl:grid-cols-4 gap-4">
       @for (stat of stats; track stat.label) {
-        <div class="stat-card">
-          <div class="flex items-start justify-between">
-            <div class="flex-1 min-w-0">
-              <p class="stat-label">{{ stat.label }}</p>
-              <p class="stat-value">{{ stat.value }}</p>
-              <div class="stat-change">
-                <lucide-angular [name]="stat.up ? 'arrow-up' : 'arrow-down'" [size]="12"
-                  [class]="stat.up ? 'text-emerald-500' : 'text-red-500'"></lucide-angular>
-                <span class="text-xs font-medium" [class]="stat.up ? 'text-emerald-600' : 'text-red-600'">{{ stat.change }}</span>
-              </div>
+        <div class="stat-card group">
+          <div class="flex items-start justify-between mb-3">
+            <div class="stat-icon w-10 h-10 rounded-xl shrink-0" [class]="stat.bg">
+              <lucide-angular [name]="stat.icon" [size]="19" [class]="stat.iconColor"></lucide-angular>
             </div>
-            <div class="stat-icon" [class]="stat.bg">
-              <lucide-angular [name]="stat.icon" [size]="20" [class]="stat.iconColor"></lucide-angular>
-            </div>
+            <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full"
+              [class]="stat.up ? 'bg-emerald-50 text-emerald-700' : 'bg-red-50 text-red-600'">
+              {{ stat.up ? '▲' : '▼' }} {{ stat.change }}
+            </span>
           </div>
+          <p class="stat-label mb-1">{{ stat.label }}</p>
+          <p class="stat-value">{{ stat.value }}</p>
+          <!-- Progress bar showing % of monthly target -->
+          <div class="mt-3 chart-bar-track">
+            <div class="chart-bar-fill transition-all duration-1000" [style.width.%]="stat.pct"></div>
+          </div>
+          <p class="text-[11px] text-gray-400 mt-1">{{ stat.pct }}% of monthly target</p>
         </div>
       }
     </div>
 
-    <!-- Charts row -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+    <!-- ── Quick Actions ──────────────────────────────── -->
+    <div class="card p-4">
+      <div class="flex items-center justify-between mb-3">
+        <h3 class="card-title">Quick Actions</h3>
+        <span class="text-[11px] text-gray-400">Shortcuts to common tasks</span>
+      </div>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        @for (action of quickActions; track action.label) {
+          <a [routerLink]="action.path"
+            class="flex items-center gap-3 p-3 rounded-xl border border-gray-100 hover:border-sb-green/30 hover:shadow-sm transition-all group cursor-pointer">
+            <div [class]="'w-9 h-9 rounded-xl flex items-center justify-center shrink-0 transition-transform group-hover:scale-105 ' + action.iconBg">
+              <lucide-angular [name]="action.icon" [size]="17" [class]="action.iconColor"></lucide-angular>
+            </div>
+            <div>
+              <p class="text-sm font-semibold text-gray-800 leading-tight">{{ action.label }}</p>
+              <p class="text-[11px] text-gray-400">{{ action.sub }}</p>
+            </div>
+          </a>
+        }
+      </div>
+    </div>
 
-      <!-- Weekly Sales -->
-      <div class="card p-5">
-        <div class="card-header px-0 pt-0 pb-5 mb-5 border-0 flex items-center justify-between">
-          <h3 class="card-title">Weekly Sales</h3>
-          <span class="text-xs text-gray-400 bg-gray-50 px-2.5 py-1 rounded-lg border border-gray-100">This week</span>
+    <!-- ── Charts row ─────────────────────────────────── -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+
+      <!-- Weekly Sales bar chart -->
+      <div class="card p-5 lg:col-span-2">
+        <div class="flex items-center justify-between mb-5">
+          <div>
+            <h3 class="card-title">Weekly Sales</h3>
+            <p class="text-xs text-gray-400 mt-0.5">Revenue per day this week (EGP)</p>
+          </div>
+          <div class="text-right">
+            <p class="text-lg font-bold text-gray-900 font-heading">EGP {{ weeklyTotal | number }}</p>
+            <p class="text-[11px] text-emerald-600 font-medium">↑ 12% vs last week</p>
+          </div>
         </div>
-        <div class="space-y-3">
+        <!-- Chart -->
+        <div class="flex items-end gap-2 h-36 mb-3">
           @for (day of weeklySales; track day.day) {
-            <div class="flex items-center gap-3">
-              <span class="text-xs text-gray-500 w-8 shrink-0">{{ day.day }}</span>
-              <div class="chart-bar-track">
-                <div class="chart-bar-fill" [style.width.%]="day.pct"></div>
+            <div class="flex-1 flex flex-col items-center gap-1 group relative">
+              <!-- Tooltip -->
+              <div class="absolute bottom-full mb-1 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-[10px] font-medium px-2 py-1 rounded-lg opacity-0 group-hover:opacity-100 whitespace-nowrap pointer-events-none transition-opacity z-10">
+                EGP {{ (day.amount / 1000).toFixed(1) }}k
               </div>
-              <span class="text-xs font-semibold text-gray-700 w-14 text-right shrink-0">
-                EGP {{ (day.amount / 1000).toFixed(0) }}k
-              </span>
+              <div class="w-full rounded-t-lg transition-all duration-700 relative overflow-hidden"
+                [style.height.px]="(day.pct / 100) * 128"
+                [class]="day.pct === maxDayPct ? 'bg-sb-green' : 'bg-sb-green/20 group-hover:bg-sb-green/50'">
+              </div>
+              <span class="text-[10px] font-medium text-gray-500">{{ day.day }}</span>
             </div>
           }
         </div>
       </div>
 
-      <!-- Category distribution -->
+      <!-- Sales by Category donut-like -->
       <div class="card p-5">
-        <div class="flex items-center justify-between mb-5">
-          <h3 class="card-title">Sales by Category</h3>
-          <span class="text-xs text-gray-400 bg-gray-50 px-2.5 py-1 rounded-lg border border-gray-100">All time</span>
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="card-title">By Category</h3>
+          <span class="text-xs text-gray-400 bg-gray-50 px-2 py-1 rounded-lg border border-gray-100">All time</span>
         </div>
-        <div class="space-y-4">
+        <div class="space-y-3.5">
           @for (cat of categories; track cat.name) {
             <div>
-              <div class="flex justify-between items-center mb-1.5">
-                <span class="text-sm font-medium text-gray-700">{{ cat.name }}</span>
-                <span class="text-sm font-bold text-gray-900">{{ cat.pct }}%</span>
+              <div class="flex justify-between items-center mb-1">
+                <div class="flex items-center gap-2">
+                  <span class="w-2.5 h-2.5 rounded-full shrink-0" [class]="cat.dot"></span>
+                  <span class="text-sm font-medium text-gray-700">{{ cat.name }}</span>
+                </div>
+                <div class="text-right">
+                  <span class="text-sm font-bold text-gray-900">{{ cat.pct }}%</span>
+                </div>
               </div>
               <div class="chart-bar-track">
                 <div [class]="'h-2.5 rounded-full transition-all duration-700 ' + cat.color" [style.width.%]="cat.pct"></div>
@@ -92,45 +141,88 @@
             </div>
           }
         </div>
+        <div class="divider mt-4 mb-3"></div>
+        <div class="text-center">
+          <p class="text-2xl font-bold text-gray-900 font-heading">EGP 2.1M</p>
+          <p class="text-xs text-gray-400 mt-0.5">Total all-time revenue</p>
+        </div>
       </div>
     </div>
 
-    <!-- Recent Orders -->
-    <div class="card overflow-hidden">
-      <div class="card-header">
-        <h3 class="card-title">Recent Orders</h3>
-        <a routerLink="/orders" class="text-sm text-sb-green font-medium hover:text-sb-dark transition-colors">View all →</a>
-      </div>
-      <div class="overflow-x-auto">
-        <table class="data-table">
-          <thead>
-            <tr class="table-head-row">
-              <th class="th">Order</th>
-              <th class="th">Customer</th>
-              <th class="th hidden md:table-cell">Product</th>
-              <th class="th">Amount</th>
-              <th class="th">Status</th>
-              <th class="th hidden sm:table-cell">Date</th>
-            </tr>
-          </thead>
-          <tbody class="divide-y divide-gray-50">
-            @for (order of recentOrders; track order.id) {
-              <tr class="tr">
-                <td class="td font-semibold text-sb-green">#{{ order.id }}</td>
-                <td class="td text-sm text-gray-700">{{ order.customer }}</td>
-                <td class="td text-sm text-gray-500 hidden md:table-cell">{{ order.product }}</td>
-                <td class="td text-sm font-bold text-gray-900">EGP {{ order.amount.toFixed(2) }}</td>
-                <td class="td">
-                  <span [class]="getStatusConfig(order.status).classes">
-                    <lucide-angular [name]="getStatusConfig(order.status).icon" [size]="11"></lucide-angular>
-                    {{ order.status }}
-                  </span>
-                </td>
-                <td class="td text-sm text-gray-400 hidden sm:table-cell">{{ order.date }}</td>
+    <!-- ── Bottom row: Recent orders + Top products ───── -->
+    <div class="grid grid-cols-1 xl:grid-cols-3 gap-4">
+
+      <!-- Recent orders (takes 2/3) -->
+      <div class="card overflow-hidden xl:col-span-2">
+        <div class="card-header">
+          <h3 class="card-title">Recent Orders</h3>
+          <a routerLink="/orders" class="text-sm font-medium text-sb-green hover:text-sb-dark transition-colors inline-flex items-center gap-1">
+            View all <lucide-angular name="chevron-right" [size]="14"></lucide-angular>
+          </a>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="data-table">
+            <thead>
+              <tr class="table-head-row">
+                <th class="th">Order</th>
+                <th class="th">Customer</th>
+                <th class="th">Amount</th>
+                <th class="th">Status</th>
+                <th class="th hidden sm:table-cell">Date</th>
               </tr>
-            }
-          </tbody>
-        </table>
+            </thead>
+            <tbody class="divide-y divide-gray-50">
+              @for (order of recentOrders; track order.id) {
+                <tr class="tr">
+                  <td class="td text-sm font-bold text-sb-green">#{{ order.id }}</td>
+                  <td class="td">
+                    <div class="flex items-center gap-2.5">
+                      <div class="avatar-sm avatar-dark">{{ order.customer[0] }}</div>
+                      <span class="text-sm font-medium text-gray-800">{{ order.customer }}</span>
+                    </div>
+                  </td>
+                  <td class="td text-sm font-bold text-gray-900">EGP {{ order.amount.toFixed(0) }}</td>
+                  <td class="td">
+                    <span [class]="getStatusConfig(order.status).classes">
+                      <lucide-angular [name]="getStatusConfig(order.status).icon" [size]="10"></lucide-angular>
+                      {{ order.status }}
+                    </span>
+                  </td>
+                  <td class="td text-sm text-gray-400 hidden sm:table-cell">{{ order.date }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Top products (takes 1/3) -->
+      <div class="card overflow-hidden">
+        <div class="card-header">
+          <h3 class="card-title">Top Products</h3>
+          <a routerLink="/products" class="text-sm font-medium text-sb-green hover:text-sb-dark transition-colors">
+            <lucide-angular name="chevron-right" [size]="14"></lucide-angular>
+          </a>
+        </div>
+        <div class="divide-y divide-gray-50">
+          @for (p of topProducts; track p.name; let idx = $index) {
+            <div class="px-4 py-3 flex items-center gap-3 hover:bg-gray-50/60 transition-colors">
+              <span class="text-[11px] font-bold text-gray-300 w-5 shrink-0 text-center">{{ idx + 1 }}</span>
+              <div class="w-8 h-8 rounded-xl flex items-center justify-center shrink-0 text-white font-bold text-xs"
+                [class]="p.iconBg">{{ p.name[0] }}</div>
+              <div class="flex-1 min-w-0">
+                <p class="text-sm font-semibold text-gray-800 truncate">{{ p.name }}</p>
+                <p class="text-[11px] text-gray-400">{{ p.orders }} orders</p>
+              </div>
+              <div class="text-right shrink-0">
+                <p class="text-sm font-bold text-gray-900">EGP {{ (p.revenue / 1000).toFixed(0) }}k</p>
+                <p [class]="'text-[11px] font-semibold ' + (p.trend > 0 ? 'text-emerald-600' : 'text-red-500')">
+                  {{ p.trend > 0 ? '▲' : '▼' }} {{ p.trend }}%
+                </p>
+              </div>
+            </div>
+          }
+        </div>
       </div>
     </div>
 
