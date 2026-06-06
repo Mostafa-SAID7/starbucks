@@ -22,7 +22,6 @@
       </div>
     }
 
-    <!-- Desktop collapse toggle -->
     <button
       (click)="toggleCollapse()"
       class="hidden lg:flex items-center justify-center w-7 h-7 rounded-md hover:bg-white/10 text-white/50 hover:text-white transition-colors shrink-0"
@@ -30,7 +29,6 @@
       <lucide-angular [name]="collapsed() ? 'chevron-right' : 'chevron-left'" [size]="16"></lucide-angular>
     </button>
 
-    <!-- Mobile close button -->
     <button
       (click)="close()"
       class="lg:hidden flex items-center justify-center w-7 h-7 rounded-md hover:bg-white/10 text-white/50 hover:text-white transition-colors"
@@ -60,7 +58,6 @@
               <span class="text-sm font-medium truncate">{{ item.label }}</span>
             }
           </a>
-          <!-- Tooltip when collapsed -->
           @if (collapsed()) {
             <div class="absolute left-full ml-2 top-1/2 -translate-y-1/2 px-2.5 py-1.5 bg-gray-900 text-white text-xs font-medium rounded-lg opacity-0 group-hover:opacity-100 pointer-events-none whitespace-nowrap z-50 shadow-xl transition-opacity duration-150">
               {{ item.label }}
@@ -70,11 +67,10 @@
       }
     </ul>
 
-    <!-- Quick stats (only when expanded) -->
     @if (!collapsed()) {
       <div class="mt-6 mx-2 border-t border-white/10 pt-4">
         <p class="px-2 pb-3 text-[10px] font-semibold uppercase tracking-widest text-green-400/70">
-          Today
+          Today at a Glance
         </p>
         <div class="space-y-2 px-2">
           <div class="bg-white/5 rounded-xl p-3 border border-white/5">
@@ -100,14 +96,18 @@
   <div class="p-3 border-t border-white/10">
     <div [class]="'flex items-center gap-3 ' + (collapsed() ? 'justify-center' : '')">
       <div class="w-9 h-9 rounded-full bg-[#006241] flex items-center justify-center shrink-0 shadow-md">
-        <span class="text-sm font-bold text-white">A</span>
+        <span class="text-sm font-bold text-white">{{ userInitials() }}</span>
       </div>
       @if (!collapsed()) {
         <div class="flex-1 overflow-hidden">
-          <p class="text-sm font-semibold text-white truncate">Admin User</p>
-          <p class="text-[11px] text-green-300 truncate">admin&#64;starbucks.eg</p>
+          <p class="text-sm font-semibold text-white truncate">{{ auth.user()?.name ?? 'Admin' }}</p>
+          <p class="text-[11px] text-green-300 truncate">{{ auth.user()?.email ?? 'admin&#64;starbucks.eg' }}</p>
         </div>
-        <button class="p-1.5 rounded-lg hover:bg-white/10 text-green-300 hover:text-white transition-colors">
+        <button
+          (click)="logout()"
+          title="Logout"
+          class="p-1.5 rounded-lg hover:bg-white/10 text-green-300 hover:text-white transition-colors"
+        >
           <lucide-angular name="log-out" [size]="15"></lucide-angular>
         </button>
       }

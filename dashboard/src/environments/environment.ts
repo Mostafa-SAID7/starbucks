@@ -1,8 +1,7 @@
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:5000/api',
-  apiVersion: 'v1',
-  appName: 'Starbucks Dashboard',
+  apiUrl: 'http://localhost:8080/api/v1',
+  appName: 'Starbucks Egypt Admin',
   enableAnalytics: false,
   logLevel: 'debug'
 };

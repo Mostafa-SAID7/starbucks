@@ -1,7 +1,8 @@
-import { Component, Input, Output, EventEmitter, signal } from '@angular/core';
+import { Component, Input, Output, EventEmitter, signal, inject, computed } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { LucideAngularModule } from 'lucide-angular';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -14,6 +15,12 @@ export class SidebarComponent {
   @Output() closed = new EventEmitter<void>();
 
   collapsed = signal(false);
+  auth = inject(AuthService);
+
+  userInitials = computed(() => {
+    const name = this.auth.user()?.name ?? 'Admin';
+    return name.split(' ').map((n: string) => n[0]).join('').toUpperCase().slice(0, 2);
+  });
 
   navItems = [
     { path: '/dashboard', label: 'Dashboard', icon: 'layout-dashboard' },
@@ -22,11 +29,7 @@ export class SidebarComponent {
     { path: '/analytics', label: 'Analytics', icon: 'chart-bar-big' },
   ];
 
-  toggleCollapse() {
-    this.collapsed.update(v => !v);
-  }
-
-  close() {
-    this.closed.emit();
-  }
+  toggleCollapse() { this.collapsed.update(v => !v); }
+  close()          { this.closed.emit(); }
+  logout()         { this.auth.logout(); }
 }

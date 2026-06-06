@@ -2,6 +2,8 @@ import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
+import { provideHttpClient, withInterceptors, withFetch } from '@angular/common/http';
+import { authInterceptor } from './interceptors/auth.interceptor';
 import { LUCIDE_ICONS, LucideIconProvider } from 'lucide-angular';
 import {
   LayoutDashboard, ShoppingBag, Package, ChartBarBig,
@@ -10,7 +12,7 @@ import {
   Users, DollarSign, ShoppingCart, UserCheck, Boxes,
   ArrowUp, ArrowDown, Eye, Pencil, Trash2,
   Filter, Download, Calendar, Plus, CheckCircle,
-  Clock, XCircle, AlertCircle, Star, Sparkles
+  Clock, XCircle, AlertCircle, Star, Sparkles, Lock
 } from 'lucide-angular';
 
 export const appConfig: ApplicationConfig = {
@@ -18,6 +20,7 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideClientHydration(withEventReplay()),
+    provideHttpClient(withInterceptors([authInterceptor]), withFetch()),
     {
       provide: LUCIDE_ICONS,
       multi: true,
@@ -28,7 +31,7 @@ export const appConfig: ApplicationConfig = {
         Users, DollarSign, ShoppingCart, UserCheck, Boxes,
         ArrowUp, ArrowDown, Eye, Pencil, Trash2,
         Filter, Download, Calendar, Plus, CheckCircle,
-        Clock, XCircle, AlertCircle, Star, Sparkles
+        Clock, XCircle, AlertCircle, Star, Sparkles, Lock
       })
     }
   ]
