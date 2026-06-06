@@ -1,16 +1,14 @@
-<header class="bg-white border-b border-gray-100 px-4 sm:px-6 flex items-center gap-3 shadow-sm shrink-0 h-[72px]">
+<header class="bg-white border-b px-4 sm:px-6 flex items-center gap-3 shadow-sm shrink-0 h-[72px]"
+  style="border-color: var(--border-subtle);">
 
   <!-- Mobile menu toggle -->
-  <button
-    (click)="toggle()"
-    class="lg:hidden p-2.5 rounded-xl hover:bg-gray-100 text-gray-600 transition-colors shrink-0"
-    aria-label="Open menu"
-  >
+  <button (click)="toggle()"
+    class="lg:hidden btn-icon p-2.5 rounded-xl hover:bg-gray-100 text-gray-600" aria-label="Open menu">
     <lucide-angular name="menu" [size]="20"></lucide-angular>
   </button>
 
   <!-- Logo mark (mobile only) -->
-  <div class="lg:hidden w-8 h-8 rounded-full bg-[#006241] flex items-center justify-center shadow-sm shrink-0">
+  <div class="lg:hidden avatar-md avatar-green shadow-sm">
     <lucide-angular name="coffee" [size]="16" class="text-white"></lucide-angular>
   </div>
 
@@ -25,40 +23,32 @@
   <!-- Search bar -->
   <div class="flex-1 max-w-sm hidden md:block">
     <div class="relative">
-      <lucide-angular name="search" [size]="16" class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></lucide-angular>
-      <input
-        type="text"
-        placeholder="Search orders, products..."
-        class="w-full pl-9 pr-4 py-2 text-sm border border-gray-200 rounded-xl bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#006241]/20 focus:border-[#006241] transition-colors placeholder-gray-400"
-      />
+      <lucide-angular name="search" [size]="16" class="field-icon"></lucide-angular>
+      <input type="text" placeholder="Search orders, products…" class="field-search py-2" />
     </div>
   </div>
 
   <!-- Right actions -->
   <div class="flex items-center gap-1 ml-auto">
 
-    <!-- Mobile search -->
-    <button class="md:hidden p-2.5 rounded-xl hover:bg-gray-100 text-gray-600 transition-colors">
+    <button class="md:hidden btn-icon p-2.5 rounded-xl hover:bg-gray-100 text-gray-600">
       <lucide-angular name="search" [size]="18"></lucide-angular>
     </button>
 
-    <!-- Notifications -->
-    <button class="relative p-2.5 rounded-xl hover:bg-gray-100 text-gray-600 hover:text-gray-800 transition-colors">
+    <button class="relative btn-icon p-2.5 rounded-xl hover:bg-gray-100 text-gray-600 hover:text-gray-800">
       <lucide-angular name="bell" [size]="18"></lucide-angular>
       <span class="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full ring-2 ring-white"></span>
     </button>
 
-    <!-- Settings -->
-    <button class="p-2.5 rounded-xl hover:bg-gray-100 text-gray-600 hover:text-gray-800 transition-colors">
+    <a routerLink="/settings"
+      class="btn-icon p-2.5 rounded-xl hover:bg-gray-100 text-gray-600 hover:text-gray-800">
       <lucide-angular name="settings" [size]="18"></lucide-angular>
-    </button>
+    </a>
 
-    <!-- Divider -->
     <div class="w-px h-6 bg-gray-200 mx-1"></div>
 
-    <!-- Avatar + user -->
     <div class="flex items-center gap-2.5 pl-1">
-      <div class="w-8 h-8 rounded-full bg-[#006241] flex items-center justify-center shadow-sm shrink-0">
+      <div class="avatar-md avatar-green shadow-sm">
         <span class="text-xs font-bold text-white">{{ userInitials() }}</span>
       </div>
       <div class="hidden sm:block">

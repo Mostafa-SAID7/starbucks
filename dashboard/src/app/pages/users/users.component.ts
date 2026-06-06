@@ -54,18 +54,16 @@ export class UsersComponent implements OnInit {
   }
 
   getStatusClass(status: string): string {
-    return status === 'Active'
-      ? 'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200'
-      : 'bg-red-50 text-red-700 ring-1 ring-red-200';
+    return status === 'Active' ? 'badge badge-success' : 'badge badge-danger';
   }
 
   getRoleClass(role: string): string {
     const map: Record<string, string> = {
-      SuperAdmin: 'bg-violet-50 text-violet-700 ring-1 ring-violet-200',
-      Admin:      'bg-blue-50 text-blue-700 ring-1 ring-blue-200',
-      Customer:   'bg-gray-100 text-gray-600',
+      SuperAdmin: 'badge badge-purple',
+      Admin:      'badge badge-info',
+      Customer:   'badge badge-muted',
     };
-    return map[role] ?? 'bg-gray-100 text-gray-600';
+    return map[role] ?? 'badge badge-muted';
   }
 
   initials(name: string): string {

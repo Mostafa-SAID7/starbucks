@@ -1,34 +1,36 @@
-<div class="space-y-5">
+<div class="page-wrapper">
 
   @if (loading) {
-    <div class="flex items-center gap-3 p-4 bg-white rounded-2xl border border-gray-100 shadow-sm">
-      <div class="w-5 h-5 border-2 border-[#006241]/30 border-t-[#006241] rounded-full animate-spin shrink-0"></div>
-      <p class="text-sm text-gray-500 font-medium">Loading settings…</p>
+    <div class="loading-bar">
+      <div class="loading-spinner"></div>
+      <p class="loading-text">Loading settings…</p>
     </div>
   }
 
   <!-- Header -->
-  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+  <div class="page-header">
     <div>
-      <h2 class="text-2xl font-bold text-gray-900 font-heading">System Settings</h2>
-      <p class="text-sm text-gray-500 mt-0.5">Configure platform-wide operational parameters</p>
+      <h2 class="page-title">System Settings</h2>
+      <p class="page-subtitle">Configure platform-wide operational parameters</p>
     </div>
-    <div class="inline-flex items-center gap-2 px-3 py-2 bg-amber-50 border border-amber-200 rounded-xl text-xs font-medium text-amber-700">
+    <div class="inline-flex items-center gap-2 px-3 py-2 badge-demo">
       <lucide-angular name="alert-circle" [size]="13"></lucide-angular>
-      Changes apply immediately to all users
+      Changes apply immediately
     </div>
   </div>
 
   @if (!loading) {
     @for (group of groups; track group) {
-      <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+      <div class="card overflow-hidden">
 
         <!-- Group header -->
-        <div class="px-5 py-4 border-b border-gray-100 flex items-center gap-3 bg-gray-50/50">
-          <div class="w-8 h-8 rounded-xl bg-[#006241]/10 flex items-center justify-center shrink-0">
-            <lucide-angular [name]="groupIcon(group)" [size]="15" class="text-[#006241]"></lucide-angular>
+        <div class="card-header bg-gray-50/50">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-xl flex items-center justify-center shrink-0" style="background: var(--sb-green-muted)">
+              <lucide-angular [name]="groupIcon(group)" [size]="15" class="text-sb-green"></lucide-angular>
+            </div>
+            <h3 class="card-title">{{ group }}</h3>
           </div>
-          <h3 class="text-sm font-bold text-gray-900 font-heading">{{ group }}</h3>
         </div>
 
         <!-- Settings rows -->
@@ -36,38 +38,36 @@
           @for (setting of byGroup(group); track setting.key) {
             <div class="px-5 py-4 flex flex-col sm:flex-row sm:items-center gap-4">
 
-              <!-- Label + desc -->
               <div class="flex-1 min-w-0">
                 <p class="text-sm font-semibold text-gray-800">{{ setting.label }}</p>
                 <p class="text-[12px] text-gray-400 mt-0.5">{{ setting.description }}</p>
               </div>
 
-              <!-- Input control -->
               <div class="flex items-center gap-2 shrink-0">
                 @if (setting.type === 'boolean') {
-                  <!-- Toggle -->
                   <button
                     (click)="toggleBoolean(setting)"
-                    [class]="'relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ' + (editValues[setting.key] === 'true' ? 'bg-[#006241]' : 'bg-gray-200')"
+                    [class]="'toggle ' + (editValues[setting.key] === 'true' ? 'toggle-on' : 'toggle-off')"
+                    [attr.aria-checked]="editValues[setting.key] === 'true'"
+                    role="switch"
                   >
-                    <span [class]="'inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform ' + (editValues[setting.key] === 'true' ? 'translate-x-6' : 'translate-x-1')"></span>
+                    <span [class]="'toggle-knob ' + (editValues[setting.key] === 'true' ? 'toggle-knob-on' : 'toggle-knob-off')"></span>
                   </button>
                   <span class="text-sm font-medium text-gray-600 w-8">{{ editValues[setting.key] === 'true' ? 'On' : 'Off' }}</span>
                 } @else {
-                  <!-- Text / Number input -->
                   <input
                     [type]="setting.type"
                     [(ngModel)]="editValues[setting.key]"
-                    class="w-40 px-3 py-2 text-sm border border-gray-200 rounded-xl bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#006241]/20 focus:border-[#006241] transition-colors text-right"
+                    class="field-input w-40 text-right"
                   />
                   <button
                     (click)="saveSetting(setting)"
                     [disabled]="saving[setting.key] || editValues[setting.key] === setting.value"
-                    [class]="'w-20 py-2 rounded-xl text-xs font-semibold transition-all ' + (saved[setting.key] ? 'bg-emerald-50 text-emerald-700' : 'bg-[#006241] text-white hover:bg-[#1e3932] disabled:opacity-40 disabled:cursor-not-allowed')"
+                    [class]="'w-20 py-2 rounded-xl text-xs font-semibold transition-all ' + (saved[setting.key] ? 'bg-emerald-50 text-emerald-700' : 'btn-primary disabled:opacity-40 disabled:cursor-not-allowed disabled:active:scale-100')"
                   >
                     @if (saving[setting.key]) {
                       <span class="flex items-center justify-center gap-1">
-                        <span class="w-3 h-3 border-2 border-white/40 border-t-white rounded-full animate-spin"></span>
+                        <span class="loading-spinner w-3 h-3 border-white/40 border-t-white"></span>
                       </span>
                     } @else if (saved[setting.key]) {
                       ✓ Saved

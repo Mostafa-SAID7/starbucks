@@ -1,80 +1,60 @@
-<div class="space-y-5">
+<div class="page-wrapper">
 
   @if (loading) {
-    <div class="flex items-center gap-3 p-4 bg-white rounded-2xl border border-gray-100 shadow-sm">
-      <div class="w-5 h-5 border-2 border-[#006241]/30 border-t-[#006241] rounded-full animate-spin shrink-0"></div>
-      <p class="text-sm text-gray-500 font-medium">Loading users…</p>
+    <div class="loading-bar">
+      <div class="loading-spinner"></div>
+      <p class="loading-text">Loading users…</p>
     </div>
   }
 
   <!-- Header -->
-  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+  <div class="page-header">
     <div>
-      <h2 class="text-2xl font-bold text-gray-900 font-heading">User Management</h2>
-      <p class="text-sm text-gray-500 mt-0.5">{{ filtered.length }} users found</p>
+      <h2 class="page-title">User Management</h2>
+      <p class="page-subtitle">{{ filtered.length }} users found</p>
     </div>
-    <button class="inline-flex items-center gap-2 border border-gray-200 text-gray-700 px-4 py-2.5 rounded-xl text-sm font-medium hover:bg-gray-50 transition-colors">
+    <button class="btn-outline">
       <lucide-angular name="download" [size]="14"></lucide-angular>
       Export
     </button>
   </div>
 
-  <!-- Stats row -->
+  <!-- Stats -->
   <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex items-center gap-3">
-      <div class="w-9 h-9 rounded-xl bg-blue-50 flex items-center justify-center shrink-0">
+    <div class="stat-card flex items-center gap-3">
+      <div class="stat-icon bg-blue-50 w-9 h-9 rounded-xl">
         <lucide-angular name="users" [size]="18" class="text-blue-600"></lucide-angular>
       </div>
-      <div>
-        <p class="text-xl font-bold text-gray-900 leading-none font-heading">{{ users.length }}</p>
-        <p class="text-[11px] text-gray-500 mt-0.5">Total Users</p>
-      </div>
+      <div><p class="stat-value text-xl">{{ users.length }}</p><p class="stat-label text-[11px]">Total Users</p></div>
     </div>
-    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex items-center gap-3">
-      <div class="w-9 h-9 rounded-xl bg-emerald-50 flex items-center justify-center shrink-0">
+    <div class="stat-card flex items-center gap-3">
+      <div class="stat-icon bg-emerald-50 w-9 h-9 rounded-xl">
         <lucide-angular name="user-check" [size]="18" class="text-emerald-600"></lucide-angular>
       </div>
-      <div>
-        <p class="text-xl font-bold text-gray-900 leading-none font-heading">{{ totalActive }}</p>
-        <p class="text-[11px] text-gray-500 mt-0.5">Active</p>
-      </div>
+      <div><p class="stat-value text-xl">{{ totalActive }}</p><p class="stat-label text-[11px]">Active</p></div>
     </div>
-    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex items-center gap-3">
-      <div class="w-9 h-9 rounded-xl bg-red-50 flex items-center justify-center shrink-0">
+    <div class="stat-card flex items-center gap-3">
+      <div class="stat-icon bg-red-50 w-9 h-9 rounded-xl">
         <lucide-angular name="user-x" [size]="18" class="text-red-600"></lucide-angular>
       </div>
-      <div>
-        <p class="text-xl font-bold text-gray-900 leading-none font-heading">{{ totalDisabled }}</p>
-        <p class="text-[11px] text-gray-500 mt-0.5">Disabled</p>
-      </div>
+      <div><p class="stat-value text-xl">{{ totalDisabled }}</p><p class="stat-label text-[11px]">Disabled</p></div>
     </div>
-    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex items-center gap-3">
-      <div class="w-9 h-9 rounded-xl bg-violet-50 flex items-center justify-center shrink-0">
+    <div class="stat-card flex items-center gap-3">
+      <div class="stat-icon bg-violet-50 w-9 h-9 rounded-xl">
         <lucide-angular name="shield-check" [size]="18" class="text-violet-600"></lucide-angular>
       </div>
-      <div>
-        <p class="text-xl font-bold text-gray-900 leading-none font-heading">{{ totalAdmins }}</p>
-        <p class="text-[11px] text-gray-500 mt-0.5">Admins</p>
-      </div>
+      <div><p class="stat-value text-xl">{{ totalAdmins }}</p><p class="stat-label text-[11px]">Admins</p></div>
     </div>
   </div>
 
   <!-- Filters -->
-  <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4">
+  <div class="filter-bar">
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
       <div class="relative sm:col-span-2">
-        <lucide-angular name="search" [size]="15" class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></lucide-angular>
-        <input
-          type="text"
-          [(ngModel)]="search"
-          placeholder="Search by name or email…"
-          class="w-full pl-9 pr-4 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#006241]/20 focus:border-[#006241] transition-colors bg-gray-50"
-        />
+        <lucide-angular name="search" [size]="15" class="field-icon"></lucide-angular>
+        <input type="text" [(ngModel)]="search" placeholder="Search by name or email…" class="field-search" />
       </div>
-      <select
-        [(ngModel)]="roleFilter"
-        class="border border-gray-200 rounded-xl px-3 py-2.5 text-sm bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#006241]/20 focus:border-[#006241] transition-colors text-gray-700"
-      >
+      <select [(ngModel)]="roleFilter" class="field-select">
         <option value="">All Roles</option>
         <option>Customer</option>
         <option>Admin</option>
@@ -84,68 +64,59 @@
   </div>
 
   <!-- Users table -->
-  <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+  <div class="card overflow-hidden">
     <div class="overflow-x-auto">
-      <table class="w-full">
+      <table class="data-table">
         <thead>
-          <tr class="bg-gray-50 border-b border-gray-100">
-            <th class="px-5 py-3 text-left text-[11px] font-semibold text-gray-400 uppercase tracking-wider">User</th>
-            <th class="px-5 py-3 text-left text-[11px] font-semibold text-gray-400 uppercase tracking-wider hidden md:table-cell">Phone</th>
-            <th class="px-5 py-3 text-left text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Role</th>
-            <th class="px-5 py-3 text-left text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Status</th>
-            <th class="px-5 py-3 text-left text-[11px] font-semibold text-gray-400 uppercase tracking-wider hidden sm:table-cell">Orders</th>
-            <th class="px-5 py-3 text-left text-[11px] font-semibold text-gray-400 uppercase tracking-wider hidden sm:table-cell">Spent</th>
-            <th class="px-5 py-3 text-left text-[11px] font-semibold text-gray-400 uppercase tracking-wider hidden lg:table-cell">Joined</th>
-            <th class="px-5 py-3 text-left text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Actions</th>
+          <tr class="table-head-row">
+            <th class="th">User</th>
+            <th class="th hidden md:table-cell">Phone</th>
+            <th class="th">Role</th>
+            <th class="th">Status</th>
+            <th class="th hidden sm:table-cell">Orders</th>
+            <th class="th hidden sm:table-cell">Spent</th>
+            <th class="th hidden lg:table-cell">Joined</th>
+            <th class="th">Actions</th>
           </tr>
         </thead>
         <tbody class="divide-y divide-gray-50">
           @for (user of filtered; track user.id) {
-            <tr class="hover:bg-gray-50/60 transition-colors">
-              <td class="px-5 py-3.5 whitespace-nowrap">
+            <tr class="tr">
+              <td class="td">
                 <div class="flex items-center gap-3">
-                  <div class="w-8 h-8 rounded-full bg-[#1e3932] flex items-center justify-center shrink-0">
-                    <span class="text-[11px] font-bold text-white">{{ initials(user.name) }}</span>
-                  </div>
+                  <div class="avatar-md avatar-dark">{{ initials(user.name) }}</div>
                   <div>
                     <p class="text-sm font-semibold text-gray-800">{{ user.name }}</p>
                     <p class="text-[11px] text-gray-400">{{ user.email }}</p>
                   </div>
                 </div>
               </td>
-              <td class="px-5 py-3.5 text-sm text-gray-500 whitespace-nowrap hidden md:table-cell">{{ user.phone }}</td>
-              <td class="px-5 py-3.5 whitespace-nowrap">
-                <span [class]="'inline-flex items-center px-2.5 py-1 text-[11px] font-semibold rounded-full ' + getRoleClass(user.role)">
-                  {{ user.role }}
-                </span>
+              <td class="td text-sm text-gray-500 hidden md:table-cell">{{ user.phone }}</td>
+              <td class="td">
+                <span [class]="getRoleClass(user.role)">{{ user.role }}</span>
               </td>
-              <td class="px-5 py-3.5 whitespace-nowrap">
-                <span [class]="'inline-flex items-center px-2.5 py-1 text-[11px] font-semibold rounded-full ' + getStatusClass(user.status)">
-                  {{ user.status }}
-                </span>
+              <td class="td">
+                <span [class]="getStatusClass(user.status)">{{ user.status }}</span>
               </td>
-              <td class="px-5 py-3.5 text-sm text-gray-700 whitespace-nowrap hidden sm:table-cell">
-                <span class="bg-gray-100 px-2 py-0.5 rounded-lg text-xs font-medium">{{ user.ordersCount }}</span>
+              <td class="td hidden sm:table-cell">
+                <span class="badge badge-muted text-xs">{{ user.ordersCount }}</span>
               </td>
-              <td class="px-5 py-3.5 text-sm font-semibold text-gray-900 whitespace-nowrap hidden sm:table-cell">
-                ${{ user.totalSpent.toFixed(2) }}
+              <td class="td text-sm font-semibold text-gray-900 hidden sm:table-cell">
+                EGP {{ user.totalSpent.toFixed(2) }}
               </td>
-              <td class="px-5 py-3.5 text-sm text-gray-400 whitespace-nowrap hidden lg:table-cell">{{ user.joinedAt }}</td>
-              <td class="px-5 py-3.5 whitespace-nowrap">
+              <td class="td text-sm text-gray-400 hidden lg:table-cell">{{ user.joinedAt }}</td>
+              <td class="td">
                 <div class="flex items-center gap-1">
                   <button
                     (click)="disableUser(user)"
                     [title]="user.status === 'Active' ? 'Disable account' : 'Enable account'"
-                    [class]="'p-1.5 rounded-lg transition-colors text-gray-400 ' + (user.status === 'Active' ? 'hover:bg-red-50 hover:text-red-500' : 'hover:bg-emerald-50 hover:text-emerald-600')"
+                    [class]="'btn-icon ' + (user.status === 'Active' ? 'hover:bg-red-50 hover:text-red-500' : 'hover:bg-emerald-50 hover:text-emerald-600')"
                   >
                     <lucide-angular [name]="user.status === 'Active' ? 'user-x' : 'user-check'" [size]="14"></lucide-angular>
                   </button>
                   @if (user.role === 'Customer') {
-                    <button
-                      (click)="changeRole(user, 'Admin')"
-                      title="Promote to Admin"
-                      class="p-1.5 rounded-lg hover:bg-violet-50 text-gray-400 hover:text-violet-600 transition-colors"
-                    >
+                    <button (click)="changeRole(user, 'Admin')" title="Promote to Admin"
+                      class="btn-icon hover:bg-violet-50 hover:text-violet-600">
                       <lucide-angular name="shield-check" [size]="14"></lucide-angular>
                     </button>
                   }
@@ -154,20 +125,13 @@
             </tr>
           }
           @empty {
-            <tr>
-              <td colspan="8" class="px-5 py-12 text-center text-sm text-gray-400">
-                No users found matching your search.
-              </td>
-            </tr>
+            <tr><td colspan="8" class="px-5 py-12 text-center text-sm text-gray-400">No users found matching your search.</td></tr>
           }
         </tbody>
       </table>
     </div>
-    <div class="px-5 py-3.5 border-t border-gray-100 flex items-center justify-between">
-      <p class="text-sm text-gray-500">
-        Showing <span class="font-semibold text-gray-700">{{ filtered.length }}</span>
-        of <span class="font-semibold text-gray-700">{{ users.length }}</span> users
-      </p>
+    <div class="table-footer">
+      <p class="table-count">Showing <span>{{ filtered.length }}</span> of <span>{{ users.length }}</span> users</p>
     </div>
   </div>
 

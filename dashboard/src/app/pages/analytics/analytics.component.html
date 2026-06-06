@@ -1,24 +1,24 @@
-<div class="space-y-5">
+<div class="page-wrapper">
 
   @if (loading) {
-    <div class="flex items-center gap-3 p-4 bg-white rounded-2xl border border-gray-100 shadow-sm">
-      <div class="w-5 h-5 border-2 border-[#006241]/30 border-t-[#006241] rounded-full animate-spin shrink-0"></div>
-      <p class="text-sm text-gray-500 font-medium">Loading analytics…</p>
+    <div class="loading-bar">
+      <div class="loading-spinner"></div>
+      <p class="loading-text">Loading analytics…</p>
     </div>
   }
 
   <!-- Header -->
-  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+  <div class="page-header">
     <div>
-      <h2 class="text-2xl font-bold text-gray-900 font-heading">Analytics & Reports</h2>
-      <p class="text-sm text-gray-500 mt-0.5">Performance insights and business metrics</p>
+      <h2 class="page-title">Analytics & Reports</h2>
+      <p class="page-subtitle">Performance insights and business metrics</p>
     </div>
     <div class="flex items-center gap-2">
-      <button class="inline-flex items-center gap-2 border border-gray-200 text-gray-700 px-4 py-2.5 rounded-xl text-sm font-medium hover:bg-gray-50 transition-colors">
+      <button class="btn-outline">
         <lucide-angular name="calendar" [size]="14"></lucide-angular>
         Date Range
       </button>
-      <button class="inline-flex items-center gap-2 bg-[#006241] text-white px-4 py-2.5 rounded-xl text-sm font-semibold hover:bg-[#1e3932] transition-colors shadow-sm">
+      <button class="btn-primary">
         <lucide-angular name="download" [size]="14"></lucide-angular>
         Export
       </button>
@@ -28,18 +28,19 @@
   <!-- Metric cards -->
   <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
     @for (metric of metrics; track metric.label) {
-      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 hover:shadow-md transition-shadow">
+      <div class="stat-card">
         <div class="flex items-start justify-between">
           <div>
-            <p class="text-xs font-medium text-gray-500 uppercase tracking-wide">{{ metric.label }}</p>
-            <p class="text-2xl font-bold text-gray-900 mt-1 font-heading">{{ metric.value }}</p>
-            <div class="flex items-center gap-1 mt-2">
-              <lucide-angular [name]="metric.up ? 'arrow-up' : 'arrow-down'" [size]="12" [class]="metric.up ? 'text-emerald-500' : 'text-red-500'"></lucide-angular>
-              <span [class]="'text-xs font-medium ' + (metric.up ? 'text-emerald-600' : 'text-red-600')">{{ metric.change }}</span>
+            <p class="stat-label">{{ metric.label }}</p>
+            <p class="stat-value">{{ metric.value }}</p>
+            <div class="stat-change">
+              <lucide-angular [name]="metric.up ? 'arrow-up' : 'arrow-down'" [size]="12"
+                [class]="metric.up ? 'text-emerald-500' : 'text-red-500'"></lucide-angular>
+              <span class="text-xs font-medium" [class]="metric.up ? 'text-emerald-600' : 'text-red-600'">{{ metric.change }}</span>
               <span class="text-xs text-gray-400">vs last month</span>
             </div>
           </div>
-          <div [class]="'w-11 h-11 rounded-xl flex items-center justify-center shrink-0 ' + metric.bg">
+          <div class="stat-icon" [class]="metric.bg">
             <lucide-angular [name]="metric.icon" [size]="20" [class]="metric.iconColor"></lucide-angular>
           </div>
         </div>
@@ -48,22 +49,21 @@
   </div>
 
   <!-- Monthly revenue chart -->
-  <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
+  <div class="card p-5">
     <div class="flex items-center justify-between mb-6">
-      <h3 class="text-base font-bold text-gray-900 font-heading">Monthly Revenue</h3>
-      <span class="text-xs text-gray-400 bg-gray-50 px-2.5 py-1 rounded-lg">2026</span>
+      <h3 class="card-title">Monthly Revenue</h3>
+      <span class="text-xs text-gray-400 bg-gray-50 px-2.5 py-1 rounded-lg border border-gray-100">2026</span>
     </div>
-    <!-- Bar chart -->
     <div class="flex items-end gap-1.5 h-36">
       @for (m of monthlyRevenue; track m.month) {
         <div class="flex-1 flex flex-col items-center gap-1 group">
           <div class="w-full relative">
             <div
-              class="w-full rounded-t-lg bg-[#006241]/15 group-hover:bg-[#006241]/30 transition-colors"
+              class="w-full rounded-t-lg bg-sb-green/10 group-hover:bg-sb-green/20 transition-colors"
               [style.height.px]="(m.pct / 100) * 128"
             >
               <div
-                class="w-full rounded-t-lg bg-[#006241] group-hover:bg-[#1e3932] transition-colors absolute bottom-0"
+                class="w-full rounded-t-lg bg-sb-green group-hover:bg-sb-dark transition-colors absolute bottom-0"
                 [style.height.%]="60 + (m.pct * 0.3)"
               ></div>
             </div>
@@ -74,31 +74,31 @@
     </div>
   </div>
 
-  <!-- Top customers table -->
-  <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-    <div class="px-5 py-4 border-b border-gray-100">
-      <h3 class="text-base font-bold text-gray-900 font-heading">Top Customers</h3>
+  <!-- Top customers -->
+  <div class="card overflow-hidden">
+    <div class="card-header">
+      <h3 class="card-title">Top Customers</h3>
     </div>
     <div class="overflow-x-auto">
-      <table class="w-full">
+      <table class="data-table">
         <thead>
-          <tr class="bg-gray-50 border-b border-gray-100">
-            <th class="px-5 py-3 text-left text-[11px] font-semibold text-gray-400 uppercase tracking-wider">#</th>
-            <th class="px-5 py-3 text-left text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Customer</th>
-            <th class="px-5 py-3 text-left text-[11px] font-semibold text-gray-400 uppercase tracking-wider hidden sm:table-cell">Orders</th>
-            <th class="px-5 py-3 text-left text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Total Spent</th>
-            <th class="px-5 py-3 text-left text-[11px] font-semibold text-gray-400 uppercase tracking-wider hidden md:table-cell">Avg. Order</th>
-            <th class="px-5 py-3 text-left text-[11px] font-semibold text-gray-400 uppercase tracking-wider hidden lg:table-cell">Last Order</th>
+          <tr class="table-head-row">
+            <th class="th">#</th>
+            <th class="th">Customer</th>
+            <th class="th hidden sm:table-cell">Orders</th>
+            <th class="th">Total Spent</th>
+            <th class="th hidden md:table-cell">Avg. Order</th>
+            <th class="th hidden lg:table-cell">Last Order</th>
           </tr>
         </thead>
         <tbody class="divide-y divide-gray-50">
           @for (customer of topCustomers; track customer.id) {
-            <tr class="hover:bg-gray-50/60 transition-colors">
-              <td class="px-5 py-3.5 text-sm font-bold text-gray-400 whitespace-nowrap">#{{ customer.id }}</td>
-              <td class="px-5 py-3.5 whitespace-nowrap">
+            <tr class="tr">
+              <td class="td text-sm font-bold text-gray-400">#{{ customer.id }}</td>
+              <td class="td">
                 <div class="flex items-center gap-3">
-                  <div class="w-8 h-8 rounded-full bg-emerald-50 flex items-center justify-center shrink-0 ring-1 ring-emerald-100">
-                    <span class="text-[11px] font-bold text-[#006241]">{{ customer.name[0] }}</span>
+                  <div class="avatar-md avatar-green ring-1 ring-emerald-100 ring-offset-1">
+                    {{ customer.name[0] }}
                   </div>
                   <div>
                     <p class="text-sm font-semibold text-gray-800">{{ customer.name }}</p>
@@ -106,12 +106,12 @@
                   </div>
                 </div>
               </td>
-              <td class="px-5 py-3.5 whitespace-nowrap hidden sm:table-cell">
-                <span class="text-sm font-medium text-gray-700 bg-gray-100 px-2 py-0.5 rounded-lg">{{ customer.orders }}</span>
+              <td class="td hidden sm:table-cell">
+                <span class="badge badge-muted text-xs">{{ customer.orders }}</span>
               </td>
-              <td class="px-5 py-3.5 text-sm font-bold text-gray-900 whitespace-nowrap">${{ customer.totalSpent }}</td>
-              <td class="px-5 py-3.5 text-sm text-gray-500 whitespace-nowrap hidden md:table-cell">${{ customer.avgOrder }}</td>
-              <td class="px-5 py-3.5 text-sm text-gray-400 whitespace-nowrap hidden lg:table-cell">{{ customer.lastOrder }}</td>
+              <td class="td text-sm font-bold text-gray-900">EGP {{ customer.totalSpent }}</td>
+              <td class="td text-sm text-gray-500 hidden md:table-cell">EGP {{ customer.avgOrder }}</td>
+              <td class="td text-sm text-gray-400 hidden lg:table-cell">{{ customer.lastOrder }}</td>
             </tr>
           }
         </tbody>

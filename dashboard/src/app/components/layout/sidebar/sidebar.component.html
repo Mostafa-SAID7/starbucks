@@ -1,5 +1,5 @@
 <aside
-  [class]="'fixed lg:relative inset-y-0 left-0 z-40 flex flex-col bg-[#1e3932] text-white transition-all duration-300 ease-in-out shrink-0 '
+  [class]="'fixed lg:relative inset-y-0 left-0 z-40 flex flex-col bg-sb-dark text-white transition-all duration-300 ease-in-out shrink-0 '
     + (collapsed() ? 'w-[72px]' : 'w-64') + ' '
     + (isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0')"
 >
@@ -7,44 +7,39 @@
   <div class="flex items-center justify-between px-4 py-5 border-b border-white/10 min-h-[72px]">
     @if (!collapsed()) {
       <div class="flex items-center gap-3 overflow-hidden">
-        <div class="w-9 h-9 rounded-full bg-[#006241] flex items-center justify-center shrink-0 shadow-lg">
+        <div class="avatar-lg avatar-green shadow-lg">
           <lucide-angular name="coffee" [size]="18" class="text-white"></lucide-angular>
         </div>
         <div class="overflow-hidden">
           <p class="font-bold text-sm leading-tight text-white truncate font-heading">Starbucks EG</p>
-          <p class="text-[11px] text-green-300 truncate">Admin Portal</p>
+          <p class="text-[11px] text-emerald-300 truncate">Admin Portal</p>
         </div>
       </div>
     }
     @if (collapsed()) {
-      <div class="w-9 h-9 rounded-full bg-[#006241] flex items-center justify-center mx-auto shadow-lg">
+      <div class="avatar-lg avatar-green shadow-lg mx-auto">
         <lucide-angular name="coffee" [size]="18" class="text-white"></lucide-angular>
       </div>
     }
-    <button
-      (click)="toggleCollapse()"
-      class="hidden lg:flex items-center justify-center w-7 h-7 rounded-md hover:bg-white/10 text-white/50 hover:text-white transition-colors shrink-0"
-    >
+    <button (click)="toggleCollapse()"
+      class="hidden lg:flex btn-icon w-7 h-7 rounded-md hover:bg-white/10 text-white/50 hover:text-white shrink-0">
       <lucide-angular [name]="collapsed() ? 'chevron-right' : 'chevron-left'" [size]="16"></lucide-angular>
     </button>
-    <button
-      (click)="close()"
-      class="lg:hidden flex items-center justify-center w-7 h-7 rounded-md hover:bg-white/10 text-white/50 hover:text-white transition-colors"
-    >
+    <button (click)="close()"
+      class="lg:hidden btn-icon w-7 h-7 rounded-md hover:bg-white/10 text-white/50 hover:text-white">
       <lucide-angular name="x" [size]="16"></lucide-angular>
     </button>
   </div>
 
-  <!-- Sectioned Nav -->
+  <!-- Nav sections -->
   <nav class="flex-1 py-3 overflow-y-auto scrollbar-hide">
     @for (section of navSections; track section.title) {
-      <!-- Section label (only when expanded) -->
+
       @if (!collapsed()) {
-        <p class="px-4 pt-4 pb-1.5 text-[10px] font-semibold uppercase tracking-widest text-green-400/60 first:pt-3">
+        <p class="px-4 pt-4 pb-1.5 text-[10px] font-semibold uppercase tracking-widest text-emerald-400/60 first:pt-3">
           {{ section.title }}
         </p>
       } @else {
-        <!-- Divider in collapsed mode -->
         <div class="mx-3 my-2 border-t border-white/10"></div>
       }
 
@@ -53,16 +48,15 @@
           <li class="relative group">
             <a
               [routerLink]="item.path"
-              routerLinkActive="bg-[#006241] text-white shadow-md"
+              routerLinkActive="bg-sb-green text-white shadow-md"
               [routerLinkActiveOptions]="{ exact: item.path === '/dashboard' }"
-              class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-150 text-green-200 hover:bg-white/10 hover:text-white"
+              class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-150 text-emerald-200/80 hover:bg-white/10 hover:text-white"
             >
               <lucide-angular [name]="item.icon" [size]="19" class="shrink-0"></lucide-angular>
               @if (!collapsed()) {
                 <span class="text-sm font-medium truncate">{{ item.label }}</span>
               }
             </a>
-            <!-- Tooltip in collapsed mode -->
             @if (collapsed()) {
               <div class="absolute left-full ml-2 top-1/2 -translate-y-1/2 px-2.5 py-1.5 bg-gray-900 text-white text-xs font-medium rounded-lg opacity-0 group-hover:opacity-100 pointer-events-none whitespace-nowrap z-50 shadow-xl transition-opacity duration-150">
                 {{ item.label }}
@@ -73,24 +67,21 @@
       </ul>
     }
 
-    <!-- Quick stats (expanded only) -->
     @if (!collapsed()) {
       <div class="mt-4 mx-2 border-t border-white/10 pt-4">
-        <p class="px-2 pb-3 text-[10px] font-semibold uppercase tracking-widest text-green-400/60">
-          Today
-        </p>
+        <p class="px-2 pb-3 text-[10px] font-semibold uppercase tracking-widest text-emerald-400/60">Today</p>
         <div class="space-y-2 px-2">
           <div class="bg-white/5 rounded-xl p-3 border border-white/5">
             <div class="flex items-center gap-2 mb-1">
-              <lucide-angular name="trending-up" [size]="13" class="text-green-400"></lucide-angular>
-              <span class="text-[11px] text-green-300">Revenue</span>
+              <lucide-angular name="trending-up" [size]="13" class="text-emerald-400"></lucide-angular>
+              <span class="text-[11px] text-emerald-300">Revenue</span>
             </div>
             <p class="text-base font-bold text-white font-heading">EGP 42,580</p>
           </div>
           <div class="bg-white/5 rounded-xl p-3 border border-white/5">
             <div class="flex items-center gap-2 mb-1">
-              <lucide-angular name="users" [size]="13" class="text-[#cba258]"></lucide-angular>
-              <span class="text-[11px] text-green-300">Active Now</span>
+              <lucide-angular name="users" [size]="13" class="text-sb-gold"></lucide-angular>
+              <span class="text-[11px] text-emerald-300">Active Now</span>
             </div>
             <p class="text-base font-bold text-white font-heading">1,284</p>
           </div>
@@ -102,19 +93,16 @@
   <!-- User footer -->
   <div class="p-3 border-t border-white/10">
     <div [class]="'flex items-center gap-3 ' + (collapsed() ? 'justify-center' : '')">
-      <div class="w-9 h-9 rounded-full bg-[#006241] flex items-center justify-center shrink-0 shadow-md">
+      <div class="avatar-lg avatar-green shadow-md">
         <span class="text-sm font-bold text-white">{{ userInitials() }}</span>
       </div>
       @if (!collapsed()) {
         <div class="flex-1 overflow-hidden">
           <p class="text-sm font-semibold text-white truncate">{{ auth.user()?.name ?? 'Admin' }}</p>
-          <p class="text-[11px] text-green-300 truncate">{{ auth.user()?.email ?? 'admin&#64;starbucks.eg' }}</p>
+          <p class="text-[11px] text-emerald-300 truncate">{{ auth.user()?.email ?? 'admin&#64;starbucks.eg' }}</p>
         </div>
-        <button
-          (click)="logout()"
-          title="Logout"
-          class="p-1.5 rounded-lg hover:bg-white/10 text-green-300 hover:text-white transition-colors"
-        >
+        <button (click)="logout()" title="Logout"
+          class="btn-icon p-1.5 rounded-lg hover:bg-white/10 text-emerald-300 hover:text-white">
           <lucide-angular name="log-out" [size]="15"></lucide-angular>
         </button>
       }

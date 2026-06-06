@@ -1,7 +1,7 @@
-<div class="min-h-screen bg-[#1e3932] flex items-center justify-center p-4 relative overflow-hidden">
+<div class="min-h-screen bg-sb-dark flex items-center justify-center p-4 relative overflow-hidden">
 
   <!-- Background pattern -->
-  <div class="absolute inset-0 opacity-5">
+  <div class="absolute inset-0 opacity-5 pointer-events-none">
     <div class="absolute top-10 left-10 w-64 h-64 rounded-full bg-white"></div>
     <div class="absolute bottom-20 right-20 w-96 h-96 rounded-full bg-white"></div>
     <div class="absolute top-1/2 left-1/3 w-48 h-48 rounded-full bg-white"></div>
@@ -9,10 +9,11 @@
 
   <div class="w-full max-w-md relative z-10">
 
-    <!-- Logo & branding -->
+    <!-- Branding -->
     <div class="text-center mb-8">
       <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-5 shadow-2xl ring-4 ring-white/20">
-        <img src="logo.png" alt="Starbucks" class="w-14 h-14 object-contain" onerror="this.style.display='none';this.parentElement.innerHTML='☕'">
+        <img src="logo.png" alt="Starbucks" class="w-14 h-14 object-contain"
+          onerror="this.style.display='none';this.parentElement.innerHTML='☕'">
       </div>
       <h1 class="text-3xl font-bold text-white font-heading tracking-tight">Admin Dashboard</h1>
       <p class="text-emerald-300 mt-1.5 text-sm font-medium">Starbucks Egypt · Staff Access Only</p>
@@ -32,13 +33,9 @@
         <div>
           <label class="block text-sm font-semibold text-gray-700 mb-1.5">Email Address</label>
           <input
-            type="email"
-            name="email"
-            [(ngModel)]="email"
-            required
-            autocomplete="email"
+            type="email" name="email" [(ngModel)]="email" required autocomplete="email"
             placeholder="admin@starbucks.eg"
-            class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm bg-gray-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#006241]/30 focus:border-[#006241] transition-all placeholder-gray-400"
+            class="field-input py-3"
           >
         </div>
 
@@ -46,33 +43,23 @@
           <label class="block text-sm font-semibold text-gray-700 mb-1.5">Password</label>
           <div class="relative">
             <input
-              [type]="showPassword ? 'text' : 'password'"
-              name="password"
-              [(ngModel)]="password"
-              required
-              autocomplete="current-password"
-              placeholder="Enter your password"
-              class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm bg-gray-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#006241]/30 focus:border-[#006241] transition-all placeholder-gray-400 pr-12"
+              [type]="showPassword ? 'text' : 'password'" name="password" [(ngModel)]="password"
+              required autocomplete="current-password" placeholder="Enter your password"
+              class="field-input py-3 pr-16"
             >
-            <button
-              type="button"
-              (click)="showPassword = !showPassword"
-              class="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors text-xs font-medium"
-            >
+            <button type="button" (click)="showPassword = !showPassword"
+              class="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors text-xs font-semibold">
               {{ showPassword ? 'Hide' : 'Show' }}
             </button>
           </div>
         </div>
 
-        <button
-          type="submit"
-          [disabled]="loading()"
-          class="w-full mt-2 bg-[#006241] text-white py-3.5 rounded-xl font-bold text-sm hover:bg-[#1e3932] active:scale-[0.98] transition-all disabled:opacity-60 shadow-sm shadow-[#006241]/30"
-        >
+        <button type="submit" [disabled]="loading()"
+          class="w-full mt-2 btn-primary py-3.5 text-sm justify-center disabled:opacity-60 disabled:cursor-not-allowed disabled:active:scale-100 w-full">
           @if (loading()) {
             <span class="flex items-center justify-center gap-2">
-              <span class="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin"></span>
-              Signing in...
+              <span class="loading-spinner w-4 h-4 border-white/40 border-t-white"></span>
+              Signing in…
             </span>
           } @else {
             Sign In
@@ -90,18 +77,14 @@
         </div>
       </div>
 
-      <!-- Demo mode -->
-      <button
-        type="button"
-        (click)="loginDemo()"
-        class="w-full py-3.5 border-2 border-[#cba258] text-[#cba258] rounded-xl font-bold text-sm hover:bg-[#cba258]/8 active:scale-[0.98] transition-all"
-      >
+      <!-- Demo -->
+      <button type="button" (click)="loginDemo()"
+        class="w-full py-3.5 border-2 border-sb-gold text-sb-gold rounded-xl font-bold text-sm hover:bg-sb-gold/5 active:scale-[0.98] transition-all">
         ☕ &nbsp;Continue in Demo Mode
       </button>
       <p class="text-center text-xs text-gray-400 mt-2.5">Explore the dashboard with Egyptian sample data</p>
     </div>
 
-    <!-- Footer -->
     <p class="text-center text-emerald-400/60 text-xs mt-6">
       © {{ year }} Starbucks Egypt. Staff access only.
     </p>

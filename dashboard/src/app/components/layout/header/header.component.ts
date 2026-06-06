@@ -1,11 +1,12 @@
 import { Component, Output, EventEmitter, inject, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
 import { LucideAngularModule } from 'lucide-angular';
 import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-header',
-  imports: [CommonModule, LucideAngularModule],
+  imports: [CommonModule, RouterLink, LucideAngularModule],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css']
 })

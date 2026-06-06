@@ -1,50 +1,39 @@
-<div class="space-y-5">
+<div class="page-wrapper">
 
   <!-- Header -->
-  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+  <div class="page-header">
     <div>
-      <h2 class="text-2xl font-bold text-gray-900 font-heading">Products Management</h2>
-      <p class="text-sm text-gray-500 mt-0.5">{{ filtered.length }} products listed</p>
+      <h2 class="page-title">Products Management</h2>
+      <p class="page-subtitle">{{ filtered.length }} products listed</p>
     </div>
-    <button class="inline-flex items-center gap-2 bg-[#006241] text-white px-4 py-2.5 rounded-xl text-sm font-semibold hover:bg-[#1e3932] transition-colors shadow-sm">
+    <button class="btn-primary">
       <lucide-angular name="plus" [size]="15"></lucide-angular>
       Add Product
     </button>
   </div>
 
   <!-- Filters -->
-  <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4">
+  <div class="filter-bar">
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
       <div class="relative sm:col-span-2 lg:col-span-1">
-        <lucide-angular name="search" [size]="15" class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></lucide-angular>
-        <input
-          type="text"
-          [(ngModel)]="search"
-          placeholder="Search products..."
-          class="w-full pl-9 pr-4 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#006241]/20 focus:border-[#006241] transition-colors bg-gray-50"
-        />
+        <lucide-angular name="search" [size]="15" class="field-icon"></lucide-angular>
+        <input type="text" [(ngModel)]="search" placeholder="Search products…" class="field-search" />
       </div>
-      <select
-        [(ngModel)]="categoryFilter"
-        class="border border-gray-200 rounded-xl px-3 py-2.5 text-sm bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#006241]/20 focus:border-[#006241] transition-colors text-gray-700"
-      >
+      <select [(ngModel)]="categoryFilter" class="field-select">
         <option value="">All Categories</option>
         <option>Coffee</option>
         <option>Tea</option>
         <option>Food</option>
         <option>Merchandise</option>
       </select>
-      <select
-        [(ngModel)]="statusFilter"
-        class="border border-gray-200 rounded-xl px-3 py-2.5 text-sm bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#006241]/20 focus:border-[#006241] transition-colors text-gray-700"
-      >
+      <select [(ngModel)]="statusFilter" class="field-select">
         <option value="">All Status</option>
         <option>Active</option>
         <option>Out of Stock</option>
       </select>
-      <button class="inline-flex items-center justify-center gap-2 bg-gray-100 text-gray-700 px-4 py-2.5 rounded-xl text-sm font-medium hover:bg-gray-200 transition-colors">
-        <lucide-angular name="filter" [size]="14"></lucide-angular>
-        Filter
+      <button class="btn-outline">
+        <lucide-angular name="download" [size]="14"></lucide-angular>
+        Export
       </button>
     </div>
   </div>
@@ -52,40 +41,36 @@
   <!-- Product grid -->
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
     @for (product of filtered; track product.id) {
-      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow group">
-        <!-- Product image area -->
+      <div class="card card-hover overflow-hidden">
+        <!-- Image area -->
         <div class="h-40 bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center relative">
           <span class="text-5xl">{{ product.emoji }}</span>
           <div class="absolute top-3 right-3">
-            <span [class]="'px-2 py-0.5 text-[11px] font-semibold rounded-full ' + getStatusConfig(product.status)">
-              {{ product.status }}
-            </span>
+            <span [class]="getStatusConfig(product.status)">{{ product.status }}</span>
           </div>
         </div>
 
-        <!-- Content -->
+        <!-- Info -->
         <div class="p-4">
-          <div class="flex items-start justify-between gap-2 mb-1">
-            <h3 class="text-sm font-bold text-gray-900 leading-tight">{{ product.name }}</h3>
-          </div>
+          <h3 class="text-sm font-bold text-gray-900 leading-tight mb-1">{{ product.name }}</h3>
           <span [class]="'inline-block px-2 py-0.5 text-[10px] font-semibold rounded-md mb-2 ' + getCategoryColor(product.category)">
             {{ product.category }}
           </span>
           <p class="text-[12px] text-gray-500 mb-3 leading-relaxed line-clamp-2">{{ product.description }}</p>
 
-          <div class="flex items-center justify-between">
-            <span class="text-xl font-bold text-[#006241]">${{ product.price }}</span>
-            <span class="text-[11px] text-gray-400 bg-gray-50 px-2 py-1 rounded-lg">
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xl font-bold text-sb-green font-heading">EGP {{ product.price }}</span>
+            <span class="text-[11px] text-gray-400 bg-gray-50 px-2 py-1 rounded-lg border border-gray-100">
               Stock: {{ product.stock }}
             </span>
           </div>
 
-          <div class="flex gap-2 mt-3">
-            <button class="flex-1 bg-[#006241] text-white px-3 py-2 rounded-xl text-xs font-semibold hover:bg-[#1e3932] transition-colors inline-flex items-center justify-center gap-1.5">
+          <div class="flex gap-2">
+            <button class="flex-1 btn-primary text-xs py-2">
               <lucide-angular name="pencil" [size]="12"></lucide-angular>
               Edit
             </button>
-            <button class="p-2 border border-gray-200 rounded-xl hover:bg-red-50 hover:border-red-200 text-gray-400 hover:text-red-500 transition-colors">
+            <button class="p-2 border border-gray-200 rounded-xl btn-icon btn-icon-danger">
               <lucide-angular name="trash-2" [size]="14"></lucide-angular>
             </button>
           </div>
@@ -100,12 +85,11 @@
   </div>
 
   <!-- Pagination -->
-  <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-    <p class="text-sm text-gray-500">Showing <span class="font-semibold text-gray-700">{{ filtered.length }}</span> of <span class="font-semibold text-gray-700">{{ products.length }}</span> products</p>
+  <div class="table-footer card p-4">
+    <p class="table-count">Showing <span>{{ filtered.length }}</span> of <span>{{ products.length }}</span> products</p>
     <div class="flex items-center gap-1">
       <button class="px-3 py-1.5 text-sm border border-gray-200 rounded-lg hover:bg-gray-50 text-gray-600 transition-colors">Previous</button>
-      <button class="px-3 py-1.5 text-sm bg-[#006241] text-white rounded-lg font-medium">1</button>
-      <button class="px-3 py-1.5 text-sm border border-gray-200 rounded-lg hover:bg-gray-50 text-gray-600 transition-colors">2</button>
+      <button class="px-3 py-1.5 text-sm bg-sb-green text-white rounded-lg font-medium">1</button>
       <button class="px-3 py-1.5 text-sm border border-gray-200 rounded-lg hover:bg-gray-50 text-gray-600 transition-colors">Next</button>
     </div>
   </div>

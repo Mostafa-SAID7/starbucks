@@ -6,21 +6,19 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        /* Starbucks brand tokens — mirrors Frontend/src/index.css exactly */
+        /* ── Starbucks brand — single source, use these in templates ── */
+        'sb-green': '#006241',
+        'sb-dark':  '#1e3932',
+        'sb-gold':  '#cba258',
+
+        /* ── Extended brand palette ─────────────────────────────────── */
         starbucks: {
           green:                '#006241',
           dark:                 '#1e3932',
           gold:                 '#cba258',
           'card-green-light':   '#d4e9e2',
-          'card-green-dark':    '#1e3932',
           'card-neutral-light': '#f2f0eb',
-          'card-neutral-dark':  '#2d2926',
         },
-        /* Semantic CSS-variable colours */
-        background: 'var(--background)',
-        foreground: 'var(--foreground)',
-        card:       'var(--card)',
-        border:     'var(--border)',
       },
       fontFamily: {
         sans:     ['Noto Sans Arabic', 'system-ui', 'sans-serif'],

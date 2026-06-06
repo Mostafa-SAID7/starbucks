@@ -42,14 +42,13 @@ export class ProductsComponent implements OnInit {
     });
   }
 
-  getStatusConfig(status: string): string { return this.getStatusClass(status); }
-  getStatusClass(status: string): string {
+  getStatusConfig(status: string): string {
     const map: Record<string, string> = {
-      Active:          'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200',
-      'Out of Stock':  'bg-red-50 text-red-700 ring-1 ring-red-200',
-      Inactive:        'bg-gray-100 text-gray-600',
+      Active:         'badge-sm badge-success',
+      'Out of Stock': 'badge-sm badge-danger',
+      Inactive:       'badge-sm badge-muted',
     };
-    return map[status] ?? 'bg-gray-100 text-gray-600';
+    return map[status] ?? 'badge-sm badge-muted';
   }
 
   getCategoryColor(cat: string): string {

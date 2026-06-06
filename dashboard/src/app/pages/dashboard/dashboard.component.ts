@@ -50,11 +50,11 @@ export class DashboardComponent implements OnInit {
 
   getStatusConfig(status: string): { classes: string; icon: string } {
     const map: Record<string, { classes: string; icon: string }> = {
-      Completed:  { classes: 'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200', icon: 'check-circle' },
-      Processing: { classes: 'bg-blue-50 text-blue-700 ring-1 ring-blue-200',          icon: 'clock' },
-      Pending:    { classes: 'bg-amber-50 text-amber-700 ring-1 ring-amber-200',       icon: 'alert-circle' },
-      Cancelled:  { classes: 'bg-red-50 text-red-700 ring-1 ring-red-200',             icon: 'x-circle' },
+      Completed:  { classes: 'badge badge-success', icon: 'check-circle' },
+      Processing: { classes: 'badge badge-info',    icon: 'clock' },
+      Pending:    { classes: 'badge badge-warning', icon: 'alert-circle' },
+      Cancelled:  { classes: 'badge badge-danger',  icon: 'x-circle' },
     };
-    return map[status] ?? { classes: 'bg-gray-100 text-gray-700', icon: 'clock' };
+    return map[status] ?? { classes: 'badge badge-muted', icon: 'clock' };
   }
 }

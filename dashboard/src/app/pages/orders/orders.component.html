@@ -1,55 +1,40 @@
-<div class="space-y-5">
+<div class="page-wrapper">
 
   @if (loading) {
-    <div class="flex items-center gap-3 p-4 bg-white rounded-2xl border border-gray-100 shadow-sm">
-      <div class="w-5 h-5 border-2 border-[#006241]/30 border-t-[#006241] rounded-full animate-spin shrink-0"></div>
-      <p class="text-sm text-gray-500 font-medium">Loading orders…</p>
+    <div class="loading-bar">
+      <div class="loading-spinner"></div>
+      <p class="loading-text">Loading orders…</p>
     </div>
   }
 
   <!-- Header -->
-  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+  <div class="page-header">
     <div>
-      <h2 class="text-2xl font-bold text-gray-900 font-heading">Orders Management</h2>
-      <p class="text-sm text-gray-500 mt-0.5">{{ filtered.length }} orders found</p>
+      <h2 class="page-title">Orders Management</h2>
+      <p class="page-subtitle">{{ filtered.length }} orders found</p>
     </div>
-    <button class="inline-flex items-center gap-2 bg-[#006241] text-white px-4 py-2.5 rounded-xl text-sm font-semibold hover:bg-[#1e3932] transition-colors shadow-sm">
+    <button class="btn-primary">
       <lucide-angular name="plus" [size]="15"></lucide-angular>
       New Order
     </button>
   </div>
 
-  <!-- Filters card -->
-  <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4">
+  <!-- Filters -->
+  <div class="filter-bar">
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-      <!-- Search -->
       <div class="relative sm:col-span-2 lg:col-span-1">
-        <lucide-angular name="search" [size]="15" class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></lucide-angular>
-        <input
-          type="text"
-          [(ngModel)]="search"
-          placeholder="Search orders..."
-          class="w-full pl-9 pr-4 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#006241]/20 focus:border-[#006241] transition-colors bg-gray-50"
-        />
+        <lucide-angular name="search" [size]="15" class="field-icon"></lucide-angular>
+        <input type="text" [(ngModel)]="search" placeholder="Search orders…" class="field-search" />
       </div>
-      <!-- Status filter -->
-      <select
-        [(ngModel)]="statusFilter"
-        class="border border-gray-200 rounded-xl px-3 py-2.5 text-sm bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#006241]/20 focus:border-[#006241] transition-colors text-gray-700"
-      >
+      <select [(ngModel)]="statusFilter" class="field-select">
         <option value="">All Status</option>
         <option>Pending</option>
         <option>Processing</option>
         <option>Completed</option>
         <option>Cancelled</option>
       </select>
-      <!-- Date -->
-      <input
-        type="date"
-        class="border border-gray-200 rounded-xl px-3 py-2.5 text-sm bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#006241]/20 focus:border-[#006241] transition-colors text-gray-700"
-      />
-      <!-- Export -->
-      <button class="inline-flex items-center justify-center gap-2 bg-gray-100 text-gray-700 px-4 py-2.5 rounded-xl text-sm font-medium hover:bg-gray-200 transition-colors">
+      <input type="date" [(ngModel)]="dateFilter" class="field-select" />
+      <button class="btn-outline">
         <lucide-angular name="download" [size]="14"></lucide-angular>
         Export
       </button>
@@ -57,52 +42,50 @@
   </div>
 
   <!-- Orders table -->
-  <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+  <div class="card overflow-hidden">
     <div class="overflow-x-auto">
-      <table class="w-full">
+      <table class="data-table">
         <thead>
-          <tr class="bg-gray-50 border-b border-gray-100">
-            <th class="px-5 py-3 text-left text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Order ID</th>
-            <th class="px-5 py-3 text-left text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Customer</th>
-            <th class="px-5 py-3 text-left text-[11px] font-semibold text-gray-400 uppercase tracking-wider hidden sm:table-cell">Items</th>
-            <th class="px-5 py-3 text-left text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Total</th>
-            <th class="px-5 py-3 text-left text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Status</th>
-            <th class="px-5 py-3 text-left text-[11px] font-semibold text-gray-400 uppercase tracking-wider hidden md:table-cell">Date</th>
-            <th class="px-5 py-3 text-left text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Actions</th>
+          <tr class="table-head-row">
+            <th class="th">Order</th>
+            <th class="th">Customer</th>
+            <th class="th hidden sm:table-cell">Items</th>
+            <th class="th">Total</th>
+            <th class="th">Status</th>
+            <th class="th hidden md:table-cell">Date</th>
+            <th class="th">Actions</th>
           </tr>
         </thead>
         <tbody class="divide-y divide-gray-50">
           @for (order of filtered; track order.id) {
-            <tr class="hover:bg-gray-50/60 transition-colors">
-              <td class="px-5 py-3.5 text-sm font-semibold text-[#006241] whitespace-nowrap">#{{ order.id }}</td>
-              <td class="px-5 py-3.5 whitespace-nowrap">
+            <tr class="tr">
+              <td class="td font-semibold text-sb-green text-sm">#{{ order.id }}</td>
+              <td class="td">
                 <div class="flex items-center gap-2.5">
-                  <div class="w-7 h-7 rounded-full bg-emerald-50 flex items-center justify-center shrink-0">
-                    <span class="text-[11px] font-bold text-[#006241]">{{ order.customer[0] }}</span>
-                  </div>
+                  <div class="avatar-sm avatar-green">{{ order.customer[0] }}</div>
                   <span class="text-sm text-gray-700">{{ order.customer }}</span>
                 </div>
               </td>
-              <td class="px-5 py-3.5 text-sm text-gray-500 whitespace-nowrap hidden sm:table-cell">
-                <span class="bg-gray-100 text-gray-700 px-2 py-0.5 rounded-lg text-xs font-medium">{{ order.items }} items</span>
+              <td class="td hidden sm:table-cell">
+                <span class="badge badge-muted text-xs">{{ order.items }} items</span>
               </td>
-              <td class="px-5 py-3.5 text-sm font-bold text-gray-900 whitespace-nowrap">${{ order.total }}</td>
-              <td class="px-5 py-3.5 whitespace-nowrap">
-                <span [class]="'inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-full ' + getStatusConfig(order.status).classes">
+              <td class="td text-sm font-bold text-gray-900">EGP {{ order.total }}</td>
+              <td class="td">
+                <span [class]="getStatusConfig(order.status).classes">
                   <lucide-angular [name]="getStatusConfig(order.status).icon" [size]="11"></lucide-angular>
                   {{ order.status }}
                 </span>
               </td>
-              <td class="px-5 py-3.5 text-sm text-gray-400 whitespace-nowrap hidden md:table-cell">{{ order.date }}</td>
-              <td class="px-5 py-3.5 whitespace-nowrap">
+              <td class="td text-sm text-gray-400 hidden md:table-cell">{{ order.date }}</td>
+              <td class="td">
                 <div class="flex items-center gap-1">
-                  <button class="p-1.5 rounded-lg hover:bg-emerald-50 text-gray-400 hover:text-[#006241] transition-colors" title="View">
+                  <button class="btn-icon btn-icon-primary" title="View">
                     <lucide-angular name="eye" [size]="14"></lucide-angular>
                   </button>
-                  <button class="p-1.5 rounded-lg hover:bg-blue-50 text-gray-400 hover:text-blue-600 transition-colors" title="Edit">
+                  <button class="btn-icon hover:bg-blue-50 hover:text-blue-600" title="Edit">
                     <lucide-angular name="pencil" [size]="14"></lucide-angular>
                   </button>
-                  <button class="p-1.5 rounded-lg hover:bg-red-50 text-gray-400 hover:text-red-500 transition-colors" title="Delete">
+                  <button class="btn-icon btn-icon-danger" title="Delete">
                     <lucide-angular name="trash-2" [size]="14"></lucide-angular>
                   </button>
                 </div>
@@ -110,22 +93,17 @@
             </tr>
           }
           @empty {
-            <tr>
-              <td colspan="7" class="px-5 py-12 text-center text-sm text-gray-400">
-                No orders found matching your search.
-              </td>
-            </tr>
+            <tr><td colspan="7" class="px-5 py-12 text-center text-sm text-gray-400">No orders found matching your search.</td></tr>
           }
         </tbody>
       </table>
     </div>
 
-    <!-- Pagination -->
-    <div class="px-5 py-3.5 border-t border-gray-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-      <p class="text-sm text-gray-500">Showing <span class="font-semibold text-gray-700">{{ filtered.length }}</span> of <span class="font-semibold text-gray-700">{{ orders.length }}</span> orders</p>
+    <div class="table-footer">
+      <p class="table-count">Showing <span>{{ filtered.length }}</span> of <span>{{ orders.length }}</span> orders</p>
       <div class="flex items-center gap-1">
         <button class="px-3 py-1.5 text-sm border border-gray-200 rounded-lg hover:bg-gray-50 text-gray-600 transition-colors">Previous</button>
-        <button class="px-3 py-1.5 text-sm bg-[#006241] text-white rounded-lg font-medium">1</button>
+        <button class="px-3 py-1.5 text-sm bg-sb-green text-white rounded-lg font-medium">1</button>
         <button class="px-3 py-1.5 text-sm border border-gray-200 rounded-lg hover:bg-gray-50 text-gray-600 transition-colors">2</button>
         <button class="px-3 py-1.5 text-sm border border-gray-200 rounded-lg hover:bg-gray-50 text-gray-600 transition-colors">Next</button>
       </div>
