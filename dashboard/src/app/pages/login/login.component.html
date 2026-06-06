@@ -1,0 +1,92 @@
+<div class="min-h-screen bg-sb-dark flex items-center justify-center p-4 relative overflow-hidden">
+
+  <!-- Background pattern -->
+  <div class="absolute inset-0 opacity-5 pointer-events-none">
+    <div class="absolute top-10 left-10 w-64 h-64 rounded-full bg-white"></div>
+    <div class="absolute bottom-20 right-20 w-96 h-96 rounded-full bg-white"></div>
+    <div class="absolute top-1/2 left-1/3 w-48 h-48 rounded-full bg-white"></div>
+  </div>
+
+  <div class="w-full max-w-md relative z-10">
+
+    <!-- Branding -->
+    <div class="text-center mb-8">
+      <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-5 shadow-2xl ring-4 ring-white/20">
+        <img src="logo.png" alt="Starbucks" class="w-14 h-14 object-contain"
+          onerror="this.style.display='none';this.parentElement.innerHTML='☕'">
+      </div>
+      <h1 class="text-3xl font-bold text-white font-heading tracking-tight">Admin Dashboard</h1>
+      <p class="text-emerald-300 mt-1.5 text-sm font-medium">Starbucks Egypt · Staff Access Only</p>
+    </div>
+
+    <!-- Card -->
+    <div class="bg-white rounded-3xl shadow-2xl p-8">
+
+      @if (error()) {
+        <div class="mb-5 p-3.5 bg-red-50 border border-red-200 rounded-2xl text-sm text-red-700 flex items-start gap-2.5">
+          <span class="shrink-0 mt-0.5">⚠️</span>
+          <span>{{ error() }}</span>
+        </div>
+      }
+
+      <form (ngSubmit)="onLogin()" #loginForm="ngForm" class="space-y-4">
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-1.5">Email Address</label>
+          <input
+            type="email" name="email" [(ngModel)]="email" required autocomplete="email"
+            placeholder="admin@starbucks.eg"
+            class="field-input py-3"
+          >
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-1.5">Password</label>
+          <div class="relative">
+            <input
+              [type]="showPassword ? 'text' : 'password'" name="password" [(ngModel)]="password"
+              required autocomplete="current-password" placeholder="Enter your password"
+              class="field-input py-3 pr-16"
+            >
+            <button type="button" (click)="showPassword = !showPassword"
+              class="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors text-xs font-semibold">
+              {{ showPassword ? 'Hide' : 'Show' }}
+            </button>
+          </div>
+        </div>
+
+        <button type="submit" [disabled]="loading()"
+          class="w-full mt-2 btn-primary py-3.5 text-sm justify-center disabled:opacity-60 disabled:cursor-not-allowed disabled:active:scale-100 w-full">
+          @if (loading()) {
+            <span class="flex items-center justify-center gap-2">
+              <span class="loading-spinner w-4 h-4 border-white/40 border-t-white"></span>
+              Signing in…
+            </span>
+          } @else {
+            Sign In
+          }
+        </button>
+      </form>
+
+      <!-- Divider -->
+      <div class="relative my-5">
+        <div class="absolute inset-0 flex items-center">
+          <div class="w-full border-t border-gray-100"></div>
+        </div>
+        <div class="relative flex justify-center">
+          <span class="px-3 bg-white text-xs text-gray-400 font-medium">or</span>
+        </div>
+      </div>
+
+      <!-- Demo -->
+      <button type="button" (click)="loginDemo()"
+        class="w-full py-3.5 border-2 border-sb-gold text-sb-gold rounded-xl font-bold text-sm hover:bg-sb-gold/5 active:scale-[0.98] transition-all">
+        ☕ &nbsp;Continue in Demo Mode
+      </button>
+      <p class="text-center text-xs text-gray-400 mt-2.5">Explore the dashboard with Egyptian sample data</p>
+    </div>
+
+    <p class="text-center text-emerald-400/60 text-xs mt-6">
+      © {{ year }} Starbucks Egypt. Staff access only.
+    </p>
+  </div>
+</div>

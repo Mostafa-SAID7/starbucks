@@ -1,0 +1,24 @@
+{
+  "name": "Starbucks Egypt — Admin Dashboard",
+  "short_name": "SBX Admin",
+  "description": "Starbucks Egypt admin dashboard — manage orders, products, analytics, and more.",
+  "theme_color": "#006241",
+  "background_color": "#1e3932",
+  "display": "standalone",
+  "orientation": "landscape-primary",
+  "scope": "/",
+  "start_url": "/dashboard",
+  "lang": "en",
+  "icons": [
+    { "src": "logo.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "logo.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Dashboard", "short_name": "Home", "url": "/dashboard", "description": "Overview and KPIs" },
+    { "name": "Orders", "short_name": "Orders", "url": "/orders", "description": "Manage customer orders" },
+    { "name": "Products", "short_name": "Products", "url": "/products", "description": "Manage menu items" },
+    { "name": "Analytics", "short_name": "Analytics", "url": "/analytics", "description": "View analytics reports" }
+  ],
+  "categories": ["business", "productivity"],
+  "prefer_related_applications": false
+}

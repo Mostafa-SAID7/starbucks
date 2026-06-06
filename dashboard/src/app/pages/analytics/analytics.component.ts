@@ -1,33 +1,71 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { LucideAngularModule } from 'lucide-angular';
+import { forkJoin } from 'rxjs';
+import { AnalyticsService, MonthlyRevenue, TopCustomer, AnalyticsSummary } from '../../services/analytics.service';
+
+interface EnrichedMonth extends MonthlyRevenue {
+  isCurrentMonth: boolean;
+}
 
 @Component({
   selector: 'app-analytics',
-  imports: [CommonModule],
+  imports: [CommonModule, LucideAngularModule],
   templateUrl: './analytics.component.html',
   styleUrls: ['./analytics.component.css']
 })
 export class AnalyticsComponent implements OnInit {
-  metrics = {
-    revenue: 325420,
-    revenueGrowth: 18.5,
-    avgOrderValue: 15.87,
-    avgOrderValueGrowth: 5.2,
-    conversionRate: 3.8,
-    conversionRateGrowth: 0.5,
-    retention: 82.4,
-    retentionGrowth: 2.1
-  };
+  loading = true;
 
-  topCustomers = [
-    { id: 1, name: 'John Doe', email: 'john&#64;example.com', initial: 'JD', orders: 47, totalSpent: 524.30, avgOrder: 11.15, lastOrder: '2026-06-05' },
-    { id: 2, name: 'Jane Smith', email: 'jane&#64;example.com', initial: 'JS', orders: 42, totalSpent: 487.90, avgOrder: 11.62, lastOrder: '2026-06-06' },
-    { id: 3, name: 'Mike Johnson', email: 'mike&#64;example.com', initial: 'MJ', orders: 38, totalSpent: 445.20, avgOrder: 11.72, lastOrder: '2026-06-04' },
-    { id: 4, name: 'Sarah Williams', email: 'sarah&#64;example.com', initial: 'SW', orders: 35, totalSpent: 412.75, avgOrder: 11.79, lastOrder: '2026-06-06' },
-    { id: 5, name: 'Tom Brown', email: 'tom&#64;example.com', initial: 'TB', orders: 32, totalSpent: 398.40, avgOrder: 12.45, lastOrder: '2026-06-05' },
+  summary: AnalyticsSummary | null = null;
+  monthlyRevenue: EnrichedMonth[] = [];
+  topCustomers: TopCustomer[] = [];
+
+  metrics: Array<{ label: string; value: string; change: string; up: boolean; icon: string; bg: string; iconColor: string }> = [];
+
+  private svc = inject(AnalyticsService);
+
+  categoryBreakdown = [
+    { name: 'Coffee',      pct: 52, amount: 972, dot: 'bg-sb-dark',     color: 'bg-sb-green' },
+    { name: 'Food',        pct: 24, amount: 449, dot: 'bg-orange-400',  color: 'bg-orange-400' },
+    { name: 'Tea',         pct: 16, amount: 299, dot: 'bg-emerald-400', color: 'bg-emerald-400' },
+    { name: 'Merchandise', pct:  8, amount: 150, dot: 'bg-violet-400',  color: 'bg-violet-400' },
   ];
 
-  ngOnInit(): void {
-    // Initialize data
+  topProducts = [
+    { name: 'Caramel Macchiato',   iconBg: 'bg-sb-dark',     revenue: 48200, trend: 12, pct: 100 },
+    { name: 'Vanilla Frappuccino', iconBg: 'bg-sb-green',    revenue: 42100, trend: 15, pct: 87 },
+    { name: 'Matcha Latte',        iconBg: 'bg-emerald-600', revenue: 31500, trend: 8,  pct: 65 },
+    { name: 'Spinach Wrap',        iconBg: 'bg-orange-500',  revenue: 22300, trend: -3, pct: 46 },
+    { name: 'Green Tea Latte',     iconBg: 'bg-teal-600',    revenue: 18900, trend: 5,  pct: 39 },
+  ];
+
+  ngOnInit() {
+    forkJoin({
+      summary:   this.svc.getSummary(),
+      monthly:   this.svc.getMonthlyRevenue(),
+      customers: this.svc.getTopCustomers(),
+    }).subscribe({
+      next: ({ summary, monthly, customers }) => {
+        this.summary      = summary;
+        this.topCustomers = customers;
+        this.metrics      = this.buildMetrics(summary);
+        this.monthlyRevenue = monthly.map((m, i) => ({
+          ...m,
+          isCurrentMonth: i === monthly.length - 1,
+        }));
+        this.loading = false;
+      },
+      error: () => { this.loading = false; }
+    });
+  }
+
+  private buildMetrics(s: AnalyticsSummary) {
+    return [
+      { label: 'Total Revenue',      value: `EGP ${s.totalRevenue.toLocaleString()}`, change: `+${s.revenueChange}%`,    up: s.revenueChange >= 0,    icon: 'dollar-sign',   bg: 'bg-emerald-50', iconColor: 'text-emerald-600' },
+      { label: 'Avg. Order Value',   value: `EGP ${s.avgOrderValue.toFixed(0)}`,      change: `+${s.avgOrderChange}%`,   up: s.avgOrderChange >= 0,   icon: 'shopping-cart', bg: 'bg-blue-50',    iconColor: 'text-blue-600' },
+      { label: 'Conversion Rate',    value: `${s.conversionRate}%`,                   change: `+${s.conversionChange}%`, up: s.conversionChange >= 0, icon: 'trending-up',   bg: 'bg-violet-50',  iconColor: 'text-violet-600' },
+      { label: 'Customer Retention', value: `${s.customerRetention}%`,               change: `${s.retentionChange}%`,   up: s.retentionChange >= 0,  icon: 'user-check',    bg: 'bg-amber-50',   iconColor: 'text-amber-600' },
+    ];
   }
 }

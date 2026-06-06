@@ -1,0 +1,88 @@
+<div class="page-wrapper">
+
+  @if (loading) {
+    <div class="loading-bar">
+      <div class="loading-spinner"></div>
+      <p class="loading-text">Loading settings…</p>
+    </div>
+  }
+
+  <!-- Header -->
+  <div class="page-header">
+    <div>
+      <h2 class="page-title">System Settings</h2>
+      <p class="page-subtitle">Configure platform-wide operational parameters</p>
+    </div>
+    <div class="inline-flex items-center gap-2 px-3 py-2 badge-demo">
+      <lucide-angular name="alert-circle" [size]="13"></lucide-angular>
+      Changes apply immediately
+    </div>
+  </div>
+
+  @if (!loading) {
+    @for (group of groups; track group) {
+      <div class="card overflow-hidden">
+
+        <!-- Group header -->
+        <div class="card-header bg-gray-50/50">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-xl flex items-center justify-center shrink-0" style="background: var(--sb-green-muted)">
+              <lucide-angular [name]="groupIcon(group)" [size]="15" class="text-sb-green"></lucide-angular>
+            </div>
+            <h3 class="card-title">{{ group }}</h3>
+          </div>
+        </div>
+
+        <!-- Settings rows -->
+        <div class="divide-y divide-gray-50">
+          @for (setting of byGroup(group); track setting.key) {
+            <div class="px-5 py-4 flex flex-col sm:flex-row sm:items-center gap-4">
+
+              <div class="flex-1 min-w-0">
+                <p class="text-sm font-semibold text-gray-800">{{ setting.label }}</p>
+                <p class="text-[12px] text-gray-400 mt-0.5">{{ setting.description }}</p>
+              </div>
+
+              <div class="flex items-center gap-2 shrink-0">
+                @if (setting.type === 'boolean') {
+                  <button
+                    (click)="toggleBoolean(setting)"
+                    [class]="'toggle ' + (editValues[setting.key] === 'true' ? 'toggle-on' : 'toggle-off')"
+                    [attr.aria-checked]="editValues[setting.key] === 'true'"
+                    role="switch"
+                  >
+                    <span [class]="'toggle-knob ' + (editValues[setting.key] === 'true' ? 'toggle-knob-on' : 'toggle-knob-off')"></span>
+                  </button>
+                  <span class="text-sm font-medium text-gray-600 w-8">{{ editValues[setting.key] === 'true' ? 'On' : 'Off' }}</span>
+                } @else {
+                  <input
+                    [type]="setting.type"
+                    [(ngModel)]="editValues[setting.key]"
+                    class="field-input w-40 text-right"
+                  />
+                  <button
+                    (click)="saveSetting(setting)"
+                    [disabled]="saving[setting.key] || editValues[setting.key] === setting.value"
+                    [class]="'w-20 py-2 rounded-xl text-xs font-semibold transition-all ' + (saved[setting.key] ? 'bg-emerald-50 text-emerald-700' : 'btn-primary disabled:opacity-40 disabled:cursor-not-allowed disabled:active:scale-100')"
+                  >
+                    @if (saving[setting.key]) {
+                      <span class="flex items-center justify-center gap-1">
+                        <span class="loading-spinner w-3 h-3 border-white/40 border-t-white"></span>
+                      </span>
+                    } @else if (saved[setting.key]) {
+                      ✓ Saved
+                    } @else {
+                      Save
+                    }
+                  </button>
+                }
+              </div>
+
+            </div>
+          }
+        </div>
+      </div>
+    }
+  }
+
+</div>

@@ -1,221 +1,231 @@
-<div class="space-y-6">
-  <!-- Stats Cards -->
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-    <!-- Total Sales -->
-    <div class="bg-white rounded-lg shadow p-6">
-      <div class="flex items-center justify-between">
-        <div>
-          <p class="text-sm text-gray-600">Total Sales</p>
-          <p class="text-2xl font-bold text-gray-800">${{ stats.totalSales | number:'1.0-0' }}</p>
-          <p class="text-sm text-green-600 mt-1">+12.5% from last month</p>
+<div class="page-wrapper">
+
+  <!-- Skeleton loading -->
+  @if (loading) {
+    <div class="loading-bar"><div class="loading-spinner"></div><p class="loading-text">Loading dashboard…</p></div>
+    <div class="grid grid-cols-2 xl:grid-cols-4 gap-4">
+      @for (i of [1,2,3,4]; track i) {
+        <div class="card p-5 space-y-3">
+          <div class="skeleton h-3 w-20"></div>
+          <div class="skeleton h-8 w-28"></div>
+          <div class="skeleton h-2.5 w-full rounded-full"></div>
         </div>
-        <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-          <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-        </div>
+      }
+    </div>
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+      <div class="card p-5 lg:col-span-2"><div class="skeleton h-48 w-full rounded-xl"></div></div>
+      <div class="card p-5"><div class="skeleton h-48 w-full rounded-xl"></div></div>
+    </div>
+  }
+
+  @if (!loading) {
+
+    <!-- ── Header ─────────────────────────────────────── -->
+    <div class="page-header">
+      <div>
+        <h2 class="page-title">Dashboard Overview</h2>
+        <p class="page-subtitle">Welcome back — here's what's happening today in Egypt.</p>
+      </div>
+      <div class="flex items-center gap-2">
+        <button class="btn-outline">
+          <lucide-angular name="calendar" [size]="14"></lucide-angular>
+          Today
+        </button>
+        <button class="btn-primary">
+          <lucide-angular name="download" [size]="14"></lucide-angular>
+          Export
+        </button>
       </div>
     </div>
 
-    <!-- Orders -->
-    <div class="bg-white rounded-lg shadow p-6">
-      <div class="flex items-center justify-between">
-        <div>
-          <p class="text-sm text-gray-600">Total Orders</p>
-          <p class="text-2xl font-bold text-gray-800">{{ stats.totalOrders | number }}</p>
-          <p class="text-sm text-blue-600 mt-1">+8.2% from last month</p>
+    <!-- ── KPI cards ──────────────────────────────────── -->
+    <div class="grid grid-cols-2 xl:grid-cols-4 gap-4">
+      @for (stat of stats; track stat.label) {
+        <div class="stat-card group">
+          <div class="flex items-start justify-between mb-3">
+            <div class="stat-icon w-10 h-10 rounded-xl shrink-0" [class]="stat.bg">
+              <lucide-angular [name]="stat.icon" [size]="19" [class]="stat.iconColor"></lucide-angular>
+            </div>
+            <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full"
+              [class]="stat.up ? 'bg-emerald-50 text-emerald-700' : 'bg-red-50 text-red-600'">
+              {{ stat.up ? '▲' : '▼' }} {{ stat.change }}
+            </span>
+          </div>
+          <p class="stat-label mb-1">{{ stat.label }}</p>
+          <p class="stat-value">{{ stat.value }}</p>
+          <!-- Progress bar showing % of monthly target -->
+          <div class="mt-3 chart-bar-track">
+            <div class="chart-bar-fill transition-all duration-1000" [style.width.%]="stat.pct"></div>
+          </div>
+          <p class="text-[11px] text-gray-400 mt-1">{{ stat.pct }}% of monthly target</p>
         </div>
-        <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-          <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-          </svg>
-        </div>
+      }
+    </div>
+
+    <!-- ── Quick Actions ──────────────────────────────── -->
+    <div class="card p-4">
+      <div class="flex items-center justify-between mb-3">
+        <h3 class="card-title">Quick Actions</h3>
+        <span class="text-[11px] text-gray-400">Shortcuts to common tasks</span>
+      </div>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        @for (action of quickActions; track action.label) {
+          <a [routerLink]="action.path"
+            class="flex items-center gap-3 p-3 rounded-xl border border-gray-100 hover:border-sb-green/30 hover:shadow-sm transition-all group cursor-pointer">
+            <div [class]="'w-9 h-9 rounded-xl flex items-center justify-center shrink-0 transition-transform group-hover:scale-105 ' + action.iconBg">
+              <lucide-angular [name]="action.icon" [size]="17" [class]="action.iconColor"></lucide-angular>
+            </div>
+            <div>
+              <p class="text-sm font-semibold text-gray-800 leading-tight">{{ action.label }}</p>
+              <p class="text-[11px] text-gray-400">{{ action.sub }}</p>
+            </div>
+          </a>
+        }
       </div>
     </div>
 
-    <!-- Customers -->
-    <div class="bg-white rounded-lg shadow p-6">
-      <div class="flex items-center justify-between">
-        <div>
-          <p class="text-sm text-gray-600">Active Customers</p>
-          <p class="text-2xl font-bold text-gray-800">{{ stats.activeCustomers | number }}</p>
-          <p class="text-sm text-purple-600 mt-1">+15.3% from last month</p>
-        </div>
-        <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
-          <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-          </svg>
-        </div>
-      </div>
-    </div>
+    <!-- ── Charts row ─────────────────────────────────── -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
 
-    <!-- Products -->
-    <div class="bg-white rounded-lg shadow p-6">
-      <div class="flex items-center justify-between">
-        <div>
-          <p class="text-sm text-gray-600">Products</p>
-          <p class="text-2xl font-bold text-gray-800">{{ stats.totalProducts }}</p>
-          <p class="text-sm text-orange-600 mt-1">5 new this week</p>
+      <!-- Weekly Sales bar chart -->
+      <div class="card p-5 lg:col-span-2">
+        <div class="flex items-center justify-between mb-5">
+          <div>
+            <h3 class="card-title">Weekly Sales</h3>
+            <p class="text-xs text-gray-400 mt-0.5">Revenue per day this week (EGP)</p>
+          </div>
+          <div class="text-right">
+            <p class="text-lg font-bold text-gray-900 font-heading">EGP {{ weeklyTotal | number }}</p>
+            <p class="text-[11px] text-emerald-600 font-medium">↑ 12% vs last week</p>
+          </div>
         </div>
-        <div class="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center">
-          <svg class="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-          </svg>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Quick Stats -->
-  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-    <!-- Sales Overview -->
-    <div class="bg-white rounded-lg shadow p-6">
-      <h3 class="text-lg font-bold text-gray-800 mb-4">Weekly Sales</h3>
-      <div class="space-y-3">
-        <div class="flex justify-between items-center">
-          <span class="text-sm text-gray-600">Monday</span>
-          <div class="flex-1 mx-4">
-            <div class="h-2 bg-gray-200 rounded-full">
-              <div class="h-2 bg-starbucks-green rounded-full" style="width: 45%"></div>
+        <!-- Chart -->
+        <div class="flex items-end gap-2 h-36 mb-3">
+          @for (day of weeklySales; track day.day) {
+            <div class="flex-1 flex flex-col items-center gap-1 group relative">
+              <!-- Tooltip -->
+              <div class="absolute bottom-full mb-1 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-[10px] font-medium px-2 py-1 rounded-lg opacity-0 group-hover:opacity-100 whitespace-nowrap pointer-events-none transition-opacity z-10">
+                EGP {{ (day.amount / 1000).toFixed(1) }}k
+              </div>
+              <div class="w-full rounded-t-lg transition-all duration-700 relative overflow-hidden"
+                [style.height.px]="(day.pct / 100) * 128"
+                [class]="day.pct === maxDayPct ? 'bg-sb-green' : 'bg-sb-green/20 group-hover:bg-sb-green/50'">
+              </div>
+              <span class="text-[10px] font-medium text-gray-500">{{ day.day }}</span>
             </div>
-          </div>
-          <span class="text-sm font-semibold text-gray-800">$31k</span>
-        </div>
-        <div class="flex justify-between items-center">
-          <span class="text-sm text-gray-600">Tuesday</span>
-          <div class="flex-1 mx-4">
-            <div class="h-2 bg-gray-200 rounded-full">
-              <div class="h-2 bg-starbucks-green rounded-full" style="width: 58%"></div>
-            </div>
-          </div>
-          <span class="text-sm font-semibold text-gray-800">$40k</span>
-        </div>
-        <div class="flex justify-between items-center">
-          <span class="text-sm text-gray-600">Wednesday</span>
-          <div class="flex-1 mx-4">
-            <div class="h-2 bg-gray-200 rounded-full">
-              <div class="h-2 bg-starbucks-green rounded-full" style="width: 40%"></div>
-            </div>
-          </div>
-          <span class="text-sm font-semibold text-gray-800">$28k</span>
-        </div>
-        <div class="flex justify-between items-center">
-          <span class="text-sm text-gray-600">Thursday</span>
-          <div class="flex-1 mx-4">
-            <div class="h-2 bg-gray-200 rounded-full">
-              <div class="h-2 bg-starbucks-green rounded-full" style="width: 73%"></div>
-            </div>
-          </div>
-          <span class="text-sm font-semibold text-gray-800">$51k</span>
-        </div>
-        <div class="flex justify-between items-center">
-          <span class="text-sm text-gray-600">Friday</span>
-          <div class="flex-1 mx-4">
-            <div class="h-2 bg-gray-200 rounded-full">
-              <div class="h-2 bg-starbucks-green rounded-full" style="width: 60%"></div>
-            </div>
-          </div>
-          <span class="text-sm font-semibold text-gray-800">$42k</span>
-        </div>
-        <div class="flex justify-between items-center">
-          <span class="text-sm text-gray-600">Saturday</span>
-          <div class="flex-1 mx-4">
-            <div class="h-2 bg-gray-200 rounded-full">
-              <div class="h-2 bg-starbucks-green rounded-full" style="width: 95%"></div>
-            </div>
-          </div>
-          <span class="text-sm font-semibold text-gray-800">$82k</span>
-        </div>
-        <div class="flex justify-between items-center">
-          <span class="text-sm text-gray-600">Sunday</span>
-          <div class="flex-1 mx-4">
-            <div class="h-2 bg-gray-200 rounded-full">
-              <div class="h-2 bg-starbucks-green rounded-full" style="width: 75%"></div>
-            </div>
-          </div>
-          <span class="text-sm font-semibold text-gray-800">$65k</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Category Distribution -->
-    <div class="bg-white rounded-lg shadow p-6">
-      <h3 class="text-lg font-bold text-gray-800 mb-4">Sales by Category</h3>
-      <div class="space-y-4">
-        <div>
-          <div class="flex justify-between mb-2">
-            <span class="text-sm font-medium text-gray-700">Coffee</span>
-            <span class="text-sm font-semibold text-gray-800">44%</span>
-          </div>
-          <div class="h-3 bg-gray-200 rounded-full">
-            <div class="h-3 bg-starbucks-green rounded-full" style="width: 44%"></div>
-          </div>
-        </div>
-        <div>
-          <div class="flex justify-between mb-2">
-            <span class="text-sm font-medium text-gray-700">Tea</span>
-            <span class="text-sm font-semibold text-gray-800">35%</span>
-          </div>
-          <div class="h-3 bg-gray-200 rounded-full">
-            <div class="h-3 bg-green-600 rounded-full" style="width: 35%"></div>
-          </div>
-        </div>
-        <div>
-          <div class="flex justify-between mb-2">
-            <span class="text-sm font-medium text-gray-700">Food</span>
-            <span class="text-sm font-semibold text-gray-800">26%</span>
-          </div>
-          <div class="h-3 bg-gray-200 rounded-full">
-            <div class="h-3 bg-green-500 rounded-full" style="width: 26%"></div>
-          </div>
-        </div>
-        <div>
-          <div class="flex justify-between mb-2">
-            <span class="text-sm font-medium text-gray-700">Merchandise</span>
-            <span class="text-sm font-semibold text-gray-800">11%</span>
-          </div>
-          <div class="h-3 bg-gray-200 rounded-full">
-            <div class="h-3 bg-green-400 rounded-full" style="width: 11%"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Recent Orders -->
-  <div class="bg-white rounded-lg shadow">
-    <div class="p-6 border-b border-gray-200">
-      <h3 class="text-lg font-bold text-gray-800">Recent Orders</h3>
-    </div>
-    <div class="overflow-x-auto">
-      <table class="w-full">
-        <thead class="bg-gray-50 border-b border-gray-200">
-          <tr>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order ID</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Customer</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-          </tr>
-        </thead>
-        <tbody class="bg-white divide-y divide-gray-200">
-          @for (order of recentOrders; track order.id) {
-            <tr class="hover:bg-gray-50">
-              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">#{{ order.id }}</td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ order.customer }}</td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ order.product }}</td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${{ order.amount }}</td>
-              <td class="px-6 py-4 whitespace-nowrap">
-                <span [class]="getStatusClass(order.status)" class="px-2 py-1 text-xs font-semibold rounded-full">
-                  {{ order.status }}
-                </span>
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ order.date }}</td>
-            </tr>
           }
-        </tbody>
-      </table>
+        </div>
+      </div>
+
+      <!-- Sales by Category donut-like -->
+      <div class="card p-5">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="card-title">By Category</h3>
+          <span class="text-xs text-gray-400 bg-gray-50 px-2 py-1 rounded-lg border border-gray-100">All time</span>
+        </div>
+        <div class="space-y-3.5">
+          @for (cat of categories; track cat.name) {
+            <div>
+              <div class="flex justify-between items-center mb-1">
+                <div class="flex items-center gap-2">
+                  <span class="w-2.5 h-2.5 rounded-full shrink-0" [class]="cat.dot"></span>
+                  <span class="text-sm font-medium text-gray-700">{{ cat.name }}</span>
+                </div>
+                <div class="text-right">
+                  <span class="text-sm font-bold text-gray-900">{{ cat.pct }}%</span>
+                </div>
+              </div>
+              <div class="chart-bar-track">
+                <div [class]="'h-2.5 rounded-full transition-all duration-700 ' + cat.color" [style.width.%]="cat.pct"></div>
+              </div>
+            </div>
+          }
+        </div>
+        <div class="divider mt-4 mb-3"></div>
+        <div class="text-center">
+          <p class="text-2xl font-bold text-gray-900 font-heading">EGP 2.1M</p>
+          <p class="text-xs text-gray-400 mt-0.5">Total all-time revenue</p>
+        </div>
+      </div>
     </div>
-  </div>
+
+    <!-- ── Bottom row: Recent orders + Top products ───── -->
+    <div class="grid grid-cols-1 xl:grid-cols-3 gap-4">
+
+      <!-- Recent orders (takes 2/3) -->
+      <div class="card overflow-hidden xl:col-span-2">
+        <div class="card-header">
+          <h3 class="card-title">Recent Orders</h3>
+          <a routerLink="/orders" class="text-sm font-medium text-sb-green hover:text-sb-dark transition-colors inline-flex items-center gap-1">
+            View all <lucide-angular name="chevron-right" [size]="14"></lucide-angular>
+          </a>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="data-table">
+            <thead>
+              <tr class="table-head-row">
+                <th class="th">Order</th>
+                <th class="th">Customer</th>
+                <th class="th">Amount</th>
+                <th class="th">Status</th>
+                <th class="th hidden sm:table-cell">Date</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-50">
+              @for (order of recentOrders; track order.id) {
+                <tr class="tr">
+                  <td class="td text-sm font-bold text-sb-green">#{{ order.id }}</td>
+                  <td class="td">
+                    <div class="flex items-center gap-2.5">
+                      <div class="avatar-sm avatar-dark">{{ order.customer[0] }}</div>
+                      <span class="text-sm font-medium text-gray-800">{{ order.customer }}</span>
+                    </div>
+                  </td>
+                  <td class="td text-sm font-bold text-gray-900">EGP {{ order.amount.toFixed(0) }}</td>
+                  <td class="td">
+                    <span [class]="getStatusConfig(order.status).classes">
+                      <lucide-angular [name]="getStatusConfig(order.status).icon" [size]="10"></lucide-angular>
+                      {{ order.status }}
+                    </span>
+                  </td>
+                  <td class="td text-sm text-gray-400 hidden sm:table-cell">{{ order.date }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Top products (takes 1/3) -->
+      <div class="card overflow-hidden">
+        <div class="card-header">
+          <h3 class="card-title">Top Products</h3>
+          <a routerLink="/products" class="text-sm font-medium text-sb-green hover:text-sb-dark transition-colors">
+            <lucide-angular name="chevron-right" [size]="14"></lucide-angular>
+          </a>
+        </div>
+        <div class="divide-y divide-gray-50">
+          @for (p of topProducts; track p.name; let idx = $index) {
+            <div class="px-4 py-3 flex items-center gap-3 hover:bg-gray-50/60 transition-colors">
+              <span class="text-[11px] font-bold text-gray-300 w-5 shrink-0 text-center">{{ idx + 1 }}</span>
+              <div class="w-8 h-8 rounded-xl flex items-center justify-center shrink-0 text-white font-bold text-xs"
+                [class]="p.iconBg">{{ p.name[0] }}</div>
+              <div class="flex-1 min-w-0">
+                <p class="text-sm font-semibold text-gray-800 truncate">{{ p.name }}</p>
+                <p class="text-[11px] text-gray-400">{{ p.orders }} orders</p>
+              </div>
+              <div class="text-right shrink-0">
+                <p class="text-sm font-bold text-gray-900">EGP {{ (p.revenue / 1000).toFixed(0) }}k</p>
+                <p [class]="'text-[11px] font-semibold ' + (p.trend > 0 ? 'text-emerald-600' : 'text-red-500')">
+                  {{ p.trend > 0 ? '▲' : '▼' }} {{ p.trend }}%
+                </p>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+
+  }
+
 </div>

@@ -1,37 +1,69 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { LucideAngularModule } from 'lucide-angular';
+import { OrdersService, Order } from '../../services/orders.service';
 
 @Component({
   selector: 'app-orders',
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule, LucideAngularModule],
   templateUrl: './orders.component.html',
   styleUrls: ['./orders.component.css']
 })
 export class OrdersComponent implements OnInit {
-  orders = [
-    { id: '1001', customer: 'John Doe', items: 3, total: 15.35, status: 'Completed', date: '2026-06-06 10:30' },
-    { id: '1002', customer: 'Jane Smith', items: 2, total: 9.90, status: 'Processing', date: '2026-06-06 11:15' },
-    { id: '1003', customer: 'Mike Johnson', items: 1, total: 3.25, status: 'Completed', date: '2026-06-06 11:45' },
-    { id: '1004', customer: 'Sarah Williams', items: 4, total: 22.80, status: 'Pending', date: '2026-06-06 12:00' },
-    { id: '1005', customer: 'Tom Brown', items: 2, total: 12.90, status: 'Completed', date: '2026-06-06 12:30' },
-    { id: '1006', customer: 'Emily Davis', items: 3, total: 18.45, status: 'Processing', date: '2026-06-06 13:00' },
-    { id: '1007', customer: 'David Miller', items: 1, total: 4.75, status: 'Completed', date: '2026-06-06 13:30' },
-    { id: '1008', customer: 'Lisa Anderson', items: 5, total: 31.20, status: 'Completed', date: '2026-06-06 14:00' },
-    { id: '1009', customer: 'Robert Taylor', items: 2, total: 11.90, status: 'Cancelled', date: '2026-06-06 14:30' },
-    { id: '1010', customer: 'Jennifer Wilson', items: 3, total: 17.25, status: 'Pending', date: '2026-06-06 15:00' },
-  ];
+  loading = true;
+  search = '';
+  statusFilter = '';
+  dateFilter = '';
+  page = 1;
+  pageSize = 20;
+  total = 0;
+  orders: Order[] = [];
 
-  ngOnInit(): void {
-    // Initialize data
+  private svc = inject(OrdersService);
+
+  get filtered() {
+    return this.orders.filter(o =>
+      (!this.search || o.customer.toLowerCase().includes(this.search.toLowerCase()) || o.id.includes(this.search)) &&
+      (!this.statusFilter || o.status === this.statusFilter)
+    );
   }
 
-  getStatusClass(status: string): string {
-    const classes: { [key: string]: string } = {
-      'Completed': 'bg-green-100 text-green-800',
-      'Processing': 'bg-blue-100 text-blue-800',
-      'Pending': 'bg-yellow-100 text-yellow-800',
-      'Cancelled': 'bg-red-100 text-red-800'
+  get totalPages() { return Math.max(1, Math.ceil(this.total / this.pageSize)); }
+
+  get statusSummary() {
+    return [
+      { label: 'Pending',    value: 'Pending',    count: this.orders.filter(o => o.status === 'Pending').length,    icon: 'alert-circle', bg: 'bg-amber-50',   text: 'text-amber-600',   bar: 'bg-amber-400' },
+      { label: 'Processing', value: 'Processing', count: this.orders.filter(o => o.status === 'Processing').length, icon: 'clock',        bg: 'bg-blue-50',    text: 'text-blue-600',    bar: 'bg-blue-400' },
+      { label: 'Completed',  value: 'Completed',  count: this.orders.filter(o => o.status === 'Completed').length,  icon: 'check-circle', bg: 'bg-emerald-50', text: 'text-emerald-600', bar: 'bg-emerald-400' },
+      { label: 'Cancelled',  value: 'Cancelled',  count: this.orders.filter(o => o.status === 'Cancelled').length,  icon: 'x-circle',     bg: 'bg-red-50',     text: 'text-red-600',     bar: 'bg-red-400' },
+    ];
+  }
+
+  ngOnInit() { this.load(); }
+
+  load() {
+    this.loading = true;
+    this.svc.getOrders(this.page, this.pageSize).subscribe({
+      next: res => { this.orders = res.items; this.total = res.total; this.loading = false; },
+      error: () => { this.loading = false; }
+    });
+  }
+
+  updateStatus(id: string, status: string) {
+    this.svc.updateStatus(id, status).subscribe(() => {
+      const o = this.orders.find(x => x.id === id);
+      if (o) o.status = status;
+    });
+  }
+
+  getStatusConfig(status: string): { classes: string; icon: string } {
+    const map: Record<string, { classes: string; icon: string }> = {
+      Completed:  { classes: 'badge badge-success', icon: 'check-circle' },
+      Processing: { classes: 'badge badge-info',    icon: 'clock' },
+      Pending:    { classes: 'badge badge-warning', icon: 'alert-circle' },
+      Cancelled:  { classes: 'badge badge-danger',  icon: 'x-circle' },
     };
-    return classes[status] || 'bg-gray-100 text-gray-800';
+    return map[status] ?? { classes: 'badge badge-muted', icon: 'clock' };
   }
 }

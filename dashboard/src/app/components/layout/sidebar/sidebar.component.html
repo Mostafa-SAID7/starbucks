@@ -1,76 +1,146 @@
-<aside class="w-64 bg-starbucks-green text-white min-h-screen flex flex-col">
-  <div class="p-6 border-b border-starbucks-dark">
-    <div class="flex items-center space-x-3">
-      <img src="assets/logo.png" alt="Starbucks Logo" class="w-10 h-10 object-contain">
-      <div>
-        <h1 class="text-2xl font-bold">Starbucks</h1>
-        <p class="text-sm text-green-100">Admin Dashboard</p>
+<aside
+  [class]="'sidebar-shell fixed lg:relative inset-y-0 left-0 z-40 flex flex-col text-white transition-all duration-300 ease-in-out shrink-0 '
+    + (collapsed() ? 'w-[68px]' : 'w-64') + ' '
+    + (isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0')"
+>
+
+  <!-- ── Brand header ─────────────────────── -->
+  <div [class]="'flex items-center border-b min-h-[68px] px-3.5 '
+    + (collapsed() ? 'justify-center' : 'justify-between gap-2.5')"
+    style="border-color: rgba(255,255,255,0.07);">
+
+    <!-- Logo mark + text -->
+    <div [class]="'flex items-center gap-3 overflow-hidden ' + (collapsed() ? '' : 'flex-1 min-w-0')">
+      <!-- Icon with gold ring -->
+      <div class="relative shrink-0">
+        <div class="w-9 h-9 rounded-full flex items-center justify-center"
+          style="background: var(--sb-green); box-shadow: 0 0 0 2px rgba(203,162,88,0.55), 0 2px 8px rgba(0,0,0,0.3);">
+          <lucide-angular name="coffee" [size]="16" class="text-white"></lucide-angular>
+        </div>
+        <!-- Gold accent dots (star-like) -->
+        <div class="absolute -top-0.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full"
+          style="background: var(--sb-gold);"></div>
+        <div class="absolute -bottom-0.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full"
+          style="background: var(--sb-gold);"></div>
       </div>
+      @if (!collapsed()) {
+        <div class="overflow-hidden">
+          <p class="text-sm font-bold text-white font-heading tracking-wide leading-tight">Starbucks EG</p>
+          <p class="text-[9px] font-semibold uppercase tracking-[0.2em] leading-none mt-0.5"
+            style="color: var(--sb-gold-muted);">Admin Portal</p>
+        </div>
+      }
     </div>
+
+    <!-- Collapse toggle -->
+    <button (click)="toggleCollapse()" class="sidebar-collapse-btn hidden lg:flex" aria-label="Collapse sidebar">
+      <lucide-angular [name]="collapsed() ? 'chevron-right' : 'chevron-left'" [size]="13"></lucide-angular>
+    </button>
+    <button (click)="close()" class="sidebar-collapse-btn lg:hidden" aria-label="Close menu">
+      <lucide-angular name="x" [size]="13"></lucide-angular>
+    </button>
   </div>
 
-  <nav class="flex-1 p-4">
-    <ul class="space-y-2">
-      <li>
-        <a
-          routerLink="/dashboard"
-          routerLinkActive="bg-starbucks-dark font-semibold"
-          class="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-starbucks-dark transition-colors"
-        >
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-          </svg>
-          <span>Dashboard</span>
-        </a>
-      </li>
-      <li>
-        <a
-          routerLink="/orders"
-          routerLinkActive="bg-starbucks-dark font-semibold"
-          class="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-starbucks-dark transition-colors"
-        >
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-          </svg>
-          <span>Orders</span>
-        </a>
-      </li>
-      <li>
-        <a
-          routerLink="/products"
-          routerLinkActive="bg-starbucks-dark font-semibold"
-          class="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-starbucks-dark transition-colors"
-        >
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-          </svg>
-          <span>Products</span>
-        </a>
-      </li>
-      <li>
-        <a
-          routerLink="/analytics"
-          routerLinkActive="bg-starbucks-dark font-semibold"
-          class="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-starbucks-dark transition-colors"
-        >
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-          </svg>
-          <span>Analytics</span>
-        </a>
-      </li>
-    </ul>
+  <!-- ── Navigation ───────────────────────── -->
+  <nav class="flex-1 py-2 overflow-y-auto scrollbar-hide">
+
+    @for (section of navSections; track section.title) {
+
+      @if (!collapsed()) {
+        <p class="sidebar-section-label">{{ section.title }}</p>
+      } @else {
+        <div class="sidebar-section-divider"></div>
+      }
+
+      <ul [class]="'px-2 ' + (!collapsed() ? 'space-y-0.5' : 'space-y-1')">
+        @for (item of section.items; track item.path) {
+          <li class="relative group">
+            <a
+              [routerLink]="item.path"
+              routerLinkActive="sidebar-link-active"
+              [routerLinkActiveOptions]="{ exact: item.path === '/dashboard' }"
+              [class]="'sidebar-link ' + (collapsed() ? 'justify-center px-0' : '')"
+              [title]="collapsed() ? item.label : ''"
+            >
+              <lucide-angular [name]="item.icon" [size]="18" class="shrink-0"></lucide-angular>
+              @if (!collapsed()) {
+                <span class="text-sm font-medium truncate">{{ item.label }}</span>
+              }
+            </a>
+
+            <!-- Tooltip in collapsed mode -->
+            @if (collapsed()) {
+              <div class="sidebar-tooltip">{{ item.label }}</div>
+            }
+          </li>
+        }
+      </ul>
+    }
+
+    <!-- Today mini-stats (expanded only) -->
+    @if (!collapsed()) {
+      <div class="mx-2 mt-5 mb-2">
+        <p class="sidebar-section-label px-2 pt-0 pb-2">Today's Pulse</p>
+        <div class="space-y-2">
+          <!-- Revenue -->
+          <div class="sidebar-mini-card">
+            <div class="flex items-center gap-2 mb-1.5">
+              <div class="w-5 h-5 rounded-lg flex items-center justify-center"
+                style="background: rgba(203,162,88,0.15);">
+                <lucide-angular name="trending-up" [size]="11" style="color: var(--sb-gold);"></lucide-angular>
+              </div>
+              <span class="text-[11px] font-medium" style="color: rgba(255,255,255,0.50);">Revenue</span>
+              <span class="ml-auto text-[10px] font-semibold text-emerald-400">↑ 12%</span>
+            </div>
+            <p class="text-base font-bold text-white font-heading">EGP 42,580</p>
+            <div class="mt-1.5 h-1 rounded-full" style="background: rgba(255,255,255,0.08);">
+              <div class="h-1 rounded-full" style="width: 68%; background: var(--sb-gold); opacity: 0.7;"></div>
+            </div>
+          </div>
+          <!-- Active users -->
+          <div class="sidebar-mini-card">
+            <div class="flex items-center gap-2 mb-1.5">
+              <div class="w-5 h-5 rounded-lg flex items-center justify-center"
+                style="background: rgba(52,211,153,0.12);">
+                <lucide-angular name="users" [size]="11" class="text-emerald-400"></lucide-angular>
+              </div>
+              <span class="text-[11px] font-medium" style="color: rgba(255,255,255,0.50);">Active Now</span>
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse ml-auto"></span>
+            </div>
+            <p class="text-base font-bold text-white font-heading">1,284</p>
+            <div class="mt-1.5 h-1 rounded-full" style="background: rgba(255,255,255,0.08);">
+              <div class="h-1 rounded-full bg-emerald-400" style="width: 55%; opacity: 0.7;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
   </nav>
 
-  <div class="p-4 border-t border-starbucks-dark">
-    <div class="flex items-center space-x-3">
-      <div class="w-10 h-10 bg-green-200 rounded-full flex items-center justify-center">
-        <span class="text-starbucks-green font-bold">A</span>
+  <!-- ── User footer ───────────────────────── -->
+  <div class="p-3" style="border-top: 1px solid rgba(255,255,255,0.07);">
+    <div [class]="'flex items-center gap-2.5 ' + (collapsed() ? 'justify-center' : '')">
+      <!-- Avatar with online dot -->
+      <div class="relative shrink-0">
+        <div class="avatar-lg avatar-green shadow-md">
+          <span class="text-sm font-bold">{{ userInitials() }}</span>
+        </div>
+        <span class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-400 rounded-full ring-2"
+          style="ring-color: #1a3528;"></span>
       </div>
-      <div>
-        <p class="font-semibold">Admin User</p>
-        <p class="text-xs text-green-100">admin&#64;starbucks.com</p>
-      </div>
+
+      @if (!collapsed()) {
+        <div class="flex-1 overflow-hidden">
+          <p class="text-sm font-semibold text-white truncate leading-tight">{{ auth.user()?.name ?? 'Admin' }}</p>
+          <p class="text-[11px] truncate leading-none mt-0.5"
+            style="color: var(--sb-gold-muted);">{{ auth.user()?.role ?? 'Super Admin' }}</p>
+        </div>
+        <button (click)="logout()" title="Sign out"
+          class="sidebar-collapse-btn shrink-0">
+          <lucide-angular name="log-out" [size]="13"></lucide-angular>
+        </button>
+      }
     </div>
   </div>
+
 </aside>

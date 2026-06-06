@@ -1,13 +1,46 @@
 import { Routes } from '@angular/router';
-import { DashboardComponent } from './pages/dashboard/dashboard.component';
-import { OrdersComponent } from './pages/orders/orders.component';
-import { ProductsComponent } from './pages/products/products.component';
-import { AnalyticsComponent } from './pages/analytics/analytics.component';
+import { authGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
-  { path: 'dashboard', component: DashboardComponent },
-  { path: 'orders', component: OrdersComponent },
-  { path: 'products', component: ProductsComponent },
-  { path: 'analytics', component: AnalyticsComponent },
+  {
+    path: 'login',
+    loadComponent: () => import('./pages/login/login.component').then(m => m.LoginComponent)
+  },
+  {
+    path: 'dashboard',
+    loadComponent: () => import('./pages/dashboard/dashboard.component').then(m => m.DashboardComponent),
+    canActivate: [authGuard]
+  },
+  {
+    path: 'orders',
+    loadComponent: () => import('./pages/orders/orders.component').then(m => m.OrdersComponent),
+    canActivate: [authGuard]
+  },
+  {
+    path: 'products',
+    loadComponent: () => import('./pages/products/products.component').then(m => m.ProductsComponent),
+    canActivate: [authGuard]
+  },
+  {
+    path: 'users',
+    loadComponent: () => import('./pages/users/users.component').then(m => m.UsersComponent),
+    canActivate: [authGuard]
+  },
+  {
+    path: 'locations',
+    loadComponent: () => import('./pages/locations/locations.component').then(m => m.LocationsComponent),
+    canActivate: [authGuard]
+  },
+  {
+    path: 'analytics',
+    loadComponent: () => import('./pages/analytics/analytics.component').then(m => m.AnalyticsComponent),
+    canActivate: [authGuard]
+  },
+  {
+    path: 'settings',
+    loadComponent: () => import('./pages/settings/settings.component').then(m => m.SettingsComponent),
+    canActivate: [authGuard]
+  },
+  { path: '**', redirectTo: '/dashboard' }
 ];
