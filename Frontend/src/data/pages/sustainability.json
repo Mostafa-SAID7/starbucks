@@ -3,29 +3,29 @@
   "layoutType": "sidebar",
   "hideMainTitle": true,
   "sidebarImage": {
-    "ar": "/sustainability/Sustainability-ar.webp",
-    "en": "/sustainability/Sustainability-en.webp"
+    "ar": "/api/v1/images/sustainability/Sustainability-ar.webp",
+    "en": "/api/v1/images/sustainability/Sustainability-en.webp"
   },
   "intro": {
-    "image": "/sustainability/Sustainability1.webp"
+    "image": "/api/v1/images/sustainability/Sustainability1.webp"
   },
   "sections": [
     {
       "id": "reusables",
-      "image": "/sustainability/Sustainability2.webp",
+      "image": "/api/v1/images/sustainability/Sustainability2.webp",
       "imagePosition": "right",
       "ctaLink": "#",
       "hideSideBorder": true
     },
     {
       "id": "coffee-grounds",
-      "image": "/sustainability/Sustainability3.webp",
+      "image": "/api/v1/images/sustainability/Sustainability3.webp",
       "imagePosition": "left",
       "hideSideBorder": true
     },
     {
       "id": "strawless-lids",
-      "image": "/sustainability/Sustainability4.webp",
+      "image": "/api/v1/images/sustainability/Sustainability4.webp",
       "imagePosition": "right",
       "hideSideBorder": true
     }

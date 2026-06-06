@@ -2,12 +2,12 @@
   "categories": [
     {
       "id": "drinks",
-      "image": "https://www.starbucks.eg/sites/starbucks-eg-pwa/files/styles/c06_cards_grid_314x176/public/2021-01/ProductShot_5.jpg.webp?h=34e43602&itok=OqHJvNZs",
+      "image": "/api/v1/images/menu/drinks.webp",
       "href": "/menu/drinks",
       "subcategories": [
         {
           "id": "espresso",
-          "image": "/menu/deink.webp",
+          "image": "/api/v1/images/menu/drinks.webp",
           "href": "/menu/drinks/espresso",
           "items": [
             {
@@ -17,7 +17,6 @@
               "description": "Our dark, rich espresso balanced with steamed milk and a light layer of foam.",
               "descriptionAr": "إسبريسو غني متوازن مع الحليب المبخر وطبقة خفيفة من الرغوة.",
               "price": 45,
-              "image": "/menu/deink.webp",
               "href": "/menu/drinks/espresso/caffe-latte",
               "category": "Coffee",
               "isNew": false
@@ -29,7 +28,6 @@
               "description": "Dark espresso lies in wait under a smoothed and stretched layer of deep, velvety foam.",
               "descriptionAr": "إسبريسو داكن تحت طبقة ناعمة من الرغوة المخملية العميقة.",
               "price": 48,
-              "image": "/menu/deink.webp",
               "href": "/menu/drinks/espresso/cappuccino",
               "category": "Coffee",
               "isNew": false
@@ -41,7 +39,6 @@
               "description": "A concentrated form of coffee served in a small, strong shot.",
               "descriptionAr": "قهوة مركزة تقدم في جرعة صغيرة وقوية.",
               "price": 35,
-              "image": "/menu/deink.webp",
               "href": "/menu/drinks/espresso/espresso",
               "category": "Coffee",
               "isNew": false
@@ -50,7 +47,7 @@
         },
         {
           "id": "frappuccino",
-          "image": "/menu/deink.webp",
+          "image": "/api/v1/images/menu/drinks.webp",
           "href": "/menu/drinks/frappuccino",
           "items": [
             {
@@ -58,9 +55,8 @@
               "name": "Caramel Frappuccino",
               "nameAr": "فرابوتشينو كراميل",
               "description": "Caramel syrup meets coffee, milk and ice for a blended beverage.",
-              "descriptionAr": "شراب الكراميل مع القهوة والحليب والثلج في مشروب مخفوق.",
+              "descriptionAr": "شراب الكاراميل مع القهوة والحليب والثلج في مشروب مخفوق.",
               "price": 65,
-              "image": "/menu/deink.webp",
               "href": "/menu/drinks/frappuccino/caramel-frappuccino",
               "category": "Coffee",
               "isNew": true
@@ -72,7 +68,6 @@
               "description": "Mocha sauce and Frappuccino roast coffee blended with milk and ice.",
               "descriptionAr": "صوص الموكا وقهوة فرابوتشينو مخفوقة مع الحليب والثلج.",
               "price": 65,
-              "image": "/menu/deink.webp",
               "href": "/menu/drinks/frappuccino/mocha-frappuccino",
               "category": "Coffee",
               "isNew": false
@@ -83,12 +78,12 @@
     },
     {
       "id": "food",
-      "image": "https://www.starbucks.eg/sites/starbucks-eg-pwa/files/styles/c06_cards_grid_314x176/public/2021-01/Image-104_0.jpg.webp?h=04d92ac6&itok=JbtQOzRa",
+      "image": "/api/v1/images/menu/food.webp",
       "href": "/menu/food",
       "subcategories": [
         {
           "id": "sandwiches",
-          "image": "/menu/food.webp",
+          "image": "/api/v1/images/menu/food.webp",
           "href": "/menu/food/sandwiches",
           "items": [
             {
@@ -98,7 +93,6 @@
               "description": "Grilled halloumi with herbs, prepared Arabic style with grilled halloumi cheese, dried tomatoes and black olive paste.",
               "descriptionAr": "حلوم مشوي مع أعشاب، محضر على الطريقة العربية مع جبنة حلوم مشوية وطماطم مجففة ومعجون زيتون أسود.",
               "price": 75,
-              "image": "/menu/food.webp",
               "href": "/menu/food/sandwiches/halloumi",
               "category": "Food",
               "isNew": false
@@ -110,7 +104,6 @@
               "description": "Grilled chicken breast with lettuce, tomato and pesto sauce on focaccia bread.",
               "descriptionAr": "صدر دجاج مشوي مع الخس والطماطم وصوص البيستو على خبز الفوكاتشيا.",
               "price": 80,
-              "image": "/menu/food.webp",
               "href": "/menu/food/sandwiches/focaccia",
               "category": "Food",
               "isNew": true
@@ -119,7 +112,7 @@
         },
         {
           "id": "salads",
-          "image": "/menu/food.webp",
+          "image": "/api/v1/images/menu/food.webp",
           "href": "/menu/food/salads",
           "items": [
             {
@@ -129,7 +122,6 @@
               "description": "Classic Caesar salad with romaine lettuce, parmesan cheese and Caesar dressing.",
               "descriptionAr": "سلطة سيزر الكلاسيكية مع خس روماني وجبن البارميزان وصوص سيزر.",
               "price": 65,
-              "image": "/menu/food.webp",
               "href": "/menu/food/salads/caesar-salad",
               "category": "Food",
               "isNew": false
@@ -143,7 +135,7 @@
     "link": "https://www.alshaya.com/campaigns/Starbucks/uae/index.html"
   },
   "sidebar": {
-    "image": "/menu/Menu.webp",
+    "image": "/api/v1/images/menu/Menu.webp",
     "actions": [
       {
         "href": "order",

@@ -134,7 +134,21 @@
         @if (!collapsed()) {
           <span class="text-xs font-medium">{{ darkMode() ? 'Light' : 'Dark' }}</span>
         }
-      </button>
+    </div>
+
+    <!-- Go to Main App link/button -->
+    <div [class]="'flex items-center px-3 py-2 border-t ' + (collapsed() ? 'justify-center' : 'justify-between gap-2')"
+         style="border-color: rgba(255,255,255,0.07);">
+      <a href="https://starbucks73.vercel.app" 
+         target="_blank" 
+         rel="noopener noreferrer"
+         [class]="'flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-emerald-400 hover:text-emerald-300 transition-colors w-full ' + (collapsed() ? 'justify-center py-1' : 'py-1')"
+         [title]="'Go to Customer App'">
+        <lucide-angular name="external-link" [size]="14"></lucide-angular>
+        @if (!collapsed()) {
+          <span>Main App</span>
+        }
+      </a>
     </div>
 
     <!-- User row -->

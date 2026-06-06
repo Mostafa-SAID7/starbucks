@@ -47,6 +47,8 @@ public sealed class TokenService : ITokenService
             new(ClaimTypes.NameIdentifier, user.Id.ToString()),
             new(ClaimTypes.Email,          user.Email ?? string.Empty),
             new(ClaimTypes.Name,           $"{user.FirstName} {user.LastName}".Trim()),
+            new(ClaimTypes.Role,           user.Role.ToString()),
+            new("role",                    user.Role.ToString()),
             new("phone_number",            user.PhoneNumber ?? string.Empty),
             new("email_verified",          user.EmailConfirmed.ToString()),
         };

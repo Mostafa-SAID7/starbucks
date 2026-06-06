@@ -23,7 +23,7 @@ public static class MenuCategorySeeder
                 English = "Hot and cold beverages",
                 Arabic = "المشروبات الساخنة والباردة"
             },
-            ImageUrl = "https://www.starbucks.eg/sites/starbucks-eg-pwa/files/styles/c06_cards_grid_314x176/public/2021-01/ProductShot_5.jpg.webp",
+            ImageUrl = "/images/menu/drinks.webp",
             SortOrder = 1,
             IsActive = true
         };
@@ -41,7 +41,7 @@ public static class MenuCategorySeeder
                 English = "Fresh food and snacks",
                 Arabic = "الطعام الطازج والوجبات الخفيفة"
             },
-            ImageUrl = "https://www.starbucks.eg/sites/starbucks-eg-pwa/files/styles/c06_cards_grid_314x176/public/2021-01/Image-104_0.jpg.webp",
+            ImageUrl = "/images/menu/food.webp",
             SortOrder = 2,
             IsActive = true
         };

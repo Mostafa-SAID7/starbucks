@@ -36,7 +36,7 @@ export function ContactUsPageContent({ data }: ContactUsPageContentProps) {
               className="h-full rounded-[2.5rem] overflow-hidden shadow-2xl relative"
             >
               <img
-                src="/contact-us.webp"
+                src="/api/v1/images/contact-us.webp"
                 alt={t('pages:contact.hero.image_alt')}
                 className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
               />

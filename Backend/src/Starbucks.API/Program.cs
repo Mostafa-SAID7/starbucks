@@ -42,6 +42,7 @@ try
     app.UseRequestLocalization();           // handle culture early for localized responses
     app.UseSecurityHeaders();
     app.UseHttpsRedirection();
+    app.UseStaticFiles();                   // serve static files from wwwroot (images, etc.)
     app.UseCors(CorsConfiguration.AllowFrontendPolicy);
     AspNetCoreRateLimit.StartupExtensions.UseIpRateLimiting(app);
     app.UseSerilogRequestLogging();         // structured request logs

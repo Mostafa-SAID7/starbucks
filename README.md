@@ -81,10 +81,21 @@ Our technology stack is selected to provide a world-class, ultra-fast, and highl
 
 Want to run the project locally? Follow these simple steps.
 
+### Prerequisites
+- **Node.js** 18+ (Frontend & Dashboard)
+- **.NET SDK** 9.0 (Backend)
+- **Docker & Docker Compose** (Database & Redis)
+- **Google OAuth Credentials** (for authentication)
+
 ### Frontend Setup
 ```bash
 cd Frontend
 npm install --legacy-peer-deps
+
+# Create .env file from example
+cp .env.example .env
+# Update VITE_GOOGLE_OAUTH_CLIENT_ID with your credentials
+
 npm run dev
 ```
 > The frontend application will start on `http://localhost:5173`
@@ -92,6 +103,7 @@ npm run dev
 ### Backend Setup
 ```bash
 cd Backend
+
 # Start the database and Redis instances
 docker-compose up -d
 
@@ -99,6 +111,80 @@ docker-compose up -d
 dotnet run --project src/Starbucks.API
 ```
 > The API will be available on `https://localhost:7082` (or your configured port). Check out `/swagger` for API documentation.
+> Static images are served from `/api/v1/images/` endpoints.
+
+### Dashboard Setup
+```bash
+cd Dashboard
+npm install
+
+# Create/update environment files with OAuth config
+# environment.ts and environment.prod.ts already configured
+
+ng serve
+```
+> The dashboard will start on `http://localhost:4200`
+
+---
+
+## 🔐 Google OAuth Configuration
+
+All three applications (Frontend, Backend, Dashboard) are configured with Google OAuth:
+
+**Credentials Used:**
+- Client ID: `YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com`
+
+**Redirect URIs (Development):**
+- Frontend: `http://localhost:5173/auth/google/callback`
+- Dashboard: `http://localhost:4200/auth/google/callback`
+- Backend: `http://localhost:8080/api/v1/auth/google-callback`
+
+**Production Redirect URIs:**
+- Frontend: `https://starbucks.eg/auth/google/callback`
+- Dashboard: `https://dashboard.starbucks.eg/auth/google/callback`
+- Backend: `https://api.starbucks.eg/api/v1/auth/google-callback`
+
+> ⚠️ These redirect URIs must be registered in [Google Cloud Console](https://console.cloud.google.com/)
+
+---
+
+## 🖼️ Image Management
+
+All images are now centralized and served through the Backend API:
+
+**Image Storage:** `Backend/src/Starbucks.API/wwwroot/images/`
+
+**Available Image Categories:**
+- `/api/v1/images/home/` - Homepage banners and hero images
+- `/api/v1/images/menu/` - Menu category images
+- `/api/v1/images/statics/` - Static page content images
+- `/api/v1/images/sustainability/` - Sustainability initiative images
+
+**Configuration:**
+- Frontend: Uses relative paths `/api/v1/images/*`
+- Dashboard: Configured in `environment.ts` with `imageConfig.apiBaseUrl`
+- Allowed formats: JPG, JPEG, PNG, WebP
+- Max file size: 5MB
+
+---
+
+## 📊 Architecture Highlights
+
+### Image Centralization ✅
+- All product and content images served from Backend
+- Eliminated external CDN dependency
+- SEO-optimized meta tags (OG, Twitter) with local image URLs
+- PWA caching strategy optimized for local images
+
+### OAuth Integration ✅
+- Google OAuth configured across all three applications
+- Credentials secured in environment files
+- Redirect URIs configured for development and production
+
+### Dashboard Enhancements 🚀
+- Environment configuration with Google OAuth support
+- Image configuration for upload/display capabilities
+- Ready for image implementation phase (Products, Locations, Users)
 
 ---
 

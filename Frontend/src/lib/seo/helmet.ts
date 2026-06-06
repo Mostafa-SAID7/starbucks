@@ -15,7 +15,7 @@ export function generateMetaTags(config: MetaTagsConfig) {
   const {
     title,
     description,
-    image = 'https://starbucks.eg/og-image.jpg',
+    image = '/logo.png',
     url = 'https://starbucks.eg',
     type = 'website',
     author = 'Starbucks Egypt',

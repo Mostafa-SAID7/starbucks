@@ -18,7 +18,7 @@ export function generateOrganizationSchema(): SchemaConfig {
     '@type': 'Organization',
     name: 'Starbucks Egypt',
     url: 'https://starbucks.eg',
-    logo: 'https://starbucks.eg/logo.png',
+    logo: '/logo.png',
     description: 'Premium coffee and drinks in Egypt',
     sameAs: [
       'https://www.facebook.com/StarbucksEgypt',

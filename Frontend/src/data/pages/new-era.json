@@ -1,6 +1,6 @@
 {
   "layoutType": "sidebar",
-  "sidebarImage": "/home/UAE_1.webp",
+  "sidebarImage": "/api/v1/images/home/UAE_1.webp",
   "sections": [
     {
       "id": "miranda"

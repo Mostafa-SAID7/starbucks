@@ -6,7 +6,7 @@
   "sections": [
     {
       "id": "partners",
-      "image": "/Talabat_Starbucks.png.webp",
+      "image": "/api/v1/images/Talabat_Starbucks.png.webp",
       "ctaLink": "https://www.talabat.com/ar/egypt/restaurant/516787/starbucks-city-scape-6th-of-october?aid=7935"
     },
     {

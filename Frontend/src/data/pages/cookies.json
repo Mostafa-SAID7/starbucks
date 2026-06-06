@@ -1,6 +1,6 @@
 {
   "layoutType": "sidebar",
-  "sidebarImage": "/cookie-notice.webp",
+  "sidebarImage": "/api/v1/images/cookie-notice.webp",
   "accordion": {
     "items": [
       {},

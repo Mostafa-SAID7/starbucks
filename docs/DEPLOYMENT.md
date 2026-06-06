@@ -2,7 +2,7 @@
 
 # 🚢 Deployment Guide
 
-**Complete guide for deploying the Starbucks Egypt application and managing its live environments.**
+**Complete guide for deploying all three applications (Frontend, Dashboard, Backend) and managing live environments.**
 
 </div>
 
@@ -10,54 +10,95 @@
 
 ## 🚀 Live Production URLs
 
-| Component | URL |
-| :--- | :--- |
-| **✨ Frontend** | [starbucks73.vercel.app](https://starbucks73.vercel.app) |
-| **⚙️ Backend API** | [starbucks.runasp.net/api](http://starbucks.runasp.net/api) |
-| **📚 Swagger UI** | [starbucks.runasp.net/swagger](http://starbucks.runasp.net/swagger) |
+| Component | Environment | URL |
+| :--- | :--- | :--- |
+| **✨ Frontend** | Production | [starbucks73.vercel.app](https://starbucks73.vercel.app) |
+| **📊 Dashboard** | Production | `https://dashboard.starbucks.eg` |
+| **⚙️ Backend API** | Production | [starbucks.runasp.net/api](http://starbucks.runasp.net/api) |
+| **📚 Swagger UI** | Swagger | [starbucks.runasp.net/swagger](http://starbucks.runasp.net/swagger) |
 
 ---
 
 ## 📋 Table of Contents
 
 - [Prerequisites](#prerequisites)
-- [Build for Production](#build-for-production)
-- [Deploy to Vercel](#deploy-to-vercel)
-- [Deploy to Netlify](#deploy-to-netlify)
-- [Deploy with Docker](#deploy-with-docker)
-- [Deploy to AWS](#deploy-to-aws)
+- [Three-App Architecture](#three-app-architecture)
+- [Frontend Deployment](#frontend-deployment)
+- [Dashboard Deployment](#dashboard-deployment)
+- [Backend Deployment](#backend-deployment)
+- [Google OAuth Setup](#google-oauth-setup)
 - [Environment Variables](#environment-variables)
 - [Performance Optimization](#performance-optimization)
+- [Monitoring & Analytics](#monitoring--analytics)
+- [CI/CD Pipeline](#cicd-pipeline)
 
 ---
 
 ## Prerequisites
 
-- Node.js 18+
+- Node.js 18+ (Frontend & Dashboard)
+- .NET SDK 9.0 (Backend)
 - npm or yarn
 - Git
-- Account on deployment platform
+- Account on deployment platform (Vercel, Netlify, Azure, etc.)
+- Google OAuth credentials configured
+
+---
+
+## Three-App Architecture
+
+The Starbucks Egypt platform consists of three separate applications that work together:
+
+```
+┌─────────────────────────────────────────────────────────┐
+│         Starbucks Egypt - Complete Platform            │
+├─────────────────────────────────────────────────────────┤
+│                                                         │
+│  Frontend (React 19)        Dashboard (Angular 18)     │
+│  Port: 5173 / Vercel        Port: 4200 / Netlify      │
+│  └─── Google OAuth          └─── Google OAuth         │
+│  └─── TanStack Query        └─── HttpClient           │
+│                                                        │
+│  └──────────────→ Backend API (ASP.NET Core 9.0) ←───┘
+│                     Port: 7082 / Azure/AWS
+│                     OAuth Handler
+│                     Image Server (/api/v1/images/)
+│                     JWT Token Issuer
+│
+└─────────────────────────────────────────────────────────┘
+```
 
 ---
 
 ## Build for Production
 
+### Frontend Build
 ```bash
-# Install dependencies
+cd Frontend
 npm install --legacy-peer-deps
-
-# Build the project
 npm run build
-
-# Preview the build locally
-npm run preview
+# Output: dist/
 ```
 
-The build output will be in the `dist/` folder.
+### Dashboard Build
+```bash
+cd Dashboard
+npm install
+ng build --configuration production
+# Output: dist/starbucks-dashboard/
+```
+
+### Backend Build
+```bash
+cd Backend
+dotnet restore
+dotnet publish -c Release
+# Output: bin/Release/net9.0/publish/
+```
 
 ---
 
-## Deploy to Vercel
+## Frontend Deployment
 
 ### Option 1: Using Vercel CLI
 
@@ -105,9 +146,74 @@ Create `vercel.json`:
 }
 ```
 
+## Dashboard Deployment
+
+### Deploy to Netlify
+
+Dashboard can be deployed to Netlify using the Angular build output.
+
+#### Option 1: Using Netlify CLI
+
+```bash
+cd Dashboard
+npm install
+ng build --configuration production
+
+# Install Netlify CLI
+npm i -g netlify-cli
+
+# Deploy
+netlify deploy --prod --dir=dist/starbucks-dashboard
+```
+
+#### Option 2: GitHub Integration
+
+1. Push code to GitHub
+2. Go to [netlify.com](https://netlify.com)
+3. Click "New site from Git"
+4. Select your repository
+5. Configure build settings:
+   - **Build Command**: `npm install && ng build --configuration production`
+   - **Publish Directory**: `dist/starbucks-dashboard`
+6. Set environment variables:
+   - `NODE_VERSION=20`
+7. Deploy
+
+#### Option 3: Manual Upload
+
+```bash
+cd Dashboard
+ng build --configuration production
+# Upload dist/starbucks-dashboard/ to Netlify
+```
+
+### Environment Configuration for Dashboard
+
+Dashboard requires environment configuration for production:
+
+**Dashboard/src/environments/environment.prod.ts**:
+```typescript
+export const environment = {
+  production: true,
+  apiUrl: 'https://api.starbucks.eg/api/v1',
+  appName: 'Starbucks Egypt Admin',
+  enableAnalytics: true,
+  logLevel: 'error',
+  googleOAuth: {
+    clientId: 'YOUR_GOOGLE_CLIENT_ID',
+    redirectUri: 'https://dashboard.starbucks.eg/auth/google/callback'
+  },
+  imageConfig: {
+    apiBaseUrl: 'https://api.starbucks.eg/api/v1/images',
+    allowedExtensions: ['jpg', 'jpeg', 'png', 'webp'],
+    maxFileSize: 5 * 1024 * 1024
+  }
+};
+```
+
 ---
 
-## Deploy to Netlify
+## Backend Deployment
 
 ### Option 1: Using Netlify CLI
 
@@ -222,79 +328,119 @@ docker run -d \
 
 ---
 
-## Deploy to AWS
-
-### AWS S3 + CloudFront
-
-1. **Build the project**:
-   ```bash
-   npm run build
-   ```
-
-2. **Create S3 bucket**:
-   ```bash
-   aws s3 mb s3://starbucks-eg-react
-   ```
-
-3. **Upload files**:
-   ```bash
-   aws s3 sync dist/ s3://starbucks-eg-react --delete
-   ```
-
-4. **Configure bucket for static hosting**:
-   ```bash
-   aws s3 website s3://starbucks-eg-react \
-     --index-document index.html \
-     --error-document index.html
-   ```
-
-5. **Create CloudFront distribution** (optional for CDN)
-
-### AWS Amplify
+### Deploy to Azure App Service
 
 ```bash
-# Install Amplify CLI
-npm install -g @aws-amplify/cli
+cd Backend
 
-# Initialize Amplify
-amplify init
+# Create Azure App Service
+az appservice plan create --name starbucks-api-plan --resource-group starbucks-rg --sku B1
 
-# Add hosting
-amplify add hosting
+# Create the app
+az webapp create --resource-group starbucks-rg --plan starbucks-api-plan --name starbucks-api
 
-# Publish
-amplify publish
+# Configure OAuth environment variables
+az webapp config appsettings set --resource-group starbucks-rg --name starbucks-api \
+  --settings "Authentication__Google__ClientId=YOUR_CLIENT_ID" \
+             "Authentication__Google__ClientSecret=YOUR_CLIENT_SECRET"
+
+# Deploy
+dotnet publish -c Release
+# Use Azure DevOps or GitHub Actions for CI/CD
 ```
 
 ---
 
-## Environment Variables
+## Google OAuth Setup
 
-### Production Environment Variables
+### Prerequisites
+1. Google Cloud Console project created
+2. Google+ API enabled
+3. OAuth 2.0 credentials (Web application) created
+4. Redirect URIs registered for all three apps
 
-Create `.env.production`:
+### Production Redirect URIs
 
+Register these URIs in [Google Cloud Console](https://console.cloud.google.com/):
+
+```
+https://starbucks.eg/auth/google/callback
+https://dashboard.starbucks.eg/auth/google/callback
+https://api.starbucks.eg/api/v1/auth/google-callback
+```
+
+### Configuration by Application
+
+**Backend** (`appsettings.Production.json`):
+```json
+{
+  "Authentication": {
+    "Google": {
+      "ClientId": "YOUR_GOOGLE_CLIENT_ID",
+      "ClientSecret": "YOUR_GOOGLE_CLIENT_SECRET"
+    }
+  }
+}
+```
+
+**Frontend** (`.env.production`):
+```env
+VITE_GOOGLE_OAUTH_CLIENT_ID=YOUR_GOOGLE_CLIENT_ID
+VITE_GOOGLE_OAUTH_REDIRECT_URI=https://starbucks.eg/auth/google/callback
+```
+
+**Dashboard** (`environment.prod.ts`):
+```typescript
+googleOAuth: {
+  clientId: 'YOUR_GOOGLE_CLIENT_ID',
+  redirectUri: 'https://dashboard.starbucks.eg/auth/google/callback'
+}
+```
+
+---
+
+## Frontend Deployment (Vercel)
+
+### Environment Variables
+
+#### Frontend (.env.production)
 ```env
 VITE_APP_TITLE=Starbucks Egypt
-VITE_API_URL=https://api.production.com
-VITE_GA_TRACKING_ID=UA-XXXXXXXXX-X
+VITE_API_URL=https://api.starbucks.eg/api/v1
+VITE_GOOGLE_OAUTH_CLIENT_ID=YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com
+VITE_GOOGLE_OAUTH_REDIRECT_URI=https://starbucks.eg/auth/google/callback
 ```
 
-### Platform-Specific Setup
-
-#### Vercel
-```bash
-vercel env add VITE_API_URL production
+#### Dashboard (environment.prod.ts)
+```typescript
+export const environment = {
+  apiUrl: 'https://api.starbucks.eg/api/v1',
+  googleOAuth: {
+    clientId: 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com',
+    redirectUri: 'https://dashboard.starbucks.eg/auth/google/callback'
+  },
+  imageConfig: {
+    apiBaseUrl: 'https://api.starbucks.eg/api/v1/images'
+  }
+};
 ```
 
-#### Netlify
-```bash
-netlify env:set VITE_API_URL "https://api.production.com"
-```
-
-#### Docker
-```dockerfile
-ENV VITE_API_URL=https://api.production.com
+#### Backend (appsettings.Production.json)
+```json
+{
+  "Authentication": {
+    "Google": {
+      "ClientId": "YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com",
+      "ClientSecret": "YOUR_GOOGLE_CLIENT_SECRET"
+    }
+  },
+  "ConnectionStrings": {
+    "DefaultConnection": "Your_Production_SQL_Connection_String"
+  },
+  "Redis": {
+    "Connection": "Your_Redis_Connection_String"
+  }
+}
 ```
 
 ---
@@ -441,20 +587,36 @@ docker build --no-cache -t starbucks-eg-react .
 3. Check output directory
 4. Review deployment logs
 
----
-
 ## Checklist Before Deployment
 
+### For All Applications
 - [ ] All tests passing
-- [ ] No console errors
+- [ ] No console errors or warnings
 - [ ] Environment variables configured
 - [ ] Build succeeds locally
+- [ ] OAuth redirect URIs registered in Google Cloud Console
+- [ ] Git repository up to date
+
+### Frontend
 - [ ] Images optimized
-- [ ] Meta tags updated
+- [ ] Meta tags updated with OG/Twitter tags
 - [ ] Analytics configured
-- [ ] Error tracking setup
-- [ ] Performance tested
 - [ ] Mobile responsive verified
+- [ ] Vercel environment variables set
+
+### Dashboard
+- [ ] Angular build succeeds
+- [ ] OAuth configuration verified
+- [ ] Image configuration points to correct API
+- [ ] Netlify environment variables set
+
+### Backend
+- [ ] Database migrations applied
+- [ ] Redis connection configured
+- [ ] OAuth credentials set (use secrets/key vault)
+- [ ] Static files (images) deployed to wwwroot/
+- [ ] Error tracking setup (Sentry)
+- [ ] Monitoring configured
 
 ---
 

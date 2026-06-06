@@ -81,7 +81,68 @@ sequenceDiagram
 
 ---
 
-## 4. Project Structure
+## 5. Image Management Architecture
+
+### Image Centralization Strategy
+All product and content images are served through the Backend API to provide:
+- **Single Source of Truth**: All images stored in `Backend/src/Starbucks.API/wwwroot/images/`
+- **Unified Access**: Images served via `/api/v1/images/*` endpoints
+- **Performance**: Static file caching via `UseStaticFiles()` middleware
+- **SEO**: Proper meta tags with local image URLs
+
+### Image Flow Diagram
+```mermaid
+graph LR
+    A[Frontend/Dashboard] -->|Request Image| B[Backend API]
+    B -->|UseStaticFiles Middleware| C[wwwroot/images/]
+    C -->|Serve Static File| B
+    B -->|Return Image| A
+    D[MenuCategorySeeder] -->|Update Image Paths| B
+```
+
+### Image Organization
+```
+Backend/wwwroot/images/
+├── home/              (Homepage images)
+├── menu/              (Menu category images)
+├── statics/           (Static page content)
+├── sustainability/    (Sustainability content)
+└── [Other Categories]
+```
+
+---
+
+## 6. Authentication & OAuth Architecture
+
+### Three-Layer OAuth Implementation
+```mermaid
+graph TD
+    A[Google OAuth] -->|Credentials| B[Backend: appsettings.OAuth.json]
+    A -->|Client ID| C[Frontend: .env]
+    A -->|Client ID| D[Dashboard: environment.ts]
+    B -->|JWT Token| C
+    B -->|JWT Token| D
+```
+
+### Configuration by Layer
+1. **Backend** (`appsettings.OAuth.json`):
+   - Stores Google Client ID and Secret
+   - Validates OAuth tokens
+   - Issues JWT tokens to Frontend/Dashboard
+
+2. **Frontend** (`.env.production`):
+   - Google OAuth Client ID
+   - Redirect URI: `http://localhost:5173/auth/google/callback`
+   - Uses Google Sign-In button
+
+3. **Dashboard** (`environment.ts`):
+   - Google OAuth Client ID
+   - Redirect URI: `http://localhost:4200/auth/google/callback`
+   - Uses Angular OAuth service
+
+---
+
+## 7. Project Structure (Updated)
 
 ### Frontend Directory Tree
 ```text
@@ -106,8 +167,13 @@ src/
 The backend follows **Clean Architecture** with four distinct layers:
 1. **Domain:** Enterprise logic and entities.
 2. **Application:** Business logic, CQRS (MediatR), and DTOs.
-3. **Infrastructure:** Data access (EF Core), Redis, and external services.
-4. **API:** Entry point, controllers, and middleware.
+3. **Infrastructure:** Data access (EF Core), Redis, OAuth, and external services.
+4. **API:** Entry point, controllers, middleware, and static file serving (`wwwroot/images/`).
+
+**Key Services**:
+- `FilesController`: Handles image requests and file operations
+- `TokenService`: JWT token generation and validation
+- `AuthController`: OAuth flow and user authentication
 
 ---
 

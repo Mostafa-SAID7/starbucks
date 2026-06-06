@@ -80,7 +80,7 @@ export function MenuPageContent({ categories }: MenuPageContentProps) {
 
       <div className="container mx-auto px-4 py-8 lg:py-12 max-w-7xl">
         <SidebarTemplate
-          image="/menu/Menu.webp"
+          image="/api/v1/images/menu/Menu.webp"
           title={t("pages:menu.title") || "Menu"}
           overlay={
             <div className="text-center px-4 max-w-xs mx-auto">

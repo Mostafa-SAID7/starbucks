@@ -1,7 +1,7 @@
 {
   "slug": "community-impact",
   "layoutType": "sidebar",
-  "sidebarImage": "/statics/Gaza.webp",
+  "sidebarImage": "/api/v1/images/statics/Gaza.webp",
   "sections": [
     {
       "id": "gaza-humanitarian-aid"
@@ -22,10 +22,10 @@
       "id": "our-impact",
       "imageGrid": {
         "images": [
-          "/statics/Gaza-1.webp",
-          "/statics/Gaza-2.webp",
-          "/statics/Gaza-3.webp",
-          "/statics/Gaza-4.webp"
+          "/api/v1/images/statics/Gaza-1.webp",
+          "/api/v1/images/statics/Gaza-2.webp",
+          "/api/v1/images/statics/Gaza-3.webp",
+          "/api/v1/images/statics/Gaza-4.webp"
         ],
         "columns": 2,
         "aspectRatio": "video"

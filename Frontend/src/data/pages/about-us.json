@@ -1,7 +1,7 @@
 {
   "slug": "about-us",
   "layoutType": "sidebar",
-  "sidebarImage": "/about-us.webp",
+  "sidebarImage": "/api/v1/images/about-us.webp",
   "sections": [
     {
       "id": "connecting"

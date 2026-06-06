@@ -66,21 +66,7 @@ export default defineConfig({
               globPatterns: ["**/*.{js,css,html,ico,png,svg,webp,woff2}"],
               runtimeCaching: [
                 {
-                  urlPattern: /^https:\/\/www\.starbucks\.eg\/.*\.(?:jpg|jpeg|png|webp|svg|avif)$/i,
-                  handler: "CacheFirst",
-                  options: {
-                    cacheName: "external-starbucks-assets",
-                    expiration: {
-                      maxEntries: 100,
-                      maxAgeSeconds: 60 * 60 * 24 * 30, // 30 days
-                    },
-                    cacheableResponse: {
-                      statuses: [0, 200],
-                    },
-                  },
-                },
-                {
-                  urlPattern: /\.(?:png|jpg|jpeg|svg|webp)$/,
+                  urlPattern: /\.(?:png|jpg|jpeg|svg|webp|avif)$/,
                   handler: "StaleWhileRevalidate",
                   options: {
                     cacheName: "local-images",
