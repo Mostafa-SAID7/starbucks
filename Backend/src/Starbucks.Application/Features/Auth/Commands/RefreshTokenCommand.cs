@@ -1,10 +1,12 @@
 using MediatR;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Starbucks.Application.Common.Interfaces.Services;
 using Starbucks.Application.Common.Interfaces.Data;
 using Starbucks.Application.Common.Models;
-using Starbucks.Application.Common.Specifications;
 using Starbucks.Application.DTOs.Auth;
+using Starbucks.Domain.Identity;
 using Mapster;
 
 namespace Starbucks.Application.Features.Auth.Commands;
@@ -13,20 +15,23 @@ public record RefreshTokenCommand(string RefreshToken) : IRequest<Result<LoginRe
 
 public class RefreshTokenCommandHandler : IRequestHandler<RefreshTokenCommand, Result<LoginResponse>>
 {
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly UserManager<ApplicationUser> _userManager;
     private readonly ITokenService _tokenService;
     private readonly IDateTimeService _dateTimeService;
+    private readonly IApplicationDbContext _context;
     private readonly ILogger<RefreshTokenCommandHandler> _logger;
 
     public RefreshTokenCommandHandler(
-        IUnitOfWork unitOfWork,
+        UserManager<ApplicationUser> userManager,
         ITokenService tokenService,
         IDateTimeService dateTimeService,
+        IApplicationDbContext context,
         ILogger<RefreshTokenCommandHandler> logger)
     {
-        _unitOfWork = unitOfWork;
+        _userManager = userManager;
         _tokenService = tokenService;
         _dateTimeService = dateTimeService;
+        _context = context;
         _logger = logger;
     }
 
@@ -40,9 +45,13 @@ public class RefreshTokenCommandHandler : IRequestHandler<RefreshTokenCommand, R
             if (string.IsNullOrWhiteSpace(request.RefreshToken))
                 return Result<LoginResponse>.Failure("Refresh token is required");
 
-            // STEP 2: Find user with refresh token using specification
-            var spec = new UserByRefreshTokenSpecification(request.RefreshToken);
-            var user = await _unitOfWork.Users.GetSingleAsync(spec, cancellationToken);
+            // STEP 2: Find user with refresh token
+            var user = await _context.Users
+                .AsNoTracking()
+                .FirstOrDefaultAsync(u => 
+                    u.RefreshToken == request.RefreshToken && 
+                    !u.IsDeleted, 
+                    cancellationToken);
 
             if (user == null)
             {
@@ -64,28 +73,34 @@ public class RefreshTokenCommandHandler : IRequestHandler<RefreshTokenCommand, R
                 return Result<LoginResponse>.Failure("Invalid refresh token state");
             }
 
-            // STEP 5: Generate new access token
-            var newAccessToken = _tokenService.GenerateAccessToken(user);
+            // STEP 5: Reload user for update (since we loaded it AsNoTracking)
+            var userForUpdate = await _userManager.FindByIdAsync(user.Id.ToString());
+            if (userForUpdate == null)
+            {
+                return Result<LoginResponse>.Failure("User not found");
+            }
 
-            // STEP 6: Rotate refresh token (invalidates old token by incrementing version)
-            await _tokenService.RotateRefreshTokenAsync(user, cancellationToken);
+            // STEP 6: Generate new access token
+            var newAccessToken = _tokenService.GenerateAccessToken(userForUpdate);
 
-            // STEP 7: Update last login
-            user.LastLoginAt = _dateTimeService.UtcNow;
+            // STEP 7: Rotate refresh token (invalidates old token by incrementing version)
+            await _tokenService.RotateRefreshTokenAsync(userForUpdate, cancellationToken);
 
-            // STEP 8: Persist changes
-            await _unitOfWork.Users.UpdateAsync(user, cancellationToken);
-            await _unitOfWork.SaveChangesAsync(cancellationToken);
+            // STEP 8: Update last login
+            userForUpdate.LastLoginAt = _dateTimeService.UtcNow;
 
-            _logger.LogInformation("Refresh token rotated successfully for user: {UserId}", user.Id);
+            // STEP 9: Persist changes
+            await _userManager.UpdateAsync(userForUpdate);
 
-            // STEP 9: Map and return
+            _logger.LogInformation("Refresh token rotated successfully for user: {UserId}", userForUpdate.Id);
+
+            // STEP 10: Map and return
             var response = new LoginResponse
             {
                 AccessToken = newAccessToken,
-                RefreshToken = user.RefreshToken ?? string.Empty,
+                RefreshToken = userForUpdate.RefreshToken ?? string.Empty,
                 ExpiresAt = _dateTimeService.UtcNow.AddHours(1),
-                User = user.Adapt<UserDto>()
+                User = userForUpdate.Adapt<UserDto>()
             };
 
             return Result<LoginResponse>.Success(response);

@@ -10,18 +10,22 @@ namespace Starbucks.API.Configuration;
 public static class DatabaseConfiguration
 {
     /// <summary>
-    /// Adds SQLite database context for Replit/local development.
+    /// Adds database context - uses SQL Server for production/remote, SQLite for local development.
     /// </summary>
     public static IServiceCollection AddDatabaseConfiguration(
         this IServiceCollection services,
         IConfiguration configuration)
     {
-        var connectionString = configuration.GetConnectionString("DefaultConnection")
-            ?? "Data Source=starbucks.db";
+        var connectionString = configuration.GetConnectionString("DefaultConnection");
+
+        if (string.IsNullOrWhiteSpace(connectionString))
+        {
+            throw new InvalidOperationException("Connection string 'DefaultConnection' is not set.");
+        }
 
         services.AddDbContext<ApplicationDbContext>(options =>
         {
-            options.UseSqlite(connectionString);
+            options.UseSqlServer(connectionString);
 
             if (configuration.GetValue<bool>("Logging:EnableSensitiveDataLogging"))
             {

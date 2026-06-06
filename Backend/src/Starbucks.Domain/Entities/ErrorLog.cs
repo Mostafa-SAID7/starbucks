@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Starbucks.Domain.Common;
 using Starbucks.Domain.Enums;
+using Starbucks.Domain.Identity;
 
 namespace Starbucks.Domain.Entities;
 
@@ -64,5 +65,5 @@ public class ErrorLog : BaseEntity
     /// Navigation property to the User associated with the error.
     /// </summary>
     [ForeignKey(nameof(UserId))]
-    public virtual User? User { get; set; }
+    public virtual ApplicationUser? User { get; set; }
 }

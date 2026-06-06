@@ -6,6 +6,7 @@ namespace Starbucks.Infrastructure.Data;
 /// <summary>
 /// Main orchestrator for seeding sample data into the database.
 /// Coordinates all individual seeders in the correct order to maintain referential integrity.
+/// Note: User seeding is now handled by IdentityDataSeeder in Program.cs
 /// </summary>
 public static class DataSeeder
 {
@@ -25,7 +26,7 @@ public static class DataSeeder
         MenuItemSeeder.Seed(context);
         MenuItemVariantSeeder.Seed(context);
         LocationSeeder.Seed(context);
-        UserSeeder.Seed(context);
+        // User seeding moved to IdentityDataSeeder
 
         await context.SaveChangesAsync();
     }

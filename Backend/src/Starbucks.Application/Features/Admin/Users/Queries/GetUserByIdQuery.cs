@@ -47,7 +47,7 @@ public class GetUserByIdQueryHandler : IRequestHandler<GetUserByIdQuery, Result<
             // STEP 3: Map and enrich DTO
             var userDto = user.Adapt<UserManagementDto>();
             userDto.IsLocked = user.LockoutEnd.HasValue && user.LockoutEnd.Value > DateTime.UtcNow;
-            userDto.LockoutEnd = user.LockoutEnd;
+            userDto.LockoutEnd = user.LockoutEnd?.UtcDateTime;
 
             _logger.LogInformation("User retrieved successfully: {UserId}", request.UserId);
 

@@ -3,7 +3,7 @@ using Microsoft.IdentityModel.Tokens;
 using Starbucks.Application.Common.Interfaces.Services;
 using Starbucks.Application.Common.Interfaces.Data;
 using Starbucks.Application.Common.Settings;
-using Starbucks.Domain.Entities;
+using Starbucks.Domain.Identity;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
@@ -36,7 +36,7 @@ public sealed class TokenService : ITokenService
         }
     }
 
-    public string GenerateAccessToken(User user)
+    public string GenerateAccessToken(ApplicationUser user)
     {
         var key     = Encoding.ASCII.GetBytes(_jwt.Secret);
         var now     = _dateTime.UtcNow;
@@ -45,11 +45,10 @@ public sealed class TokenService : ITokenService
         var claims = new List<Claim>
         {
             new(ClaimTypes.NameIdentifier, user.Id.ToString()),
-            new(ClaimTypes.Email,          user.Email),
-            new(ClaimTypes.Name,           $"{user.FirstName} {user.LastName}"),
-            new(ClaimTypes.Role,           user.Role.ToString()),
-            new("phone_number",            user.PhoneNumber),
-            new("email_verified",          user.IsEmailVerified.ToString()),
+            new(ClaimTypes.Email,          user.Email ?? string.Empty),
+            new(ClaimTypes.Name,           $"{user.FirstName} {user.LastName}".Trim()),
+            new("phone_number",            user.PhoneNumber ?? string.Empty),
+            new("email_verified",          user.EmailConfirmed.ToString()),
         };
 
         var descriptor = new SecurityTokenDescriptor
@@ -110,7 +109,7 @@ public sealed class TokenService : ITokenService
     }
 
     public async Task RotateRefreshTokenAsync(
-        User user,
+        ApplicationUser user,
         CancellationToken cancellationToken = default)
     {
         // Increment version to invalidate old tokens

@@ -25,5 +25,5 @@ public class Notification : BaseEntity
     public string Type { get; set; } = string.Empty;
 
     // Navigation properties
-    public virtual User User { get; set; } = null!;
+    public virtual Identity.ApplicationUser User { get; set; } = null!;
 }

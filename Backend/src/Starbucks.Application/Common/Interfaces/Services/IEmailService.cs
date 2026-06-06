@@ -12,4 +12,5 @@ public interface IEmailService
     Task SendContactFormConfirmationAsync(string toEmail, string name, CancellationToken cancellationToken = default);
     Task SendContactFormNotificationAsync(string name, string email, string subject, string message, CancellationToken cancellationToken = default);
     Task SendOrderConfirmationAsync(string toEmail, string orderNumber, decimal totalAmount, CancellationToken cancellationToken = default);
+    Task SendEmailAsync(string toEmail, string subject, string htmlBody, CancellationToken cancellationToken = default);
 }

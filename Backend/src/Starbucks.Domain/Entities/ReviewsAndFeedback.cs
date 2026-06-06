@@ -1,4 +1,5 @@
 using Starbucks.Domain.Common;
+using Starbucks.Domain.Identity;
 
 namespace Starbucks.Domain.Entities;
 
@@ -13,7 +14,7 @@ public class Review : BaseEntity
 
     // Navigation properties
     public MenuItem MenuItem { get; set; } = null!;
-    public User User { get; set; } = null!;
+    public ApplicationUser User { get; set; } = null!;
 }
 
 public class ContactSubmission : BaseEntity

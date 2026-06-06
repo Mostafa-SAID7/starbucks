@@ -1,11 +1,11 @@
 using MediatR;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Starbucks.Application.Common.Interfaces.Services;
-using Starbucks.Application.Common.Interfaces.Data;
 using Starbucks.Application.Common.Models;
 using Starbucks.Application.DTOs.Auth;
 using Starbucks.Domain.Entities;
-using Starbucks.Domain.Enums;
+using Starbucks.Domain.Identity;
 using Mapster;
 
 namespace Starbucks.Application.Features.Auth.Commands;
@@ -14,26 +14,23 @@ public record RegisterCommand(RegisterRequest Request) : IRequest<Result<LoginRe
 
 public class RegisterCommandHandler : IRequestHandler<RegisterCommand, Result<LoginResponse>>
 {
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly UserManager<ApplicationUser> _userManager;
+    private readonly RoleManager<ApplicationRole> _roleManager;
     private readonly ITokenService _tokenService;
-    private readonly IPasswordService _passwordService;
     private readonly IDateTimeService _dateTime;
-    private readonly IUserValidationService _userValidationService;
     private readonly ILogger<RegisterCommandHandler> _logger;
 
     public RegisterCommandHandler(
-        IUnitOfWork unitOfWork,
+        UserManager<ApplicationUser> userManager,
+        RoleManager<ApplicationRole> roleManager,
         ITokenService tokenService,
-        IPasswordService passwordService,
         IDateTimeService dateTime,
-        IUserValidationService userValidationService,
         ILogger<RegisterCommandHandler> logger)
     {
-        _unitOfWork = unitOfWork;
+        _userManager = userManager;
+        _roleManager = roleManager;
         _tokenService = tokenService;
-        _passwordService = passwordService;
         _dateTime = dateTime;
-        _userValidationService = userValidationService;
         _logger = logger;
     }
 
@@ -56,70 +53,88 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, Result<Lo
             if (string.IsNullOrWhiteSpace(request.Request.LastName))
                 return Result<LoginResponse>.Failure("Last name is required");
 
-            // STEP 2: Validate email and phone uniqueness using centralized service
-            var validationError = await _userValidationService.ValidateEmailAndPhoneUniquenessAsync(
-                request.Request.Email,
-                request.Request.PhoneNumber,
-                cancellationToken);
-
-            if (validationError != null)
+            // STEP 2: Check if user already exists
+            var existingUser = await _userManager.FindByEmailAsync(request.Request.Email);
+            if (existingUser != null)
             {
-                _logger.LogWarning("Registration validation failed: {Error}", validationError);
-                return Result<LoginResponse>.Failure(validationError);
+                _logger.LogWarning("Registration attempt with existing email: {Email}", request.Request.Email);
+                return Result<LoginResponse>.Failure("An account with this email already exists");
             }
 
-            // STEP 3: Create new user entity
+            // STEP 3: Create new ApplicationUser
             var now = _dateTime.UtcNow;
-            var refreshToken = _tokenService.GenerateRefreshToken();
-
-            var user = new User
+            var user = new ApplicationUser
             {
-                FirstName = request.Request.FirstName,
-                LastName = request.Request.LastName,
+                UserName = request.Request.Email,
                 Email = request.Request.Email,
                 PhoneNumber = request.Request.PhoneNumber,
-                PasswordHash = _passwordService.Hash(request.Request.Password),
+                FirstName = request.Request.FirstName,
+                LastName = request.Request.LastName,
                 DateOfBirth = request.Request.DateOfBirth,
-                Role = UserRole.Customer,
-                RefreshToken = refreshToken,
-                RefreshTokenExpiry = now.AddDays(7),
-                RefreshTokenIssuedAt = now,
-                RefreshTokenVersion = 0,
+                EmailConfirmed = false,
+                PhoneNumberConfirmed = false,
+                CreatedAt = now,
+                CreatedBy = "System",
                 LastLoginAt = now,
+                Profile = new UserProfile
+                {
+                    PreferredLanguage = request.Request.PreferredLanguage,
+                    MarketingEmails = request.Request.AcceptMarketing,
+                }
             };
 
-            // STEP 4: Create user profile
-            var profile = new UserProfile
-            {
-                UserId = user.Id,
-                PreferredLanguage = request.Request.PreferredLanguage,
-                MarketingEmails = request.Request.AcceptMarketing,
-            };
+            // STEP 4: Use Identity's UserManager to create user with password
+            var createResult = await _userManager.CreateAsync(user, request.Request.Password);
 
-            // STEP 5: Add entities to repository
-            await _unitOfWork.Users.AddAsync(user, cancellationToken);
-            // Note: UserProfile is added via User navigation property, but we can add it explicitly if needed
-            // For now, relying on EF Core's relationship tracking
-
-            // STEP 6: Single transaction for multi-entity operation
-            await _unitOfWork.BeginTransactionAsync(cancellationToken);
-            try
+            if (!createResult.Succeeded)
             {
-                await _unitOfWork.SaveChangesAsync(cancellationToken);
-                await _unitOfWork.CommitTransactionAsync(cancellationToken);
-            }
-            catch
-            {
-                await _unitOfWork.RollbackTransactionAsync(cancellationToken);
-                throw;
+                var errors = string.Join(", ", createResult.Errors.Select(e => e.Description));
+                _logger.LogWarning("Registration failed for email {Email}: {Errors}", 
+                    request.Request.Email, errors);
+                return Result<LoginResponse>.Failure($"Registration failed: {errors}");
             }
 
-            // STEP 7: Generate tokens
+            // STEP 5: Add user to Customer role
+            var roleExists = await _roleManager.RoleExistsAsync("Customer");
+            if (!roleExists)
+            {
+                var roleResult = await _roleManager.CreateAsync(new ApplicationRole("Customer")
+                {
+                    Description = "Regular customer",
+                    Priority = 0,
+                    IsSystemRole = true,
+                    CreatedAt = now,
+                    CreatedBy = "System"
+                });
+
+                if (!roleResult.Succeeded)
+                {
+                    _logger.LogError("Failed to create Customer role");
+                }
+            }
+
+            var addRoleResult = await _userManager.AddToRoleAsync(user, "Customer");
+            if (!addRoleResult.Succeeded)
+            {
+                _logger.LogWarning("Failed to add user to Customer role: {UserId}", user.Id);
+            }
+
+            // STEP 6: Generate tokens
             var accessToken = _tokenService.GenerateAccessToken(user);
+            var refreshToken = _tokenService.GenerateRefreshToken();
+
+            // STEP 7: Update refresh token
+            user.RefreshToken = refreshToken;
+            user.RefreshTokenExpiry = now.AddDays(7);
+            user.RefreshTokenVersion = 0;
+            user.RefreshTokenIssuedAt = now;
+
+            // STEP 8: Save token updates
+            await _userManager.UpdateAsync(user);
 
             _logger.LogInformation("User registered successfully: {UserId}", user.Id);
 
-            // STEP 8: Map and return
+            // STEP 9: Return response
             var response = new LoginResponse
             {
                 AccessToken = accessToken,

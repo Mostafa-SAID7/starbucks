@@ -83,7 +83,7 @@ public class GetUsersQueryHandler : IRequestHandler<GetUsersQuery, Result<PagedR
             {
                 var user = userList.First(u => u.Id == userDto.Id);
                 userDto.IsLocked = user.LockoutEnd.HasValue && user.LockoutEnd.Value > DateTime.UtcNow;
-                userDto.LockoutEnd = user.LockoutEnd;
+                userDto.LockoutEnd = user.LockoutEnd?.UtcDateTime;
             }
 
             // STEP 6: Create paged result

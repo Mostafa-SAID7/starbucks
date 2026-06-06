@@ -1,11 +1,10 @@
 using MediatR;
-using Microsoft.EntityFrameworkCore;
-using Starbucks.Application.Common.Interfaces.Data;
+using Microsoft.AspNetCore.Identity;
 using Starbucks.Application.Common.Interfaces.Services;
 using Starbucks.Application.Common.Models;
 using Starbucks.Application.DTOs.Admin;
 using Starbucks.Domain.Entities;
-using Starbucks.Domain.Enums;
+using Starbucks.Domain.Identity;
 using Mapster;
 
 namespace Starbucks.Application.Features.Admin.Users.Commands;
@@ -14,56 +13,65 @@ public record CreateUserCommand(CreateUserRequestDto Request) : IRequest<Result<
 
 public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Result<UserManagementDto>>
 {
-    private readonly IApplicationDbContext _context;
-    private readonly IPasswordService _passwordService;
+    private readonly UserManager<ApplicationUser> _userManager;
+    private readonly RoleManager<ApplicationRole> _roleManager;
     private readonly IDateTimeService _dateTime;
     private readonly IAuditService _auditService;
-    private readonly IUserValidationService _userValidationService;
 
     public CreateUserCommandHandler(
-        IApplicationDbContext context,
-        IPasswordService passwordService,
+        UserManager<ApplicationUser> userManager,
+        RoleManager<ApplicationRole> roleManager,
         IDateTimeService dateTime,
-        IAuditService auditService,
-        IUserValidationService userValidationService)
+        IAuditService auditService)
     {
-        _context = context;
-        _passwordService = passwordService;
+        _userManager = userManager;
+        _roleManager = roleManager;
         _dateTime = dateTime;
         _auditService = auditService;
-        _userValidationService = userValidationService;
     }
 
     public async Task<Result<UserManagementDto>> Handle(CreateUserCommand request, CancellationToken cancellationToken)
     {
-        // Validate email uniqueness using centralized service
-        var validationError = await _userValidationService.ValidateEmailUniquenessAsync(
-            request.Request.Email,
-            cancellationToken);
-
-        if (validationError != null)
+        // Check if user already exists
+        var existingUser = await _userManager.FindByEmailAsync(request.Request.Email);
+        if (existingUser != null)
         {
-            return Result<UserManagementDto>.Failure(validationError);
+            return Result<UserManagementDto>.Failure($"User with email {request.Request.Email} already exists");
         }
 
-        // Create new user
-        var user = new User
+        // Create new ApplicationUser
+        var now = _dateTime.UtcNow;
+        var user = new ApplicationUser
         {
             Id = Guid.NewGuid(),
+            UserName = request.Request.Email,
+            Email = request.Request.Email,
             FirstName = request.Request.FirstName,
             LastName = request.Request.LastName,
-            Email = request.Request.Email,
             PhoneNumber = request.Request.PhoneNumber,
-            PasswordHash = _passwordService.Hash(request.Request.Password),
-            Role = request.Request.Role,
             DateOfBirth = request.Request.DateOfBirth,
-            IsEmailVerified = false,
-            IsPhoneVerified = false,
-            CreatedAt = _dateTime.UtcNow
+            EmailConfirmed = false,
+            PhoneNumberConfirmed = false,
+            CreatedAt = now,
+            CreatedBy = "Admin"
         };
 
-        _context.Users.Add(user);
-        await _context.SaveChangesAsync(cancellationToken);
+        // Create user with password
+        var result = await _userManager.CreateAsync(user, request.Request.Password);
+
+        if (!result.Succeeded)
+        {
+            var errors = string.Join(", ", result.Errors.Select(e => e.Description));
+            return Result<UserManagementDto>.Failure($"Failed to create user: {errors}");
+        }
+
+        // Assign role
+        var roleName = request.Request.Role.ToString(); // Convert enum to role name string
+        var roleExists = await _roleManager.RoleExistsAsync(roleName);
+        if (roleExists)
+        {
+            await _userManager.AddToRoleAsync(user, roleName);
+        }
 
         // Create audit log
         await _auditService.LogActionAsync(
@@ -72,7 +80,7 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Resul
             entityType: "User",
             entityId: user.Id,
             oldValues: null,
-            newValues: new { user.FirstName, user.LastName, user.Email, user.Role },
+            newValues: new { user.FirstName, user.LastName, user.Email, user.PhoneNumber },
             cancellationToken: cancellationToken
         );
 

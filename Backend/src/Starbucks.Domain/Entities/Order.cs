@@ -73,7 +73,7 @@ public class Order : BaseEntity
     public int PointsRedeemed { get; set; } = 0;
     
     // Navigation properties
-    public virtual User User { get; set; } = null!;
+    public virtual Identity.ApplicationUser User { get; set; } = null!;
     public virtual Location? Location { get; set; }
     public virtual ICollection<OrderItem> Items { get; set; } = new List<OrderItem>();
 }

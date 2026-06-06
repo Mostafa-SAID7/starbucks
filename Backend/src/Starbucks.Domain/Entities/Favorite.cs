@@ -12,6 +12,6 @@ public class Favorite : BaseEntity
     public Guid MenuItemId { get; set; }
 
     // Navigation properties
-    public virtual User User { get; set; } = null!;
+    public virtual Identity.ApplicationUser User { get; set; } = null!;
     public virtual MenuItem MenuItem { get; set; } = null!;
 }

@@ -7,7 +7,7 @@ namespace Starbucks.Application.Common.Specifications;
 /// Specification pattern interface for encapsulating query logic
 /// Allows complex queries to be defined in a reusable, testable way
 /// </summary>
-public interface ISpecification<T> where T : BaseEntity
+public interface ISpecification<T> where T : class
 {
     /// <summary>
     /// The base query criteria
@@ -58,7 +58,7 @@ public interface ISpecification<T> where T : BaseEntity
 /// <summary>
 /// Base specification class for implementing common query patterns
 /// </summary>
-public abstract class BaseSpecification<T> : ISpecification<T> where T : BaseEntity
+public abstract class BaseSpecification<T> : ISpecification<T> where T : class
 {
     public Expression<Func<T, bool>>? Criteria { get; protected set; }
     public List<Expression<Func<T, object>>> Includes { get; } = new();

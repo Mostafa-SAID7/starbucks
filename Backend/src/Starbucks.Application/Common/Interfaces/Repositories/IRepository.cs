@@ -8,7 +8,7 @@ namespace Starbucks.Application.Common.Interfaces.Repositories;
 /// Generic repository interface for all entities
 /// Provides abstraction over data access operations
 /// </summary>
-public interface IRepository<T> where T : BaseEntity
+public interface IRepository<T> where T : class
 {
     /// <summary>
     /// Gets entity by ID

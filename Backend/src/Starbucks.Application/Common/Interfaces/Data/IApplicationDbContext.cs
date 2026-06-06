@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Starbucks.Domain.Identity;
 using Starbucks.Domain.Entities;
 
 namespace Starbucks.Application.Common.Interfaces.Data;
@@ -10,7 +11,7 @@ namespace Starbucks.Application.Common.Interfaces.Data;
 /// </summary>
 public interface IApplicationDbContext
 {
-    DbSet<User> Users { get; }
+    DbSet<ApplicationUser> Users { get; }
     DbSet<UserProfile> UserProfiles { get; }
     DbSet<MenuCategory> MenuCategories { get; }
     DbSet<MenuSubcategory> MenuSubcategories { get; }

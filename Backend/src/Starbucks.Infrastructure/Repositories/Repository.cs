@@ -1,19 +1,23 @@
-using Microsoft.EntityFrameworkCore;
-using Starbucks.Application.Common.Interfaces.Repositories;
-using Starbucks.Application.Common.Specifications;
+using System.Linq.Expressions;
 using Starbucks.Domain.Common;
+using Starbucks.Domain.Identity;
 using Starbucks.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
+using Starbucks.Application.Common.Specifications;
+using Starbucks.Application.Common.Interfaces.Repositories;
 
 namespace Starbucks.Infrastructure.Repositories;
 
 /// <summary>
 /// Generic repository implementation for data access
-/// Provides CRUD operations and query capabilities using specifications
+/// Provides CRUD operations and query capabilities using specifications.
+/// Refactored to support entities that do not inherit from BaseEntity (like Identity's ApplicationUser)
+/// by checking for properties dynamically or using reflection/casting.
 /// </summary>
-public class Repository<T> : IRepository<T> where T : BaseEntity
+public class Repository<T> : IRepository<T> where T : class
 {
-    private readonly ApplicationDbContext _context;
-    private readonly DbSet<T> _dbSet;
+    protected readonly ApplicationDbContext _context;
+    protected readonly DbSet<T> _dbSet;
 
     public Repository(ApplicationDbContext context)
     {
@@ -23,7 +27,20 @@ public class Repository<T> : IRepository<T> where T : BaseEntity
 
     public async Task<T?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        return await _dbSet.FirstOrDefaultAsync(e => e.Id == id && !e.IsDeleted, cancellationToken);
+        // Check if entity is BaseEntity
+        if (typeof(BaseEntity).IsAssignableFrom(typeof(T)))
+        {
+            return await _dbSet.FirstOrDefaultAsync(e => ((BaseEntity)(object)e).Id == id && !((BaseEntity)(object)e).IsDeleted, cancellationToken);
+        }
+        
+        // Otherwise check if entity is ApplicationUser (which has Id and IsDeleted)
+        if (typeof(T) == typeof(ApplicationUser))
+        {
+            return await _dbSet.FirstOrDefaultAsync(e => ((ApplicationUser)(object)e).Id == id && !((ApplicationUser)(object)e).IsDeleted, cancellationToken) as T;
+        }
+
+        // Fallback: use EF FindAsync
+        return await _dbSet.FindAsync(new object[] { id }, cancellationToken);
     }
 
     public async Task<IEnumerable<T>> GetAsync(ISpecification<T> specification, CancellationToken cancellationToken = default)
@@ -38,7 +55,15 @@ public class Repository<T> : IRepository<T> where T : BaseEntity
 
     public async Task<IEnumerable<T>> GetAllAsync(CancellationToken cancellationToken = default)
     {
-        return await _dbSet.Where(e => !e.IsDeleted).ToListAsync(cancellationToken);
+        if (typeof(BaseEntity).IsAssignableFrom(typeof(T)))
+        {
+            return await _dbSet.Where(e => !((BaseEntity)(object)e).IsDeleted).ToListAsync(cancellationToken);
+        }
+        if (typeof(T) == typeof(ApplicationUser))
+        {
+            return await _dbSet.Where(e => !((ApplicationUser)(object)e).IsDeleted).ToListAsync(cancellationToken) as IEnumerable<T> ?? Array.Empty<T>();
+        }
+        return await _dbSet.ToListAsync(cancellationToken);
     }
 
     public async Task<(IEnumerable<T> Items, int TotalCount)> GetPagedAsync(
@@ -94,10 +119,22 @@ public class Repository<T> : IRepository<T> where T : BaseEntity
 
     public async Task DeleteAsync(T entity, CancellationToken cancellationToken = default)
     {
-        // Soft delete - mark as deleted
-        entity.IsDeleted = true;
-        entity.DeletedAt = DateTime.UtcNow;
-        _dbSet.Update(entity);
+        if (entity is BaseEntity baseEntity)
+        {
+            baseEntity.IsDeleted = true;
+            baseEntity.DeletedAt = DateTime.UtcNow;
+            _dbSet.Update(entity);
+        }
+        else if (entity is ApplicationUser appUser)
+        {
+            appUser.IsDeleted = true;
+            appUser.DeletedAt = DateTime.UtcNow;
+            _dbSet.Update(entity);
+        }
+        else
+        {
+            _dbSet.Remove(entity);
+        }
         await _context.SaveChangesAsync(cancellationToken);
     }
 
@@ -105,8 +142,20 @@ public class Repository<T> : IRepository<T> where T : BaseEntity
     {
         foreach (var entity in entities)
         {
-            entity.IsDeleted = true;
-            entity.DeletedAt = DateTime.UtcNow;
+            if (entity is BaseEntity baseEntity)
+            {
+                baseEntity.IsDeleted = true;
+                baseEntity.DeletedAt = DateTime.UtcNow;
+            }
+            else if (entity is ApplicationUser appUser)
+            {
+                appUser.IsDeleted = true;
+                appUser.DeletedAt = DateTime.UtcNow;
+            }
+            else
+            {
+                _dbSet.Remove(entity);
+            }
         }
         _dbSet.UpdateRange(entities);
         await _context.SaveChangesAsync(cancellationToken);
@@ -127,9 +176,18 @@ public class Repository<T> : IRepository<T> where T : BaseEntity
     /// <summary>
     /// Applies specification criteria, includes, ordering, and pagination to query
     /// </summary>
-    private IQueryable<T> ApplySpecification(ISpecification<T> specification)
+    protected IQueryable<T> ApplySpecification(ISpecification<T> specification)
     {
-        var query = _dbSet.AsNoTracking().Where(e => !e.IsDeleted);
+        IQueryable<T> query = _dbSet.AsNoTracking();
+
+        if (typeof(BaseEntity).IsAssignableFrom(typeof(T)))
+        {
+            query = query.Where(e => !((BaseEntity)(object)e).IsDeleted);
+        }
+        else if (typeof(T) == typeof(ApplicationUser))
+        {
+            query = query.Where(e => !((ApplicationUser)(object)e).IsDeleted);
+        }
 
         // Apply criteria
         if (specification.Criteria != null)

@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Starbucks.Domain.Common;
+using Starbucks.Domain.Identity;
 
 namespace Starbucks.Domain.Entities;
 
@@ -67,5 +68,5 @@ public class AuditLog : BaseEntity
     /// Navigation property to the User who performed the action.
     /// </summary>
     [ForeignKey(nameof(UserId))]
-    public virtual User? User { get; set; }
+    public virtual ApplicationUser? User { get; set; }
 }

@@ -21,7 +21,7 @@ public class CartItem : BaseEntity
     public string? SelectedModifiersJson { get; set; }
 
     // Navigation properties
-    public virtual User User { get; set; } = null!;
+    public virtual Identity.ApplicationUser User { get; set; } = null!;
     public virtual MenuItem MenuItem { get; set; } = null!;
     public virtual MenuItemVariant? Variant { get; set; }
 }

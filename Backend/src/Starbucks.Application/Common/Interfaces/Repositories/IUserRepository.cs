@@ -1,4 +1,4 @@
-using Starbucks.Domain.Entities;
+using Starbucks.Domain.Identity;
 
 namespace Starbucks.Application.Common.Interfaces.Repositories;
 
@@ -6,22 +6,22 @@ namespace Starbucks.Application.Common.Interfaces.Repositories;
 /// User-specific repository interface
 /// Extends generic repository with user-specific queries
 /// </summary>
-public interface IUserRepository : IRepository<User>
+public interface IUserRepository : IRepository<ApplicationUser>
 {
     /// <summary>
     /// Gets a user by email address
     /// </summary>
-    Task<User?> GetByEmailAsync(string email, CancellationToken cancellationToken = default);
+    Task<ApplicationUser?> GetByEmailAsync(string email, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Gets a user by phone number
     /// </summary>
-    Task<User?> GetByPhoneAsync(string phoneNumber, CancellationToken cancellationToken = default);
+    Task<ApplicationUser?> GetByPhoneAsync(string phoneNumber, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Gets all verified users with pagination
     /// </summary>
-    Task<(IEnumerable<User> Items, int TotalCount)> GetVerifiedUsersPagedAsync(
+    Task<(IEnumerable<ApplicationUser> Items, int TotalCount)> GetVerifiedUsersPagedAsync(
         int pageNumber,
         int pageSize,
         CancellationToken cancellationToken = default);
@@ -29,7 +29,7 @@ public interface IUserRepository : IRepository<User>
     /// <summary>
     /// Gets users by role
     /// </summary>
-    Task<IEnumerable<User>> GetByRoleAsync(string role, CancellationToken cancellationToken = default);
+    Task<IEnumerable<ApplicationUser>> GetByRoleAsync(string role, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Checks if email exists
@@ -44,7 +44,7 @@ public interface IUserRepository : IRepository<User>
     /// <summary>
     /// Gets users with failed login attempts
     /// </summary>
-    Task<IEnumerable<User>> GetUsersWithFailedLoginsAsync(
+    Task<IEnumerable<ApplicationUser>> GetUsersWithFailedLoginsAsync(
         int minAttempts,
         CancellationToken cancellationToken = default);
 }

@@ -1,5 +1,6 @@
 using Starbucks.Tests.Builders;
 using Starbucks.Domain.Entities;
+using Starbucks.Domain.Identity;
 
 namespace Starbucks.Tests.Helpers;
 
@@ -11,13 +12,14 @@ public static class TestDataHelper
     /// <summary>
     /// Creates a valid test user.
     /// </summary>
-    public static User CreateValidUser()
+    public static ApplicationUser CreateValidUser()
     {
         return new UserBuilder()
             .WithVerifiedEmail()
             .WithVerifiedPhone()
             .Build();
     }
+
 
     /// <summary>
     /// Creates a valid test order.
@@ -63,12 +65,13 @@ public static class TestDataHelper
     /// <summary>
     /// Creates multiple test users.
     /// </summary>
-    public static List<User> CreateValidUsers(int count)
+    public static List<ApplicationUser> CreateValidUsers(int count)
     {
         return Enumerable.Range(0, count)
             .Select(_ => CreateValidUser())
             .ToList();
     }
+
 
     /// <summary>
     /// Creates multiple test orders.

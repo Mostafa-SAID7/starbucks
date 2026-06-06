@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 using Starbucks.Application.Common.Interfaces.Data;
 using Starbucks.Application.Common.Interfaces.Services;
+using Starbucks.Domain.Identity;
 
 namespace Starbucks.Infrastructure.Data;
 
@@ -32,7 +33,7 @@ public class ApplicationDbContextFactory : IDesignTimeDbContextFactory<Applicati
         }
 
         var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
-        optionsBuilder.UseSqlite(connectionString ?? "Data Source=starbucks_dev.db");
+        optionsBuilder.UseSqlServer(connectionString);
 
         // Mock services for design-time (no DI container available)
         var currentUserService = new DesignTimeCurrentUserService();

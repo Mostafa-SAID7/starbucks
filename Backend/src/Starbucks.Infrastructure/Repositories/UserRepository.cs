@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Starbucks.Application.Common.Interfaces.Repositories;
 using Starbucks.Application.Common.Specifications;
 using Starbucks.Domain.Entities;
+using Starbucks.Domain.Identity;
 using Starbucks.Infrastructure.Data;
 
 namespace Starbucks.Infrastructure.Repositories;
@@ -10,7 +11,7 @@ namespace Starbucks.Infrastructure.Repositories;
 /// User repository implementation
 /// Provides user-specific data access operations
 /// </summary>
-public class UserRepository : Repository<User>, IUserRepository
+public class UserRepository : Repository<ApplicationUser>, IUserRepository
 {
     private readonly ApplicationDbContext _context;
 
@@ -19,19 +20,19 @@ public class UserRepository : Repository<User>, IUserRepository
         _context = context;
     }
 
-    public async Task<User?> GetByEmailAsync(string email, CancellationToken cancellationToken = default)
+    public async Task<ApplicationUser?> GetByEmailAsync(string email, CancellationToken cancellationToken = default)
     {
         var spec = new UserByEmailSpecification(email);
         return await GetSingleAsync(spec, cancellationToken);
     }
 
-    public async Task<User?> GetByPhoneAsync(string phoneNumber, CancellationToken cancellationToken = default)
+    public async Task<ApplicationUser?> GetByPhoneAsync(string phoneNumber, CancellationToken cancellationToken = default)
     {
         var spec = new UserByPhoneSpecification(phoneNumber);
         return await GetSingleAsync(spec, cancellationToken);
     }
 
-    public async Task<(IEnumerable<User> Items, int TotalCount)> GetVerifiedUsersPagedAsync(
+    public async Task<(IEnumerable<ApplicationUser> Items, int TotalCount)> GetVerifiedUsersPagedAsync(
         int pageNumber,
         int pageSize,
         CancellationToken cancellationToken = default)
@@ -40,11 +41,11 @@ public class UserRepository : Repository<User>, IUserRepository
         return await GetPagedAsync(spec, pageNumber, pageSize, cancellationToken);
     }
 
-    public async Task<IEnumerable<User>> GetByRoleAsync(string role, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<ApplicationUser>> GetByRoleAsync(string role, CancellationToken cancellationToken = default)
     {
         if (!Enum.TryParse<Domain.Enums.UserRole>(role, true, out var userRole))
         {
-            return Enumerable.Empty<User>();
+            return Enumerable.Empty<ApplicationUser>();
         }
 
         var spec = new UsersByRoleSpecification(userRole);
@@ -63,7 +64,7 @@ public class UserRepository : Repository<User>, IUserRepository
         return await AnyAsync(spec, cancellationToken);
     }
 
-    public async Task<IEnumerable<User>> GetUsersWithFailedLoginsAsync(
+    public async Task<IEnumerable<ApplicationUser>> GetUsersWithFailedLoginsAsync(
         int minAttempts,
         CancellationToken cancellationToken = default)
     {

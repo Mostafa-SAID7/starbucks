@@ -1,8 +1,10 @@
 using MediatR;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Starbucks.Application.Common.Interfaces.Data;
 using Starbucks.Application.Common.Interfaces.Services;
 using Starbucks.Application.Common.Models;
+using Starbucks.Domain.Identity;
 
 namespace Starbucks.Application.Features.Admin.Users.Commands;
 
@@ -16,44 +18,43 @@ public class ResetPasswordResponse
 
 public class ResetPasswordCommandHandler : IRequestHandler<ResetPasswordCommand, Result<ResetPasswordResponse>>
 {
-    private readonly IApplicationDbContext _context;
-    private readonly IPasswordService _passwordService;
+    private readonly UserManager<ApplicationUser> _userManager;
     private readonly IDateTimeService _dateTime;
     private readonly IAuditService _auditService;
 
     public ResetPasswordCommandHandler(
-        IApplicationDbContext context,
-        IPasswordService passwordService,
+        UserManager<ApplicationUser> userManager,
         IDateTimeService dateTime,
         IAuditService auditService)
     {
-        _context = context;
-        _passwordService = passwordService;
+        _userManager = userManager;
         _dateTime = dateTime;
         _auditService = auditService;
     }
 
     public async Task<Result<ResetPasswordResponse>> Handle(ResetPasswordCommand request, CancellationToken cancellationToken)
     {
-        var user = await _context.Users
-            .FirstOrDefaultAsync(u => u.Id == request.UserId && !u.IsDeleted, cancellationToken);
+        var user = await _userManager.FindByIdAsync(request.UserId.ToString());
 
-        if (user == null)
+        if (user == null || user.IsDeleted)
         {
             return Result<ResetPasswordResponse>.Failure("User not found.");
         }
 
         // Generate temporary password
         var temporaryPassword = GenerateTemporaryPassword();
-        var hashedPassword = _passwordService.Hash(temporaryPassword);
 
-        user.PasswordHash = hashedPassword;
-        user.PasswordResetToken = null;
-        user.PasswordResetTokenExpiry = null;
+        // Use UserManager to set password (handles hashing internally)
+        var resetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
+        var result = await _userManager.ResetPasswordAsync(user, resetToken, temporaryPassword);
+
+        if (!result.Succeeded)
+        {
+            return Result<ResetPasswordResponse>.Failure($"Failed to reset password: {string.Join(", ", result.Errors.Select(e => e.Description))}");
+        }
+
         user.UpdatedAt = _dateTime.UtcNow;
-
-        _context.Users.Update(user);
-        await _context.SaveChangesAsync(cancellationToken);
+        await _userManager.UpdateAsync(user);
 
         // Create audit log
         await _auditService.LogActionAsync(

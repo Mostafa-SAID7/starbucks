@@ -1,22 +1,24 @@
 using FluentAssertions;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Moq;
-using Starbucks.Application.Common.Interfaces.Data;
 using Starbucks.Application.Common.Interfaces.Services;
 using Starbucks.Application.DTOs.Auth;
 using Starbucks.Application.Features.Auth.Commands;
-using Starbucks.Domain.Entities;
+using Starbucks.Domain.Identity;
 using Starbucks.Domain.Enums;
-using Starbucks.Application.Common.Specifications;
 using Xunit;
 
 namespace Starbucks.UnitTests.Application.Auth;
 
 public class LoginCommandHandlerTests
 {
-    private readonly Mock<IUnitOfWork> _unitOfWorkMock;
+    private readonly Mock<UserManager<ApplicationUser>> _userManagerMock;
+    private readonly Mock<SignInManager<ApplicationUser>> _signInManagerMock;
     private readonly Mock<ITokenService> _tokenServiceMock;
-    private readonly Mock<IPasswordService> _passwordServiceMock;
     private readonly Mock<IDateTimeService> _dateTimeMock;
     private readonly Mock<ILogger<LoginCommandHandler>> _loggerMock;
     private readonly LoginCommandHandler _handler;
@@ -24,85 +26,51 @@ public class LoginCommandHandlerTests
 
     public LoginCommandHandlerTests()
     {
-        _unitOfWorkMock = new Mock<IUnitOfWork>();
+        // UserManager requires several deps — mock them all with empty stubs
+        var userStoreMock = new Mock<IUserStore<ApplicationUser>>();
+        _userManagerMock = new Mock<UserManager<ApplicationUser>>(
+            userStoreMock.Object,
+            null!, null!, null!, null!, null!, null!, null!, null!);
+
+        // SignInManager requires UserManager + several more
+        var httpContextAccessorMock = new Mock<IHttpContextAccessor>();
+        var claimsFactoryMock = new Mock<IUserClaimsPrincipalFactory<ApplicationUser>>();
+        _signInManagerMock = new Mock<SignInManager<ApplicationUser>>(
+            _userManagerMock.Object,
+            httpContextAccessorMock.Object,
+            claimsFactoryMock.Object,
+            null!, null!, null!, null!);
+
         _tokenServiceMock = new Mock<ITokenService>();
-        _passwordServiceMock = new Mock<IPasswordService>();
         _dateTimeMock = new Mock<IDateTimeService>();
         _loggerMock = new Mock<ILogger<LoginCommandHandler>>();
 
         _dateTimeMock.Setup(d => d.UtcNow).Returns(_now);
 
         _handler = new LoginCommandHandler(
-            _unitOfWorkMock.Object,
+            _signInManagerMock.Object,
+            _userManagerMock.Object,
             _tokenServiceMock.Object,
-            _passwordServiceMock.Object,
             _dateTimeMock.Object,
             _loggerMock.Object);
     }
 
-    private User BuildUser(string email = "test@example.com", string passwordHash = "hashed")
+    private ApplicationUser BuildUser(string email = "test@example.com")
     {
-        return new User
+        return new ApplicationUser
         {
             Id = Guid.NewGuid(),
             Email = email,
-            PasswordHash = passwordHash,
+            UserName = email,
+            PasswordHash = "hashed",
             FirstName = "Test",
             LastName = "User",
             PhoneNumber = "+201001234567",
             Role = UserRole.Customer,
-            IsEmailVerified = true,
-            FailedLoginAttempts = 0,
+            EmailConfirmed = true,
+            AccessFailedCount = 0,
             CreatedAt = _now.AddDays(-30)
         };
-    }
-
-    // ── Happy Path ───────────────────────────────────────────────────────────
-
-    [Fact]
-    public async Task Handle_ValidCredentials_ReturnsSuccessWithTokens()
-    {
-        // Arrange
-        var user = BuildUser();
-        SetupUserLookup(user);
-        _passwordServiceMock.Setup(p => p.Verify("password123", user.PasswordHash)).Returns(true);
-        _tokenServiceMock.Setup(t => t.GenerateAccessToken(user)).Returns("access-token");
-        _tokenServiceMock.Setup(t => t.GenerateRefreshToken()).Returns("refresh-token");
-        _unitOfWorkMock.Setup(u => u.Users.UpdateAsync(user, default)).Returns(Task.CompletedTask);
-        _unitOfWorkMock.Setup(u => u.SaveChangesAsync(default)).ReturnsAsync(1);
-
-        var command = new LoginCommand(new LoginRequest { Email = user.Email, Password = "password123" });
-
-        // Act
-        var result = await _handler.Handle(command, CancellationToken.None);
-
-        // Assert
-        result.IsSuccess.Should().BeTrue();
-        result.Data!.AccessToken.Should().Be("access-token");
-        result.Data.RefreshToken.Should().Be("refresh-token");
-    }
-
-    [Fact]
-    public async Task Handle_ValidCredentials_ResetsFailedLoginAttempts()
-    {
-        // Arrange
-        var user = BuildUser();
-        user.FailedLoginAttempts = 3;
-        SetupUserLookup(user);
-        _passwordServiceMock.Setup(p => p.Verify(It.IsAny<string>(), user.PasswordHash)).Returns(true);
-        _tokenServiceMock.Setup(t => t.GenerateAccessToken(It.IsAny<User>())).Returns("tok");
-        _tokenServiceMock.Setup(t => t.GenerateRefreshToken()).Returns("ref");
-        _unitOfWorkMock.Setup(u => u.Users.UpdateAsync(It.IsAny<User>(), default)).Returns(Task.CompletedTask);
-        _unitOfWorkMock.Setup(u => u.SaveChangesAsync(default)).ReturnsAsync(1);
-
-        var command = new LoginCommand(new LoginRequest { Email = user.Email, Password = "correct" });
-
-        // Act
-        await _handler.Handle(command, CancellationToken.None);
-
-        // Assert
-        user.FailedLoginAttempts.Should().Be(0);
-        user.LastLoginAt.Should().Be(_now);
     }
 
     // ── Validation Guards ────────────────────────────────────────────────────
@@ -140,17 +108,39 @@ public class LoginCommandHandlerTests
     [Fact]
     public async Task Handle_UnknownEmail_ReturnsGenericFailure()
     {
-        _unitOfWorkMock
-            .Setup(u => u.Users.GetSingleAsync(It.IsAny<ISpecification<User>>(), default))
-            .ReturnsAsync((User?)null);
+        _userManagerMock
+            .Setup(u => u.FindByEmailAsync("nobody@test.com"))
+            .ReturnsAsync((ApplicationUser?)null);
 
         var command = new LoginCommand(new LoginRequest { Email = "nobody@test.com", Password = "pass" });
 
         var result = await _handler.Handle(command, CancellationToken.None);
 
         result.IsSuccess.Should().BeFalse();
-        // Must return generic message to prevent user enumeration
         result.Errors.Should().ContainSingle(e => e.Contains("Invalid email or password"));
+    }
+
+    // ── Successful Login ─────────────────────────────────────────────────────
+
+    [Fact]
+    public async Task Handle_ValidCredentials_ReturnsSuccessWithTokens()
+    {
+        var user = BuildUser();
+        _userManagerMock.Setup(u => u.FindByEmailAsync(user.Email!)).ReturnsAsync(user);
+        _signInManagerMock
+            .Setup(s => s.PasswordSignInAsync(user, "password123", false, true))
+            .ReturnsAsync(SignInResult.Success);
+        _tokenServiceMock.Setup(t => t.GenerateAccessToken(user)).Returns("access-token");
+        _tokenServiceMock.Setup(t => t.GenerateRefreshToken()).Returns("refresh-token");
+        _userManagerMock.Setup(u => u.UpdateAsync(user)).ReturnsAsync(IdentityResult.Success);
+
+        var command = new LoginCommand(new LoginRequest { Email = user.Email!, Password = "password123" });
+
+        var result = await _handler.Handle(command, CancellationToken.None);
+
+        result.IsSuccess.Should().BeTrue();
+        result.Data!.AccessToken.Should().Be("access-token");
+        result.Data.RefreshToken.Should().Be("refresh-token");
     }
 
     // ── Lockout ──────────────────────────────────────────────────────────────
@@ -159,10 +149,15 @@ public class LoginCommandHandlerTests
     public async Task Handle_LockedAccount_ReturnsLockoutMessage()
     {
         var user = BuildUser();
-        user.LockoutEnd = _now.AddMinutes(10);
-        SetupUserLookup(user);
+        _userManagerMock.Setup(u => u.FindByEmailAsync(user.Email!)).ReturnsAsync(user);
+        _signInManagerMock
+            .Setup(s => s.PasswordSignInAsync(user, It.IsAny<string>(), false, true))
+            .ReturnsAsync(SignInResult.LockedOut);
+        _userManagerMock
+            .Setup(u => u.GetLockoutEndDateAsync(user))
+            .ReturnsAsync(new DateTimeOffset(_now.AddMinutes(10)));
 
-        var command = new LoginCommand(new LoginRequest { Email = user.Email, Password = "any" });
+        var command = new LoginCommand(new LoginRequest { Email = user.Email!, Password = "any" });
 
         var result = await _handler.Handle(command, CancellationToken.None);
 
@@ -170,70 +165,22 @@ public class LoginCommandHandlerTests
         result.Errors.Should().ContainSingle(e => e.Contains("locked"));
     }
 
-    [Fact]
-    public async Task Handle_ExpiredLockout_AllowsLogin()
-    {
-        var user = BuildUser();
-        user.LockoutEnd = _now.AddMinutes(-1); // Already expired
-        SetupUserLookup(user);
-        _passwordServiceMock.Setup(p => p.Verify(It.IsAny<string>(), user.PasswordHash)).Returns(true);
-        _tokenServiceMock.Setup(t => t.GenerateAccessToken(It.IsAny<User>())).Returns("tok");
-        _tokenServiceMock.Setup(t => t.GenerateRefreshToken()).Returns("ref");
-        _unitOfWorkMock.Setup(u => u.Users.UpdateAsync(It.IsAny<User>(), default)).Returns(Task.CompletedTask);
-        _unitOfWorkMock.Setup(u => u.SaveChangesAsync(default)).ReturnsAsync(1);
-
-        var command = new LoginCommand(new LoginRequest { Email = user.Email, Password = "correct" });
-
-        var result = await _handler.Handle(command, CancellationToken.None);
-
-        result.IsSuccess.Should().BeTrue();
-    }
-
-    // ── Wrong Password / Account Locking ─────────────────────────────────────
+    // ── Wrong Password ────────────────────────────────────────────────────────
 
     [Fact]
-    public async Task Handle_WrongPassword_IncrementsFailedAttempts()
+    public async Task Handle_WrongPassword_ReturnsFailure()
     {
         var user = BuildUser();
-        user.FailedLoginAttempts = 2;
-        SetupUserLookup(user);
-        _passwordServiceMock.Setup(p => p.Verify(It.IsAny<string>(), user.PasswordHash)).Returns(false);
-        _unitOfWorkMock.Setup(u => u.Users.UpdateAsync(It.IsAny<User>(), default)).Returns(Task.CompletedTask);
-        _unitOfWorkMock.Setup(u => u.SaveChangesAsync(default)).ReturnsAsync(1);
+        _userManagerMock.Setup(u => u.FindByEmailAsync(user.Email!)).ReturnsAsync(user);
+        _signInManagerMock
+            .Setup(s => s.PasswordSignInAsync(user, "wrongpassword", false, true))
+            .ReturnsAsync(SignInResult.Failed);
 
-        var command = new LoginCommand(new LoginRequest { Email = user.Email, Password = "wrong" });
+        var command = new LoginCommand(new LoginRequest { Email = user.Email!, Password = "wrongpassword" });
 
         var result = await _handler.Handle(command, CancellationToken.None);
 
         result.IsSuccess.Should().BeFalse();
-        user.FailedLoginAttempts.Should().Be(3);
-        user.LockoutEnd.Should().BeNull("account should not be locked before 5 attempts");
-    }
-
-    [Fact]
-    public async Task Handle_FifthWrongPassword_LocksAccount()
-    {
-        var user = BuildUser();
-        user.FailedLoginAttempts = 4;
-        SetupUserLookup(user);
-        _passwordServiceMock.Setup(p => p.Verify(It.IsAny<string>(), user.PasswordHash)).Returns(false);
-        _unitOfWorkMock.Setup(u => u.Users.UpdateAsync(It.IsAny<User>(), default)).Returns(Task.CompletedTask);
-        _unitOfWorkMock.Setup(u => u.SaveChangesAsync(default)).ReturnsAsync(1);
-
-        var command = new LoginCommand(new LoginRequest { Email = user.Email, Password = "wrong5" });
-
-        await _handler.Handle(command, CancellationToken.None);
-
-        user.LockoutEnd.Should().NotBeNull("account should be locked after 5 failed attempts");
-        user.LockoutEnd.Should().BeCloseTo(_now.AddMinutes(15), TimeSpan.FromSeconds(1));
-    }
-
-    // ── Helpers ───────────────────────────────────────────────────────────────
-
-    private void SetupUserLookup(User user)
-    {
-        _unitOfWorkMock
-            .Setup(u => u.Users.GetSingleAsync(It.IsAny<ISpecification<User>>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(user);
+        result.Errors.Should().ContainSingle(e => e.Contains("Invalid email or password"));
     }
 }

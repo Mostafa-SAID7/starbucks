@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using Starbucks.Domain.Common;
 using Starbucks.Domain.Enums;
+using Starbucks.Domain.Identity;
 
 namespace Starbucks.Domain.Entities;
 
@@ -40,6 +41,6 @@ public class UserProfile : BaseEntity
     
     public DateTime? LastPointsActivity { get; set; }
     
-    // Navigation properties
-    public virtual User User { get; set; } = null!;
+    // Navigation properties - use ApplicationUser instead of User
+    public virtual ApplicationUser User { get; set; } = null!;
 }

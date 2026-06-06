@@ -1,8 +1,9 @@
 using MediatR;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Starbucks.Application.Common.Interfaces.Services;
-using Starbucks.Application.Common.Interfaces.Data;
 using Starbucks.Application.Common.Models;
+using Starbucks.Domain.Identity;
 
 namespace Starbucks.Application.Features.Auth.Commands;
 
@@ -10,16 +11,16 @@ public record LogoutCommand(Guid UserId) : IRequest<Result>;
 
 public class LogoutCommandHandler : IRequestHandler<LogoutCommand, Result>
 {
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly UserManager<ApplicationUser> _userManager;
     private readonly ITokenService _tokenService;
     private readonly ILogger<LogoutCommandHandler> _logger;
 
     public LogoutCommandHandler(
-        IUnitOfWork unitOfWork,
+        UserManager<ApplicationUser> userManager,
         ITokenService tokenService,
         ILogger<LogoutCommandHandler> logger)
     {
-        _unitOfWork = unitOfWork;
+        _userManager = userManager;
         _tokenService = tokenService;
         _logger = logger;
     }
@@ -46,3 +47,4 @@ public class LogoutCommandHandler : IRequestHandler<LogoutCommand, Result>
         }
     }
 }
+

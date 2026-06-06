@@ -1,13 +1,18 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Starbucks.Domain.Identity;
+using Starbucks.Domain.Entities;
 using Starbucks.Infrastructure.Extensions;
 
 namespace Starbucks.Infrastructure.Data.Configurations;
 
-public class UserConfiguration : IEntityTypeConfiguration<User>
+public class UserConfiguration : IEntityTypeConfiguration<ApplicationUser>
 {
-    public void Configure(EntityTypeBuilder<User> builder)
+    public void Configure(EntityTypeBuilder<ApplicationUser> builder)
     {
-        builder.HasKey(u => u.Id);
-
+        // Primary key already configured by Identity (Id property)
+        
+        // Custom properties
         builder.Property(u => u.FirstName)
             .IsRequired()
             .HasMaxLength(100);
@@ -16,25 +21,10 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             .IsRequired()
             .HasMaxLength(100);
 
-        builder.Property(u => u.Email)
-            .IsRequired()
-            .HasMaxLength(255);
-
-        builder.Property(u => u.PhoneNumber)
-            .IsRequired()
-            .HasMaxLength(20);
-
-        builder.Property(u => u.PasswordHash)
-            .IsRequired();
-
-        // Unique indexes with soft-delete filter
-        builder.HasIndex(u => u.Email)
-            .HasUniqueIndexWithSoftDelete();
-
-        builder.HasIndex(u => u.PhoneNumber)
-            .HasUniqueIndexWithSoftDelete();
-
-        // Index for refresh token lookups
+        // Identity properties are already configured (Email, PhoneNumber, PasswordHash, etc.)
+        
+        // Indexes for performance
+        builder.HasIndex(u => u.LastLoginAt);
         builder.HasIndex(u => u.RefreshToken);
 
         // Relationships
@@ -48,7 +38,23 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             .HasForeignKey(o => o.UserId)
             .OnDelete(DeleteBehavior.Restrict);
 
+        builder.HasMany(u => u.Favorites)
+            .WithOne(f => f.User)
+            .HasForeignKey(f => f.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasMany(u => u.Notifications)
+            .WithOne(n => n.User)
+            .HasForeignKey(n => n.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasMany(u => u.Reviews)
+            .WithOne(r => r.User)
+            .HasForeignKey(r => r.UserId)
+            .OnDelete(DeleteBehavior.Restrict);
+
         // Global query filter for soft delete
         builder.HasQueryFilter(u => !u.IsDeleted);
     }
 }
+

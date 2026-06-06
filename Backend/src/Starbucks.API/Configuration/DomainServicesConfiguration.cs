@@ -33,8 +33,8 @@ public static class DomainServicesConfiguration
         services.AddScoped<ICacheInvalidationService, CacheInvalidationService>();
         services.AddScoped<ICacheWarmingService, CacheWarmingService>();
         services.AddScoped<ITokenService, TokenService>();
+        services.AddScoped<IOtpService, OtpService>();
         services.AddScoped<ICurrentUserService, CurrentUserService>();
-        services.AddScoped<IPasswordService, PasswordService>();
         services.AddScoped<ISoftDeleteService, SoftDeleteService>();
         services.AddScoped<IAuditService, AuditService>();
         services.AddScoped<IUserValidationService, UserValidationService>();
