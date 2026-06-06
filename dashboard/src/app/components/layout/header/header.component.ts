@@ -1,7 +1,7 @@
 import { Component, Output, EventEmitter, inject, computed, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, Router, NavigationEnd } from '@angular/router';
-import { LucideAngularModule } from 'lucide-angular';
+import { LucideAngularModule } from '../../../lucide-angular-shim.module';
 import { AuthService } from '../../../services/auth.service';
 import { filter } from 'rxjs';
 

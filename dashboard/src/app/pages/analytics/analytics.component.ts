@@ -1,6 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { LucideAngularModule } from 'lucide-angular';
+import { LucideAngularModule } from '../../lucide-angular-shim.module';
 import { forkJoin } from 'rxjs';
 import { AnalyticsService, MonthlyRevenue, TopCustomer, AnalyticsSummary } from '../../services/analytics.service';
 

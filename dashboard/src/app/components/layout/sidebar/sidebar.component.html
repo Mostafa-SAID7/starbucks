@@ -1,5 +1,5 @@
 <aside
-  [class]="'sidebar-shell fixed lg:relative inset-y-0 left-0 z-40 flex flex-col text-white transition-all duration-300 ease-in-out shrink-0 '
+  [class]="'sidebar-shell fixed lg:relative inset-y-0 left-0 z-40 flex flex-col text-white transition-all duration-300 ease-in-out shrink-0 h-full '
     + (collapsed() ? 'w-[68px]' : 'w-64') + ' '
     + (isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0')"
 >
@@ -117,29 +117,49 @@
     }
   </nav>
 
-  <!-- ── User footer ───────────────────────── -->
-  <div class="p-3" style="border-top: 1px solid rgba(255,255,255,0.07);">
-    <div [class]="'flex items-center gap-2.5 ' + (collapsed() ? 'justify-center' : '')">
-      <!-- Avatar with online dot -->
-      <div class="relative shrink-0">
-        <div class="avatar-lg avatar-green shadow-md">
-          <span class="text-sm font-bold">{{ userInitials() }}</span>
-        </div>
-        <span class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-400 rounded-full ring-2"
-          style="ring-color: #1a3528;"></span>
-      </div>
+  <!-- ── Theme toggle + User footer ─────────── -->
+  <div style="border-top: 1px solid rgba(255,255,255,0.07);">
 
+    <!-- Theme toggle row -->
+    <div [class]="'flex items-center px-3 py-2 ' + (collapsed() ? 'justify-center' : 'justify-between gap-2')">
       @if (!collapsed()) {
-        <div class="flex-1 overflow-hidden">
-          <p class="text-sm font-semibold text-white truncate leading-tight">{{ auth.user()?.name ?? 'Admin' }}</p>
-          <p class="text-[11px] truncate leading-none mt-0.5"
-            style="color: var(--sb-gold-muted);">{{ auth.user()?.role ?? 'Super Admin' }}</p>
-        </div>
-        <button (click)="logout()" title="Sign out"
-          class="sidebar-collapse-btn shrink-0">
-          <lucide-angular name="log-out" [size]="13"></lucide-angular>
-        </button>
+        <span class="text-[10px] font-semibold uppercase tracking-widest" style="color: rgba(255,255,255,0.35);">Appearance</span>
       }
+      <button
+        (click)="toggleTheme()"
+        [title]="darkMode() ? 'Switch to Light Mode' : 'Switch to Dark Mode'"
+        class="sidebar-theme-btn"
+        [class.sidebar-theme-btn-active]="darkMode()">
+        <lucide-angular [name]="themeIcon" [size]="14"></lucide-angular>
+        @if (!collapsed()) {
+          <span class="text-xs font-medium">{{ darkMode() ? 'Light' : 'Dark' }}</span>
+        }
+      </button>
+    </div>
+
+    <!-- User row -->
+    <div class="p-3 pt-2">
+      <div [class]="'flex items-center gap-2.5 ' + (collapsed() ? 'justify-center' : '')">
+        <!-- Avatar with online dot -->
+        <div class="relative shrink-0">
+          <div class="avatar-lg avatar-green shadow-md">
+            <span class="text-sm font-bold">{{ userInitials() }}</span>
+          </div>
+          <span class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-400 rounded-full ring-2 ring-[#1a3528]"></span>
+        </div>
+
+        @if (!collapsed()) {
+          <div class="flex-1 overflow-hidden">
+            <p class="text-sm font-semibold text-white truncate leading-tight">{{ auth.user()?.name ?? 'Admin' }}</p>
+            <p class="text-[11px] truncate leading-none mt-0.5"
+              style="color: var(--sb-gold-muted);">{{ auth.user()?.role ?? 'Super Admin' }}</p>
+          </div>
+          <button (click)="logout()" title="Sign out"
+            class="sidebar-collapse-btn shrink-0">
+            <lucide-angular name="log-out" [size]="13"></lucide-angular>
+          </button>
+        }
+      </div>
     </div>
   </div>
 

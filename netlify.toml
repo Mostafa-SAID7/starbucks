@@ -5,7 +5,7 @@
   # Base directory where the Angular app is located
   base = "dashboard"
   # Build command
-  command = "npm install --legacy-peer-deps && npm run build:netlify"
+  command = "npm config set registry https://registry.npmjs.org && rm -f package-lock.json && npm install --legacy-peer-deps && npm run build:netlify"
   # Publish directory (relative to base)
   publish = "dist/dashboard/browser"
   # Environment variables

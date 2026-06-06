@@ -1,7 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { LucideAngularModule } from 'lucide-angular';
+import { LucideAngularModule } from '../../lucide-angular-shim.module';
 import { ProductsService, Product } from '../../services/products.service';
 
 @Component({

@@ -1,7 +1,7 @@
-import { Component, Input, Output, EventEmitter, signal, inject, computed } from '@angular/core';
+import { Component, Input, Output, EventEmitter, signal, inject, computed, OnInit } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { LucideAngularModule } from 'lucide-angular';
+import { LucideAngularModule } from '../../../lucide-angular-shim.module';
 import { AuthService } from '../../../services/auth.service';
 
 export interface NavItem {
@@ -21,12 +21,31 @@ export interface NavSection {
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.css']
 })
-export class SidebarComponent {
+export class SidebarComponent implements OnInit {
   @Input() isOpen = false;
   @Output() closed = new EventEmitter<void>();
 
   collapsed = signal(false);
+  darkMode = signal(false);
   auth = inject(AuthService);
+
+  ngOnInit() {
+    const saved = localStorage.getItem('sb-theme');
+    const prefersDark = saved ? saved === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+    this.darkMode.set(prefersDark);
+    this.applyTheme(prefersDark);
+  }
+
+  toggleTheme() {
+    const next = !this.darkMode();
+    this.darkMode.set(next);
+    this.applyTheme(next);
+    localStorage.setItem('sb-theme', next ? 'dark' : 'light');
+  }
+
+  private applyTheme(dark: boolean) {
+    document.documentElement.classList.toggle('dark', dark);
+  }
 
   userInitials = computed(() => {
     const name = this.auth.user()?.name ?? 'Admin';
@@ -73,4 +92,5 @@ export class SidebarComponent {
   toggleCollapse() { this.collapsed.update(v => !v); }
   close()          { this.closed.emit(); }
   logout()         { this.auth.logout(); }
+  get themeIcon()  { return this.darkMode() ? 'sun' : 'moon'; }
 }
