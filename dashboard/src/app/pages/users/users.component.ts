@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, computed, signal } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { LucideAngularModule } from 'lucide-angular';
@@ -14,16 +14,16 @@ export class UsersComponent implements OnInit {
   loading = true;
   search = '';
   roleFilter = '';
+  statusFilter = '';
   users: AdminUser[] = [];
 
   private svc = inject(UsersService);
 
   get filtered(): AdminUser[] {
     return this.users.filter(u =>
-      (!this.search ||
-        u.name.toLowerCase().includes(this.search.toLowerCase()) ||
-        u.email.toLowerCase().includes(this.search.toLowerCase())) &&
-      (!this.roleFilter || u.role === this.roleFilter)
+      (!this.search || u.name.toLowerCase().includes(this.search.toLowerCase()) || u.email.toLowerCase().includes(this.search.toLowerCase())) &&
+      (!this.roleFilter   || u.role   === this.roleFilter) &&
+      (!this.statusFilter || u.status === this.statusFilter)
     );
   }
 
@@ -48,9 +48,7 @@ export class UsersComponent implements OnInit {
 
   changeRole(user: AdminUser, role: string) {
     if (!confirm(`Promote ${user.name} to ${role}?`)) return;
-    this.svc.changeRole(user.id, role).subscribe(() => {
-      user.role = role;
-    });
+    this.svc.changeRole(user.id, role).subscribe(() => { user.role = role; });
   }
 
   getStatusClass(status: string): string {

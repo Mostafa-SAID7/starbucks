@@ -1,27 +1,114 @@
 <div class="page-wrapper">
 
   @if (loading) {
-    <div class="loading-bar">
-      <div class="loading-spinner"></div>
-      <p class="loading-text">Loading locations…</p>
+    <div class="loading-bar"><div class="loading-spinner"></div><p class="loading-text">Loading locations…</p></div>
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+      @for (i of [1,2,3,4]; track i) {
+        <div class="card p-4 space-y-2">
+          <div class="skeleton h-7 w-10"></div><div class="skeleton h-2.5 w-16 rounded-full"></div>
+          <div class="skeleton h-1.5 w-full rounded-full"></div>
+        </div>
+      }
     </div>
   }
 
-  <!-- Header -->
+  <!-- ── Header ───────────────────────────── -->
   <div class="page-header">
     <div>
       <h2 class="page-title">Store Locations</h2>
-      <p class="page-subtitle">{{ filtered.length }} branches across Egypt</p>
+      <p class="page-subtitle">{{ locations.length }} branches across Egypt · {{ filtered.length }} shown</p>
     </div>
-    <button class="btn-primary">
-      <lucide-angular name="plus" [size]="15"></lucide-angular>
-      Add Location
-    </button>
+    <div class="flex items-center gap-2">
+      <button class="btn-outline">
+        <lucide-angular name="map" [size]="14"></lucide-angular>
+        Map View
+      </button>
+      <button class="btn-primary">
+        <lucide-angular name="plus" [size]="15"></lucide-angular>
+        Add Location
+      </button>
+    </div>
   </div>
 
-  <!-- Filters -->
+  <!-- ── Summary tiles ─────────────────────── -->
+  @if (!loading) {
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+
+      <!-- All -->
+      <button class="stat-tile" [class.stat-tile-active]="cityFilter === '' && search === ''"
+        (click)="cityFilter=''; search=''">
+        <div class="flex items-center justify-between mb-2.5">
+          <div class="w-8 h-8 rounded-xl flex items-center justify-center bg-blue-50 shrink-0">
+            <lucide-angular name="store" [size]="15" class="text-blue-600"></lucide-angular>
+          </div>
+        </div>
+        <p class="text-2xl font-bold text-gray-900 font-heading leading-none">{{ locations.length }}</p>
+        <p class="text-xs text-gray-500 mt-1 font-medium">All Branches</p>
+        <div class="mt-2.5 chart-bar-track"><div class="chart-bar-fill" style="width:100%"></div></div>
+      </button>
+
+      <!-- Open -->
+      <button class="stat-tile" [class.stat-tile-active]="statusFilter === 'Open'"
+        (click)="statusFilter = statusFilter === 'Open' ? '' : 'Open'">
+        <div class="flex items-center justify-between mb-2.5">
+          <div class="w-8 h-8 rounded-xl flex items-center justify-center bg-emerald-50 shrink-0">
+            <lucide-angular name="door-open" [size]="15" class="text-emerald-600"></lucide-angular>
+          </div>
+          @if (statusFilter === 'Open') {
+            <lucide-angular name="check-circle" [size]="13" class="text-sb-green"></lucide-angular>
+          }
+        </div>
+        <p class="text-2xl font-bold text-gray-900 font-heading leading-none">{{ totalOpen }}</p>
+        <p class="text-xs text-gray-500 mt-1 font-medium">Open Now</p>
+        <div class="mt-2.5 chart-bar-track">
+          <div class="h-1.5 rounded-full bg-emerald-400 transition-all duration-700"
+            [style.width.%]="locations.length ? (totalOpen / locations.length * 100) : 0"></div>
+        </div>
+      </button>
+
+      <!-- Closed -->
+      <button class="stat-tile" [class.stat-tile-active]="statusFilter === 'Closed'"
+        (click)="statusFilter = statusFilter === 'Closed' ? '' : 'Closed'">
+        <div class="flex items-center justify-between mb-2.5">
+          <div class="w-8 h-8 rounded-xl flex items-center justify-center bg-red-50 shrink-0">
+            <lucide-angular name="moon" [size]="15" class="text-red-500"></lucide-angular>
+          </div>
+          @if (statusFilter === 'Closed') {
+            <lucide-angular name="check-circle" [size]="13" class="text-sb-green"></lucide-angular>
+          }
+        </div>
+        <p class="text-2xl font-bold text-gray-900 font-heading leading-none">{{ totalClosed }}</p>
+        <p class="text-xs text-gray-500 mt-1 font-medium">Closed</p>
+        <div class="mt-2.5 chart-bar-track">
+          <div class="h-1.5 rounded-full bg-red-400 transition-all duration-700"
+            [style.width.%]="locations.length ? (totalClosed / locations.length * 100) : 0"></div>
+        </div>
+      </button>
+
+      <!-- Drive-Thru -->
+      <button class="stat-tile" [class.stat-tile-active]="driveThruFilter"
+        (click)="driveThruFilter = !driveThruFilter">
+        <div class="flex items-center justify-between mb-2.5">
+          <div class="w-8 h-8 rounded-xl flex items-center justify-center bg-amber-50 shrink-0">
+            <lucide-angular name="car" [size]="15" class="text-amber-600"></lucide-angular>
+          </div>
+          @if (driveThruFilter) {
+            <lucide-angular name="check-circle" [size]="13" class="text-sb-green"></lucide-angular>
+          }
+        </div>
+        <p class="text-2xl font-bold text-gray-900 font-heading leading-none">{{ totalDriveThru }}</p>
+        <p class="text-xs text-gray-500 mt-1 font-medium">Drive-Thru</p>
+        <div class="mt-2.5 chart-bar-track">
+          <div class="h-1.5 rounded-full bg-amber-400 transition-all duration-700"
+            [style.width.%]="locations.length ? (totalDriveThru / locations.length * 100) : 0"></div>
+        </div>
+      </button>
+    </div>
+  }
+
+  <!-- ── Filters ───────────────────────────── -->
   <div class="filter-bar">
-    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+    <div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
       <div class="relative sm:col-span-2">
         <lucide-angular name="search" [size]="15" class="field-icon"></lucide-angular>
         <input type="text" [(ngModel)]="search" placeholder="Search by name or address…" class="field-search" />
@@ -32,54 +119,87 @@
           <option [value]="city">{{ city }}</option>
         }
       </select>
+      <button (click)="search=''; cityFilter=''; statusFilter=''; driveThruFilter=false" class="btn-outline">
+        <lucide-angular name="refresh-cw" [size]="13"></lucide-angular>
+        Clear
+      </button>
     </div>
   </div>
 
-  <!-- Location grid -->
+  <!-- ── Location cards ────────────────────── -->
   <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
     @for (loc of filtered; track loc.id) {
-      <div class="card card-hover overflow-hidden">
+      <div class="card card-hover overflow-hidden flex flex-col">
 
-        <!-- Map banner -->
-        <div class="h-28 bg-sb-dark relative overflow-hidden flex items-center justify-center">
-          <div class="absolute inset-0 opacity-10">
-            <div class="absolute top-4 left-8 w-20 h-20 rounded-full border-2 border-white"></div>
-            <div class="absolute bottom-2 right-4 w-14 h-14 rounded-full border-2 border-white"></div>
+        <!-- Card banner: dark gradient with map-pin motif -->
+        <div class="h-32 relative overflow-hidden"
+          style="background: linear-gradient(135deg, var(--sb-dark-deep) 0%, var(--sb-dark) 60%, #0a2818 100%);">
+
+          <!-- Decorative circles -->
+          <div class="absolute -top-6 -right-6 w-28 h-28 rounded-full"
+            style="border: 2px solid rgba(203,162,88,0.12);"></div>
+          <div class="absolute -bottom-8 -left-4 w-24 h-24 rounded-full"
+            style="border: 2px solid rgba(255,255,255,0.05);"></div>
+          <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+            style="width:60px; height:60px; border-radius:50%; border:1px solid rgba(255,255,255,0.06);"></div>
+
+          <!-- Center icon -->
+          <div class="absolute inset-0 flex items-center justify-center">
+            <div class="w-12 h-12 rounded-2xl flex items-center justify-center"
+              style="background: rgba(0,98,65,0.4); border: 1px solid rgba(203,162,88,0.2);">
+              <lucide-angular name="map-pin" [size]="22" style="color: var(--sb-gold); opacity:0.9;"></lucide-angular>
+            </div>
           </div>
-          <lucide-angular name="map-pin" [size]="30" class="text-white/70 relative z-10"></lucide-angular>
+
+          <!-- Status badge (top right) -->
           <div class="absolute top-3 right-3">
             <span [class]="'px-2.5 py-1 text-[11px] font-bold rounded-full ' + (loc.status === 'Open' ? 'badge-open' : 'badge-closed')">
               {{ loc.status }}
             </span>
           </div>
+
+          <!-- City chip (bottom left) -->
+          <div class="absolute bottom-3 left-3">
+            <span class="px-2 py-0.5 text-[10px] font-bold rounded-md"
+              style="background: rgba(255,255,255,0.10); color: rgba(255,255,255,0.75);">
+              {{ loc.city }}
+            </span>
+          </div>
+
+          <!-- Drive-Thru badge (bottom right) -->
+          @if (loc.hasDriveThru) {
+            <div class="absolute bottom-3 right-3">
+              <span class="px-2 py-0.5 text-[10px] font-bold rounded-md badge-gold">
+                Drive-Thru
+              </span>
+            </div>
+          }
         </div>
 
         <!-- Info -->
-        <div class="p-4">
-          <div class="flex items-start justify-between gap-2 mb-2">
-            <div>
-              <h3 class="text-sm font-bold text-gray-900 leading-tight">{{ loc.name }}</h3>
-              <p class="text-[12px] text-sb-green font-medium mt-0.5">{{ loc.nameAr }}</p>
-            </div>
-            <span class="text-[11px] text-gray-400 bg-gray-50 px-2 py-1 rounded-lg border border-gray-100 shrink-0">{{ loc.city }}</span>
+        <div class="p-4 flex-1 flex flex-col">
+          <div class="mb-3">
+            <h3 class="text-sm font-bold text-gray-900 leading-tight">{{ loc.name }}</h3>
+            <p class="text-[12px] font-medium mt-0.5" style="color: var(--sb-green);">{{ loc.nameAr }}</p>
           </div>
 
-          <div class="space-y-1.5 mb-3">
+          <div class="space-y-1.5 mb-3 flex-1">
             <div class="flex items-start gap-2">
-              <lucide-angular name="map-pin" [size]="12" class="text-gray-400 mt-0.5 shrink-0"></lucide-angular>
-              <p class="text-[12px] text-gray-500 leading-tight">{{ loc.address }}</p>
+              <lucide-angular name="map-pin" [size]="11" class="text-gray-400 mt-0.5 shrink-0"></lucide-angular>
+              <p class="text-[12px] text-gray-500 leading-snug">{{ loc.address }}</p>
             </div>
             <div class="flex items-center gap-2">
-              <lucide-angular name="phone" [size]="12" class="text-gray-400 shrink-0"></lucide-angular>
+              <lucide-angular name="phone" [size]="11" class="text-gray-400 shrink-0"></lucide-angular>
               <p class="text-[12px] text-gray-500">{{ loc.phone }}</p>
             </div>
             <div class="flex items-center gap-2">
-              <lucide-angular name="clock" [size]="12" class="text-gray-400 shrink-0"></lucide-angular>
+              <lucide-angular name="clock" [size]="11" class="text-gray-400 shrink-0"></lucide-angular>
               <p class="text-[12px] text-gray-500">{{ loc.hours }}</p>
             </div>
           </div>
 
-          <div class="flex gap-1.5 mb-3">
+          <!-- Feature chips -->
+          <div class="flex flex-wrap gap-1.5 mb-3">
             @if (loc.hasDriveThru) {
               <span class="badge-sm badge-warning">Drive-Thru</span>
             }
@@ -88,27 +208,54 @@
             }
           </div>
 
+          <!-- Actions -->
           <div class="flex gap-2">
             <button
               (click)="toggleStatus(loc)"
-              [class]="'flex-1 py-2 rounded-xl text-xs font-semibold transition-colors ' + (loc.status === 'Open' ? 'bg-red-50 text-red-600 hover:bg-red-100' : 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100')"
-            >
+              [class]="'flex-1 py-2 rounded-xl text-xs font-semibold border transition-all '
+                + (loc.status === 'Open'
+                    ? 'bg-red-50 text-red-600 border-red-100 hover:bg-red-100'
+                    : 'bg-emerald-50 text-emerald-700 border-emerald-100 hover:bg-emerald-100')">
+              <lucide-angular [name]="loc.status === 'Open' ? 'x-circle' : 'check-circle'" [size]="12" class="inline-block mr-1"></lucide-angular>
               {{ loc.status === 'Open' ? 'Mark Closed' : 'Mark Open' }}
             </button>
-            <button class="p-2 border border-gray-200 rounded-xl btn-icon hover:bg-blue-50 hover:text-blue-600">
+            <button class="p-2 border rounded-xl btn-icon hover:bg-blue-50 hover:text-blue-600 hover:border-blue-100"
+              style="border-color: var(--border-default);">
               <lucide-angular name="pencil" [size]="14"></lucide-angular>
             </button>
             <button (click)="deleteLocation(loc.id, loc.name)"
-              class="p-2 border border-gray-200 rounded-xl btn-icon btn-icon-danger">
+              class="p-2 border rounded-xl btn-icon btn-icon-danger"
+              style="border-color: var(--border-default);">
               <lucide-angular name="trash-2" [size]="14"></lucide-angular>
             </button>
           </div>
         </div>
       </div>
     }
+
     @empty {
-      <div class="col-span-full py-16 text-center text-sm text-gray-400">No locations found matching your search.</div>
+      <div class="col-span-full py-20 text-center">
+        <div class="flex flex-col items-center gap-3">
+          <div class="w-16 h-16 rounded-2xl flex items-center justify-center" style="background: var(--surface-sunken);">
+            <lucide-angular name="map-pin" [size]="30" class="text-gray-300"></lucide-angular>
+          </div>
+          <div>
+            <p class="text-sm font-semibold text-gray-600">No locations found</p>
+            <p class="text-xs text-gray-400 mt-0.5">Try adjusting your search or filters</p>
+          </div>
+          <button (click)="search=''; cityFilter=''; statusFilter=''; driveThruFilter=false" class="btn-outline text-xs px-3 py-1.5">
+            Clear filters
+          </button>
+        </div>
+      </div>
     }
   </div>
+
+  <!-- Footer -->
+  @if (filtered.length) {
+    <div class="card p-3.5 flex flex-col sm:flex-row items-center justify-between gap-3">
+      <p class="table-count">Showing <span>{{ filtered.length }}</span> of <span>{{ locations.length }}</span> locations</p>
+    </div>
+  }
 
 </div>

@@ -1,18 +1,32 @@
-<header class="bg-white border-b px-4 sm:px-6 flex items-center gap-3 shadow-sm shrink-0 h-[72px]"
-  style="border-color: var(--border-subtle);">
+<header class="header-bar">
 
-  <!-- Mobile menu toggle -->
-  <button (click)="toggle()"
-    class="lg:hidden btn-icon p-2.5 rounded-xl hover:bg-gray-100 text-gray-600" aria-label="Open menu">
-    <lucide-angular name="menu" [size]="20"></lucide-angular>
+  <!-- Mobile menu button -->
+  <button (click)="toggle()" class="header-icon-btn lg:hidden" aria-label="Open menu">
+    <lucide-angular name="menu" [size]="19"></lucide-angular>
   </button>
 
-  <!-- Logo mark (mobile only) -->
-  <div class="lg:hidden avatar-md avatar-green shadow-sm">
-    <lucide-angular name="coffee" [size]="16" class="text-white"></lucide-angular>
+  <!-- Current page breadcrumb -->
+  <div class="hidden lg:flex items-center gap-2.5">
+    <div class="w-7 h-7 rounded-lg flex items-center justify-center"
+      style="background: var(--sb-green-muted);">
+      <lucide-angular [name]="currentPage.icon" [size]="14" class="text-sb-green"></lucide-angular>
+    </div>
+    <div>
+      <p class="text-sm font-bold text-gray-900 leading-none font-heading">{{ currentPage.label }}</p>
+      <p class="text-[10px] text-gray-400 mt-0.5 leading-none">Starbucks Egypt Admin</p>
+    </div>
   </div>
 
-  <!-- Demo mode badge -->
+  <!-- Mobile: logo mark -->
+  <div class="lg:hidden flex items-center gap-2">
+    <div class="w-7 h-7 rounded-lg flex items-center justify-center"
+      style="background: var(--sb-green);">
+      <lucide-angular name="coffee" [size]="14" class="text-white"></lucide-angular>
+    </div>
+    <span class="text-sm font-bold text-gray-900 font-heading">{{ currentPage.label }}</span>
+  </div>
+
+  <!-- Demo badge -->
   @if (auth.isDemoMode()) {
     <div class="hidden sm:flex items-center gap-1.5 px-2.5 py-1.5 bg-amber-50 border border-amber-200 rounded-xl shrink-0">
       <span class="w-1.5 h-1.5 bg-amber-500 rounded-full animate-pulse"></span>
@@ -20,41 +34,67 @@
     </div>
   }
 
-  <!-- Search bar -->
-  <div class="flex-1 max-w-sm hidden md:block">
+  <!-- Global search -->
+  <div class="flex-1 max-w-xs hidden md:block">
     <div class="relative">
-      <lucide-angular name="search" [size]="16" class="field-icon"></lucide-angular>
-      <input type="text" placeholder="Search orders, products…" class="field-search py-2" />
+      <lucide-angular name="search" [size]="14" class="field-icon"></lucide-angular>
+      <input type="text" placeholder="Search orders, products…"
+        class="field-search py-2 text-sm"
+        style="background: var(--surface-raised); padding-right: 2.5rem;" />
+      <span class="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] font-semibold px-1.5 py-0.5 rounded border"
+        style="color: var(--text-muted); border-color: var(--border-default); background: var(--surface);">
+        ⌘K
+      </span>
     </div>
   </div>
 
   <!-- Right actions -->
   <div class="flex items-center gap-1 ml-auto">
 
-    <button class="md:hidden btn-icon p-2.5 rounded-xl hover:bg-gray-100 text-gray-600">
-      <lucide-angular name="search" [size]="18"></lucide-angular>
+    <!-- Search (mobile) -->
+    <button class="header-icon-btn md:hidden">
+      <lucide-angular name="search" [size]="17"></lucide-angular>
     </button>
 
-    <button class="relative btn-icon p-2.5 rounded-xl hover:bg-gray-100 text-gray-600 hover:text-gray-800">
-      <lucide-angular name="bell" [size]="18"></lucide-angular>
-      <span class="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full ring-2 ring-white"></span>
+    <!-- Date chip (desktop) -->
+    <div class="hidden xl:flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium"
+      style="background: var(--surface-raised); color: var(--text-secondary); border: 1px solid var(--border-subtle);">
+      <lucide-angular name="calendar" [size]="12"></lucide-angular>
+      {{ today }}
+    </div>
+
+    <!-- Notifications -->
+    <button class="header-icon-btn relative">
+      <lucide-angular name="bell" [size]="17"></lucide-angular>
+      @if (notifCount > 0) {
+        <span class="absolute top-1 right-1 min-w-[16px] h-4 flex items-center justify-center
+                     text-[9px] font-bold text-white rounded-full px-0.5"
+          style="background: #ef4444;">{{ notifCount }}</span>
+      }
     </button>
 
-    <a routerLink="/settings"
-      class="btn-icon p-2.5 rounded-xl hover:bg-gray-100 text-gray-600 hover:text-gray-800">
-      <lucide-angular name="settings" [size]="18"></lucide-angular>
+    <!-- Settings -->
+    <a routerLink="/settings" class="header-icon-btn">
+      <lucide-angular name="settings" [size]="17"></lucide-angular>
     </a>
 
-    <div class="w-px h-6 bg-gray-200 mx-1"></div>
+    <!-- Divider -->
+    <div class="w-px h-6 mx-1" style="background: var(--border-subtle);"></div>
 
-    <div class="flex items-center gap-2.5 pl-1">
-      <div class="avatar-md avatar-green shadow-sm">
-        <span class="text-xs font-bold text-white">{{ userInitials() }}</span>
+    <!-- User -->
+    <div class="flex items-center gap-2.5 pl-1 cursor-pointer group">
+      <div class="relative">
+        <div class="avatar-md avatar-green shadow-sm">
+          <span class="text-xs font-bold text-white">{{ userInitials() }}</span>
+        </div>
+        <span class="absolute bottom-0 right-0 w-2 h-2 bg-emerald-400 rounded-full ring-2 ring-white"></span>
       </div>
       <div class="hidden sm:block">
-        <p class="text-sm font-semibold text-gray-800 leading-none">{{ auth.user()?.name ?? 'Admin' }}</p>
-        <p class="text-[11px] text-gray-500 mt-0.5">{{ auth.user()?.role ?? 'Super Admin' }}</p>
+        <p class="text-sm font-semibold text-gray-800 leading-tight">{{ auth.user()?.name ?? 'Admin' }}</p>
+        <p class="text-[11px] mt-0.5" style="color: var(--text-muted);">{{ auth.user()?.role ?? 'Super Admin' }}</p>
       </div>
+      <lucide-angular name="chevron-down" [size]="13" class="hidden sm:block text-gray-400 group-hover:text-gray-600 transition-colors"></lucide-angular>
     </div>
   </div>
+
 </header>

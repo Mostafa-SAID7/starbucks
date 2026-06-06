@@ -1,111 +1,146 @@
 <aside
-  [class]="'fixed lg:relative inset-y-0 left-0 z-40 flex flex-col bg-sb-dark text-white transition-all duration-300 ease-in-out shrink-0 '
-    + (collapsed() ? 'w-[72px]' : 'w-64') + ' '
+  [class]="'sidebar-shell fixed lg:relative inset-y-0 left-0 z-40 flex flex-col text-white transition-all duration-300 ease-in-out shrink-0 '
+    + (collapsed() ? 'w-[68px]' : 'w-64') + ' '
     + (isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0')"
 >
-  <!-- Logo -->
-  <div class="flex items-center justify-between px-4 py-5 border-b border-white/10 min-h-[72px]">
-    @if (!collapsed()) {
-      <div class="flex items-center gap-3 overflow-hidden">
-        <div class="avatar-lg avatar-green shadow-lg">
-          <lucide-angular name="coffee" [size]="18" class="text-white"></lucide-angular>
+
+  <!-- ── Brand header ─────────────────────── -->
+  <div [class]="'flex items-center border-b min-h-[68px] px-3.5 '
+    + (collapsed() ? 'justify-center' : 'justify-between gap-2.5')"
+    style="border-color: rgba(255,255,255,0.07);">
+
+    <!-- Logo mark + text -->
+    <div [class]="'flex items-center gap-3 overflow-hidden ' + (collapsed() ? '' : 'flex-1 min-w-0')">
+      <!-- Icon with gold ring -->
+      <div class="relative shrink-0">
+        <div class="w-9 h-9 rounded-full flex items-center justify-center"
+          style="background: var(--sb-green); box-shadow: 0 0 0 2px rgba(203,162,88,0.55), 0 2px 8px rgba(0,0,0,0.3);">
+          <lucide-angular name="coffee" [size]="16" class="text-white"></lucide-angular>
         </div>
+        <!-- Gold accent dots (star-like) -->
+        <div class="absolute -top-0.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full"
+          style="background: var(--sb-gold);"></div>
+        <div class="absolute -bottom-0.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full"
+          style="background: var(--sb-gold);"></div>
+      </div>
+      @if (!collapsed()) {
         <div class="overflow-hidden">
-          <p class="font-bold text-sm leading-tight text-white truncate font-heading">Starbucks EG</p>
-          <p class="text-[11px] text-emerald-300 truncate">Admin Portal</p>
+          <p class="text-sm font-bold text-white font-heading tracking-wide leading-tight">Starbucks EG</p>
+          <p class="text-[9px] font-semibold uppercase tracking-[0.2em] leading-none mt-0.5"
+            style="color: var(--sb-gold-muted);">Admin Portal</p>
         </div>
-      </div>
-    }
-    @if (collapsed()) {
-      <div class="avatar-lg avatar-green shadow-lg mx-auto">
-        <lucide-angular name="coffee" [size]="18" class="text-white"></lucide-angular>
-      </div>
-    }
-    <button (click)="toggleCollapse()"
-      class="hidden lg:flex btn-icon w-7 h-7 rounded-md hover:bg-white/10 text-white/50 hover:text-white shrink-0">
-      <lucide-angular [name]="collapsed() ? 'chevron-right' : 'chevron-left'" [size]="16"></lucide-angular>
+      }
+    </div>
+
+    <!-- Collapse toggle -->
+    <button (click)="toggleCollapse()" class="sidebar-collapse-btn hidden lg:flex" aria-label="Collapse sidebar">
+      <lucide-angular [name]="collapsed() ? 'chevron-right' : 'chevron-left'" [size]="13"></lucide-angular>
     </button>
-    <button (click)="close()"
-      class="lg:hidden btn-icon w-7 h-7 rounded-md hover:bg-white/10 text-white/50 hover:text-white">
-      <lucide-angular name="x" [size]="16"></lucide-angular>
+    <button (click)="close()" class="sidebar-collapse-btn lg:hidden" aria-label="Close menu">
+      <lucide-angular name="x" [size]="13"></lucide-angular>
     </button>
   </div>
 
-  <!-- Nav sections -->
-  <nav class="flex-1 py-3 overflow-y-auto scrollbar-hide">
+  <!-- ── Navigation ───────────────────────── -->
+  <nav class="flex-1 py-2 overflow-y-auto scrollbar-hide">
+
     @for (section of navSections; track section.title) {
 
       @if (!collapsed()) {
-        <p class="px-4 pt-4 pb-1.5 text-[10px] font-semibold uppercase tracking-widest text-emerald-400/60 first:pt-3">
-          {{ section.title }}
-        </p>
+        <p class="sidebar-section-label">{{ section.title }}</p>
       } @else {
-        <div class="mx-3 my-2 border-t border-white/10"></div>
+        <div class="sidebar-section-divider"></div>
       }
 
-      <ul class="space-y-0.5 px-2">
+      <ul [class]="'px-2 ' + (!collapsed() ? 'space-y-0.5' : 'space-y-1')">
         @for (item of section.items; track item.path) {
           <li class="relative group">
             <a
               [routerLink]="item.path"
-              routerLinkActive="bg-sb-green text-white shadow-md"
+              routerLinkActive="sidebar-link-active"
               [routerLinkActiveOptions]="{ exact: item.path === '/dashboard' }"
-              class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-150 text-emerald-200/80 hover:bg-white/10 hover:text-white"
+              [class]="'sidebar-link ' + (collapsed() ? 'justify-center px-0' : '')"
+              [title]="collapsed() ? item.label : ''"
             >
-              <lucide-angular [name]="item.icon" [size]="19" class="shrink-0"></lucide-angular>
+              <lucide-angular [name]="item.icon" [size]="18" class="shrink-0"></lucide-angular>
               @if (!collapsed()) {
                 <span class="text-sm font-medium truncate">{{ item.label }}</span>
               }
             </a>
+
+            <!-- Tooltip in collapsed mode -->
             @if (collapsed()) {
-              <div class="absolute left-full ml-2 top-1/2 -translate-y-1/2 px-2.5 py-1.5 bg-gray-900 text-white text-xs font-medium rounded-lg opacity-0 group-hover:opacity-100 pointer-events-none whitespace-nowrap z-50 shadow-xl transition-opacity duration-150">
-                {{ item.label }}
-              </div>
+              <div class="sidebar-tooltip">{{ item.label }}</div>
             }
           </li>
         }
       </ul>
     }
 
+    <!-- Today mini-stats (expanded only) -->
     @if (!collapsed()) {
-      <div class="mt-4 mx-2 border-t border-white/10 pt-4">
-        <p class="px-2 pb-3 text-[10px] font-semibold uppercase tracking-widest text-emerald-400/60">Today</p>
-        <div class="space-y-2 px-2">
-          <div class="bg-white/5 rounded-xl p-3 border border-white/5">
-            <div class="flex items-center gap-2 mb-1">
-              <lucide-angular name="trending-up" [size]="13" class="text-emerald-400"></lucide-angular>
-              <span class="text-[11px] text-emerald-300">Revenue</span>
+      <div class="mx-2 mt-5 mb-2">
+        <p class="sidebar-section-label px-2 pt-0 pb-2">Today's Pulse</p>
+        <div class="space-y-2">
+          <!-- Revenue -->
+          <div class="sidebar-mini-card">
+            <div class="flex items-center gap-2 mb-1.5">
+              <div class="w-5 h-5 rounded-lg flex items-center justify-center"
+                style="background: rgba(203,162,88,0.15);">
+                <lucide-angular name="trending-up" [size]="11" style="color: var(--sb-gold);"></lucide-angular>
+              </div>
+              <span class="text-[11px] font-medium" style="color: rgba(255,255,255,0.50);">Revenue</span>
+              <span class="ml-auto text-[10px] font-semibold text-emerald-400">↑ 12%</span>
             </div>
             <p class="text-base font-bold text-white font-heading">EGP 42,580</p>
+            <div class="mt-1.5 h-1 rounded-full" style="background: rgba(255,255,255,0.08);">
+              <div class="h-1 rounded-full" style="width: 68%; background: var(--sb-gold); opacity: 0.7;"></div>
+            </div>
           </div>
-          <div class="bg-white/5 rounded-xl p-3 border border-white/5">
-            <div class="flex items-center gap-2 mb-1">
-              <lucide-angular name="users" [size]="13" class="text-sb-gold"></lucide-angular>
-              <span class="text-[11px] text-emerald-300">Active Now</span>
+          <!-- Active users -->
+          <div class="sidebar-mini-card">
+            <div class="flex items-center gap-2 mb-1.5">
+              <div class="w-5 h-5 rounded-lg flex items-center justify-center"
+                style="background: rgba(52,211,153,0.12);">
+                <lucide-angular name="users" [size]="11" class="text-emerald-400"></lucide-angular>
+              </div>
+              <span class="text-[11px] font-medium" style="color: rgba(255,255,255,0.50);">Active Now</span>
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse ml-auto"></span>
             </div>
             <p class="text-base font-bold text-white font-heading">1,284</p>
+            <div class="mt-1.5 h-1 rounded-full" style="background: rgba(255,255,255,0.08);">
+              <div class="h-1 rounded-full bg-emerald-400" style="width: 55%; opacity: 0.7;"></div>
+            </div>
           </div>
         </div>
       </div>
     }
   </nav>
 
-  <!-- User footer -->
-  <div class="p-3 border-t border-white/10">
-    <div [class]="'flex items-center gap-3 ' + (collapsed() ? 'justify-center' : '')">
-      <div class="avatar-lg avatar-green shadow-md">
-        <span class="text-sm font-bold text-white">{{ userInitials() }}</span>
+  <!-- ── User footer ───────────────────────── -->
+  <div class="p-3" style="border-top: 1px solid rgba(255,255,255,0.07);">
+    <div [class]="'flex items-center gap-2.5 ' + (collapsed() ? 'justify-center' : '')">
+      <!-- Avatar with online dot -->
+      <div class="relative shrink-0">
+        <div class="avatar-lg avatar-green shadow-md">
+          <span class="text-sm font-bold">{{ userInitials() }}</span>
+        </div>
+        <span class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-400 rounded-full ring-2"
+          style="ring-color: #1a3528;"></span>
       </div>
+
       @if (!collapsed()) {
         <div class="flex-1 overflow-hidden">
-          <p class="text-sm font-semibold text-white truncate">{{ auth.user()?.name ?? 'Admin' }}</p>
-          <p class="text-[11px] text-emerald-300 truncate">{{ auth.user()?.email ?? 'admin&#64;starbucks.eg' }}</p>
+          <p class="text-sm font-semibold text-white truncate leading-tight">{{ auth.user()?.name ?? 'Admin' }}</p>
+          <p class="text-[11px] truncate leading-none mt-0.5"
+            style="color: var(--sb-gold-muted);">{{ auth.user()?.role ?? 'Super Admin' }}</p>
         </div>
-        <button (click)="logout()" title="Logout"
-          class="btn-icon p-1.5 rounded-lg hover:bg-white/10 text-emerald-300 hover:text-white">
-          <lucide-angular name="log-out" [size]="15"></lucide-angular>
+        <button (click)="logout()" title="Sign out"
+          class="sidebar-collapse-btn shrink-0">
+          <lucide-angular name="log-out" [size]="13"></lucide-angular>
         </button>
       }
     </div>
   </div>
+
 </aside>

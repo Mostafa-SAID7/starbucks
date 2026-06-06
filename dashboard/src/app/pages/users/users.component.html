@@ -1,55 +1,116 @@
 <div class="page-wrapper">
 
   @if (loading) {
-    <div class="loading-bar">
-      <div class="loading-spinner"></div>
-      <p class="loading-text">Loading users…</p>
+    <div class="loading-bar"><div class="loading-spinner"></div><p class="loading-text">Loading users…</p></div>
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+      @for (i of [1,2,3,4]; track i) {
+        <div class="card p-4 space-y-2">
+          <div class="skeleton h-7 w-12"></div><div class="skeleton h-2.5 w-20 rounded-full"></div>
+          <div class="skeleton h-1.5 w-full rounded-full"></div>
+        </div>
+      }
     </div>
   }
 
-  <!-- Header -->
+  <!-- ── Header ───────────────────────────── -->
   <div class="page-header">
     <div>
       <h2 class="page-title">User Management</h2>
-      <p class="page-subtitle">{{ filtered.length }} users found</p>
+      <p class="page-subtitle">{{ users.length }} registered accounts · {{ filtered.length }} shown</p>
     </div>
-    <button class="btn-outline">
-      <lucide-angular name="download" [size]="14"></lucide-angular>
-      Export
-    </button>
-  </div>
-
-  <!-- Stats -->
-  <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-    <div class="stat-card flex items-center gap-3">
-      <div class="stat-icon bg-blue-50 w-9 h-9 rounded-xl">
-        <lucide-angular name="users" [size]="18" class="text-blue-600"></lucide-angular>
-      </div>
-      <div><p class="stat-value text-xl">{{ users.length }}</p><p class="stat-label text-[11px]">Total Users</p></div>
-    </div>
-    <div class="stat-card flex items-center gap-3">
-      <div class="stat-icon bg-emerald-50 w-9 h-9 rounded-xl">
-        <lucide-angular name="user-check" [size]="18" class="text-emerald-600"></lucide-angular>
-      </div>
-      <div><p class="stat-value text-xl">{{ totalActive }}</p><p class="stat-label text-[11px]">Active</p></div>
-    </div>
-    <div class="stat-card flex items-center gap-3">
-      <div class="stat-icon bg-red-50 w-9 h-9 rounded-xl">
-        <lucide-angular name="user-x" [size]="18" class="text-red-600"></lucide-angular>
-      </div>
-      <div><p class="stat-value text-xl">{{ totalDisabled }}</p><p class="stat-label text-[11px]">Disabled</p></div>
-    </div>
-    <div class="stat-card flex items-center gap-3">
-      <div class="stat-icon bg-violet-50 w-9 h-9 rounded-xl">
-        <lucide-angular name="shield-check" [size]="18" class="text-violet-600"></lucide-angular>
-      </div>
-      <div><p class="stat-value text-xl">{{ totalAdmins }}</p><p class="stat-label text-[11px]">Admins</p></div>
+    <div class="flex items-center gap-2">
+      <button class="btn-outline">
+        <lucide-angular name="download" [size]="14"></lucide-angular>
+        Export
+      </button>
+      <button class="btn-primary">
+        <lucide-angular name="user-plus" [size]="14"></lucide-angular>
+        Add User
+      </button>
     </div>
   </div>
 
-  <!-- Filters -->
+  <!-- ── Summary tiles ─────────────────────── -->
+  @if (!loading) {
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+
+      <!-- Total -->
+      <button class="stat-tile" [class.stat-tile-active]="roleFilter === '' && search === ''"
+        (click)="roleFilter = ''; search = ''">
+        <div class="flex items-center justify-between mb-2.5">
+          <div class="w-8 h-8 rounded-xl flex items-center justify-center bg-blue-50 shrink-0">
+            <lucide-angular name="users" [size]="15" class="text-blue-600"></lucide-angular>
+          </div>
+        </div>
+        <p class="text-2xl font-bold text-gray-900 font-heading leading-none">{{ users.length }}</p>
+        <p class="text-xs text-gray-500 mt-1 font-medium">Total Users</p>
+        <div class="mt-2.5 chart-bar-track">
+          <div class="chart-bar-fill" style="width:100%"></div>
+        </div>
+      </button>
+
+      <!-- Active -->
+      <button class="stat-tile" [class.stat-tile-active]="statusFilter === 'Active'"
+        (click)="statusFilter = statusFilter === 'Active' ? '' : 'Active'">
+        <div class="flex items-center justify-between mb-2.5">
+          <div class="w-8 h-8 rounded-xl flex items-center justify-center bg-emerald-50 shrink-0">
+            <lucide-angular name="user-check" [size]="15" class="text-emerald-600"></lucide-angular>
+          </div>
+          @if (statusFilter === 'Active') {
+            <lucide-angular name="check-circle" [size]="13" class="text-sb-green"></lucide-angular>
+          }
+        </div>
+        <p class="text-2xl font-bold text-gray-900 font-heading leading-none">{{ totalActive }}</p>
+        <p class="text-xs text-gray-500 mt-1 font-medium">Active</p>
+        <div class="mt-2.5 chart-bar-track">
+          <div class="h-1.5 rounded-full bg-emerald-400 transition-all duration-700"
+            [style.width.%]="users.length ? (totalActive / users.length * 100) : 0"></div>
+        </div>
+      </button>
+
+      <!-- Disabled -->
+      <button class="stat-tile" [class.stat-tile-active]="statusFilter === 'Disabled'"
+        (click)="statusFilter = statusFilter === 'Disabled' ? '' : 'Disabled'">
+        <div class="flex items-center justify-between mb-2.5">
+          <div class="w-8 h-8 rounded-xl flex items-center justify-center bg-red-50 shrink-0">
+            <lucide-angular name="user-x" [size]="15" class="text-red-500"></lucide-angular>
+          </div>
+          @if (statusFilter === 'Disabled') {
+            <lucide-angular name="check-circle" [size]="13" class="text-sb-green"></lucide-angular>
+          }
+        </div>
+        <p class="text-2xl font-bold text-gray-900 font-heading leading-none">{{ totalDisabled }}</p>
+        <p class="text-xs text-gray-500 mt-1 font-medium">Disabled</p>
+        <div class="mt-2.5 chart-bar-track">
+          <div class="h-1.5 rounded-full bg-red-400 transition-all duration-700"
+            [style.width.%]="users.length ? (totalDisabled / users.length * 100) : 0"></div>
+        </div>
+      </button>
+
+      <!-- Admins -->
+      <button class="stat-tile" [class.stat-tile-active]="roleFilter === 'Admin'"
+        (click)="roleFilter = roleFilter === 'Admin' ? '' : 'Admin'">
+        <div class="flex items-center justify-between mb-2.5">
+          <div class="w-8 h-8 rounded-xl flex items-center justify-center bg-violet-50 shrink-0">
+            <lucide-angular name="shield-check" [size]="15" class="text-violet-600"></lucide-angular>
+          </div>
+          @if (roleFilter === 'Admin') {
+            <lucide-angular name="check-circle" [size]="13" class="text-sb-green"></lucide-angular>
+          }
+        </div>
+        <p class="text-2xl font-bold text-gray-900 font-heading leading-none">{{ totalAdmins }}</p>
+        <p class="text-xs text-gray-500 mt-1 font-medium">Admins</p>
+        <div class="mt-2.5 chart-bar-track">
+          <div class="h-1.5 rounded-full bg-violet-400 transition-all duration-700"
+            [style.width.%]="users.length ? (totalAdmins / users.length * 100) : 0"></div>
+        </div>
+      </button>
+    </div>
+  }
+
+  <!-- ── Filters ───────────────────────────── -->
   <div class="filter-bar">
-    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+    <div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
       <div class="relative sm:col-span-2">
         <lucide-angular name="search" [size]="15" class="field-icon"></lucide-angular>
         <input type="text" [(ngModel)]="search" placeholder="Search by name or email…" class="field-search" />
@@ -60,10 +121,14 @@
         <option>Admin</option>
         <option>SuperAdmin</option>
       </select>
+      <button (click)="search=''; roleFilter=''; statusFilter=''" class="btn-outline">
+        <lucide-angular name="refresh-cw" [size]="13"></lucide-angular>
+        Clear
+      </button>
     </div>
   </div>
 
-  <!-- Users table -->
+  <!-- ── Table ─────────────────────────────── -->
   <div class="card overflow-hidden">
     <div class="overflow-x-auto">
       <table class="data-table">
@@ -74,7 +139,7 @@
             <th class="th">Role</th>
             <th class="th">Status</th>
             <th class="th hidden sm:table-cell">Orders</th>
-            <th class="th hidden sm:table-cell">Spent</th>
+            <th class="th hidden sm:table-cell">Total Spent</th>
             <th class="th hidden lg:table-cell">Joined</th>
             <th class="th">Actions</th>
           </tr>
@@ -82,50 +147,68 @@
         <tbody class="divide-y divide-gray-50">
           @for (user of filtered; track user.id) {
             <tr class="tr">
+              <!-- User -->
               <td class="td">
                 <div class="flex items-center gap-3">
-                  <div class="avatar-md avatar-dark">{{ initials(user.name) }}</div>
+                  <div class="avatar-md avatar-dark shrink-0">{{ initials(user.name) }}</div>
                   <div>
-                    <p class="text-sm font-semibold text-gray-800">{{ user.name }}</p>
-                    <p class="text-[11px] text-gray-400">{{ user.email }}</p>
+                    <p class="text-sm font-semibold text-gray-800 leading-tight">{{ user.name }}</p>
+                    <p class="text-[11px] text-gray-400 mt-0.5">{{ user.email }}</p>
                   </div>
                 </div>
               </td>
               <td class="td text-sm text-gray-500 hidden md:table-cell">{{ user.phone }}</td>
-              <td class="td">
-                <span [class]="getRoleClass(user.role)">{{ user.role }}</span>
-              </td>
-              <td class="td">
-                <span [class]="getStatusClass(user.status)">{{ user.status }}</span>
+              <td class="td"><span [class]="getRoleClass(user.role)">{{ user.role }}</span></td>
+              <td class="td"><span [class]="getStatusClass(user.status)">{{ user.status }}</span></td>
+              <td class="td hidden sm:table-cell">
+                <div class="flex items-center gap-2">
+                  <span class="badge badge-muted text-xs">{{ user.ordersCount }}</span>
+                </div>
               </td>
               <td class="td hidden sm:table-cell">
-                <span class="badge badge-muted text-xs">{{ user.ordersCount }}</span>
-              </td>
-              <td class="td text-sm font-semibold text-gray-900 hidden sm:table-cell">
-                EGP {{ user.totalSpent.toFixed(2) }}
+                <span class="text-sm font-semibold text-gray-900">EGP {{ user.totalSpent.toFixed(0) }}</span>
               </td>
               <td class="td text-sm text-gray-400 hidden lg:table-cell">{{ user.joinedAt }}</td>
+              <!-- Actions -->
               <td class="td">
-                <div class="flex items-center gap-1">
+                <div class="flex items-center gap-0.5">
                   <button
                     (click)="disableUser(user)"
                     [title]="user.status === 'Active' ? 'Disable account' : 'Enable account'"
-                    [class]="'btn-icon ' + (user.status === 'Active' ? 'hover:bg-red-50 hover:text-red-500' : 'hover:bg-emerald-50 hover:text-emerald-600')"
-                  >
-                    <lucide-angular [name]="user.status === 'Active' ? 'user-x' : 'user-check'" [size]="14"></lucide-angular>
+                    class="btn-icon p-1.5 rounded-lg"
+                    [class]="user.status === 'Active' ? 'hover:bg-red-50 hover:text-red-500' : 'hover:bg-emerald-50 hover:text-emerald-600'">
+                    <lucide-angular [name]="user.status === 'Active' ? 'user-x' : 'user-check'" [size]="13"></lucide-angular>
                   </button>
                   @if (user.role === 'Customer') {
                     <button (click)="changeRole(user, 'Admin')" title="Promote to Admin"
-                      class="btn-icon hover:bg-violet-50 hover:text-violet-600">
-                      <lucide-angular name="shield-check" [size]="14"></lucide-angular>
+                      class="btn-icon p-1.5 rounded-lg hover:bg-violet-50 hover:text-violet-600">
+                      <lucide-angular name="shield-check" [size]="13"></lucide-angular>
                     </button>
                   }
+                  <button class="btn-icon btn-icon-primary p-1.5 rounded-lg" title="View profile">
+                    <lucide-angular name="eye" [size]="13"></lucide-angular>
+                  </button>
                 </div>
               </td>
             </tr>
           }
           @empty {
-            <tr><td colspan="8" class="px-5 py-12 text-center text-sm text-gray-400">No users found matching your search.</td></tr>
+            <tr>
+              <td colspan="8" class="py-16 text-center">
+                <div class="flex flex-col items-center gap-3">
+                  <div class="w-14 h-14 rounded-2xl flex items-center justify-center" style="background: var(--surface-sunken);">
+                    <lucide-angular name="users" [size]="26" class="text-gray-300"></lucide-angular>
+                  </div>
+                  <div>
+                    <p class="text-sm font-semibold text-gray-600">No users found</p>
+                    <p class="text-xs text-gray-400 mt-0.5">Try adjusting your search or filters</p>
+                  </div>
+                  <button (click)="search=''; roleFilter=''; statusFilter=''" class="btn-outline text-xs px-3 py-1.5">
+                    Clear filters
+                  </button>
+                </div>
+              </td>
+            </tr>
           }
         </tbody>
       </table>
