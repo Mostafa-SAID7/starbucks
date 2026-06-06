@@ -1,221 +1,125 @@
 <div class="space-y-6">
-  <!-- Stats Cards -->
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-    <!-- Total Sales -->
-    <div class="bg-white rounded-lg shadow p-6">
-      <div class="flex items-center justify-between">
-        <div>
-          <p class="text-sm text-gray-600">Total Sales</p>
-          <p class="text-2xl font-bold text-gray-800">${{ stats.totalSales | number:'1.0-0' }}</p>
-          <p class="text-sm text-green-600 mt-1">+12.5% from last month</p>
-        </div>
-        <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-          <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-        </div>
-      </div>
-    </div>
 
-    <!-- Orders -->
-    <div class="bg-white rounded-lg shadow p-6">
-      <div class="flex items-center justify-between">
-        <div>
-          <p class="text-sm text-gray-600">Total Orders</p>
-          <p class="text-2xl font-bold text-gray-800">{{ stats.totalOrders | number }}</p>
-          <p class="text-sm text-blue-600 mt-1">+8.2% from last month</p>
-        </div>
-        <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-          <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-          </svg>
-        </div>
-      </div>
+  <!-- Page heading -->
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+    <div>
+      <h2 class="text-2xl font-bold text-gray-900 font-heading">Dashboard Overview</h2>
+      <p class="text-sm text-gray-500 mt-0.5">Welcome back, Admin. Here's what's happening today.</p>
     </div>
-
-    <!-- Customers -->
-    <div class="bg-white rounded-lg shadow p-6">
-      <div class="flex items-center justify-between">
-        <div>
-          <p class="text-sm text-gray-600">Active Customers</p>
-          <p class="text-2xl font-bold text-gray-800">{{ stats.activeCustomers | number }}</p>
-          <p class="text-sm text-purple-600 mt-1">+15.3% from last month</p>
-        </div>
-        <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
-          <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-          </svg>
-        </div>
-      </div>
-    </div>
-
-    <!-- Products -->
-    <div class="bg-white rounded-lg shadow p-6">
-      <div class="flex items-center justify-between">
-        <div>
-          <p class="text-sm text-gray-600">Products</p>
-          <p class="text-2xl font-bold text-gray-800">{{ stats.totalProducts }}</p>
-          <p class="text-sm text-orange-600 mt-1">5 new this week</p>
-        </div>
-        <div class="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center">
-          <svg class="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-          </svg>
-        </div>
-      </div>
-    </div>
+    <button class="inline-flex items-center gap-2 bg-[#006241] text-white px-4 py-2.5 rounded-xl text-sm font-semibold hover:bg-[#1e3932] transition-colors shadow-sm">
+      <lucide-angular name="download" [size]="15"></lucide-angular>
+      Export Report
+    </button>
   </div>
 
-  <!-- Quick Stats -->
-  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-    <!-- Sales Overview -->
-    <div class="bg-white rounded-lg shadow p-6">
-      <h3 class="text-lg font-bold text-gray-800 mb-4">Weekly Sales</h3>
+  <!-- Stat cards -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+    @for (stat of stats; track stat.label) {
+      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 hover:shadow-md transition-shadow">
+        <div class="flex items-start justify-between">
+          <div class="flex-1 min-w-0">
+            <p class="text-xs font-medium text-gray-500 uppercase tracking-wide truncate">{{ stat.label }}</p>
+            <p class="text-2xl font-bold text-gray-900 mt-1 font-heading">{{ stat.value }}</p>
+            <div class="flex items-center gap-1 mt-2">
+              <lucide-angular [name]="stat.up ? 'arrow-up' : 'arrow-down'" [size]="12" [class]="stat.up ? 'text-emerald-500' : 'text-red-500'"></lucide-angular>
+              <span [class]="'text-xs font-medium ' + (stat.up ? 'text-emerald-600' : 'text-red-600')">{{ stat.change }}</span>
+            </div>
+          </div>
+          <div [class]="'w-11 h-11 rounded-xl flex items-center justify-center shrink-0 ' + stat.bg">
+            <lucide-angular [name]="stat.icon" [size]="20" [class]="stat.iconColor"></lucide-angular>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+
+  <!-- Charts row -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+
+    <!-- Weekly Sales bar chart -->
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
+      <div class="flex items-center justify-between mb-5">
+        <h3 class="text-base font-bold text-gray-900 font-heading">Weekly Sales</h3>
+        <span class="text-xs text-gray-400 bg-gray-50 px-2.5 py-1 rounded-lg">This week</span>
+      </div>
       <div class="space-y-3">
-        <div class="flex justify-between items-center">
-          <span class="text-sm text-gray-600">Monday</span>
-          <div class="flex-1 mx-4">
-            <div class="h-2 bg-gray-200 rounded-full">
-              <div class="h-2 bg-starbucks-green rounded-full" style="width: 45%"></div>
+        @for (day of weeklySales; track day.day) {
+          <div class="flex items-center gap-3">
+            <span class="text-xs text-gray-500 w-8 shrink-0">{{ day.day }}</span>
+            <div class="flex-1 bg-gray-100 rounded-full h-2.5 overflow-hidden">
+              <div
+                class="h-2.5 bg-[#006241] rounded-full transition-all duration-500"
+                [style.width.%]="day.pct"
+              ></div>
             </div>
+            <span class="text-xs font-semibold text-gray-700 w-10 text-right shrink-0">{{ day.amount }}</span>
           </div>
-          <span class="text-sm font-semibold text-gray-800">$31k</span>
-        </div>
-        <div class="flex justify-between items-center">
-          <span class="text-sm text-gray-600">Tuesday</span>
-          <div class="flex-1 mx-4">
-            <div class="h-2 bg-gray-200 rounded-full">
-              <div class="h-2 bg-starbucks-green rounded-full" style="width: 58%"></div>
-            </div>
-          </div>
-          <span class="text-sm font-semibold text-gray-800">$40k</span>
-        </div>
-        <div class="flex justify-between items-center">
-          <span class="text-sm text-gray-600">Wednesday</span>
-          <div class="flex-1 mx-4">
-            <div class="h-2 bg-gray-200 rounded-full">
-              <div class="h-2 bg-starbucks-green rounded-full" style="width: 40%"></div>
-            </div>
-          </div>
-          <span class="text-sm font-semibold text-gray-800">$28k</span>
-        </div>
-        <div class="flex justify-between items-center">
-          <span class="text-sm text-gray-600">Thursday</span>
-          <div class="flex-1 mx-4">
-            <div class="h-2 bg-gray-200 rounded-full">
-              <div class="h-2 bg-starbucks-green rounded-full" style="width: 73%"></div>
-            </div>
-          </div>
-          <span class="text-sm font-semibold text-gray-800">$51k</span>
-        </div>
-        <div class="flex justify-between items-center">
-          <span class="text-sm text-gray-600">Friday</span>
-          <div class="flex-1 mx-4">
-            <div class="h-2 bg-gray-200 rounded-full">
-              <div class="h-2 bg-starbucks-green rounded-full" style="width: 60%"></div>
-            </div>
-          </div>
-          <span class="text-sm font-semibold text-gray-800">$42k</span>
-        </div>
-        <div class="flex justify-between items-center">
-          <span class="text-sm text-gray-600">Saturday</span>
-          <div class="flex-1 mx-4">
-            <div class="h-2 bg-gray-200 rounded-full">
-              <div class="h-2 bg-starbucks-green rounded-full" style="width: 95%"></div>
-            </div>
-          </div>
-          <span class="text-sm font-semibold text-gray-800">$82k</span>
-        </div>
-        <div class="flex justify-between items-center">
-          <span class="text-sm text-gray-600">Sunday</span>
-          <div class="flex-1 mx-4">
-            <div class="h-2 bg-gray-200 rounded-full">
-              <div class="h-2 bg-starbucks-green rounded-full" style="width: 75%"></div>
-            </div>
-          </div>
-          <span class="text-sm font-semibold text-gray-800">$65k</span>
-        </div>
+        }
       </div>
     </div>
 
-    <!-- Category Distribution -->
-    <div class="bg-white rounded-lg shadow p-6">
-      <h3 class="text-lg font-bold text-gray-800 mb-4">Sales by Category</h3>
+    <!-- Category distribution -->
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
+      <div class="flex items-center justify-between mb-5">
+        <h3 class="text-base font-bold text-gray-900 font-heading">Sales by Category</h3>
+        <span class="text-xs text-gray-400 bg-gray-50 px-2.5 py-1 rounded-lg">All time</span>
+      </div>
       <div class="space-y-4">
-        <div>
-          <div class="flex justify-between mb-2">
-            <span class="text-sm font-medium text-gray-700">Coffee</span>
-            <span class="text-sm font-semibold text-gray-800">44%</span>
+        @for (cat of categories; track cat.name) {
+          <div>
+            <div class="flex justify-between items-center mb-1.5">
+              <span class="text-sm font-medium text-gray-700">{{ cat.name }}</span>
+              <span class="text-sm font-bold text-gray-900">{{ cat.pct }}%</span>
+            </div>
+            <div class="h-3 bg-gray-100 rounded-full overflow-hidden">
+              <div
+                [class]="'h-3 rounded-full transition-all duration-500 ' + cat.color"
+                [style.width.%]="cat.pct"
+              ></div>
+            </div>
           </div>
-          <div class="h-3 bg-gray-200 rounded-full">
-            <div class="h-3 bg-starbucks-green rounded-full" style="width: 44%"></div>
-          </div>
-        </div>
-        <div>
-          <div class="flex justify-between mb-2">
-            <span class="text-sm font-medium text-gray-700">Tea</span>
-            <span class="text-sm font-semibold text-gray-800">35%</span>
-          </div>
-          <div class="h-3 bg-gray-200 rounded-full">
-            <div class="h-3 bg-green-600 rounded-full" style="width: 35%"></div>
-          </div>
-        </div>
-        <div>
-          <div class="flex justify-between mb-2">
-            <span class="text-sm font-medium text-gray-700">Food</span>
-            <span class="text-sm font-semibold text-gray-800">26%</span>
-          </div>
-          <div class="h-3 bg-gray-200 rounded-full">
-            <div class="h-3 bg-green-500 rounded-full" style="width: 26%"></div>
-          </div>
-        </div>
-        <div>
-          <div class="flex justify-between mb-2">
-            <span class="text-sm font-medium text-gray-700">Merchandise</span>
-            <span class="text-sm font-semibold text-gray-800">11%</span>
-          </div>
-          <div class="h-3 bg-gray-200 rounded-full">
-            <div class="h-3 bg-green-400 rounded-full" style="width: 11%"></div>
-          </div>
-        </div>
+        }
       </div>
     </div>
   </div>
 
-  <!-- Recent Orders -->
-  <div class="bg-white rounded-lg shadow">
-    <div class="p-6 border-b border-gray-200">
-      <h3 class="text-lg font-bold text-gray-800">Recent Orders</h3>
+  <!-- Recent Orders table -->
+  <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+    <div class="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
+      <h3 class="text-base font-bold text-gray-900 font-heading">Recent Orders</h3>
+      <a routerLink="/orders" class="text-sm text-[#006241] font-medium hover:text-[#1e3932] transition-colors">View all →</a>
     </div>
     <div class="overflow-x-auto">
       <table class="w-full">
-        <thead class="bg-gray-50 border-b border-gray-200">
-          <tr>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order ID</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Customer</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+        <thead>
+          <tr class="bg-gray-50 border-b border-gray-100">
+            <th class="px-5 py-3 text-left text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Order ID</th>
+            <th class="px-5 py-3 text-left text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Customer</th>
+            <th class="px-5 py-3 text-left text-[11px] font-semibold text-gray-400 uppercase tracking-wider hidden md:table-cell">Product</th>
+            <th class="px-5 py-3 text-left text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Amount</th>
+            <th class="px-5 py-3 text-left text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Status</th>
+            <th class="px-5 py-3 text-left text-[11px] font-semibold text-gray-400 uppercase tracking-wider hidden sm:table-cell">Date</th>
           </tr>
         </thead>
-        <tbody class="bg-white divide-y divide-gray-200">
+        <tbody class="divide-y divide-gray-50">
           @for (order of recentOrders; track order.id) {
-            <tr class="hover:bg-gray-50">
-              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">#{{ order.id }}</td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ order.customer }}</td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ order.product }}</td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${{ order.amount }}</td>
-              <td class="px-6 py-4 whitespace-nowrap">
-                <span [class]="getStatusClass(order.status)" class="px-2 py-1 text-xs font-semibold rounded-full">
+            <tr class="hover:bg-gray-50/50 transition-colors">
+              <td class="px-5 py-3.5 text-sm font-semibold text-[#006241] whitespace-nowrap">#{{ order.id }}</td>
+              <td class="px-5 py-3.5 text-sm text-gray-700 whitespace-nowrap">{{ order.customer }}</td>
+              <td class="px-5 py-3.5 text-sm text-gray-500 whitespace-nowrap hidden md:table-cell">{{ order.product }}</td>
+              <td class="px-5 py-3.5 text-sm font-semibold text-gray-900 whitespace-nowrap">${{ order.amount }}</td>
+              <td class="px-5 py-3.5 whitespace-nowrap">
+                <span [class]="'inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-full ' + getStatusConfig(order.status).classes">
+                  <lucide-angular [name]="getStatusConfig(order.status).icon" [size]="11"></lucide-angular>
                   {{ order.status }}
                 </span>
               </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ order.date }}</td>
+              <td class="px-5 py-3.5 text-sm text-gray-400 whitespace-nowrap hidden sm:table-cell">{{ order.date }}</td>
             </tr>
           }
         </tbody>
       </table>
     </div>
   </div>
+
 </div>

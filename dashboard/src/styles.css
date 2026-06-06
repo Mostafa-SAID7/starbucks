@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Noto+Sans+Arabic:wght@400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -10,15 +12,49 @@
     --border: #e5e7eb;
   }
 
-  .dark {
-    --background: #0f1419;
-    --foreground: #e7e9ea;
-    --card: #16181c;
-    --border: #2f3336;
+  html, body {
+    height: 100%;
   }
 
   body {
-    @apply bg-white text-gray-900;
+    @apply bg-gray-50 text-gray-900;
+    font-family: 'Noto Sans Arabic', system-ui, sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Cairo', sans-serif;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #d1d5db;
+    border-radius: 10px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #9ca3af;
   }
 }
 
+@layer utilities {
+  .font-heading {
+    font-family: 'Cairo', sans-serif;
+  }
+  .line-clamp-2 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+}

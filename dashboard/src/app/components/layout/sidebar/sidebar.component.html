@@ -1,76 +1,116 @@
-<aside class="w-64 bg-starbucks-green text-white min-h-screen flex flex-col">
-  <div class="p-6 border-b border-starbucks-dark">
-    <div class="flex items-center space-x-3">
-      <img src="assets/logo.png" alt="Starbucks Logo" class="w-10 h-10 object-contain">
-      <div>
-        <h1 class="text-2xl font-bold">Starbucks</h1>
-        <p class="text-sm text-green-100">Admin Dashboard</p>
+<aside
+  [class]="'fixed lg:relative inset-y-0 left-0 z-40 flex flex-col bg-[#1e3932] text-white transition-all duration-300 ease-in-out shrink-0 '
+    + (collapsed() ? 'w-[72px]' : 'w-64') + ' '
+    + (isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0')"
+>
+  <!-- Logo -->
+  <div class="flex items-center justify-between px-4 py-5 border-b border-white/10 min-h-[72px]">
+    @if (!collapsed()) {
+      <div class="flex items-center gap-3 overflow-hidden">
+        <div class="w-9 h-9 rounded-full bg-[#006241] flex items-center justify-center shrink-0 shadow-lg">
+          <lucide-angular name="coffee" [size]="18" class="text-white"></lucide-angular>
+        </div>
+        <div class="overflow-hidden">
+          <p class="font-bold text-sm leading-tight text-white truncate font-heading">Starbucks EG</p>
+          <p class="text-[11px] text-green-300 truncate">Admin Portal</p>
+        </div>
       </div>
-    </div>
+    }
+    @if (collapsed()) {
+      <div class="w-9 h-9 rounded-full bg-[#006241] flex items-center justify-center mx-auto shadow-lg">
+        <lucide-angular name="coffee" [size]="18" class="text-white"></lucide-angular>
+      </div>
+    }
+
+    <!-- Desktop collapse toggle -->
+    <button
+      (click)="toggleCollapse()"
+      class="hidden lg:flex items-center justify-center w-7 h-7 rounded-md hover:bg-white/10 text-white/50 hover:text-white transition-colors shrink-0"
+    >
+      <lucide-angular [name]="collapsed() ? 'chevron-right' : 'chevron-left'" [size]="16"></lucide-angular>
+    </button>
+
+    <!-- Mobile close button -->
+    <button
+      (click)="close()"
+      class="lg:hidden flex items-center justify-center w-7 h-7 rounded-md hover:bg-white/10 text-white/50 hover:text-white transition-colors"
+    >
+      <lucide-angular name="x" [size]="16"></lucide-angular>
+    </button>
   </div>
 
-  <nav class="flex-1 p-4">
-    <ul class="space-y-2">
-      <li>
-        <a
-          routerLink="/dashboard"
-          routerLinkActive="bg-starbucks-dark font-semibold"
-          class="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-starbucks-dark transition-colors"
-        >
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-          </svg>
-          <span>Dashboard</span>
-        </a>
-      </li>
-      <li>
-        <a
-          routerLink="/orders"
-          routerLinkActive="bg-starbucks-dark font-semibold"
-          class="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-starbucks-dark transition-colors"
-        >
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-          </svg>
-          <span>Orders</span>
-        </a>
-      </li>
-      <li>
-        <a
-          routerLink="/products"
-          routerLinkActive="bg-starbucks-dark font-semibold"
-          class="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-starbucks-dark transition-colors"
-        >
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-          </svg>
-          <span>Products</span>
-        </a>
-      </li>
-      <li>
-        <a
-          routerLink="/analytics"
-          routerLinkActive="bg-starbucks-dark font-semibold"
-          class="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-starbucks-dark transition-colors"
-        >
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-          </svg>
-          <span>Analytics</span>
-        </a>
-      </li>
+  <!-- Nav -->
+  <nav class="flex-1 py-4 overflow-y-auto">
+    @if (!collapsed()) {
+      <p class="px-4 pb-2 text-[10px] font-semibold uppercase tracking-widest text-green-400/70">
+        Navigation
+      </p>
+    }
+    <ul class="space-y-1 px-2">
+      @for (item of navItems; track item.path) {
+        <li class="relative group">
+          <a
+            [routerLink]="item.path"
+            routerLinkActive="bg-[#006241] text-white shadow-md"
+            [routerLinkActiveOptions]="{ exact: item.path === '/dashboard' }"
+            class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 text-green-200 hover:bg-white/10 hover:text-white"
+          >
+            <lucide-angular [name]="item.icon" [size]="20" class="shrink-0"></lucide-angular>
+            @if (!collapsed()) {
+              <span class="text-sm font-medium truncate">{{ item.label }}</span>
+            }
+          </a>
+          <!-- Tooltip when collapsed -->
+          @if (collapsed()) {
+            <div class="absolute left-full ml-2 top-1/2 -translate-y-1/2 px-2.5 py-1.5 bg-gray-900 text-white text-xs font-medium rounded-lg opacity-0 group-hover:opacity-100 pointer-events-none whitespace-nowrap z-50 shadow-xl transition-opacity duration-150">
+              {{ item.label }}
+            </div>
+          }
+        </li>
+      }
     </ul>
+
+    <!-- Quick stats (only when expanded) -->
+    @if (!collapsed()) {
+      <div class="mt-6 mx-2 border-t border-white/10 pt-4">
+        <p class="px-2 pb-3 text-[10px] font-semibold uppercase tracking-widest text-green-400/70">
+          Today
+        </p>
+        <div class="space-y-2 px-2">
+          <div class="bg-white/5 rounded-xl p-3 border border-white/5">
+            <div class="flex items-center gap-2 mb-1">
+              <lucide-angular name="trending-up" [size]="13" class="text-green-400"></lucide-angular>
+              <span class="text-[11px] text-green-300">Revenue</span>
+            </div>
+            <p class="text-base font-bold text-white">EGP 42,580</p>
+          </div>
+          <div class="bg-white/5 rounded-xl p-3 border border-white/5">
+            <div class="flex items-center gap-2 mb-1">
+              <lucide-angular name="users" [size]="13" class="text-[#cba258]"></lucide-angular>
+              <span class="text-[11px] text-green-300">Active Now</span>
+            </div>
+            <p class="text-base font-bold text-white">1,284</p>
+          </div>
+        </div>
+      </div>
+    }
   </nav>
 
-  <div class="p-4 border-t border-starbucks-dark">
-    <div class="flex items-center space-x-3">
-      <div class="w-10 h-10 bg-green-200 rounded-full flex items-center justify-center">
-        <span class="text-starbucks-green font-bold">A</span>
+  <!-- User footer -->
+  <div class="p-3 border-t border-white/10">
+    <div [class]="'flex items-center gap-3 ' + (collapsed() ? 'justify-center' : '')">
+      <div class="w-9 h-9 rounded-full bg-[#006241] flex items-center justify-center shrink-0 shadow-md">
+        <span class="text-sm font-bold text-white">A</span>
       </div>
-      <div>
-        <p class="font-semibold">Admin User</p>
-        <p class="text-xs text-green-100">admin&#64;starbucks.com</p>
-      </div>
+      @if (!collapsed()) {
+        <div class="flex-1 overflow-hidden">
+          <p class="text-sm font-semibold text-white truncate">Admin User</p>
+          <p class="text-[11px] text-green-300 truncate">admin&#64;starbucks.eg</p>
+        </div>
+        <button class="p-1.5 rounded-lg hover:bg-white/10 text-green-300 hover:text-white transition-colors">
+          <lucide-angular name="log-out" [size]="15"></lucide-angular>
+        </button>
+      }
     </div>
   </div>
 </aside>

@@ -1,84 +1,115 @@
-<div class="space-y-6">
-  <h2 class="text-2xl font-bold text-gray-800">Analytics & Reports</h2>
+<div class="space-y-5">
 
-  <!-- Date Range Filter -->
-  <div class="bg-white rounded-lg shadow p-4">
-    <div class="flex items-center space-x-4">
-      <label class="text-sm font-medium text-gray-700">Date Range:</label>
-      <input type="date" class="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-starbucks-green" />
-      <span class="text-gray-500">to</span>
-      <input type="date" class="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-starbucks-green" />
-      <button class="bg-starbucks-green text-white px-6 py-2 rounded-lg hover:bg-starbucks-dark transition-colors">
-        Apply
+  <!-- Header -->
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+    <div>
+      <h2 class="text-2xl font-bold text-gray-900 font-heading">Analytics & Reports</h2>
+      <p class="text-sm text-gray-500 mt-0.5">Performance insights and business metrics</p>
+    </div>
+    <div class="flex items-center gap-2">
+      <button class="inline-flex items-center gap-2 border border-gray-200 text-gray-700 px-4 py-2.5 rounded-xl text-sm font-medium hover:bg-gray-50 transition-colors">
+        <lucide-angular name="calendar" [size]="14"></lucide-angular>
+        Date Range
       </button>
-      <button class="bg-gray-100 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-200 transition-colors">
+      <button class="inline-flex items-center gap-2 bg-[#006241] text-white px-4 py-2.5 rounded-xl text-sm font-semibold hover:bg-[#1e3932] transition-colors shadow-sm">
+        <lucide-angular name="download" [size]="14"></lucide-angular>
         Export
       </button>
     </div>
   </div>
 
-  <!-- Key Metrics -->
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-    <div class="bg-white rounded-lg shadow p-6">
-      <p class="text-sm text-gray-600 mb-1">Revenue</p>
-      <p class="text-3xl font-bold text-gray-800">${{ metrics.revenue | number:'1.0-0' }}</p>
-      <p class="text-sm text-green-600 mt-2">↑ {{ metrics.revenueGrowth }}%</p>
+  <!-- Metric cards -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+    @for (metric of metrics; track metric.label) {
+      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 hover:shadow-md transition-shadow">
+        <div class="flex items-start justify-between">
+          <div>
+            <p class="text-xs font-medium text-gray-500 uppercase tracking-wide">{{ metric.label }}</p>
+            <p class="text-2xl font-bold text-gray-900 mt-1 font-heading">{{ metric.value }}</p>
+            <div class="flex items-center gap-1 mt-2">
+              <lucide-angular [name]="metric.up ? 'arrow-up' : 'arrow-down'" [size]="12" [class]="metric.up ? 'text-emerald-500' : 'text-red-500'"></lucide-angular>
+              <span [class]="'text-xs font-medium ' + (metric.up ? 'text-emerald-600' : 'text-red-600')">{{ metric.change }}</span>
+              <span class="text-xs text-gray-400">vs last month</span>
+            </div>
+          </div>
+          <div [class]="'w-11 h-11 rounded-xl flex items-center justify-center shrink-0 ' + metric.bg">
+            <lucide-angular [name]="metric.icon" [size]="20" [class]="metric.iconColor"></lucide-angular>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+
+  <!-- Monthly revenue chart -->
+  <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
+    <div class="flex items-center justify-between mb-6">
+      <h3 class="text-base font-bold text-gray-900 font-heading">Monthly Revenue</h3>
+      <span class="text-xs text-gray-400 bg-gray-50 px-2.5 py-1 rounded-lg">2026</span>
     </div>
-    <div class="bg-white rounded-lg shadow p-6">
-      <p class="text-sm text-gray-600 mb-1">Avg. Order Value</p>
-      <p class="text-3xl font-bold text-gray-800">${{ metrics.avgOrderValue }}</p>
-      <p class="text-sm text-green-600 mt-2">↑ {{ metrics.avgOrderValueGrowth }}%</p>
-    </div>
-    <div class="bg-white rounded-lg shadow p-6">
-      <p class="text-sm text-gray-600 mb-1">Conversion Rate</p>
-      <p class="text-3xl font-bold text-gray-800">{{ metrics.conversionRate }}%</p>
-      <p class="text-sm text-green-600 mt-2">↑ {{ metrics.conversionRateGrowth }}%</p>
-    </div>
-    <div class="bg-white rounded-lg shadow p-6">
-      <p class="text-sm text-gray-600 mb-1">Customer Retention</p>
-      <p class="text-3xl font-bold text-gray-800">{{ metrics.retention }}%</p>
-      <p class="text-sm text-red-600 mt-2">↓ {{ metrics.retentionGrowth }}%</p>
+    <!-- Bar chart -->
+    <div class="flex items-end gap-1.5 h-36">
+      @for (m of monthlyRevenue; track m.month) {
+        <div class="flex-1 flex flex-col items-center gap-1 group">
+          <div class="w-full relative">
+            <div
+              class="w-full rounded-t-lg bg-[#006241]/15 group-hover:bg-[#006241]/30 transition-colors"
+              [style.height.px]="(m.pct / 100) * 128"
+            >
+              <div
+                class="w-full rounded-t-lg bg-[#006241] group-hover:bg-[#1e3932] transition-colors absolute bottom-0"
+                [style.height.%]="60 + (m.pct * 0.3)"
+              ></div>
+            </div>
+          </div>
+          <span class="text-[10px] text-gray-400">{{ m.month }}</span>
+        </div>
+      }
     </div>
   </div>
 
-  <!-- Top Customers Table -->
-  <div class="bg-white rounded-lg shadow">
-    <div class="p-6 border-b border-gray-200">
-      <h3 class="text-lg font-bold text-gray-800">Top Customers</h3>
+  <!-- Top customers table -->
+  <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+    <div class="px-5 py-4 border-b border-gray-100">
+      <h3 class="text-base font-bold text-gray-900 font-heading">Top Customers</h3>
     </div>
     <div class="overflow-x-auto">
       <table class="w-full">
-        <thead class="bg-gray-50 border-b border-gray-200">
-          <tr>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Customer</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Orders</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total Spent</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Avg. Order</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Last Order</th>
+        <thead>
+          <tr class="bg-gray-50 border-b border-gray-100">
+            <th class="px-5 py-3 text-left text-[11px] font-semibold text-gray-400 uppercase tracking-wider">#</th>
+            <th class="px-5 py-3 text-left text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Customer</th>
+            <th class="px-5 py-3 text-left text-[11px] font-semibold text-gray-400 uppercase tracking-wider hidden sm:table-cell">Orders</th>
+            <th class="px-5 py-3 text-left text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Total Spent</th>
+            <th class="px-5 py-3 text-left text-[11px] font-semibold text-gray-400 uppercase tracking-wider hidden md:table-cell">Avg. Order</th>
+            <th class="px-5 py-3 text-left text-[11px] font-semibold text-gray-400 uppercase tracking-wider hidden lg:table-cell">Last Order</th>
           </tr>
         </thead>
-        <tbody class="bg-white divide-y divide-gray-200">
+        <tbody class="divide-y divide-gray-50">
           @for (customer of topCustomers; track customer.id) {
-            <tr class="hover:bg-gray-50">
-              <td class="px-6 py-4 whitespace-nowrap">
-                <div class="flex items-center">
-                  <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center mr-3">
-                    <span class="text-starbucks-green font-semibold">{{ customer.initial }}</span>
+            <tr class="hover:bg-gray-50/60 transition-colors">
+              <td class="px-5 py-3.5 text-sm font-bold text-gray-400 whitespace-nowrap">#{{ customer.id }}</td>
+              <td class="px-5 py-3.5 whitespace-nowrap">
+                <div class="flex items-center gap-3">
+                  <div class="w-8 h-8 rounded-full bg-emerald-50 flex items-center justify-center shrink-0 ring-1 ring-emerald-100">
+                    <span class="text-[11px] font-bold text-[#006241]">{{ customer.name[0] }}</span>
                   </div>
                   <div>
-                    <div class="text-sm font-medium text-gray-900">{{ customer.name }}</div>
-                    <div class="text-sm text-gray-500" [innerHTML]="customer.email"></div>
+                    <p class="text-sm font-semibold text-gray-800">{{ customer.name }}</p>
+                    <p class="text-[11px] text-gray-400">{{ customer.email }}</p>
                   </div>
                 </div>
               </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ customer.orders }}</td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${{ customer.totalSpent }}</td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${{ customer.avgOrder }}</td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ customer.lastOrder }}</td>
+              <td class="px-5 py-3.5 whitespace-nowrap hidden sm:table-cell">
+                <span class="text-sm font-medium text-gray-700 bg-gray-100 px-2 py-0.5 rounded-lg">{{ customer.orders }}</span>
+              </td>
+              <td class="px-5 py-3.5 text-sm font-bold text-gray-900 whitespace-nowrap">${{ customer.totalSpent }}</td>
+              <td class="px-5 py-3.5 text-sm text-gray-500 whitespace-nowrap hidden md:table-cell">${{ customer.avgOrder }}</td>
+              <td class="px-5 py-3.5 text-sm text-gray-400 whitespace-nowrap hidden lg:table-cell">{{ customer.lastOrder }}</td>
             </tr>
           }
         </tbody>
       </table>
     </div>
   </div>
+
 </div>

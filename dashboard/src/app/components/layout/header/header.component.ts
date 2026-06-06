@@ -1,11 +1,19 @@
-import { Component, Input } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { LucideAngularModule } from 'lucide-angular';
 
 @Component({
   selector: 'app-header',
-  imports: [],
+  imports: [CommonModule, LucideAngularModule],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent {
-  @Input() title: string = 'Dashboard';
+  @Output() menuToggle = new EventEmitter<void>();
+
+  notifOpen = false;
+
+  toggle() {
+    this.menuToggle.emit();
+  }
 }
