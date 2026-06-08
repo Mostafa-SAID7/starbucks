@@ -45,7 +45,7 @@ jobs:
         working-directory: Frontend
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v7
         if: always()
         with:
           file: ./Frontend/coverage/coverage-final.json
@@ -104,7 +104,7 @@ jobs:
         working-directory: Backend
 
       - name: Upload backend unit test coverage to Codecov
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v7
         if: always()
         with:
           directory: Backend/coverage
@@ -160,7 +160,7 @@ jobs:
           DOTNET_ENVIRONMENT: Test
 
       - name: Upload backend integration coverage
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v7
         if: always()
         with:
           directory: Backend/coverage
